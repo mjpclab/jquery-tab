@@ -1,5 +1,6 @@
 /* available params
 	statusFieldSelector: a jQuery selector to find a form (normally hidden) field to store active tab index, thus after form postback and keep the field value on server to the browser, the jquery-tab will automatically restore active tab
+	statusHashTemp: a key-value pair temp to store active tab index in URL hash, ex tab=
 	fixedHeight : tab height will fixed to fit the longest page and will not change when tab is switched
 	showTopLabel : show switch label on top of the tab
 	showBottomLabel : show switch label on bottom of the tab
@@ -15,7 +16,7 @@
 */
 jQuery.fn.tab=function(param) {
 	var $=jQuery;
-	var objParam=param;
+	var objParam = typeof(param)==='object' ? param : {};
 
 
 
@@ -27,6 +28,7 @@ jQuery.fn.tab=function(param) {
 		if(typeof(objParam)=='undefined') objParam={};
 		
 		checkParam('statusFieldSelector','');
+		checkParam('statusHashTemplate','');
 		checkParam('fixedHeight',false);
 		checkParam('showTopLabel',true);
 		checkParam('showBottomLabel',false);
@@ -41,6 +43,7 @@ jQuery.fn.tab=function(param) {
 		checkParam('pageActiveClass','page-active');
 
 		objParam.statusFieldSelector=$.trim(objParam.statusFieldSelector);
+		objParam.statusHashTemplate=$.trim(objParam.statusHashTemplate);
 
 		if(objParam.showTopLabel==false && objParam.showBottomLabel==false) {
 			objParam.showTopLabel=true;
@@ -142,9 +145,21 @@ jQuery.fn.tab=function(param) {
 			$activePage.show().addClass(objParam.pageActiveClass);
 
 			$statusField.val(activeLabelIndex);
+			if(objParam.statusHashTemplate) {
+				var hash=location.hash;
+				hash=hash.replace(new RegExp(objParam.statusHashTemplate + '\\d+'), '');
+				hash+=objParam.statusHashTemplate + activeLabelIndex.toString();
+				if(location.hash!=hash) location.hash=hash;
+			}
 		}
 
 		var activeLabelIndex=parseInt($statusField.val());
+		if(isNaN(activeLabelIndex) && objParam.statusHashTemplate) {
+			var re=new RegExp(objParam.statusHashTemplate + '(\\d+)');
+			re.ignoreCase=true;
+			var searchResult=location.hash.match(re);
+			if(searchResult && searchResult[1]) activeLabelIndex=parseInt(searchResult[1]);
+		}
 		if(isNaN(activeLabelIndex)) { activeLabelIndex=0; }
 		if(objParam.showTopLabel) {
 			$topLabelContainerLeaf.children().click(labelItemClick);
