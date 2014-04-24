@@ -115,7 +115,7 @@ jQuery.fn.tab=function(param) {
 		}
 
 		//replace original content
-		$item.after($container);
+		$item.prepend($container);
 
 		//check if param:fixed height
 		if(objParam.fixedHeight)
