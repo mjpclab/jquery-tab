@@ -156,7 +156,6 @@ jQuery.fn.tab=function(param) {
 		var activeLabelIndex=parseInt($statusField.val());
 		if(isNaN(activeLabelIndex) && objParam.statusHashTemplate) {
 			var re=new RegExp(objParam.statusHashTemplate + '(\\d+)');
-			re.ignoreCase=true;
 			var searchResult=location.hash.match(re);
 			if(searchResult && searchResult[1]) activeLabelIndex=parseInt(searchResult[1]);
 		}
