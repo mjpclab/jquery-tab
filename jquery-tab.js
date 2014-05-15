@@ -1,11 +1,11 @@
 /* available params
 	statusFieldSelector: a jQuery selector to find a form (normally hidden) field to store active tab index, thus after form postback and keep the field value on server to the browser, the jquery-tab will automatically restore active tab
-	statusHashTemp: a key-value pair temp to store active tab index in URL hash, ex tab=
-	fixedHeight : tab height will fixed to fit the longest page and will not change when tab is switched
+	statusHashTemp: a key-value pair template to store active tab index in URL hash, ex: "tab="
+	fixedHeight : tab height will be fixed to fit the longest page and will not change when tab is switched
 	showTopLabel : show switch label on top of the tab
 	showBottomLabel : show switch label on bottom of the tab
 	titleSelector : a jQuery selector to pick up "title" element to be label switches
-	keepTitleVisible : show page title again in the page
+	keepTitleVisible : show page title again in the page. Since page title will be shown in tab label, normall it's not necessary to show in page again.
 	containerTemplate : whole wrapper container template
 	labelContainerTemplate : labels container template
 	labelItemTemplate : single label template
