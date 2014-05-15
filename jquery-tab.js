@@ -62,6 +62,8 @@ jQuery.fn.tab=function(param) {
 	}
 
 	function generateStructure($item) {
+		var pageCount=0;
+
 		//container
 		var $container=$(objParam.containerTemplate);
 
@@ -112,6 +114,7 @@ jQuery.fn.tab=function(param) {
 			$pageItemLeaf.append($pageContents);
 			
 			$pageContainerLeaf.append($pageItem);
+			pageCount++;
 		}
 
 		//replace original content
@@ -160,6 +163,7 @@ jQuery.fn.tab=function(param) {
 			if(searchResult && searchResult[1]) activeLabelIndex=parseInt(searchResult[1]);
 		}
 		if(isNaN(activeLabelIndex)) { activeLabelIndex=0; }
+		if(activeLabelIndex > pageCount-1) { activeLabelIndex=pageCount-1; }
 		if(objParam.showTopLabel) {
 			$topLabelContainerLeaf.children().click(labelItemClick);
 			$topLabelContainerLeaf.children(':eq(' +activeLabelIndex+ ')').click();
