@@ -21,11 +21,11 @@ jQuery.fn.tab = function (param) {
 
 
 	function checkParam(name, defaultValue) {
-		if (typeof(objParam[name]) === 'undefined') objParam[name] = defaultValue;
+		objParam[name] = objParam[name] || defaultValue;
 	}
 
 	function fixParams() {
-		if (typeof(objParam) === 'undefined') objParam = {};
+		objParam = objParam || {};
 
 		checkParam('statusFieldSelector', '');
 		checkParam('statusHashTemplate', '');
@@ -45,7 +45,7 @@ jQuery.fn.tab = function (param) {
 		objParam.statusFieldSelector = $.trim(objParam.statusFieldSelector);
 		objParam.statusHashTemplate = $.trim(objParam.statusHashTemplate);
 
-		if (objParam.showTopLabel === false && objParam.showBottomLabel === false) {
+		if (!objParam.showTopLabel && !objParam.showBottomLabel) {
 			objParam.showTopLabel = true;
 		}
 	}
@@ -93,7 +93,9 @@ jQuery.fn.tab = function (param) {
 
 		while (true) {
 			var $title = $item.find(objParam.titleSelector).first();
-			if ($title.size() === 0) break;
+			if ($title.size() === 0) {
+				break;
+			}
 			if (objParam.keepTitleVisible) {
 				$title.show();
 			}
@@ -104,8 +106,12 @@ jQuery.fn.tab = function (param) {
 			var $labelItem = $(objParam.labelItemTemplate);
 			var $labelItemLeaf = getLeafElement($labelItem);
 			$labelItemLeaf.text($title.text());
-			if (objParam.showTopLabel) $topLabelContainerLeaf.append($labelItem.clone());
-			if (objParam.showBottomLabel) $bottomLabelContainerLeaf.append($labelItem.clone());
+			if (objParam.showTopLabel) {
+				$topLabelContainerLeaf.append($labelItem.clone());
+			}
+			if (objParam.showBottomLabel) {
+				$bottomLabelContainerLeaf.append($labelItem.clone());
+			}
 
 			var $pageItem = $(objParam.pageItemTemplate);
 			var $pageItemLeaf = getLeafElement($pageItem);
@@ -126,7 +132,9 @@ jQuery.fn.tab = function (param) {
 			$pageContainerLeaf.children().each(function () {
 				var $pageItem = jQuery(this);
 				var pageHeight = $pageItem.height();
-				if (pageHeight > maxHeight) maxHeight = pageHeight;
+				if (pageHeight > maxHeight) {
+					maxHeight = pageHeight;
+				}
 			}).height(maxHeight);
 
 		}
@@ -150,7 +158,9 @@ jQuery.fn.tab = function (param) {
 				var hash = location.hash;
 				hash = hash.replace(new RegExp(objParam.statusHashTemplate + '\\d+'), '');
 				hash += objParam.statusHashTemplate + activeLabelIndex.toString();
-				if (location.hash != hash) location.hash = hash;
+				if (location.hash !== hash) {
+					location.hash = hash;
+				}
 			}
 		}
 
@@ -158,7 +168,9 @@ jQuery.fn.tab = function (param) {
 		if (isNaN(activeLabelIndex) && objParam.statusHashTemplate) {
 			var re = new RegExp(objParam.statusHashTemplate + '(\\d+)');
 			var searchResult = location.hash.match(re);
-			if (searchResult && searchResult[1]) activeLabelIndex = parseInt(searchResult[1]);
+			if (searchResult && searchResult[1]) {
+				activeLabelIndex = parseInt(searchResult[1]);
+			}
 		}
 		if (isNaN(activeLabelIndex)) {
 			activeLabelIndex = 0;
@@ -185,4 +197,6 @@ jQuery.fn.tab = function (param) {
 			generateStructure($item);
 		});
 	}
-}
+
+	return this;
+};
