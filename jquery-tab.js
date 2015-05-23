@@ -17,39 +17,23 @@
 jQuery.fn.tab = function (param) {
 	'use strict';
 	var $ = jQuery;
-	var objParam = typeof(param) === 'object' ? param : {};
-
-
-	function checkParam(name, defaultValue) {
-		objParam[name] = objParam[name] || defaultValue;
-	}
-
-	function fixParams() {
-		objParam = objParam || {};
-
-		checkParam('statusFieldSelector', '');
-		checkParam('statusHashTemplate', '');
-		checkParam('fixedHeight', false);
-		checkParam('showTopLabel', true);
-		checkParam('showBottomLabel', false);
-		checkParam('titleSelector', 'h1,h2,h3,h4,h5,h6');
-		checkParam('keepTitleVisible', false);
-		checkParam('containerTemplate', '<div class="tab-container"></div>');
-		checkParam('labelContainerTemplate', '<div class="label-container {position}"></div>');
-		checkParam('labelItemTemplate', '<span class="label-item"></span>');
-		checkParam('labelActiveClass', 'label-active');
-		checkParam('pageContainerTemplate', '<div class="page-container"></div>');
-		checkParam('pageItemTemplate', '<div class="page-item"></div>');
-		checkParam('pageActiveClass', 'page-active');
-
-		objParam.statusFieldSelector = $.trim(objParam.statusFieldSelector);
-		objParam.statusHashTemplate = $.trim(objParam.statusHashTemplate);
-
-		if (!objParam.showTopLabel && !objParam.showBottomLabel) {
-			objParam.showTopLabel = true;
-		}
-	}
-
+	var defaultParam={
+		statusFieldSelector: '',
+		statusHashTemplate: '',
+		fixedHeight: false,
+		showTopLabel: true,
+		showBottomLabel: false,
+		titleSelector: 'h1,h2,h3,h4,h5,h6',
+		keepTitleVisible: false,
+		containerTemplate: '<div class="tab-container"></div>',
+		labelContainerTemplate: '<div class="label-container {position}"></div>',
+		labelItemTemplate: '<span class="label-item"></span>',
+		labelActiveClass: 'label-active',
+		pageContainerTemplate: '<div class="page-container"></div>',
+		pageItemTemplate: '<div class="page-item"></div>',
+		pageActiveClass: 'page-active'
+	};
+	var objParam = $.extend(defaultParam,param);
 
 	function getLeafElement($node) {
 		var result = $node[0];
@@ -190,8 +174,6 @@ jQuery.fn.tab = function (param) {
 
 
 	if (this.size() > 0) {
-		fixParams();
-
 		this.each(function () {
 			var $item = $(this);
 			generateStructure($item);

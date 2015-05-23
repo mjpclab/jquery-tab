@@ -1,0 +1,29 @@
+body {
+	background: #f1f1f1;
+}
+
+.tab-container .label-container {
+	position: relative;
+	bottom: -1px;
+}
+
+.tab-container .label-container .label-item {
+	display: inline-block;
+	margin-right: 1em;
+	border: 1px #ccc solid;
+
+	background: #fff;
+	padding: 0.5em 1em;
+	cursor: pointer;
+}
+
+.tab-container .label-container .label-active {
+	color: red;
+	border-bottom-color: #fff;
+}
+
+.tab-container .page-container {
+	border: 1px #ccc solid;
+	padding: 1em;
+	background: #fff;
+}

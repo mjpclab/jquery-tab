@@ -1,12 +1,11 @@
-jquery-tab
-==========
+# jquery-tab
 make flat html document that contains title and normal content turns into tab style.
 
-usage:
+# Usage:
 
 html document:
-```
-	<div class="container-for-flat-content">
+``` html
+	<div class="tab-container">
 	  <h1>title</h1>
 	  <p>content</p>
 	  <p>content</p>
@@ -18,8 +17,25 @@ html document:
 ```	
 
 javascript code:
-```
-	$('.container-for-flat-content').tab({
+``` javascript
+	$('.tab-container').tab({
 		'fixedHeight':true,
 	});
+```
+
+# Generated Html Structure
+```
+.tab-container
+    .label-container
+        .label-item
+        .label-item
+        .label-item
+        .label-item
+        ...
+    .page-container
+        .page-item
+        .page-item
+        .page-item
+        .page-item
+        ...
 ```
