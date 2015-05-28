@@ -130,7 +130,7 @@ jQuery.fn.tab = function (param) {
 		}
 
 		//enable page switching
-		var $statusField = $item.find(objParam.statusFieldSelector);
+		var $statusFields = $item.find(objParam.statusFieldSelector);
 
 		function labelItemClick() {
 			var $activeLabel = $(this);
@@ -143,7 +143,7 @@ jQuery.fn.tab = function (param) {
 			$activePage.siblings().hide().removeClass(objParam.pageActiveClass);
 			$activePage.show().addClass(objParam.pageActiveClass);
 
-			$statusField.val(activeLabelIndex);
+			$statusFields.val(activeLabelIndex);
 			if (objParam.statusHashTemplate) {
 				var hash = location.hash;
 				hash = hash.replace(new RegExp(objParam.statusHashTemplate + '\\d+'), '');
@@ -154,7 +154,14 @@ jQuery.fn.tab = function (param) {
 			}
 		}
 
-		var activeLabelIndex = parseInt($statusField.val());
+		var activeLabelIndex;
+		$statusFields.each(function(index,statusField){
+			var status=$(statusField).val();
+			if(status.length && isFinite(status)) {
+				activeLabelIndex=parseInt(status);
+				return false;
+			}
+		});
 		if (isNaN(activeLabelIndex) && objParam.statusHashTemplate) {
 			var re = new RegExp(objParam.statusHashTemplate + '(\\d+)');
 			var searchResult = location.hash.match(re);
