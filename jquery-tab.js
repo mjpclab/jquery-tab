@@ -1,15 +1,17 @@
 /* available params
  statusFieldSelector: a jQuery selector to find a form (normally hidden) field to store active tab index, thus after form postback and keep the field value on server to the browser, the jquery-tab will automatically restore active tab
- statusHashTemp: a key-value pair template to store active tab index in URL hash, ex: "tab="
+ statusHashTemplate: a key-value pair template to store active tab index in URL hash, ex: "tab="
  fixedHeight : tab height will be fixed to fit the longest page and will not change when tab is switched
  showTopLabel : show switch label on top of the tab
  showBottomLabel : show switch label on bottom of the tab
  titleSelector : a jQuery selector to pick up "title" element to be label switches
+ titleContentFilter: a callback to have an opportunity to change the html structure of title
  keepTitleVisible : show page title again in the page. Since page title will be shown in tab label, normall it's not necessary to show in page again.
  containerTemplate : whole wrapper container template
  labelContainerTemplate : labels container template
  labelItemTemplate : single label template
  labelActiveClass : CSS class for active label
+ labelInactiveClass : CSS class for inactive label
  pageContainerTemplate : pages container template
  pageItemTemplate : single page template
  pageActiveClass : CSS class for active page
@@ -17,23 +19,27 @@
 jQuery.fn.tab = function (param) {
 	'use strict';
 	var $ = jQuery;
-	var defaultParam={
+	var defaultParam = {
 		statusFieldSelector: '',
 		statusHashTemplate: '',
 		fixedHeight: false,
 		showTopLabel: true,
 		showBottomLabel: false,
 		titleSelector: 'h1,h2,h3,h4,h5,h6',
+		titleContentFilter: function () {
+			return this.text()
+		},
 		keepTitleVisible: false,
 		containerTemplate: '<div class="tab-container"></div>',
 		labelContainerTemplate: '<div class="label-container {position}"></div>',
 		labelItemTemplate: '<span class="label-item"></span>',
 		labelActiveClass: 'label-active',
+		labelInactiveClass: 'label-inactive',
 		pageContainerTemplate: '<div class="page-container"></div>',
 		pageItemTemplate: '<div class="page-item"></div>',
 		pageActiveClass: 'page-active'
 	};
-	var objParam = $.extend(defaultParam,param);
+	var objParam = $.extend(defaultParam, param);
 
 	function getLeafElement($node) {
 		var result = $node[0];
@@ -89,7 +95,7 @@ jQuery.fn.tab = function (param) {
 
 			var $labelItem = $(objParam.labelItemTemplate);
 			var $labelItemLeaf = getLeafElement($labelItem);
-			$labelItemLeaf.text($title.text());
+			$labelItemLeaf.html(objParam.titleContentFilter.call($title, $title));
 			if (objParam.showTopLabel) {
 				$topLabelContainerLeaf.append($labelItem.clone());
 			}
@@ -130,8 +136,8 @@ jQuery.fn.tab = function (param) {
 			var $activeLabel = $(this);
 			var activeLabelIndex = $activeLabel.index();
 
-			$activeLabel.siblings().removeClass(objParam.labelActiveClass);
-			$activeLabel.addClass(objParam.labelActiveClass);
+			$activeLabel.addClass(objParam.labelActiveClass).removeClass(objParam.labelInactiveClass);
+			$activeLabel.siblings().addClass(objParam.labelInactiveClass).removeClass(objParam.labelActiveClass);
 
 			var $activePage = $pageContainerLeaf.children(':eq(' + activeLabelIndex + ')');
 			$activePage.siblings().hide().removeClass(objParam.pageActiveClass);
