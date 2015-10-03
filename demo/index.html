@@ -65,24 +65,24 @@
 	jQuery(function ($) {
 		$('.tab1').tab({
 			'fixedHeight': true,
-			'statusHashTemplate': 'tab1=',
-			beforeSwitch:function(oldIndex,newIndex){
-				console.log('before',arguments);
+			'statusHashTemplate': 'tab1='/*,
+			beforeSwitch: function (oldIndex, newIndex) {
+				console.log('before', arguments);
 			},
-			afterSwitch:function(oldIndex,newIndex){
-				console.log('after',arguments);
-			}
+			afterSwitch: function (oldIndex, newIndex) {
+				console.log('after', arguments);
+			}*/
 		});
 
 		$('.tab2').tab({
 			'fixedHeight': true,
-			'statusHashTemplate': 'tab2=',
-			beforeSwitch:function(oldIndex,newIndex){
-				console.log('before',arguments);
+			'statusHashTemplate': 'tab2='/*,
+			beforeSwitch: function (oldIndex, newIndex) {
+				console.log('before', arguments);
 			},
-			afterSwitch:function(oldIndex,newIndex){
-				console.log('after',arguments);
-			}
+			afterSwitch: function (oldIndex, newIndex) {
+				console.log('after', arguments);
+			}*/
 		});
 	});
 </script>

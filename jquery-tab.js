@@ -1,6 +1,7 @@
-/* available params
+/* available options
  statusFieldSelector: a jQuery selector to find a form (normally hidden) field to store active tab index, thus after form postback and keep the field value on server to the browser, the jquery-tab will automatically restore active tab
  statusHashTemplate: a key-value pair template to store active tab index in URL hash, ex: "tab="
+ statusHashSeparator: a separator between multiple hash items
  fixedHeight : tab height will be fixed to fit the longest page and will not change when tab is switched
  showTopLabel : show switch label on top of the tab
  showBottomLabel : show switch label on bottom of the tab
@@ -24,6 +25,7 @@ jQuery.fn.tab = function (customOption) {
 	var defaultOption = {
 		statusFieldSelector: '',
 		statusHashTemplate: '',
+		statusHashSeparator: '&',
 		fixedHeight: false,
 		showTopLabel: true,
 		showBottomLabel: false,
@@ -140,6 +142,9 @@ jQuery.fn.tab = function (customOption) {
 		function labelItemClick() {
 			var $activeLabel = $(this);
 			var activeLabelIndex = $activeLabel.index();
+			if(activeLabelIndex===oldIndex) {
+				return;
+			}
 
 			if (typeof(option.beforeSwitch) === 'function') {
 				option.beforeSwitch(oldIndex, activeLabelIndex);
@@ -155,11 +160,18 @@ jQuery.fn.tab = function (customOption) {
 			$statusFields.val(activeLabelIndex);
 			if (option.statusHashTemplate) {
 				var hash = location.hash;
-				hash = hash.replace(new RegExp(option.statusHashTemplate + '\\d+'), '');
-				hash += option.statusHashTemplate + activeLabelIndex.toString();
-				if (location.hash !== hash) {
-					location.hash = hash;
+				var statusHash = option.statusHashTemplate + activeLabelIndex;
+				if (hash.indexOf(option.statusHashTemplate) > -1) {
+					hash = hash.replace(new RegExp(option.statusHashTemplate + '\\d+'), statusHash);
 				}
+				else {
+					if (hash.length) {
+						hash += option.statusHashSeparator;
+					}
+					hash += option.statusHashTemplate + activeLabelIndex;
+				}
+
+				location.hash = hash;
 			}
 
 			if (typeof(option.afterSwitch) === 'function') {
