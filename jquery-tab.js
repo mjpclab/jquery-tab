@@ -15,11 +15,13 @@
  pageContainerTemplate : pages container template
  pageItemTemplate : single page template
  pageActiveClass : CSS class for active page
+ beforeSwitch(oldIndex, newIndex) : a callback before switching the tab
+ afterSwitch(oldIndex, newIndex) : a callback after switching the tab
  */
-jQuery.fn.tab = function (param) {
+jQuery.fn.tab = function (customOption) {
 	'use strict';
 	var $ = jQuery;
-	var defaultParam = {
+	var defaultOption = {
 		statusFieldSelector: '',
 		statusHashTemplate: '',
 		fixedHeight: false,
@@ -27,7 +29,7 @@ jQuery.fn.tab = function (param) {
 		showBottomLabel: false,
 		titleSelector: 'h1,h2,h3,h4,h5,h6',
 		titleContentFilter: function () {
-			return this.text()
+			return this.text();
 		},
 		keepTitleVisible: false,
 		containerTemplate: '<div class="tab-container"></div>',
@@ -37,9 +39,11 @@ jQuery.fn.tab = function (param) {
 		labelInactiveClass: 'label-inactive',
 		pageContainerTemplate: '<div class="page-container"></div>',
 		pageItemTemplate: '<div class="page-item"></div>',
-		pageActiveClass: 'page-active'
+		pageActiveClass: 'page-active',
+		beforeSwitch: null,
+		afterSwitch: null
 	};
-	var objParam = $.extend(defaultParam, param);
+	var option = $.extend(defaultOption, customOption);
 
 	function getLeafElement($node) {
 		var result = $node[0];
@@ -54,58 +58,58 @@ jQuery.fn.tab = function (param) {
 		var pageCount = 0;
 
 		//container
-		var $container = $(objParam.containerTemplate);
+		var $container = $(option.containerTemplate);
 
 		//top label
-		if (objParam.showTopLabel) {
-			var $topLabelContainer = $(objParam.labelContainerTemplate.replace('{position}', 'top'));
+		if (option.showTopLabel) {
+			var $topLabelContainer = $(option.labelContainerTemplate.replace('{position}', 'top'));
 			$container.append($topLabelContainer);
 		}
 
 		//page
-		var $pageContainer = $(objParam.pageContainerTemplate);
+		var $pageContainer = $(option.pageContainerTemplate);
 		$container.append($pageContainer);
 
 		//bottom label
-		if (objParam.showBottomLabel) {
-			var $bottomLabelContainer = $(objParam.labelContainerTemplate.replace('{position}', 'bottom'));
+		if (option.showBottomLabel) {
+			var $bottomLabelContainer = $(option.labelContainerTemplate.replace('{position}', 'bottom'));
 			$container.append($bottomLabelContainer);
 		}
 
 		//add labels & pages
-		if (objParam.showTopLabel) {
+		if (option.showTopLabel) {
 			var $topLabelContainerLeaf = getLeafElement($topLabelContainer);
 		}
-		if (objParam.showBottomLabel) {
+		if (option.showBottomLabel) {
 			var $bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);
 		}
 		var $pageContainerLeaf = getLeafElement($pageContainer);
 
 		while (true) {
-			var $title = $item.find(objParam.titleSelector).first();
+			var $title = $item.find(option.titleSelector).first();
 			if ($title.size() === 0) {
 				break;
 			}
-			if (objParam.keepTitleVisible) {
+			if (option.keepTitleVisible) {
 				$title.show();
 			}
 			else {
 				$title.hide();
 			}
 
-			var $labelItem = $(objParam.labelItemTemplate);
+			var $labelItem = $(option.labelItemTemplate);
 			var $labelItemLeaf = getLeafElement($labelItem);
-			$labelItemLeaf.html(objParam.titleContentFilter.call($title, $title));
-			if (objParam.showTopLabel) {
+			$labelItemLeaf.html(option.titleContentFilter.call($title, $title));
+			if (option.showTopLabel) {
 				$topLabelContainerLeaf.append($labelItem.clone());
 			}
-			if (objParam.showBottomLabel) {
+			if (option.showBottomLabel) {
 				$bottomLabelContainerLeaf.append($labelItem.clone());
 			}
 
-			var $pageItem = $(objParam.pageItemTemplate);
+			var $pageItem = $(option.pageItemTemplate);
 			var $pageItemLeaf = getLeafElement($pageItem);
-			var $pageContents = $title.nextUntil(objParam.titleSelector).andSelf();
+			var $pageContents = $title.nextUntil(option.titleSelector).andSelf();
 			$pageItemLeaf.append($pageContents);
 
 			$pageContainerLeaf.append($pageItem);
@@ -116,7 +120,7 @@ jQuery.fn.tab = function (param) {
 		$item.prepend($container);
 
 		//check if param:fixed height
-		if (objParam.fixedHeight) {
+		if (option.fixedHeight) {
 			var maxHeight = 0;
 
 			$pageContainerLeaf.children().each(function () {
@@ -130,40 +134,50 @@ jQuery.fn.tab = function (param) {
 		}
 
 		//enable page switching
-		var $statusFields = $item.find(objParam.statusFieldSelector);
+		var $statusFields = $item.find(option.statusFieldSelector);
+		var oldIndex = -1;
 
 		function labelItemClick() {
 			var $activeLabel = $(this);
 			var activeLabelIndex = $activeLabel.index();
 
-			$activeLabel.addClass(objParam.labelActiveClass).removeClass(objParam.labelInactiveClass);
-			$activeLabel.siblings().addClass(objParam.labelInactiveClass).removeClass(objParam.labelActiveClass);
+			if (typeof(option.beforeSwitch) === 'function') {
+				option.beforeSwitch(oldIndex, activeLabelIndex);
+			}
+
+			$activeLabel.addClass(option.labelActiveClass).removeClass(option.labelInactiveClass);
+			$activeLabel.siblings().addClass(option.labelInactiveClass).removeClass(option.labelActiveClass);
 
 			var $activePage = $pageContainerLeaf.children(':eq(' + activeLabelIndex + ')');
-			$activePage.siblings().hide().removeClass(objParam.pageActiveClass);
-			$activePage.show().addClass(objParam.pageActiveClass);
+			$activePage.siblings().hide().removeClass(option.pageActiveClass);
+			$activePage.show().addClass(option.pageActiveClass);
 
 			$statusFields.val(activeLabelIndex);
-			if (objParam.statusHashTemplate) {
+			if (option.statusHashTemplate) {
 				var hash = location.hash;
-				hash = hash.replace(new RegExp(objParam.statusHashTemplate + '\\d+'), '');
-				hash += objParam.statusHashTemplate + activeLabelIndex.toString();
+				hash = hash.replace(new RegExp(option.statusHashTemplate + '\\d+'), '');
+				hash += option.statusHashTemplate + activeLabelIndex.toString();
 				if (location.hash !== hash) {
 					location.hash = hash;
 				}
 			}
+
+			if (typeof(option.afterSwitch) === 'function') {
+				option.afterSwitch(oldIndex, activeLabelIndex);
+			}
+			oldIndex = activeLabelIndex;
 		}
 
 		var activeLabelIndex;
-		$statusFields.each(function(index,statusField){
-			var status=$(statusField).val();
-			if(status.length && isFinite(status)) {
-				activeLabelIndex=parseInt(status);
+		$statusFields.each(function (index, statusField) {
+			var status = $(statusField).val();
+			if (status.length && isFinite(status)) {
+				activeLabelIndex = parseInt(status);
 				return false;
 			}
 		});
-		if (isNaN(activeLabelIndex) && objParam.statusHashTemplate) {
-			var re = new RegExp(objParam.statusHashTemplate + '(\\d+)');
+		if (isNaN(activeLabelIndex) && option.statusHashTemplate) {
+			var re = new RegExp(option.statusHashTemplate + '(\\d+)');
 			var searchResult = location.hash.match(re);
 			if (searchResult && searchResult[1]) {
 				activeLabelIndex = parseInt(searchResult[1]);
@@ -175,11 +189,11 @@ jQuery.fn.tab = function (param) {
 		if (activeLabelIndex > pageCount - 1) {
 			activeLabelIndex = pageCount - 1;
 		}
-		if (objParam.showTopLabel) {
+		if (option.showTopLabel) {
 			$topLabelContainerLeaf.children().click(labelItemClick);
 			$topLabelContainerLeaf.children(':eq(' + activeLabelIndex + ')').click();
 		}
-		if (objParam.showBottomLabel) {
+		if (option.showBottomLabel) {
 			$bottomLabelContainerLeaf.children().click(labelItemClick);
 			$bottomLabelContainerLeaf.children(':eq(' + activeLabelIndex + ')').click();
 		}
