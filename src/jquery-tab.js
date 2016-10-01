@@ -1,24 +1,3 @@
-/* available options
- statusFieldSelector: a jQuery selector to find a form (normally hidden) field to store active tab index, thus after form postback and keep the field value on server to the browser, the jquery-tab will automatically restore active tab
- statusHashTemplate: a key-value pair template to store active tab index in URL hash, ex: "tab="
- statusHashSeparator: a separator between multiple hash items
- fixedHeight : tab height will be fixed to fit the longest page and will not change when tab is switched
- showTopLabel : show switch label on top of the tab
- showBottomLabel : show switch label on bottom of the tab
- titleSelector : a jQuery selector to pick up "title" element to be label switches
- titleContentFilter: a callback to have an opportunity to change the html structure of title
- keepTitleVisible : show page title again in the page. Since page title will be shown in tab label, normall it's not necessary to show in page again.
- containerTemplate : whole wrapper container template
- labelContainerTemplate : labels container template
- labelItemTemplate : single label template
- labelActiveClass : CSS class for active label
- labelInactiveClass : CSS class for inactive label
- pageContainerTemplate : pages container template
- pageItemTemplate : single page template
- pageActiveClass : CSS class for active page
- beforeSwitch(oldIndex, newIndex) : a callback before switching the tab
- afterSwitch(oldIndex, newIndex) : a callback after switching the tab
- */
 jQuery.fn.tab = function (customOption) {
 	'use strict';
 	var $ = jQuery;
