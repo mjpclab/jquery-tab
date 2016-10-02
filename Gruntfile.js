@@ -12,8 +12,6 @@ module.exports = function (grunt) {
 		grunt.loadNpmTasks(task);
 	});
 
-	grunt.registerTask('default', ['jshint', 'clean', 'copy', 'uglify']);
-
 	grunt.config.init({
 		jshint: {
 			options: {
@@ -52,5 +50,7 @@ module.exports = function (grunt) {
 			}
 		}
 	});
+
+	grunt.registerTask('default', ['jshint', 'clean', 'copy', 'uglify']);
 
 };
