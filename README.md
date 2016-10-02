@@ -43,7 +43,7 @@ $('.tab-container').tab({
 
 # Options
 `statusFieldSelector`
-A jQuery selector to find a form (normally hidden) field to store active tab index, thus after form post back and keep the field value on server to the browser, the jquery-tab will automatically restore the active tab.
+A jQuery selector string or object to find a form (normally hidden) field to store active tab index, thus after form post back and keep the field value on server to the browser, the jquery-tab will automatically restore the active tab.
 
 `statusHashTemplate`
 A key-value pair template to store active tab index in URL hash, e.g. `"tab="`.
@@ -61,7 +61,7 @@ Show label-container on top of the tab.
 Show label-container on bottom of the tab.
 
 `titleSelector`
-A jQuery selector to pick up "title" element to be a label-item in label-container.
+A jQuery selector string or object to pick up "title" element to be a label-item in label-container.
 
 `titleContentFilter`
 A callback to have an opportunity to change the html structure of label-item.
