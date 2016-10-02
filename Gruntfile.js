@@ -16,9 +16,12 @@ module.exports = function (grunt) {
 
 	grunt.config.init({
 		jshint: {
-			all: [
+			options: {
+				validthis: true
+			},
+			default: [
 				'Gruntfile.js',
-				sourceDirectory + 'js/jquery-tab.js'
+				sourceDirectory + '*.js'
 			]
 		},
 		clean: {

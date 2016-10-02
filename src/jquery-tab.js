@@ -42,30 +42,32 @@ jQuery.fn.tab = function (customOption) {
 		var $container = $(options.containerTemplate);
 
 		//top label
+		var $topLabelContainer;
+		var $topLabelContainerLeaf;
 		if (options.showTopLabel) {
-			var $topLabelContainer = $(options.labelContainerTemplate.replace('{position}', 'top'));
+			$topLabelContainer = $(options.labelContainerTemplate.replace('{position}', 'top'));
 			$container.append($topLabelContainer);
+
+			$topLabelContainerLeaf = getLeafElement($topLabelContainer);
 		}
 
 		//page
 		var $pageContainer = $(options.pageContainerTemplate);
 		$container.append($pageContainer);
 
+		var $pageContainerLeaf = getLeafElement($pageContainer);
+
 		//bottom label
+		var $bottomLabelContainer;
+		var $bottomLabelContainerLeaf;
 		if (options.showBottomLabel) {
-			var $bottomLabelContainer = $(options.labelContainerTemplate.replace('{position}', 'bottom'));
+			$bottomLabelContainer = $(options.labelContainerTemplate.replace('{position}', 'bottom'));
 			$container.append($bottomLabelContainer);
+
+			$bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);
 		}
 
 		//add labels & pages
-		if (options.showTopLabel) {
-			var $topLabelContainerLeaf = getLeafElement($topLabelContainer);
-		}
-		if (options.showBottomLabel) {
-			var $bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);
-		}
-		var $pageContainerLeaf = getLeafElement($pageContainer);
-
 		while (true) {
 			var $title = $item.find(options.titleSelector).first();
 			if ($title.length === 0) {
@@ -81,10 +83,11 @@ jQuery.fn.tab = function (customOption) {
 			var $labelItem = $(options.labelItemTemplate);
 			var $labelItemLeaf = getLeafElement($labelItem);
 			$labelItemLeaf.html(options.titleContentFilter.call($title, $title));
-			if (options.showTopLabel) {
+
+			if ($topLabelContainerLeaf) {
 				$topLabelContainerLeaf.append($labelItem.clone());
 			}
-			if (options.showBottomLabel) {
+			if ($bottomLabelContainerLeaf) {
 				$bottomLabelContainerLeaf.append($labelItem.clone());
 			}
 
