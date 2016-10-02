@@ -68,7 +68,7 @@ jQuery.fn.tab = function (customOption) {
 
 		while (true) {
 			var $title = $item.find(options.titleSelector).first();
-			if ($title.size() === 0) {
+			if ($title.length === 0) {
 				break;
 			}
 			if (options.keepTitleVisible) {
@@ -88,9 +88,9 @@ jQuery.fn.tab = function (customOption) {
 				$bottomLabelContainerLeaf.append($labelItem.clone());
 			}
 
+			var $pageContents = $($title).add($title.nextUntil(options.titleSelector));
 			var $pageItem = $(options.pageItemTemplate);
 			var $pageItemLeaf = getLeafElement($pageItem);
-			var $pageContents = $title.nextUntil(options.titleSelector).andSelf();
 			$pageItemLeaf.append($pageContents);
 
 			$pageContainerLeaf.append($pageItem);
