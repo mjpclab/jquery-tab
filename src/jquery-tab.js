@@ -1,7 +1,7 @@
-jQuery.fn.tab = function (customOption) {
+jQuery.fn.tab = function (customOptions) {
 	'use strict';
 	var $ = jQuery;
-	var defaultOption = {
+	var defaultOptions = {
 		statusFieldSelector: '',
 		statusHashTemplate: '',
 		statusHashSeparator: '&',
@@ -24,7 +24,7 @@ jQuery.fn.tab = function (customOption) {
 		beforeSwitch: null,
 		afterSwitch: null
 	};
-	var options = $.extend({}, defaultOption, customOption);
+	var options = $.extend({}, defaultOptions, customOptions);
 
 	function getLeafElement($node) {
 		var result = $node[0];
