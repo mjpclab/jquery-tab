@@ -42,59 +42,59 @@ $('.tab-container').tab({
 ```
 
 # Options
-`statusFieldSelector`
+`statusFieldSelector`  
 A jQuery selector string or object to find a form (normally hidden) field to store active tab index, thus after form post back and keep the field value on server to the browser, the jquery-tab will automatically restore the active tab.
 
-`statusHashTemplate`
+`statusHashTemplate`  
 A key-value pair template to store active tab index in URL hash, e.g. `"tab="`.
 
-`statusHashSeparator`
+`statusHashSeparator`  
 Determine a separator between multiple hash items if there are more than 1 tab-container on the same page.
 
-`fixedHeight`
+`fixedHeight`  
 Tab-container's height will be fixed to fit the longest page and will not change when tabs are switched.
 
-`showTopLabel`
+`showTopLabel`  
 Show label-container on top of the tab.
 
-`showBottomLabel`
+`showBottomLabel`  
 Show label-container on bottom of the tab.
 
-`titleSelector`
+`titleSelector`  
 A jQuery selector string or object to pick up "title" element to be a label-item in label-container.
 
-`titleContentFilter`
+`titleContentFilter`  
 A callback to have an opportunity to change the html structure of label-item.
 
-`keepTitleVisible`
+`keepTitleVisible`  
 Show page title again in the page-item. Since page title will be shown in label-container, normally it's unnecessary to be shown in page-item again.
 
-`containerTemplate`
+`containerTemplate`  
 Tab-container's template.
 
-`labelContainerTemplate`
+`labelContainerTemplate`  
 Label-container's template.
 
-`labelItemTemplate`
+`labelItemTemplate`  
 Label-item's template.
 
-`labelActiveClass`
+`labelActiveClass`  
 CSS class for active label-item.
 
-`labelInactiveClass`
+`labelInactiveClass`  
 CSS class for inactive label-item.
 
-`pageContainerTemplate`
+`pageContainerTemplate`  
 Page-containers's template.
 
-`pageItemTemplate`
+`pageItemTemplate`  
 Page-item's template.
 
-`pageActiveClass`
+`pageActiveClass`  
 CSS class for active page-item.
 
-`beforeSwitch(oldIndex, newIndex)`
+`beforeSwitch(oldIndex, newIndex)`  
 A callback before switching the tab.
 
-`afterSwitch(oldIndex, newIndex)`
+`afterSwitch(oldIndex, newIndex)`  
 A callback after switching the tab.
