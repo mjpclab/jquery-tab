@@ -4,7 +4,9 @@
 	"description": "A jQuery tab sheet plugin",
 	"main": "src/jquery-tab.js",
 	"dependencies": {
-		"jquery": "*",
+		"jquery": "*"
+	},
+	"devDependencies": {
 		"grunt": "*",
 		"grunt-contrib-jshint": "*",
 		"grunt-contrib-clean": "*",
