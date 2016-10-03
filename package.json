@@ -7,6 +7,7 @@
 		"jquery": "*"
 	},
 	"devDependencies": {
+		"jsdom": "*",
 		"grunt": "*",
 		"grunt-contrib-jshint": "*",
 		"grunt-contrib-clean": "*",

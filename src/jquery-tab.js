@@ -4,7 +4,10 @@
 	if (typeof define === 'function' && define.amd) {
 		define(['jquery'], factory);
 	}
-	else if(root.jQuery) {
+	else if (module && module.exports) {
+		module.exports = factory;
+	}
+	else if (root.jQuery) {
 		factory(root.jQuery);
 	}
 }(this, function ($) {
