@@ -37,16 +37,16 @@
 		};
 		var options = $.extend({}, defaultOptions, customOptions);
 
-		function getLeafElement($node) {
+		var getLeafElement = function ($node) {
 			var result = $node[0];
 			while (result.hasChildNodes()) {
 				result = result.firstChild;
 			}
 
 			return $(result);
-		}
+		};
 
-		function generateStructure($item) {
+		var generateStructure = function ($item) {
 			var pageCount = 0;
 
 			//container
@@ -114,26 +114,104 @@
 			//replace original content
 			$item.prepend($container);
 
-			//check if param:fixed height
-			if (options.fixedHeight) {
-				var maxHeight = 0;
+			//controller
+			var oldIndex = -1;
+			var getCount = function () {
+				return pageCount;
+			};
+			var getCurrentIndex = function () {
+				return oldIndex;
+			};
+			var getLabel = function ($container, index) {
+				if (!isFinite(index)) {
+					return;
+				}
+				return $container.children(':eq(' + index + ')');
+			};
+			var getTopLabel = function (index) {
+				return getLabel($topLabelContainerLeaf, index);
+			};
+			var getBottomLabel = function (index) {
+				return getLabel($topLabelContainerLeaf, index);
+			};
+			var getTopBottomLabels = function (index) {
+				return $([]).add(getTopLabel(index)).add(getBottomLabel(index));
+			};
+			var getPage = function (index) {
+				if (!isFinite(index)) {
+					return;
+				}
+				return $pageContainerLeaf.children(':eq(' + index + ')');
+			};
+			var updateFixedHeight = function () {
+				if (options.fixedHeight) {
+					var maxHeight = 0;
 
-				$pageContainerLeaf.children().each(function () {
-					var $pageItem = jQuery(this);
-					var pageHeight = $pageItem.height();
-					if (pageHeight > maxHeight) {
-						maxHeight = pageHeight;
+					$pageContainerLeaf.children().each(function () {
+						var $pageItem = $(this);
+						var pageHeight = $pageItem[0].scrollHeight;
+						if (pageHeight > maxHeight) {
+							maxHeight = pageHeight;
+						}
+					}).height(maxHeight);
+				}
+			};
+			var switchTo = function (newIndex) {
+				if (typeof(options.beforeSwitch) === 'function') {
+					options.beforeSwitch(oldIndex, newIndex);
+				}
+
+				var $newLabel = getTopBottomLabels(newIndex);
+				$newLabel.addClass(options.labelActiveClass).removeClass(options.labelInactiveClass);
+				$newLabel.siblings().addClass(options.labelInactiveClass).removeClass(options.labelActiveClass);
+
+				var $newPage = getPage(newIndex);
+				$newPage.siblings().hide().removeClass(options.pageActiveClass);
+				$newPage.show().addClass(options.pageActiveClass);
+
+				$statusFields.val(newIndex);
+				if (options.statusHashTemplate) {
+					var hash = location.hash;
+					var statusHash = options.statusHashTemplate + newIndex;
+					if (hash.indexOf(options.statusHashTemplate) > -1) {
+						hash = hash.replace(new RegExp(options.statusHashTemplate + '\\d+'), statusHash);
 					}
-				}).height(maxHeight);
+					else {
+						if (hash.length) {
+							hash += options.statusHashSeparator;
+						}
+						hash += options.statusHashTemplate + newIndex;
+					}
 
-			}
+					location.hash = hash;
+				}
+
+				if (typeof(options.afterSwitch) === 'function') {
+					options.afterSwitch(oldIndex, newIndex);
+				}
+				oldIndex = newIndex;
+			};
+			var controller = {
+				getCount: getCount,
+				getCurrentIndex: getCurrentIndex,
+				getTopLabel: getTopLabel,
+				getBottomLabel: getBottomLabel,
+				getTopBottomLabels: getTopBottomLabels,
+				getPage: getPage,
+				updateFixedHeight: updateFixedHeight,
+				switchTo: switchTo
+			};
+			$item.data('jquery-tab-controller', controller);
+			$container.data('jquery-tab-controller', controller);
+
+			//check if param:fixed height
+			updateFixedHeight();
 
 			//enable page switching
 			var $statusFields = $item.find(options.statusFieldSelector);
 			if (!$statusFields.length) {
 				$statusFields = $(options.statusFieldSelector);
 			}
-			var oldIndex = -1;
 
 			function labelItemClick() {
 				var $activeLabel = $(this);
@@ -142,71 +220,40 @@
 					return;
 				}
 
-				if (typeof(options.beforeSwitch) === 'function') {
-					options.beforeSwitch(oldIndex, activeLabelIndex);
-				}
-
-				$activeLabel.addClass(options.labelActiveClass).removeClass(options.labelInactiveClass);
-				$activeLabel.siblings().addClass(options.labelInactiveClass).removeClass(options.labelActiveClass);
-
-				var $activePage = $pageContainerLeaf.children(':eq(' + activeLabelIndex + ')');
-				$activePage.siblings().hide().removeClass(options.pageActiveClass);
-				$activePage.show().addClass(options.pageActiveClass);
-
-				$statusFields.val(activeLabelIndex);
-				if (options.statusHashTemplate) {
-					var hash = location.hash;
-					var statusHash = options.statusHashTemplate + activeLabelIndex;
-					if (hash.indexOf(options.statusHashTemplate) > -1) {
-						hash = hash.replace(new RegExp(options.statusHashTemplate + '\\d+'), statusHash);
-					}
-					else {
-						if (hash.length) {
-							hash += options.statusHashSeparator;
-						}
-						hash += options.statusHashTemplate + activeLabelIndex;
-					}
-
-					location.hash = hash;
-				}
-
-				if (typeof(options.afterSwitch) === 'function') {
-					options.afterSwitch(oldIndex, activeLabelIndex);
-				}
-				oldIndex = activeLabelIndex;
+				switchTo(activeLabelIndex);
 			}
 
-			var activeLabelIndex = NaN;
+			var initialLabelIndex = NaN;
 			$statusFields.each(function () {
 				var status = $(this).val();
 				if (status.length && isFinite(status)) {
-					activeLabelIndex = parseInt(status);
+					initialLabelIndex = parseInt(status);
 					return false;
 				}
 			});
-			if (isNaN(activeLabelIndex) && options.statusHashTemplate) {
+			if (isNaN(initialLabelIndex) && options.statusHashTemplate) {
 				var re = new RegExp(options.statusHashTemplate + '(\\d+)');
 				var searchResult = location.hash.match(re);
 				if (searchResult && searchResult[1]) {
-					activeLabelIndex = parseInt(searchResult[1]);
+					initialLabelIndex = parseInt(searchResult[1]);
 				}
 			}
-			if (isNaN(activeLabelIndex)) {
-				activeLabelIndex = 0;
+			if (isNaN(initialLabelIndex)) {
+				initialLabelIndex = 0;
 			}
 			var maxLabelIndex = pageCount - 1;
-			if (activeLabelIndex > maxLabelIndex) {
-				activeLabelIndex = maxLabelIndex;
+			if (initialLabelIndex > maxLabelIndex) {
+				initialLabelIndex = maxLabelIndex;
 			}
+			switchTo(initialLabelIndex);
+
 			if (options.showTopLabel) {
 				$topLabelContainerLeaf.children().click(labelItemClick);
-				$topLabelContainerLeaf.children(':eq(' + activeLabelIndex + ')').click();
 			}
 			if (options.showBottomLabel) {
 				$bottomLabelContainerLeaf.children().click(labelItemClick);
-				$bottomLabelContainerLeaf.children(':eq(' + activeLabelIndex + ')').click();
 			}
-		}
+		};
 
 		var self = this;
 		if (self.length) {

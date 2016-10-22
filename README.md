@@ -98,3 +98,35 @@ A callback before switching the tab.
 
 `afterSwitch(oldIndex, newIndex)`  
 A callback after switching the tab.
+
+#the Controller
+##Get Controller
+``` javascript
+var controller = $('.tab-container').data('jquery-tab-controller');
+```
+
+##Controller Methods
+`getCount`  
+Get the number of pages.
+
+`getCurrentIndex`  
+Get current active tab Index.
+
+`getTopLabel(index)`  
+Get the top side label item by `index`.
+
+`getBottomLabel`  
+Get the bottom side label item by `index`.
+
+`getTopBottomLabels`  
+Get the top and bottom side label item by `index`.
+
+`getPage(index)`  
+Get page item by `index`.
+
+`updateFixedHeight`    
+When page item's content is dynamically changed and becomes longer, use this method to update the height of the page container.
+Only available in height fixed mode by setting option `fixedHeight`.
+
+`switchTo(index)`  
+Switch active(selected) page item by `index`.
