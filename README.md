@@ -106,25 +106,25 @@ var controller = $('.tab-container').data('jquery-tab-controller');
 ```
 
 ##Controller Methods
-`getCount`  
+`getCount()`  
 Get the number of pages.
 
-`getCurrentIndex`  
+`getCurrentIndex()`  
 Get current active tab Index.
 
 `getTopLabel(index)`  
 Get the top side label item by `index`.
 
-`getBottomLabel`  
+`getBottomLabel(index)`  
 Get the bottom side label item by `index`.
 
-`getTopBottomLabels`  
+`getTopBottomLabels(index)`  
 Get the top and bottom side label item by `index`.
 
 `getPage(index)`  
 Get page item by `index`.
 
-`updateFixedHeight`    
+`updateFixedHeight()`    
 When page item's content is dynamically changed and becomes longer, use this method to update the height of the page container.
 Only available in height fixed mode by setting option `fixedHeight`.
 
