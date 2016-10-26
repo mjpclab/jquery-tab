@@ -32,6 +32,12 @@
 			pageContainerTemplate: '<div class="page-container"></div>',
 			pageItemTemplate: '<div class="page-item"></div>',
 			pageActiveClass: 'page-active',
+			showPageItem: function ($pageItem) {
+				return $pageItem && $pageItem.show && $pageItem.show();
+			},
+			hidePageItem: function ($pageItem) {
+				return $pageItem && $pageItem.hide && $pageItem.hide();
+			},
 			beforeSwitch: null,
 			afterSwitch: null
 		};
@@ -166,8 +172,17 @@
 				$newLabel.siblings().addClass(options.labelInactiveClass).removeClass(options.labelActiveClass);
 
 				var $newPage = getPage(newIndex);
-				$newPage.siblings().hide().removeClass(options.pageActiveClass);
-				$newPage.show().addClass(options.pageActiveClass);
+				var $siblingsPage = $newPage.siblings();
+
+				if (typeof options.hidePageItem === 'function') {
+					options.hidePageItem($siblingsPage);
+				}
+				$siblingsPage.removeClass(options.pageActiveClass);
+
+				if (typeof options.showPageItem === 'function') {
+					options.showPageItem($newPage);
+				}
+				$newPage.addClass(options.pageActiveClass);
 
 				$statusFields.val(newIndex);
 				if (options.statusHashTemplate) {

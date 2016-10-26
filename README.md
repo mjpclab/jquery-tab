@@ -93,6 +93,16 @@ Page-item's template.
 `pageActiveClass`  
 CSS class for active page-item.
 
+`showPageItem`  
+Define the behavior of showing an page-item when switched to it.
+Must be a function like `func($pageItem) {}`. Parameter `$pageItem` will be the current page-item's jQuery object.
+The default behavior is calling the jQuery object's `show()`.
+
+`hidePageItem`    
+Define the behavior of hiding an page-item when switched to other page.
+Must be a function like `func($pageItem) {}`. Parameter `$pageItem` will be the current page-item's jQuery object.
+The default behavior is calling the jQuery object's `hide()`.
+
 `beforeSwitch(oldIndex, newIndex)`  
 A callback before switching the tab.
 
