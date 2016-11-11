@@ -120,35 +120,7 @@
 			//replace original content
 			$item.prepend($container);
 
-			//controller
-			var oldIndex = -1;
-			var getCount = function () {
-				return pageCount;
-			};
-			var getCurrentIndex = function () {
-				return oldIndex;
-			};
-			var getLabel = function ($container, index) {
-				if (!isFinite(index)) {
-					return;
-				}
-				return $container.children(':eq(' + index + ')');
-			};
-			var getTopLabel = function (index) {
-				return getLabel($topLabelContainerLeaf, index);
-			};
-			var getBottomLabel = function (index) {
-				return getLabel($topLabelContainerLeaf, index);
-			};
-			var getTopBottomLabels = function (index) {
-				return $([]).add(getTopLabel(index)).add(getBottomLabel(index));
-			};
-			var getPage = function (index) {
-				if (!isFinite(index)) {
-					return;
-				}
-				return $pageContainerLeaf.children(':eq(' + index + ')');
-			};
+			//check if param:fixed height
 			var updateFixedHeight = function () {
 				if (options.fixedHeight) {
 					var maxHeight = 0;
@@ -162,6 +134,45 @@
 					}).height(maxHeight);
 				}
 			};
+			updateFixedHeight();
+
+			//getters
+			var getCount = function () {
+				return pageCount;
+			};
+			var getCurrentIndex = function () {
+				return oldIndex;
+			};
+			var getLabel = function ($container, index) {
+				if (!isFinite(index)) {
+					return;
+				}
+				return $container.children(':eq(' + index + ')');
+			};
+			var getTopLabel = function (index) {
+				if ($topLabelContainerLeaf) {
+					return getLabel($topLabelContainerLeaf, index);
+				}
+				return $([]);
+			};
+			var getBottomLabel = function (index) {
+				if ($bottomLabelContainerLeaf) {
+					return getLabel($bottomLabelContainerLeaf, index);
+				}
+				return $([]);
+			};
+			var getTopBottomLabels = function (index) {
+				return getTopLabel(index).add(getBottomLabel(index));
+			};
+			var getPage = function (index) {
+				if (!isFinite(index)) {
+					return;
+				}
+				return $pageContainerLeaf.children(':eq(' + index + ')');
+			};
+
+			//switch function and switch event handler
+			var oldIndex = -1;
 			var switchTo = function (newIndex) {
 				if (typeof(options.beforeSwitch) === 'function') {
 					options.beforeSwitch(oldIndex, newIndex);
@@ -206,29 +217,8 @@
 				}
 				oldIndex = newIndex;
 			};
-			var controller = {
-				getCount: getCount,
-				getCurrentIndex: getCurrentIndex,
-				getTopLabel: getTopLabel,
-				getBottomLabel: getBottomLabel,
-				getTopBottomLabels: getTopBottomLabels,
-				getPage: getPage,
-				updateFixedHeight: updateFixedHeight,
-				switchTo: switchTo
-			};
-			$item.data('jquery-tab-controller', controller);
-			$container.data('jquery-tab-controller', controller);
 
-			//check if param:fixed height
-			updateFixedHeight();
-
-			//enable page switching
-			var $statusFields = $item.find(options.statusFieldSelector);
-			if (!$statusFields.length) {
-				$statusFields = $(options.statusFieldSelector);
-			}
-
-			function labelItemClick() {
+			var labelItemClick = function () {
 				var $activeLabel = $(this);
 				var activeLabelIndex = $activeLabel.index();
 				if (activeLabelIndex === oldIndex) {
@@ -236,6 +226,19 @@
 				}
 
 				switchTo(activeLabelIndex);
+			};
+
+			if ($topLabelContainerLeaf) {
+				$topLabelContainerLeaf.children().click(labelItemClick);
+			}
+			if ($bottomLabelContainerLeaf) {
+				$bottomLabelContainerLeaf.children().click(labelItemClick);
+			}
+
+			//init show active page
+			var $statusFields = $item.find(options.statusFieldSelector);
+			if (!$statusFields.length) {
+				$statusFields = $(options.statusFieldSelector);
 			}
 
 			var initialLabelIndex = NaN;
@@ -262,12 +265,19 @@
 			}
 			switchTo(initialLabelIndex);
 
-			if (options.showTopLabel) {
-				$topLabelContainerLeaf.children().click(labelItemClick);
-			}
-			if (options.showBottomLabel) {
-				$bottomLabelContainerLeaf.children().click(labelItemClick);
-			}
+			//controller
+			var controller = {
+				getCount: getCount,
+				getCurrentIndex: getCurrentIndex,
+				getTopLabel: getTopLabel,
+				getBottomLabel: getBottomLabel,
+				getTopBottomLabels: getTopBottomLabels,
+				getPage: getPage,
+				updateFixedHeight: updateFixedHeight,
+				switchTo: switchTo
+			};
+			$item.data('jquery-tab-controller', controller);
+			$container.data('jquery-tab-controller', controller);
 		};
 
 		var self = this;
