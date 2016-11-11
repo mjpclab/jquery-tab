@@ -13,6 +13,7 @@
 }(this, function ($) {
 	$.fn.tab = function (customOptions) {
 		var defaultOptions = {
+			triggerEvents: 'click',
 			statusFieldSelector: '',
 			statusHashTemplate: '',
 			statusHashSeparator: '&',
@@ -229,10 +230,10 @@
 			};
 
 			if ($topLabelContainerLeaf) {
-				$topLabelContainerLeaf.children().click(labelItemClick);
+				$topLabelContainerLeaf.children().on(options.triggerEvents, labelItemClick);
 			}
 			if ($bottomLabelContainerLeaf) {
-				$bottomLabelContainerLeaf.children().click(labelItemClick);
+				$bottomLabelContainerLeaf.children().on(options.triggerEvents, labelItemClick);
 			}
 
 			//init show active page

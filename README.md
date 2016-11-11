@@ -42,6 +42,10 @@ $('.tab-container').tab({
 ```
 
 # Options
+`triggerEvents`  
+Determine the types of events triggered on label-item that will make the page-item switched.
+Default value is `click`.
+
 `statusFieldSelector`  
 A jQuery selector string or object to find a form (normally hidden) field to store active tab index, thus after form post back and keep the field value on server to the browser, the jquery-tab will automatically restore the active tab.
 

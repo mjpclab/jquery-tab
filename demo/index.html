@@ -90,7 +90,8 @@
 	jQuery(function ($) {
 		$('.tab1').tab({
 			'fixedHeight': true,
-			'statusHashTemplate': 'tab1='/*,
+			'statusHashTemplate': 'tab1=',
+			'triggerEvents': 'click mouseover'/*,
 			beforeSwitch: function (oldIndex, newIndex) {
 				console.log('before', arguments);
 			},
