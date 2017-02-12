@@ -172,6 +172,26 @@
 				return $pageContainerLeaf.children(':eq(' + index + ')');
 			};
 
+			//utilities
+			var saveIndex=function(index) {
+				$statusFields.val(index);
+				if (options.statusHashTemplate) {
+					var hash = location.hash;
+					var statusHash = options.statusHashTemplate + index;
+					if (hash.indexOf(options.statusHashTemplate) > -1) {
+						hash = hash.replace(new RegExp(options.statusHashTemplate + '\\d+'), statusHash);
+					}
+					else {
+						if (hash.length) {
+							hash += options.statusHashSeparator;
+						}
+						hash += options.statusHashTemplate + index;
+					}
+
+					location.hash = hash;
+				}
+			};
+
 			//switch function and switch event handler
 			var oldIndex = -1;
 			var switchTo = function (newIndex) {
@@ -196,26 +216,12 @@
 				}
 				$newPage.addClass(options.pageActiveClass);
 
-				$statusFields.val(newIndex);
-				if (options.statusHashTemplate) {
-					var hash = location.hash;
-					var statusHash = options.statusHashTemplate + newIndex;
-					if (hash.indexOf(options.statusHashTemplate) > -1) {
-						hash = hash.replace(new RegExp(options.statusHashTemplate + '\\d+'), statusHash);
-					}
-					else {
-						if (hash.length) {
-							hash += options.statusHashSeparator;
-						}
-						hash += options.statusHashTemplate + newIndex;
-					}
-
-					location.hash = hash;
-				}
+				saveIndex(newIndex);
 
 				if (typeof(options.afterSwitch) === 'function') {
 					options.afterSwitch(oldIndex, newIndex);
 				}
+
 				oldIndex = newIndex;
 			};
 
