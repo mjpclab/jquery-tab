@@ -57,21 +57,21 @@
 			var pageCount = 0;
 
 			//container
-			var $container = $(options.containerTemplate);
+			var $outerContainer = $(options.containerTemplate);
 
 			//top label
 			var $topLabelContainer;
 			var $topLabelContainerLeaf;
 			if (options.showTopLabel) {
 				$topLabelContainer = $(options.labelContainerTemplate.replace('{position}', 'top'));
-				$container.append($topLabelContainer);
+				$outerContainer.append($topLabelContainer);
 
 				$topLabelContainerLeaf = getLeafElement($topLabelContainer);
 			}
 
 			//page
 			var $pageContainer = $(options.pageContainerTemplate);
-			$container.append($pageContainer);
+			$outerContainer.append($pageContainer);
 
 			var $pageContainerLeaf = getLeafElement($pageContainer);
 
@@ -80,12 +80,45 @@
 			var $bottomLabelContainerLeaf;
 			if (options.showBottomLabel) {
 				$bottomLabelContainer = $(options.labelContainerTemplate.replace('{position}', 'bottom'));
-				$container.append($bottomLabelContainer);
+				$outerContainer.append($bottomLabelContainer);
 
 				$bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);
 			}
 
 			//add labels & pages
+			var newLabelItem = function (title) {
+				var $labelItem = $(options.labelItemTemplate);
+				var $labelItemLeaf = getLeafElement($labelItem);
+				$labelItemLeaf.html(title);
+
+				return $labelItem;
+			};
+			var newPageItem = function (content) {
+				var $pageItem = $(options.pageItemTemplate);
+				var $pageItemLeaf = getLeafElement($pageItem);
+				$pageItemLeaf.append(content);
+
+				return $pageItem;
+			};
+			var addTabPage = function (title, content) {
+				//title
+				var $labelItem = newLabelItem(title);
+
+				if ($topLabelContainerLeaf) {
+					$topLabelContainerLeaf.append($labelItem.clone());
+				}
+				if ($bottomLabelContainerLeaf) {
+					$bottomLabelContainerLeaf.append($labelItem.clone());
+				}
+
+				//content
+				var $pageItem = newPageItem(content);
+				$pageContainerLeaf.append($pageItem);
+
+				//finalize
+				pageCount++;
+			};
+
 			while (true) {
 				var $title = $item.find(options.titleSelector).first();
 				if ($title.length === 0) {
@@ -95,28 +128,13 @@
 					$title.hide();
 				}
 
-				var $labelItem = $(options.labelItemTemplate);
-				var $labelItemLeaf = getLeafElement($labelItem);
-				$labelItemLeaf.html(options.titleContentFilter.call($title, $title));
-
-				if ($topLabelContainerLeaf) {
-					$topLabelContainerLeaf.append($labelItem.clone());
-				}
-				if ($bottomLabelContainerLeaf) {
-					$bottomLabelContainerLeaf.append($labelItem.clone());
-				}
-
-				var $pageContents = $($title).add($title.nextUntil(options.titleSelector));
-				var $pageItem = $(options.pageItemTemplate);
-				var $pageItemLeaf = getLeafElement($pageItem);
-				$pageItemLeaf.append($pageContents);
-
-				$pageContainerLeaf.append($pageItem);
-				pageCount++;
+				var title = options.titleContentFilter.call($title, $title);
+				var content = $title.add($title.nextUntil(options.titleSelector));
+				addTabPage(title, content);
 			}
 
 			//replace original content
-			$item.prepend($container);
+			$item.prepend($outerContainer);
 
 			//check if param:fixed height
 			var updateFixedHeight = function () {
@@ -290,7 +308,7 @@
 				switchTo: switchTo
 			};
 			$item.data('jquery-tab-controller', controller);
-			$container.data('jquery-tab-controller', controller);
+			$outerContainer.data('jquery-tab-controller', controller);
 		};
 
 		var self = this;
