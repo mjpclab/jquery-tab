@@ -86,6 +86,41 @@
 				$bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);
 			}
 
+
+			//getters
+			var getCount = function () {
+				return pageCount;
+			};
+			var getCurrentIndex = function () {
+				return currentIndex;
+			};
+			var getLabel = function ($container, index) {
+				if (!isFinite(index)) {
+					return;
+				}
+				return $container.children(':eq(' + index + ')');
+			};
+			var getTopLabel = function (index) {
+				if ($topLabelContainerLeaf) {
+					return getLabel($topLabelContainerLeaf, index);
+				}
+				return $([]);
+			};
+			var getBottomLabel = function (index) {
+				if ($bottomLabelContainerLeaf) {
+					return getLabel($bottomLabelContainerLeaf, index);
+				}
+				return $([]);
+			};
+			var getTopBottomLabels = function (index) {
+				return getTopLabel(index).add(getBottomLabel(index));
+			};
+			var getPage = function (index) {
+				if (!isFinite(index)) {
+					return;
+				}
+				return $pageContainerLeaf.children(':eq(' + index + ')');
+			};
 			//add labels & pages
 			var newLabelItem = function (title) {
 				var $labelItem = $(options.labelItemTemplate);
@@ -173,6 +208,28 @@
 					inserted++;
 				}
 			};
+			var remove = function (index) {
+				if (index < 0 || index > pageCount) {
+					return;
+				}
+
+				var $labelItems = getTopBottomLabels(index);
+				var $pageItem = getPage(index);
+
+				$labelItems.remove();
+				$pageItem.remove();
+				pageCount--;
+
+				if (index < currentIndex) {
+					currentIndex--
+				}
+				else if (index === currentIndex) {
+					currentIndex = (index < pageCount ? index : pageCount - 1);
+					switchTo(currentIndex);
+				}
+
+				return $pageItem;
+			};
 
 			add($item);
 
@@ -194,41 +251,6 @@
 				}
 			};
 			updateFixedHeight();
-
-			//getters
-			var getCount = function () {
-				return pageCount;
-			};
-			var getCurrentIndex = function () {
-				return currentIndex;
-			};
-			var getLabel = function ($container, index) {
-				if (!isFinite(index)) {
-					return;
-				}
-				return $container.children(':eq(' + index + ')');
-			};
-			var getTopLabel = function (index) {
-				if ($topLabelContainerLeaf) {
-					return getLabel($topLabelContainerLeaf, index);
-				}
-				return $([]);
-			};
-			var getBottomLabel = function (index) {
-				if ($bottomLabelContainerLeaf) {
-					return getLabel($bottomLabelContainerLeaf, index);
-				}
-				return $([]);
-			};
-			var getTopBottomLabels = function (index) {
-				return getTopLabel(index).add(getBottomLabel(index));
-			};
-			var getPage = function (index) {
-				if (!isFinite(index)) {
-					return;
-				}
-				return $pageContainerLeaf.children(':eq(' + index + ')');
-			};
 
 			//utilities
 			var $statusFields = $item.find(options.statusFieldSelector);
@@ -369,7 +391,8 @@
 				addTabPage: addTabPage,
 				insertTabPage: insertTabPage,
 				add: add,
-				insert: insert
+				insert: insert,
+				remove: remove
 			};
 			$item.data('jquery-tab-controller', controller);
 			$outerContainer.data('jquery-tab-controller', controller);

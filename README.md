@@ -156,3 +156,6 @@ Parse and append another $container's structure to current tab.
 
 `insert($container, index)`
 Parse and insert another $container's structure to current tab at position `index`.
+
+`remove(index)`  
+Remove a page from `index` and return it's page item.
