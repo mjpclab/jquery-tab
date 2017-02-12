@@ -91,10 +91,7 @@
 				if ($title.length === 0) {
 					break;
 				}
-				if (options.keepTitleVisible) {
-					$title.show();
-				}
-				else {
+				if (!options.keepTitleVisible) {
 					$title.hide();
 				}
 
@@ -173,7 +170,7 @@
 			};
 
 			//utilities
-			var saveIndex=function(index) {
+			var saveIndex = function (index) {
 				$statusFields.val(index);
 				if (options.statusHashTemplate) {
 					var hash = location.hash;
@@ -195,36 +192,45 @@
 			//switch function and switch event handler
 			var oldIndex = -1;
 			var switchTo = function (newIndex) {
+				//before switching callback
 				if (typeof(options.beforeSwitch) === 'function') {
 					options.beforeSwitch(oldIndex, newIndex);
 				}
 
+				//labels & pages
 				var $newLabel = getTopBottomLabels(newIndex);
-				$newLabel.addClass(options.labelActiveClass).removeClass(options.labelInactiveClass);
-				$newLabel.siblings().addClass(options.labelInactiveClass).removeClass(options.labelActiveClass);
-
+				var $otherLabels = $newLabel.siblings();
 				var $newPage = getPage(newIndex);
-				var $siblingsPage = $newPage.siblings();
+				var $otherPages = $newPage.siblings();
 
+				$otherLabels.removeClass(options.labelActiveClass).addClass(options.labelInactiveClass);
+				$otherPages.removeClass(options.pageActiveClass);
+				$newLabel.addClass(options.labelActiveClass).removeClass(options.labelInactiveClass);
+				$newPage.addClass(options.pageActiveClass);
+
+				//callback for hidden page items
 				if (typeof options.hidePageItem === 'function') {
-					options.hidePageItem($siblingsPage);
+					options.hidePageItem($otherPages);
 				}
-				$siblingsPage.removeClass(options.pageActiveClass);
 
+				//callback for shown page item
 				if (typeof options.showPageItem === 'function') {
 					options.showPageItem($newPage);
 				}
-				$newPage.addClass(options.pageActiveClass);
 
+				//keep new index for restoring
 				saveIndex(newIndex);
 
+				//after switching callback
 				if (typeof(options.afterSwitch) === 'function') {
 					options.afterSwitch(oldIndex, newIndex);
 				}
 
+				//finalize
 				oldIndex = newIndex;
 			};
 
+			//handle event
 			var labelItemClick = function () {
 				var $activeLabel = $(this);
 				var activeLabelIndex = $activeLabel.index();
