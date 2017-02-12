@@ -141,19 +141,40 @@
 				insertTabPage(title, content);
 			};
 
-			while (true) {
-				var $title = $item.find(options.titleSelector).first();
-				if ($title.length === 0) {
-					break;
-				}
-				if (!options.keepTitleVisible) {
-					$title.hide();
-				}
+			var add = function ($sourceContainer) {
+				while (true) {
+					var $title = $sourceContainer.find(options.titleSelector).first();
+					if ($title.length === 0) {
+						break;
+					}
+					if (!options.keepTitleVisible) {
+						$title.hide();
+					}
 
-				var title = options.titleContentFilter.call($title, $title);
-				var content = $title.add($title.nextUntil(options.titleSelector));
-				insertTabPage(title, content);
-			}
+					var title = options.titleContentFilter.call($title, $title);
+					var content = $title.add($title.nextUntil(options.titleSelector));
+					addTabPage(title, content);
+				}
+			};
+			var insert = function ($sourceContainer, index) {
+				var inserted = 0;
+				while (true) {
+					var $title = $sourceContainer.find(options.titleSelector).first();
+					if ($title.length === 0) {
+						break;
+					}
+					if (!options.keepTitleVisible) {
+						$title.hide();
+					}
+
+					var title = options.titleContentFilter.call($title, $title);
+					var content = $title.add($title.nextUntil(options.titleSelector));
+					insertTabPage(title, content, index + inserted);
+					inserted++;
+				}
+			};
+
+			add($item);
 
 			//replace original content
 			$item.prepend($outerContainer);
@@ -346,7 +367,9 @@
 				updateFixedHeight: updateFixedHeight,
 				switchTo: switchTo,
 				addTabPage: addTabPage,
-				insertTabPage: insertTabPage
+				insertTabPage: insertTabPage,
+				add: add,
+				insert: insert
 			};
 			$item.data('jquery-tab-controller', controller);
 			$outerContainer.data('jquery-tab-controller', controller);

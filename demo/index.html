@@ -83,6 +83,14 @@
 </div>
 <input type="hidden" value="2" name="active-tab" class="active-tab"/>
 
+<div class="to-be-insert">
+	<h1>another title 1</h1>
+	<p>another content 1 ... </p>
+
+	<h1>another title 2</h1>
+	<p>another content 2 ... </p>
+</div>
+
 <!--<script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>-->
 <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="../src/jquery-tab.js"></script>
@@ -108,6 +116,7 @@
 		tab2Controller.switchTo(1);
 		tab2Controller.insertTabPage('inserted', '<p>inserted page content</p>', 1);
 		tab2Controller.addTabPage('<span>added</span>', '<h1>added page content</h1>');
+		tab2Controller.insert($('.to-be-insert'), 0);
 
 		$('.tab3').tab({
 			'fixedHeight': true,
