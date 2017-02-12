@@ -55,6 +55,7 @@
 
 		var generateStructure = function ($item) {
 			var pageCount = 0;
+			var currentIndex = -1;
 
 			//container
 			var $outerContainer = $(options.containerTemplate);
@@ -100,23 +101,44 @@
 
 				return $pageItem;
 			};
-			var addTabPage = function (title, content) {
-				//title
+			var insertTabPage = function (title, content, index) {
 				var $labelItem = newLabelItem(title);
-
-				if ($topLabelContainerLeaf) {
-					$topLabelContainerLeaf.append($labelItem.clone());
-				}
-				if ($bottomLabelContainerLeaf) {
-					$bottomLabelContainerLeaf.append($labelItem.clone());
-				}
-
-				//content
 				var $pageItem = newPageItem(content);
-				$pageContainerLeaf.append($pageItem);
+				if (currentIndex > -1 && typeof options.hidePageItem === 'function') {
+					options.hidePageItem($pageItem);
+				}
+
+				if (index < 0) {
+					index = 0;
+				}
+				if (index < pageCount) {
+					if ($topLabelContainerLeaf) {
+						$topLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
+					}
+					if ($bottomLabelContainerLeaf) {
+						$bottomLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
+					}
+					$pageContainerLeaf.children(':eq(' + index + ')').before($pageItem);
+
+					if (index <= currentIndex) {
+						currentIndex++;
+					}
+				}
+				else {
+					if ($topLabelContainerLeaf) {
+						$topLabelContainerLeaf.append($labelItem.clone());
+					}
+					if ($bottomLabelContainerLeaf) {
+						$bottomLabelContainerLeaf.append($labelItem.clone());
+					}
+					$pageContainerLeaf.append($pageItem);
+				}
 
 				//finalize
 				pageCount++;
+			};
+			var addTabPage = function (title, content) {
+				insertTabPage(title, content);
 			};
 
 			while (true) {
@@ -130,7 +152,7 @@
 
 				var title = options.titleContentFilter.call($title, $title);
 				var content = $title.add($title.nextUntil(options.titleSelector));
-				addTabPage(title, content);
+				insertTabPage(title, content);
 			}
 
 			//replace original content
@@ -157,7 +179,7 @@
 				return pageCount;
 			};
 			var getCurrentIndex = function () {
-				return oldIndex;
+				return currentIndex;
 			};
 			var getLabel = function ($container, index) {
 				if (!isFinite(index)) {
@@ -188,6 +210,10 @@
 			};
 
 			//utilities
+			var $statusFields = $item.find(options.statusFieldSelector);
+			if (!$statusFields.length) {
+				$statusFields = $(options.statusFieldSelector);
+			}
 			var saveIndex = function (index) {
 				$statusFields.val(index);
 				if (options.statusHashTemplate) {
@@ -206,10 +232,39 @@
 					location.hash = hash;
 				}
 			};
+			var loadIndex = function () {
+				var index = -1;
+
+				$statusFields.each(function () {
+					var status = $(this).val();
+					if (status.length && isFinite(status)) {
+						index = parseInt(status);
+						return false;
+					}
+				});
+				if (index === -1 && options.statusHashTemplate) {
+					var re = new RegExp(options.statusHashTemplate + '(\\d+)');
+					var searchResult = location.hash.match(re);
+					if (searchResult && searchResult[1]) {
+						index = parseInt(searchResult[1]);
+					}
+				}
+				if (index === -1) {
+					index = 0;
+				}
+
+				var maxLabelIndex = pageCount - 1;
+				if (index > maxLabelIndex) {
+					index = maxLabelIndex;
+				}
+
+				return index;
+			};
 
 			//switch function and switch event handler
-			var oldIndex = -1;
 			var switchTo = function (newIndex) {
+				var oldIndex = currentIndex;
+
 				//before switching callback
 				if (typeof(options.beforeSwitch) === 'function') {
 					options.beforeSwitch(oldIndex, newIndex);
@@ -226,12 +281,12 @@
 				$newLabel.addClass(options.labelActiveClass).removeClass(options.labelInactiveClass);
 				$newPage.addClass(options.pageActiveClass);
 
-				//callback for hidden page items
+				//function to hide pages
 				if (typeof options.hidePageItem === 'function') {
 					options.hidePageItem($otherPages);
 				}
 
-				//callback for shown page item
+				//function to show page
 				if (typeof options.showPageItem === 'function') {
 					options.showPageItem($newPage);
 				}
@@ -245,14 +300,25 @@
 				}
 
 				//finalize
-				oldIndex = newIndex;
+				currentIndex = newIndex;
 			};
 
 			//handle event
-			var labelItemClick = function () {
-				var $activeLabel = $(this);
+			var labelItemClick = function (e) {
+				var target = e.currentTarget;
+				var targetParent;
+				while (true) {
+					targetParent = target.parentNode;
+					if (targetParent === e.delegateTarget || !targetParent) {
+						break;
+					}
+					else {
+						target = targetParent;
+					}
+				}
+				var $activeLabel = $(target);
 				var activeLabelIndex = $activeLabel.index();
-				if (activeLabelIndex === oldIndex) {
+				if (activeLabelIndex === currentIndex) {
 					return;
 				}
 
@@ -260,41 +326,14 @@
 			};
 
 			if ($topLabelContainerLeaf) {
-				$topLabelContainerLeaf.children().on(options.triggerEvents, labelItemClick);
+				$topLabelContainerLeaf.on(options.triggerEvents, '*', labelItemClick);
 			}
 			if ($bottomLabelContainerLeaf) {
-				$bottomLabelContainerLeaf.children().on(options.triggerEvents, labelItemClick);
+				$bottomLabelContainerLeaf.on(options.triggerEvents, '*', labelItemClick);
 			}
 
 			//init show active page
-			var $statusFields = $item.find(options.statusFieldSelector);
-			if (!$statusFields.length) {
-				$statusFields = $(options.statusFieldSelector);
-			}
-
-			var initialLabelIndex = NaN;
-			$statusFields.each(function () {
-				var status = $(this).val();
-				if (status.length && isFinite(status)) {
-					initialLabelIndex = parseInt(status);
-					return false;
-				}
-			});
-			if (isNaN(initialLabelIndex) && options.statusHashTemplate) {
-				var re = new RegExp(options.statusHashTemplate + '(\\d+)');
-				var searchResult = location.hash.match(re);
-				if (searchResult && searchResult[1]) {
-					initialLabelIndex = parseInt(searchResult[1]);
-				}
-			}
-			if (isNaN(initialLabelIndex)) {
-				initialLabelIndex = 0;
-			}
-			var maxLabelIndex = pageCount - 1;
-			if (initialLabelIndex > maxLabelIndex) {
-				initialLabelIndex = maxLabelIndex;
-			}
-			switchTo(initialLabelIndex);
+			switchTo(loadIndex());
 
 			//controller
 			var controller = {
@@ -305,7 +344,9 @@
 				getTopBottomLabels: getTopBottomLabels,
 				getPage: getPage,
 				updateFixedHeight: updateFixedHeight,
-				switchTo: switchTo
+				switchTo: switchTo,
+				addTabPage: addTabPage,
+				insertTabPage: insertTabPage
 			};
 			$item.data('jquery-tab-controller', controller);
 			$outerContainer.data('jquery-tab-controller', controller);

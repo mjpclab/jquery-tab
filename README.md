@@ -138,9 +138,15 @@ Get the top and bottom side label item by `index`.
 `getPage(index)`  
 Get page item by `index`.
 
-`updateFixedHeight()`    
+`updateFixedHeight()`  
 When page item's content is dynamically changed and becomes longer, use this method to update the height of the page container.
 Only available in height fixed mode by setting option `fixedHeight`.
 
 `switchTo(index)`  
 Switch active(selected) page item by `index`.
+
+`addTabPage(title, content)`  
+Append a new tab page to existing tab container. Both `title` and `content` can be text, HTML or jquery object.
+
+`insertTabPage(title, content, index)`  
+Insert a new tab page to existing tab container, before the page which current index is `index`. Both `title` and `content` can be text, HTML or jquery object.

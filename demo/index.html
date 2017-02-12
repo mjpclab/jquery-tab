@@ -106,6 +106,8 @@
 		});
 		var tab2Controller = $('.tab2').data('jquery-tab-controller');
 		tab2Controller.switchTo(1);
+		tab2Controller.insertTabPage('inserted', '<p>inserted page content</p>', 1);
+		tab2Controller.addTabPage('<span>added</span>', '<h1>added page content</h1>');
 
 		$('.tab3').tab({
 			'fixedHeight': true,
