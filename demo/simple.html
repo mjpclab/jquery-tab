@@ -8,7 +8,10 @@
 <body>
 <div class="tab1">
 	<h1>jquery-tab</h1>
-	<p>Usage: $container.tab();</p>
+	<p>Usage: </p>
+	<pre>
+	$container.tab();
+	</pre>
 	<ul>
 		<li>no link element needed</li>
 		<li>search engine friendly for original content</li>
@@ -16,6 +19,22 @@
 
 	<h1>Dependencies</h1>
 	<p>Depends on any version of jquery.</p>
+
+	<h1>Container</h1>
+	<p>In the container, content should arrange like this way:</p>
+	<div>
+		<div>title...</div>
+		<div>contents...</div>
+		<div>contents...</div>
+		<div>contents...</div>
+
+		<div>title...</div>
+		<div>contents...</div>
+		<div>contents...</div>
+		<div>contents...</div>
+
+		<div>...</div>
+	</div>
 
 	<h1>Lorem ipsum</h1>
 	<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet
@@ -31,14 +50,10 @@
 		Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
 </div>
 
-<script type="text/javascript" src="js/require.js"></script>
 <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../src/jquery-tab.js"></script>
 <script type="text/javascript">
-	require(['../src/jquery-tab'], function ($) {
-		$('.tab1').tab({
-			'fixedHeight': true
-		});
-	});
+	$('.tab1').tab();
 </script>
 
 </body>
