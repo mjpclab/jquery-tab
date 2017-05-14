@@ -1,16 +1,16 @@
-(function (root, factory) {
+(function (factory) {
 	'use strict';
 
 	if (typeof define === 'function' && define.amd) {
 		define(['jquery'], factory);
 	}
-	else if (typeof module !== 'undefined' && module.exports) {
+	else if (typeof module === 'object' && module.exports) {
 		module.exports = factory;
 	}
-	else if (root.jQuery) {
-		factory(root.jQuery);
+	else if (jQuery) {
+		factory(jQuery);
 	}
-}(this, function ($) {
+}(function ($) {
 	$.fn.tab = function (customOptions) {
 		var defaultOptions = {
 			triggerEvents: 'click',
