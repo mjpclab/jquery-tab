@@ -1,10 +1,7 @@
-var jsdom = require("jsdom");
+var JSDOM = require('jsdom').JSDOM;
+var dom = new JSDOM('<p>hello world</p>');
 
-jsdom.env(
-	'<p>hello world</p>',
-	function (err, window) {
-		var jquery=require('jquery')(window);
-		require('../../src/jquery-tab')(jquery);
-		console.log(jquery.fn.tab);
-	}
-);
+var window = dom.window;
+var jquery = require('jquery')(window);
+require('../../src/jquery-tab')(jquery);
+console.log(jquery.fn.tab);
