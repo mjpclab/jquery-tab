@@ -349,7 +349,7 @@
 			//init show active page
 			switchTo(loadIndex());
 
-			//handle event
+			//handle trigger event
 			var labelItemClick = function (e) {
 				if (e.currentTarget.parentNode !== e.delegateTarget) {
 					return;
@@ -363,11 +363,13 @@
 				switchTo(activeLabelIndex);
 			};
 
-			if ($topLabelContainerLeaf) {
-				$topLabelContainerLeaf.on(options.triggerEvents, '*', labelItemClick);
-			}
-			if ($bottomLabelContainerLeaf) {
-				$bottomLabelContainerLeaf.on(options.triggerEvents, '*', labelItemClick);
+			if (options.triggerEvents) {
+				if ($topLabelContainerLeaf) {
+					$topLabelContainerLeaf.on(options.triggerEvents, '*', labelItemClick);
+				}
+				if ($bottomLabelContainerLeaf) {
+					$bottomLabelContainerLeaf.on(options.triggerEvents, '*', labelItemClick);
+				}
 			}
 
 			//controller
