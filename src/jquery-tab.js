@@ -351,18 +351,10 @@
 
 			//handle event
 			var labelItemClick = function (e) {
-				var target = e.currentTarget;
-				var targetParent;
-				while (true) {
-					targetParent = target.parentNode;
-					if (targetParent === e.delegateTarget || !targetParent) {
-						break;
-					}
-					else {
-						target = targetParent;
-					}
+				if (e.currentTarget.parentNode !== e.delegateTarget) {
+					return;
 				}
-				var $activeLabel = $(target);
+				var $activeLabel = $(e.currentTarget);
 				var activeLabelIndex = $activeLabel.index();
 				if (activeLabelIndex === currentIndex) {
 					return;
