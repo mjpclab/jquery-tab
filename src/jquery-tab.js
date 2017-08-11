@@ -346,6 +346,9 @@
 				currentIndex = newIndex;
 			};
 
+			//init show active page
+			switchTo(loadIndex());
+
 			//handle event
 			var labelItemClick = function (e) {
 				var target = e.currentTarget;
@@ -374,9 +377,6 @@
 			if ($bottomLabelContainerLeaf) {
 				$bottomLabelContainerLeaf.on(options.triggerEvents, '*', labelItemClick);
 			}
-
-			//init show active page
-			switchTo(loadIndex());
 
 			//controller
 			var controller = {
