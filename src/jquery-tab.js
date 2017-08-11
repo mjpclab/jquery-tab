@@ -221,7 +221,7 @@
 				pageCount--;
 
 				if (index < currentIndex) {
-					currentIndex--
+					currentIndex--;
 				}
 				else if (index === currentIndex) {
 					currentIndex = (index < pageCount ? index : pageCount - 1);
