@@ -14,6 +14,9 @@
 	$.fn.tab = function (customOptions) {
 		var defaultOptions = {
 			triggerEvents: 'click',
+			delayTriggerEvents: '',
+			delayTriggerCancelEvents: '',
+			delayTriggerLatency: 200,
 			statusFieldSelector: '',
 			statusHashTemplate: '',
 			statusHashSeparator: '&',
@@ -349,11 +352,71 @@
 			//init show active page
 			switchTo(loadIndex());
 
+			//handle delay trigger event
+			var delayTriggerHandler;
+			var startDelayTrigger = function (labelIndex) {
+				delayTriggerHandler = setTimeout(function () {
+					switchTo(labelIndex);
+				}, options.delayTriggerLatency);
+			};
+
+			var cancelDelayTrigger = function () {
+				if (delayTriggerHandler) {
+					clearTimeout(delayTriggerHandler);
+					delayTriggerHandler = 0;
+				}
+			};
+
+			var labelItemDelayClick = function (e) {
+				if (e.currentTarget.parentNode !== e.delegateTarget) {
+					return;
+				}
+				cancelDelayTrigger();
+				var $activeLabel = $(e.currentTarget);
+				var activeLabelIndex = $activeLabel.index();
+				if (activeLabelIndex === currentIndex) {
+					return;
+				}
+
+				startDelayTrigger(activeLabelIndex);
+			};
+			var labelItemCancelDelayClick = function (e) {
+				if (e.currentTarget.parentNode !== e.delegateTarget) {
+					return;
+				}
+				var $activeLabel = $(e.currentTarget);
+				var activeLabelIndex = $activeLabel.index();
+				if (activeLabelIndex === currentIndex) {
+					return;
+				}
+
+				cancelDelayTrigger();
+			};
+
+			if (options.delayTriggerEvents) {
+				if ($topLabelContainerLeaf) {
+					$topLabelContainerLeaf.on(options.delayTriggerEvents, '*', labelItemDelayClick);
+				}
+				if ($bottomLabelContainerLeaf) {
+					$bottomLabelContainerLeaf.on(options.delayTriggerEvents, '*', labelItemDelayClick);
+				}
+
+				if (options.delayTriggerCancelEvents) {
+					if ($topLabelContainerLeaf) {
+						$topLabelContainerLeaf.on(options.delayTriggerCancelEvents, '*', labelItemCancelDelayClick);
+					}
+					if ($bottomLabelContainerLeaf) {
+						$bottomLabelContainerLeaf.on(options.delayTriggerCancelEvents, '*', labelItemCancelDelayClick);
+					}
+				}
+			}
+
 			//handle trigger event
 			var labelItemClick = function (e) {
 				if (e.currentTarget.parentNode !== e.delegateTarget) {
 					return;
 				}
+				cancelDelayTrigger();
 				var $activeLabel = $(e.currentTarget);
 				var activeLabelIndex = $activeLabel.index();
 				if (activeLabelIndex === currentIndex) {
