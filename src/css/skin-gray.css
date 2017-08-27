@@ -1,0 +1,22 @@
+.tab-container .page-container {
+	border-color: #ccc;
+	padding: 1em;
+	background: #fff;
+}
+
+.tab-container .label-container .label-item {
+	border-color: #ccc;
+	background: #fff;
+}
+
+.tab-container .label-container .label-active {
+	color: red;
+}
+
+.tab-container .label-container.top .label-active {
+	border-bottom-color: #fff;
+}
+
+.tab-container .label-container.bottom .label-active {
+	border-top-color: #fff;
+}

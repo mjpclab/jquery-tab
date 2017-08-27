@@ -1,0 +1,28 @@
+.tab-container {
+	margin-bottom: 2em;
+}
+
+.tab-container .label-container {
+	position: relative;
+}
+
+.tab-container .label-container.top {
+	bottom: -1px;
+}
+
+.tab-container .label-container.bottom {
+	top: -1px;
+}
+
+.tab-container .label-container .label-item {
+	display: inline-block;
+	margin-right: 1em;
+	border: 1px solid;
+
+	padding: 0.5em 1em;
+	cursor: pointer;
+}
+
+.tab-container .page-container {
+	border: 1px solid;
+}

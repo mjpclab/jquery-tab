@@ -1,5 +1,5 @@
 module.exports = function (grunt) {
-	var sourceDirectory = 'src/';
+	var sourceDirectory = 'src/js/';
 	var buildDirectory = 'build/';
 
 	var npmTasks = [
