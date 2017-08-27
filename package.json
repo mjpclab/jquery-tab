@@ -1,28 +1,23 @@
 {
-	"name": "jquery-tab",
-	"version": "0.16.0",
-	"description": "A jQuery tab sheet plugin",
-	"main": "src/js/jquery-tab.js",
-	"dependencies": {
-		"jquery": "*"
-	},
-	"devDependencies": {
-		"jsdom": "*",
-		"grunt": "*",
-		"grunt-contrib-jshint": "*",
-		"grunt-contrib-clean": "*",
-		"grunt-contrib-copy": "*",
-		"grunt-contrib-uglify": "*"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/mjpclab/jquery-tab.git"
-	},
-	"keywords": [
-		"jquery",
-		"tab",
-		"sheet"
-	],
-	"author": "MJ PC Lab",
-	"license": "ISC"
+  "name": "jquery-tab",
+  "version": "0.17.0",
+  "description": "A jQuery tab sheet plugin",
+  "main": "src/js/jquery-tab.js",
+  "dependencies": {
+    "jquery": "*"
+  },
+  "devDependencies": {
+    "webpack": "^3.5.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjpclab/jquery-tab.git"
+  },
+  "keywords": [
+    "jquery",
+    "tab",
+    "sheet"
+  ],
+  "author": "MJ PC Lab",
+  "license": "ISC"
 }
