@@ -1,6 +1,6 @@
 {
   "name": "jquery-tab",
-  "version": "0.17.0",
+  "version": "0.17.1",
   "description": "A jQuery tab sheet plugin",
   "main": "src/js/jquery-tab.js",
   "dependencies": {

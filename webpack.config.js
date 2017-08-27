@@ -43,7 +43,10 @@ module.exports = [
 		externals: getExternalsConfig(),
 		plugins: [
 			new webpack.optimize.UglifyJsPlugin({
-				compress: {warnings: false},
+				compress: {
+					warnings: false,
+					properties: false
+				},
 				sourceMap: true
 			}),
 			new webpack.DefinePlugin({
