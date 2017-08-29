@@ -209,14 +209,14 @@ $.fn.tab = function (customOptions) {
         //check if param:fixed height
         var updateFixedHeight = function () {
             if (options.fixedHeight) {
-                var maxHeight = 0;
+                var maxHeight_1 = 0;
                 $pageContainerLeaf.children().each(function () {
                     var $pageItem = $(this);
                     var pageHeight = $pageItem[0].scrollHeight;
-                    if (pageHeight > maxHeight) {
-                        maxHeight = pageHeight;
+                    if (pageHeight > maxHeight_1) {
+                        maxHeight_1 = pageHeight;
                     }
-                }).height(maxHeight);
+                }).height(maxHeight_1);
             }
         };
         updateFixedHeight();
@@ -401,13 +401,12 @@ $.fn.tab = function (customOptions) {
         $item.data('jquery-tab-controller', controller);
         $outerContainer.data('jquery-tab-controller', controller);
     };
-    var self = this;
-    if (self.length) {
-        self.each(function () {
+    if (this.length) {
+        this.each(function () {
             var $item = $(this);
             generateStructure($item);
         });
     }
-    return self;
+    return this;
 };
-module.exports = 'jquery';
+module.exports = $;

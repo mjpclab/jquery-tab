@@ -1,10 +1,10 @@
 import $ = require('jquery');
 
-declare function isFinite(value: number|string): boolean;
+declare function isFinite(value: number | string): boolean;
 type JQueriable = JQuery.htmlString | JQuery.TypeOrArray<JQuery.Node> | JQuery<JQuery.Node>
 
 $.fn.tab = function (customOptions: IJQueryTabOptions) {
-	var defaultOptions: IJQueryTabOptions = {
+	const defaultOptions: IJQueryTabOptions = {
 		triggerEvents: 'click',
 		delayTriggerEvents: '',
 		delayTriggerCancelEvents: '',
@@ -37,27 +37,27 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 		beforeSwitch: undefined,
 		afterSwitch: undefined
 	};
-	var options = $.extend({}, defaultOptions, customOptions);
+	const options = $.extend({}, defaultOptions, customOptions);
 
-	var getLeafElement = function ($node: JQuery) {
-		var $result = $node;
-		var $deeper;
+	const getLeafElement = function ($node: JQuery) {
+		let $result = $node;
+		let $deeper;
 		while ($deeper = $result.children(), $deeper.length) {
 			$result = $deeper;
 		}
 		return $result;
 	};
 
-	var generateStructure = function ($item: JQuery) {
-		var pageCount = 0;
-		var currentIndex = -1;
+	const generateStructure = function ($item: JQuery) {
+		let pageCount = 0;
+		let currentIndex = -1;
 
 		//container
-		var $outerContainer = $(options.containerTemplate);
+		const $outerContainer = $(options.containerTemplate);
 
 		//top label
-		var $topLabelContainer: JQuery | undefined;
-		var $topLabelContainerLeaf: JQuery | undefined;
+		let $topLabelContainer: JQuery | undefined;
+		let $topLabelContainerLeaf: JQuery | undefined;
 		if (options.showTopLabel) {
 			$topLabelContainer = $(options.labelContainerTemplate!.replace('{position}', 'top'));
 			$outerContainer.append($topLabelContainer);
@@ -66,14 +66,14 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 		}
 
 		//page
-		var $pageContainer = $(options.pageContainerTemplate);
+		const $pageContainer = $(options.pageContainerTemplate);
 		$outerContainer.append($pageContainer);
 
-		var $pageContainerLeaf = getLeafElement($pageContainer);
+		const $pageContainerLeaf = getLeafElement($pageContainer);
 
 		//bottom label
-		var $bottomLabelContainer: JQuery | undefined;
-		var $bottomLabelContainerLeaf: JQuery | undefined;
+		let $bottomLabelContainer: JQuery | undefined;
+		let $bottomLabelContainerLeaf: JQuery | undefined;
 		if (options.showBottomLabel) {
 			$bottomLabelContainer = $(options.labelContainerTemplate!.replace('{position}', 'bottom'));
 			$outerContainer.append($bottomLabelContainer);
@@ -83,34 +83,34 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 
 
 		//getters
-		var getCount = function () {
+		const getCount = function () {
 			return pageCount;
 		};
-		var getCurrentIndex = function () {
+		const getCurrentIndex = function () {
 			return currentIndex;
 		};
-		var getLabel = function ($container: JQuery, index: number) {
+		const getLabel = function ($container: JQuery, index: number) {
 			if (!isFinite(index)) {
 				throw new Error('invalid index');
 			}
 			return $container.children(':eq(' + index + ')');
 		};
-		var getTopLabel = function (index: number) {
+		const getTopLabel = function (index: number) {
 			if ($topLabelContainerLeaf) {
 				return getLabel($topLabelContainerLeaf, index);
 			}
 			return $([]);
 		};
-		var getBottomLabel = function (index: number) {
+		const getBottomLabel = function (index: number) {
 			if ($bottomLabelContainerLeaf) {
 				return getLabel($bottomLabelContainerLeaf, index);
 			}
 			return $([]);
 		};
-		var getTopBottomLabels = function (index: number) {
+		const getTopBottomLabels = function (index: number) {
 			return getTopLabel(index).add(getBottomLabel(index));
 		};
-		var getPage = function (index: number) {
+		const getPage = function (index: number) {
 			if (!isFinite(index)) {
 				throw new Error('invalid index');
 			}
@@ -118,23 +118,23 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 		};
 
 		//add labels & pages
-		var newLabelItem = function (title: JQueriable) {
-			var $labelItem = $(options.labelItemTemplate);
-			var $labelItemLeaf = getLeafElement($labelItem);
+		const newLabelItem = function (title: JQueriable) {
+			const $labelItem = $(options.labelItemTemplate);
+			const $labelItemLeaf = getLeafElement($labelItem);
 			$labelItemLeaf.empty().append(title);
 
 			return $labelItem;
 		};
-		var newPageItem = function (content: JQueriable) {
-			var $pageItem = $(options.pageItemTemplate);
-			var $pageItemLeaf = getLeafElement($pageItem);
+		const newPageItem = function (content: JQueriable) {
+			const $pageItem = $(options.pageItemTemplate);
+			const $pageItemLeaf = getLeafElement($pageItem);
 			$pageItemLeaf.append(content);
 
 			return $pageItem;
 		};
-		var insertTabPage = function (title: JQueriable, content: JQueriable, index: number = Infinity) {
-			var $labelItem = newLabelItem(title);
-			var $pageItem = newPageItem(content);
+		const insertTabPage = function (title: JQueriable, content: JQueriable, index: number = Infinity) {
+			const $labelItem = newLabelItem(title);
+			const $pageItem = newPageItem(content);
 			if (currentIndex > -1 && typeof options.hidePageItem === 'function') {
 				options.hidePageItem($pageItem);
 			}
@@ -167,14 +167,14 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 
 			pageCount++;
 		};
-		var addTabPage = function (title: JQueriable, content: JQueriable) {
+		const addTabPage = function (title: JQueriable, content: JQueriable) {
 			insertTabPage(title, content);
 		};
 
-		var add = function (sourceContainer: JQueriable) {
-			var $sourceContainer = $(sourceContainer);
+		const add = function (sourceContainer: JQueriable) {
+			const $sourceContainer = $(sourceContainer);
 			while (true) {
-				var $title = $sourceContainer.find(options.titleSelector!).first();
+				const $title = $sourceContainer.find(options.titleSelector!).first();
 				if ($title.length === 0) {
 					break;
 				}
@@ -182,16 +182,16 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 					$title.hide();
 				}
 
-				var title = options.titleContentFilter!.call($title, $title);
-				var content = $title.add($title.nextUntil(options.titleSelector));
+				const title = options.titleContentFilter!.call($title, $title);
+				const content = $title.add($title.nextUntil(options.titleSelector));
 				addTabPage(title, content);
 			}
 		};
-		var insert = function (sourceContainer: JQueriable, index: number) {
-			var $sourceContainer = $(sourceContainer);
-			var inserted = 0;
+		const insert = function (sourceContainer: JQueriable, index: number) {
+			const $sourceContainer = $(sourceContainer);
+			let inserted = 0;
 			while (true) {
-				var $title = $sourceContainer.find(options.titleSelector!).first();
+				const $title = $sourceContainer.find(options.titleSelector!).first();
 				if ($title.length === 0) {
 					break;
 				}
@@ -199,19 +199,19 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 					$title.hide();
 				}
 
-				var title = options.titleContentFilter!.call($title, $title);
-				var content = $title.add($title.nextUntil(options.titleSelector));
+				const title = options.titleContentFilter!.call($title, $title);
+				const content = $title.add($title.nextUntil(options.titleSelector));
 				insertTabPage(title, content, index + inserted);
 				inserted++;
 			}
 		};
-		var remove = function (index: number) {
+		const remove = function (index: number) {
 			if (index === undefined || !isFinite(index) || index < 0 || index >= pageCount) {
 				return;
 			}
 
-			var $labelItems = getTopBottomLabels(index);
-			var $pageItem = getPage(index);
+			const $labelItems = getTopBottomLabels(index);
+			const $pageItem = getPage(index);
 
 			$labelItems.remove();
 			$pageItem.remove();
@@ -236,13 +236,13 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 		$item.prepend($outerContainer);
 
 		//check if param:fixed height
-		var updateFixedHeight = function () {
+		const updateFixedHeight = function () {
 			if (options.fixedHeight) {
-				var maxHeight = 0;
+				let maxHeight = 0;
 
 				$pageContainerLeaf.children().each(function () {
-					var $pageItem = $(this);
-					var pageHeight = $pageItem[0].scrollHeight;
+					const $pageItem = $(this);
+					const pageHeight = $pageItem[0].scrollHeight;
 					if (pageHeight > maxHeight) {
 						maxHeight = pageHeight;
 					}
@@ -252,15 +252,15 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 		updateFixedHeight();
 
 		//utilities
-		var $statusFields = $item.find(options.statusFieldSelector!);
+		let $statusFields = $item.find(options.statusFieldSelector!);
 		if (!$statusFields.length) {
 			$statusFields = $(options.statusFieldSelector);
 		}
-		var saveIndex = function (index:number) {
+		const saveIndex = function (index: number) {
 			$statusFields.val(index);
 			if (options.statusHashTemplate) {
-				var hash = location.hash;
-				var statusHash = options.statusHashTemplate + index;
+				let hash = location.hash;
+				const statusHash = options.statusHashTemplate + index;
 				if (hash.indexOf(options.statusHashTemplate) > -1) {
 					hash = hash.replace(new RegExp(options.statusHashTemplate + '\\d+'), statusHash);
 				}
@@ -274,17 +274,17 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 				location.hash = hash;
 			}
 		};
-		var loadIndex = function () {
-			var index = -1;
+		const loadIndex = function () {
+			let index = -1;
 
 			$statusFields.each(function () {
-				var status = $(this).val() as string | number;
+				const status = $(this).val() as string | number;
 				if (typeof status === 'number') {
 					index = status;
 					return false;
 				}
 				else if (status.length) {
-					var intStatus = parseInt(status);
+					const intStatus = parseInt(status);
 					if (isFinite(intStatus) && !isNaN(intStatus)) {
 						index = parseInt(status);
 						return false;
@@ -292,8 +292,8 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 				}
 			});
 			if (index === -1 && options.statusHashTemplate) {
-				var re = new RegExp(options.statusHashTemplate + '(\\d+)');
-				var searchResult = location.hash.match(re);
+				const re = new RegExp(options.statusHashTemplate + '(\\d+)');
+				const searchResult = location.hash.match(re);
 				if (searchResult && searchResult[1]) {
 					index = parseInt(searchResult[1]);
 				}
@@ -302,7 +302,7 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 				index = 0;
 			}
 
-			var maxLabelIndex = pageCount - 1;
+			const maxLabelIndex = pageCount - 1;
 			if (index > maxLabelIndex) {
 				index = maxLabelIndex;
 			}
@@ -311,8 +311,8 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 		};
 
 		//switch function and switch event handler
-		var switchTo = function (newIndex:number) {
-			var oldIndex = currentIndex;
+		const switchTo = function (newIndex: number) {
+			const oldIndex = currentIndex;
 
 			//before switching callback
 			if (typeof (options.beforeSwitch) === 'function') {
@@ -320,10 +320,10 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 			}
 
 			//labels & pages
-			var $newLabel = getTopBottomLabels(newIndex);
-			var $otherLabels = $newLabel.siblings();
-			var $newPage = getPage(newIndex);
-			var $otherPages = $newPage.siblings();
+			const $newLabel = getTopBottomLabels(newIndex);
+			const $otherLabels = $newLabel.siblings();
+			const $newPage = getPage(newIndex);
+			const $otherPages = $newPage.siblings();
 
 			$otherLabels.removeClass(options.labelActiveClass).addClass(options.labelInactiveClass!);
 			$otherPages.removeClass(options.pageActiveClass);
@@ -356,39 +356,39 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 		switchTo(loadIndex());
 
 		//handle delay trigger event
-		var delayTriggerHandler:number;
-		var startDelayTrigger = function (labelIndex:number) {
+		let delayTriggerHandler: number;
+		const startDelayTrigger = function (labelIndex: number) {
 			delayTriggerHandler = setTimeout(function () {
 				switchTo(labelIndex);
 			}, options.delayTriggerLatency);
 		};
 
-		var cancelDelayTrigger = function () {
+		const cancelDelayTrigger = function () {
 			if (delayTriggerHandler) {
 				clearTimeout(delayTriggerHandler);
 				delayTriggerHandler = 0;
 			}
 		};
 
-		var labelItemDelayClick = function (e:any) {
+		const labelItemDelayClick = function (e: any) {
 			if (e.currentTarget.parentNode !== e.delegateTarget) {
 				return;
 			}
 			cancelDelayTrigger();
-			var $activeLabel = $(e.currentTarget);
-			var activeLabelIndex = $activeLabel.index();
+			const $activeLabel = $(e.currentTarget);
+			const activeLabelIndex = $activeLabel.index();
 			if (activeLabelIndex === currentIndex) {
 				return;
 			}
 
 			startDelayTrigger(activeLabelIndex);
 		};
-		var labelItemCancelDelayClick = function (e:any) {
+		const labelItemCancelDelayClick = function (e: any) {
 			if (e.currentTarget.parentNode !== e.delegateTarget) {
 				return;
 			}
-			var $activeLabel = $(e.currentTarget);
-			var activeLabelIndex = $activeLabel.index();
+			const $activeLabel = $(e.currentTarget);
+			const activeLabelIndex = $activeLabel.index();
 			if (activeLabelIndex === currentIndex) {
 				return;
 			}
@@ -415,13 +415,13 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 		}
 
 		//handle trigger event
-		var labelItemClick = function (e:any) {
+		const labelItemClick = function (e: any) {
 			if (e.currentTarget.parentNode !== e.delegateTarget) {
 				return;
 			}
 			cancelDelayTrigger();
-			var $activeLabel = $(e.currentTarget);
-			var activeLabelIndex = $activeLabel.index();
+			const $activeLabel = $(e.currentTarget);
+			const activeLabelIndex = $activeLabel.index();
 			if (activeLabelIndex === currentIndex) {
 				return;
 			}
@@ -439,7 +439,7 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 		}
 
 		//controller
-		var controller = {
+		const controller = {
 			getCount: getCount,
 			getCurrentIndex: getCurrentIndex,
 			getTopLabel: getTopLabel,
@@ -458,15 +458,14 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 		$outerContainer.data('jquery-tab-controller', controller);
 	};
 
-	var self = this;
-	if (self.length) {
-		self.each(function () {
-			var $item = $(this);
+	if (this.length) {
+		this.each(function () {
+			const $item = $(this);
 			generateStructure($item);
 		});
 	}
 
-	return self;
+	return this;
 };
 
 export = $;

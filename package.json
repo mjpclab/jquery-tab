@@ -1,6 +1,6 @@
 {
   "name": "jquery-tab",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "description": "A jQuery tab sheet plugin",
   "main": "src/js/jquery-tab.js",
   "types": "src/ts/index.d.ts",
@@ -22,7 +22,8 @@
     "sheet"
   ],
   "scripts": {
-    "ts": "tsc -p src/ts/"
+	"ts": "tsc -p src/ts/",
+	"build": "sh -c 'rm -rf dist/*; tsc -p src/ts/; webpack;'"
   },
   "author": "MJ PC Lab",
   "license": "ISC"
