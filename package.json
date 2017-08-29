@@ -22,8 +22,8 @@
     "sheet"
   ],
   "scripts": {
-	"ts": "tsc -p src/ts/",
-	"build": "sh -c 'rm -rf dist/*; tsc -p src/ts/; webpack;'"
+    "ts": "tsc -p src/ts/",
+    "build": "sh -c 'rm -rf dist/*; tsc -p src/ts/; webpack;'"
   },
   "author": "MJ PC Lab",
   "license": "ISC"

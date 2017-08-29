@@ -1,6 +1,5 @@
 import $ = require('jquery');
 
-declare function isFinite(value: number | string): boolean;
 type JQueriable = JQuery.htmlString | JQuery.TypeOrArray<JQuery.Node> | JQuery<JQuery.Node>
 
 $.fn.tab = function (customOptions: IJQueryTabOptions) {
