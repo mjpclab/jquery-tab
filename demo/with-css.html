@@ -2,8 +2,6 @@
 <html>
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-	<link rel="stylesheet" type="text/css" href="../src/css/layout.css"/>
-	<link rel="stylesheet" type="text/css" href="../src/css/skin-gray.css"/>
 	<link rel="stylesheet" type="text/css" href="css/main.css"/>
 	<title>jQuery tab example</title>
 </head>
@@ -13,11 +11,12 @@
 	<h1>jquery-tab</h1>
 	<p>Usage: </p>
 	<pre>
-	$container.tab({
-		fixedHeight: true
-	});
+	$container.tab();
 	</pre>
-	<p>Tab height will not be changed when switching.</p>
+	<ul>
+		<li>no link element needed</li>
+		<li>search engine friendly for original content</li>
+	</ul>
 
 	<h1>Dependencies</h1>
 	<p>Depends on any version of jquery.</p>
@@ -52,12 +51,11 @@
 		Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
 </div>
 
+<script type="text/javascript" src="js/es5-shim.js"></script>
 <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
-<script type="text/javascript" src="../dist/jquery-tab.js"></script>
+<script type="text/javascript" src="../dist/jquery-tab-with-css.js"></script>
 <script type="text/javascript">
-	$('.tab1').tab({
-		fixedHeight: true
-	});
+	$('.tab1').tab();
 </script>
 
 </body>
