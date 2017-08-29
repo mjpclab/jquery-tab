@@ -3,12 +3,12 @@ const path = require('path');
 const fs = require('fs');
 
 const PACKAGE_FILE = 'package.json';
-const package = JSON.parse(fs.readFileSync(PACKAGE_FILE));
+const thePackage = JSON.parse(fs.readFileSync(PACKAGE_FILE));
 
 const getEntryConfig = function () {
 	return {
-		[package.name]: path.resolve(__dirname, package.main),
-		[package.nameWithCss]: path.resolve(__dirname, package.mainWithCss)
+		[thePackage.name]: path.resolve(__dirname, thePackage.main),
+		[thePackage.nameWithCss]: path.resolve(__dirname, thePackage.mainWithCss)
 	}
 };
 

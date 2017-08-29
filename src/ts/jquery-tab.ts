@@ -1,6 +1,6 @@
 import $ = require('jquery');
 
-type JQueriable = JQuery.htmlString | JQuery.TypeOrArray<JQuery.Node> | JQuery<JQuery.Node>
+type JQueriable = JQuery.Selector | JQuery.TypeOrArray<JQuery.Node> | JQuery<JQuery.Node>
 
 $.fn.tab = function (customOptions: IJQueryTabOptions) {
 	const defaultOptions: IJQueryTabOptions = {
