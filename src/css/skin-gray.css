@@ -10,7 +10,7 @@
 }
 
 .tab-container .label-container .label-active {
-	color: red;
+	color: #000;
 }
 
 .tab-container .label-container.top .label-active {
@@ -19,4 +19,8 @@
 
 .tab-container .label-container.bottom .label-active {
 	border-top-color: #fff;
+}
+
+.tab-container .label-container .label-inactive {
+	color:#aaa;
 }

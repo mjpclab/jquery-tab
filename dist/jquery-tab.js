@@ -105,6 +105,7 @@ $.fn.tab = function (customOptions) {
         pageContainerTemplate: '<div class="page-container"></div>',
         pageItemTemplate: '<div class="page-item"></div>',
         pageActiveClass: 'page-active',
+        pageInactiveClass: '',
         showPageItem: function ($pageItem) {
             return $pageItem && $pageItem.show && $pageItem.show();
         },
@@ -184,13 +185,13 @@ $.fn.tab = function (customOptions) {
         };
         //add labels & pages
         var newLabelItem = function (title) {
-            var $labelItem = $(options.labelItemTemplate);
+            var $labelItem = $(options.labelItemTemplate).addClass(options.labelInactiveClass);
             var $labelItemLeaf = getLeafElement($labelItem);
             $labelItemLeaf.empty().append(title);
             return $labelItem;
         };
         var newPageItem = function (content) {
-            var $pageItem = $(options.pageItemTemplate);
+            var $pageItem = $(options.pageItemTemplate).addClass(options.pageInactiveClass);
             var $pageItemLeaf = getLeafElement($pageItem);
             $pageItemLeaf.append(content);
             return $pageItem;
@@ -354,6 +355,12 @@ $.fn.tab = function (customOptions) {
             }
             return index;
         };
+        var updateClass = function ($activeLabelItem, $activePageItem) {
+            $activeLabelItem.addClass(options.labelActiveClass).removeClass(options.labelInactiveClass);
+            $activeLabelItem.siblings().removeClass(options.labelActiveClass).addClass(options.labelInactiveClass);
+            $activePageItem.addClass(options.pageActiveClass).removeClass(options.pageInactiveClass);
+            $activePageItem.siblings().removeClass(options.pageActiveClass).addClass(options.pageInactiveClass);
+        };
         //switch function and switch event handler
         var switchTo = function (newIndex) {
             var oldIndex = currentIndex;
@@ -363,13 +370,9 @@ $.fn.tab = function (customOptions) {
             }
             //labels & pages
             var $newLabel = getTopBottomLabels(newIndex);
-            var $otherLabels = $newLabel.siblings();
             var $newPage = getPage(newIndex);
             var $otherPages = $newPage.siblings();
-            $otherLabels.removeClass(options.labelActiveClass).addClass(options.labelInactiveClass);
-            $otherPages.removeClass(options.pageActiveClass);
-            $newLabel.addClass(options.labelActiveClass).removeClass(options.labelInactiveClass);
-            $newPage.addClass(options.pageActiveClass);
+            updateClass($newLabel, $newPage);
             //function to hide pages
             if (typeof options.hidePageItem === 'function') {
                 options.hidePageItem($otherPages);
