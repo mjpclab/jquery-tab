@@ -93,6 +93,8 @@
 	<p>another content 2 ... </p>
 </div>
 
+<div class="tab4"></div>
+
 <!--<script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>-->
 <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="../dist/jquery-tab.js"></script>
@@ -101,13 +103,8 @@
 		$('.tab1').tab({
 			'fixedHeight': true,
 			'statusHashTemplate': 'tab1=',
-			'triggerEvents': 'click mouseover'/*,
-			beforeSwitch: function (oldIndex, newIndex) {
-				console.log('before', arguments);
-			},
-			afterSwitch: function (oldIndex, newIndex) {
-				console.log('after', arguments);
-			}*/
+			'triggerEvents': 'click mouseover',
+			'activeIndex': 1
 		});
 
 		$('.tab2').tab({
@@ -125,6 +122,8 @@
 			'fixedHeight': true,
 			'statusFieldSelector': '.active-tab'
 		});
+
+		$('.tab4').tab();
 	});
 </script>
 

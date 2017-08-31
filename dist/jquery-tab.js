@@ -105,7 +105,8 @@ $.fn.tab = function (customOptions) {
         pageContainerTemplate: '<div class="page-container"></div>',
         pageItemTemplate: '<div class="page-item"></div>',
         pageActiveClass: 'page-active',
-        pageInactiveClass: '',
+        pageInactiveClass: 'page-inactive',
+        activeIndex: 0,
         showPageItem: function ($pageItem) {
             return $pageItem && $pageItem.show && $pageItem.show();
         },
@@ -325,6 +326,9 @@ $.fn.tab = function (customOptions) {
         };
         var loadIndex = function () {
             var index = -1;
+            if (pageCount === 0) {
+                return index;
+            }
             $statusFields.each(function () {
                 var status = $(this).val();
                 if (typeof status === 'number') {
@@ -347,11 +351,13 @@ $.fn.tab = function (customOptions) {
                 }
             }
             if (index === -1) {
+                index = Number(options.activeIndex) || 0;
+            }
+            if (index < 0) {
                 index = 0;
             }
-            var maxLabelIndex = pageCount - 1;
-            if (index > maxLabelIndex) {
-                index = maxLabelIndex;
+            else if (index >= pageCount) {
+                index = pageCount - 1;
             }
             return index;
         };
@@ -391,6 +397,7 @@ $.fn.tab = function (customOptions) {
             currentIndex = newIndex;
         };
         //init show active page
+        var initialActiveIndex = loadIndex();
         switchTo(loadIndex());
         //handle delay trigger event
         var delayTriggerHandler;

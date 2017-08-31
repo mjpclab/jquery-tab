@@ -2,7 +2,7 @@ import $ = require('jquery');
 
 type JQueriable = JQuery.Selector | JQuery.TypeOrArray<JQuery.Node> | JQuery<JQuery.Node>
 
-$.fn.tab = function (customOptions: IJQueryTabOptions) {
+$.fn.tab = function (customOptions?: IJQueryTabOptions) {
 	const defaultOptions: IJQueryTabOptions = {
 		triggerEvents: 'click',
 		delayTriggerEvents: '',
@@ -28,6 +28,7 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 		pageItemTemplate: '<div class="page-item"></div>',
 		pageActiveClass: 'page-active',
 		pageInactiveClass: 'page-inactive',
+		activeIndex: 0,
 		showPageItem: function ($pageItem: JQuery) {
 			return $pageItem && $pageItem.show && $pageItem.show();
 		},
@@ -276,6 +277,9 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 		};
 		const loadIndex = function () {
 			let index = -1;
+			if (pageCount === 0) {
+				return index;
+			}
 
 			$statusFields.each(function () {
 				const status = $(this).val() as string | number;
@@ -299,12 +303,14 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 				}
 			}
 			if (index === -1) {
-				index = 0;
+				index = Number(options.activeIndex) || 0;
 			}
 
-			const maxLabelIndex = pageCount - 1;
-			if (index > maxLabelIndex) {
-				index = maxLabelIndex;
+			if (index < 0) {
+				index = 0;
+			}
+			else if (index >= pageCount) {
+				index = pageCount - 1;
 			}
 
 			return index;
@@ -357,6 +363,7 @@ $.fn.tab = function (customOptions: IJQueryTabOptions) {
 		};
 
 		//init show active page
+		const initialActiveIndex = loadIndex();
 		switchTo(loadIndex());
 
 		//handle delay trigger event
