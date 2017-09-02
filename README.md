@@ -42,7 +42,7 @@ $('.tab-container').tab({
 ```
 
 # Including CSS
-ReactTabber provides default CSS styles if you don't want to make layout yourself. It also provides default skin.
+jquery-tab provides default CSS styles if you don't want to make layout yourself. It also provides default skin.
 To use that, importing module `jquery-tab/with-css` instead of `jquery-tab`.
 For global variable mode, referencing the '-with-css' bundle file.
 
