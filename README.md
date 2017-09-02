@@ -41,6 +41,11 @@ $('.tab-container').tab({
 		> ...
 ```
 
+# Including CSS
+ReactTabber provides default CSS styles if you don't want to make layout yourself. It also provides default skin.
+To use that, importing module `jquery-tab/with-css` instead of `jquery-tab`.
+For global variable mode, referencing the '-with-css' bundle file.
+
 # Options
 `triggerEvents`  
 Determine the types of events triggered on label-item that will make the page-item switched.

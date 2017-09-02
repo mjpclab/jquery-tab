@@ -1,10 +1,10 @@
 {
   "name": "jquery-tab",
   "nameWithCss": "jquery-tab-with-css",
-  "version": "0.18.4",
+  "version": "0.18.5",
   "description": "A jQuery tab sheet plugin",
-  "main": "src/js/jquery-tab.js",
-  "mainWithCss": "src/js/jquery-tab-with-css.js",
+  "main": "index.js",
+  "mainWithCss": "with-css.js",
   "types": "src/ts/index.d.ts",
   "dependencies": {
     "jquery": "*"
