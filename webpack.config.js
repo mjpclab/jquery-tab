@@ -9,7 +9,7 @@ const getEntryConfig = function () {
 	return {
 		[thePackage.name]: path.resolve(__dirname, thePackage.main),
 		[thePackage.nameWithCss]: path.resolve(__dirname, thePackage.mainWithCss)
-	}
+	};
 };
 
 const getOutputConfig = function (isMinify) {
