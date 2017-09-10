@@ -19,7 +19,7 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 			return this.text();
 		},
 		keepTitleVisible: false,
-		containerTemplate: '<div class="tab-container"></div>',
+		tabContainerTemplate: '<div class="tab-container"></div>',
 		labelContainerTemplate: '<div class="label-container"></div>',
 		topLabelContainerClass: 'top',
 		bottomLabelContainerClass: 'bottom',
@@ -56,7 +56,7 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		let currentIndex = -1;
 
 		//container
-		const $outerContainer = $(options.containerTemplate);
+		const $outerContainer = $(options.tabContainerTemplate);
 
 		//top label
 		let $topLabelContainer: JQuery | undefined;

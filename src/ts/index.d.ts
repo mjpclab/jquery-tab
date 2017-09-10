@@ -18,7 +18,7 @@ interface IJQueryTabOptions {
 	titleSelector?: string;
 	titleContentFilter?: (this: JQuery) => string;
 	keepTitleVisible?: boolean;
-	containerTemplate?: string;
+	tabContainerTemplate?: string;
 	labelContainerTemplate?: string;
 	topLabelContainerClass?: string;
 	bottomLabelContainerClass?: string;

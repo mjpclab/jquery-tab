@@ -97,7 +97,7 @@ $.fn.tab = function (customOptions) {
             return this.text();
         },
         keepTitleVisible: false,
-        containerTemplate: '<div class="tab-container"></div>',
+        tabContainerTemplate: '<div class="tab-container"></div>',
         labelContainerTemplate: '<div class="label-container"></div>',
         topLabelContainerClass: 'top',
         bottomLabelContainerClass: 'bottom',
@@ -131,7 +131,7 @@ $.fn.tab = function (customOptions) {
         var pageCount = 0;
         var currentIndex = -1;
         //container
-        var $outerContainer = $(options.containerTemplate);
+        var $outerContainer = $(options.tabContainerTemplate);
         //top label
         var $topLabelContainer;
         var $topLabelContainerLeaf;

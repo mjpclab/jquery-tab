@@ -88,7 +88,7 @@ A callback to have an opportunity to change the html structure of label-item.
 `keepTitleVisible`  
 Show page title again in the page-item. Since page title will be shown in label-container, normally it's unnecessary to be shown in page-item again.
 
-`containerTemplate`  
+`tabContainerTemplate`  
 Tab-container's template.
 
 `labelContainerTemplate`  
