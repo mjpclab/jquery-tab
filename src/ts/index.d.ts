@@ -21,7 +21,7 @@ interface IJQueryTabOptions {
 	onAfterSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;
 
 	titleSelector?: string;
-	titleContentFilter?: (this: JQuery) => string;
+	titleContentFilter?: (this: JQuery, $title: JQuery) => string;
 	keepTitleVisible?: boolean;
 
 	tabContainerTemplate?: string;

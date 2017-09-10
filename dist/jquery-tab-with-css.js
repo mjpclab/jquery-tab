@@ -100,8 +100,8 @@ $.fn.tab = function (customOptions) {
         onBeforeSwitch: undefined,
         onAfterSwitch: undefined,
         titleSelector: 'h1,h2,h3,h4,h5,h6',
-        titleContentFilter: function () {
-            return this.text();
+        titleContentFilter: function ($title) {
+            return $title.text();
         },
         keepTitleVisible: false,
         tabContainerTemplate: '<div></div>',
