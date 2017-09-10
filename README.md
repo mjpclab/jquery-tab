@@ -5,7 +5,7 @@ make flat html document that contains title and normal content turns into tab st
 
 html document:
 ``` html
-<div class="tab-container">
+<div class="region">
 	<h1>title</h1>
 	<p>content</p>
 	<p>content</p>
@@ -18,8 +18,8 @@ html document:
 
 javascript code:
 ``` javascript
-$('.tab-container').tab({
-	'fixedHeight':true
+$('.region').tab({
+	fixedHeight: true
 	/*, other options */
 });
 ```
@@ -161,13 +161,13 @@ CSS class for active page item.
 `pageItemInactiveClass`  
 CSS class for inactive page item.
 
-#the Controller
-##Get Controller
+# the Controller
+## Get Controller
 ``` javascript
 var controller = $('.tab-container').data('jquery-tab-controller');
 ```
 
-##Controller Methods
+## Controller Methods
 `getCount()`  
 Get the number of pages.
 
