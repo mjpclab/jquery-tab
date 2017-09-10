@@ -13,8 +13,13 @@ interface IJQueryTabOptions {
 	statusHashTemplate?: string;
 	statusHashSeparator?: string;
 	fixedHeight?: boolean;
-	showTopLabelContainer?: boolean;
-	showBottomLabelContainer?: boolean;
+
+	activeIndex?: number;
+	fnShowPageItem?: (this: JQuery, $pageItem: JQuery) => JQuery;
+	fnHidePageItem?: (this: JQuery, $pageItem: JQuery) => JQuery;
+	onBeforeSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;
+	onAfterSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;
+
 	titleSelector?: string;
 	titleContentFilter?: (this: JQuery) => string;
 	keepTitleVisible?: boolean;
@@ -24,6 +29,8 @@ interface IJQueryTabOptions {
 
 	labelContainerTemplate?: string;
 	labelContainerClass?: string;
+	showTopLabelContainer?: boolean;
+	showBottomLabelContainer?: boolean;
 	topLabelContainerClass?: string;
 	bottomLabelContainerClass?: string;
 	labelItemTemplate?: string;
@@ -37,12 +44,6 @@ interface IJQueryTabOptions {
 	pageItemClass?: string;
 	pageItemActiveClass?: string;
 	pageItemInactiveClass?: string;
-
-	activeIndex?: number;
-	fnShowPageItem?: (this: JQuery, $pageItem: JQuery) => JQuery;
-	fnHidePageItem?: (this: JQuery, $pageItem: JQuery) => JQuery;
-	onBeforeSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;
-	onAfterSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;
 }
 
 interface JQuery {

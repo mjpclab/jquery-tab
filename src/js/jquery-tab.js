@@ -10,8 +10,15 @@ $.fn.tab = function (customOptions) {
         statusHashTemplate: '',
         statusHashSeparator: '&',
         fixedHeight: false,
-        showTopLabelContainer: true,
-        showBottomLabelContainer: false,
+        activeIndex: 0,
+        fnShowPageItem: function ($pageItem) {
+            return $pageItem && $pageItem.show && $pageItem.show();
+        },
+        fnHidePageItem: function ($pageItem) {
+            return $pageItem && $pageItem.hide && $pageItem.hide();
+        },
+        onBeforeSwitch: undefined,
+        onAfterSwitch: undefined,
         titleSelector: 'h1,h2,h3,h4,h5,h6',
         titleContentFilter: function () {
             return this.text();
@@ -21,6 +28,8 @@ $.fn.tab = function (customOptions) {
         tabContainerClass: 'tab-container',
         labelContainerTemplate: '<div></div>',
         labelContainerClass: 'label-container',
+        showTopLabelContainer: true,
+        showBottomLabelContainer: false,
         topLabelContainerClass: 'top',
         bottomLabelContainerClass: 'bottom',
         labelItemTemplate: '<span></span>',
@@ -32,16 +41,7 @@ $.fn.tab = function (customOptions) {
         pageItemTemplate: '<div></div>',
         pageItemClass: 'page-item',
         pageItemActiveClass: 'page-active',
-        pageItemInactiveClass: 'page-inactive',
-        activeIndex: 0,
-        fnShowPageItem: function ($pageItem) {
-            return $pageItem && $pageItem.show && $pageItem.show();
-        },
-        fnHidePageItem: function ($pageItem) {
-            return $pageItem && $pageItem.hide && $pageItem.hide();
-        },
-        onBeforeSwitch: undefined,
-        onAfterSwitch: undefined
+        pageItemInactiveClass: 'page-inactive'
     };
     var options = $.extend({}, defaultOptions, customOptions);
     var getLeafElement = function ($node) {

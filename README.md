@@ -47,6 +47,7 @@ To use that, importing module `jquery-tab/with-css` instead of `jquery-tab`.
 For global variable mode, referencing the '-with-css' bundle file, or directly referencing CSS files under src/css/ folder.
 
 # Options
+## Behavior Options
 `triggerEvents`  
 Determine the types of events triggered on label-item that will make the page-item switched.
 Default value is `click`.
@@ -73,12 +74,27 @@ Determine a separator between multiple hash items if there are more than 1 tab-c
 `fixedHeight`  
 Tab-container's height will be fixed to fit the longest page and will not change when tabs are switched.
 
-`showTopLabelContainer`  
-Show label-container on top of the tab.
+`activeIndex`  
+The default initial active index of the tab. Will be ignored if it can get value from `statusFieldSelector` or `statusHashTemplate`.
 
-`showBottomLabelContainer`  
-Show label-container on bottom of the tab.
+`fnShowPageItem`  
+Define the behavior of showing an page-item when switched to it.
+Must be a function like `func($pageItem) {}`. Parameter `$pageItem` will be the current page-item's jQuery object.
+The default behavior is calling the jQuery object's `show()`.
 
+`fnHidePageItem`  
+Define the behavior of hiding an page-item when switched to other page.
+Must be a function like `func($pageItem) {}`. Parameter `$pageItem` will be the current page-item's jQuery object.
+The default behavior is calling the jQuery object's `hide()`.
+
+`onBeforeSwitch(oldIndex, newIndex)`  
+A callback before switching the tab.
+
+`onAfterSwitch(oldIndex, newIndex)`  
+A callback after switching the tab.
+
+## UI Options
+### Title
 `titleSelector`  
 A jQuery selector string or object to pick up "title" element to be a label-item in label-container.
 
@@ -88,17 +104,25 @@ A callback to have an opportunity to change the html structure of label-item.
 `keepTitleVisible`  
 Show page title again in the page-item. Since page title will be shown in label-container, normally it's unnecessary to be shown in page-item again.
 
+### Tab
 `tabContainerTemplate`  
 Tab container's template.
 
 `tabContainerClass`  
 CSS class for tab container.
 
+### Label
 `labelContainerTemplate`  
 Label container's template.
 
 `labelContainerClass`  
 CSS class for label container.
+
+`showTopLabelContainer`  
+Show label-container on top of the tab.
+
+`showBottomLabelContainer`  
+Show label-container on bottom of the tab.
 
 `topLabelContainerClass`  
 CSS class for top label container.
@@ -118,6 +142,7 @@ CSS class for active label item.
 `labelItemInactiveClass`  
 CSS class for inactive label item.
 
+### Page
 `pageContainerTemplate`  
 Page containers's template.
 
@@ -135,25 +160,6 @@ CSS class for active page item.
 
 `pageItemInactiveClass`  
 CSS class for inactive page item.
-
-`activeIndex`  
-The default initial active index of the tab. Will be ignored if it can get value from `statusFieldSelector` or `statusHashTemplate`.
-
-`fnShowPageItem`  
-Define the behavior of showing an page-item when switched to it.
-Must be a function like `func($pageItem) {}`. Parameter `$pageItem` will be the current page-item's jQuery object.
-The default behavior is calling the jQuery object's `show()`.
-
-`fnHidePageItem`    
-Define the behavior of hiding an page-item when switched to other page.
-Must be a function like `func($pageItem) {}`. Parameter `$pageItem` will be the current page-item's jQuery object.
-The default behavior is calling the jQuery object's `hide()`.
-
-`onBeforeSwitch(oldIndex, newIndex)`  
-A callback before switching the tab.
-
-`onAfterSwitch(oldIndex, newIndex)`  
-A callback after switching the tab.
 
 #the Controller
 ##Get Controller
