@@ -26,8 +26,8 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		labelItemInactiveClass: 'label-inactive',
 		pageContainerTemplate: '<div class="page-container"></div>',
 		pageItemTemplate: '<div class="page-item"></div>',
-		pageActiveClass: 'page-active',
-		pageInactiveClass: 'page-inactive',
+		pageItemActiveClass: 'page-active',
+		pageItemInactiveClass: 'page-inactive',
 		activeIndex: 0,
 		showPageItem: function ($pageItem: JQuery) {
 			return $pageItem && $pageItem.show && $pageItem.show();
@@ -127,7 +127,7 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 			return $labelItem;
 		};
 		const newPageItem = function (content: JQueriable) {
-			const $pageItem = $(options.pageItemTemplate).addClass(options.pageInactiveClass!);
+			const $pageItem = $(options.pageItemTemplate).addClass(options.pageItemInactiveClass!);
 			const $pageItemLeaf = getLeafElement($pageItem);
 			$pageItemLeaf.append(content);
 
@@ -320,8 +320,8 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 			$activeLabelItem.addClass(options.labelItemActiveClass!).removeClass(options.labelItemInactiveClass);
 			$activeLabelItem.siblings().removeClass(options.labelItemActiveClass).addClass(options.labelItemInactiveClass!);
 
-			$activePageItem.addClass(options.pageActiveClass!).removeClass(options.pageInactiveClass);
-			$activePageItem.siblings().removeClass(options.pageActiveClass).addClass(options.pageInactiveClass!);
+			$activePageItem.addClass(options.pageItemActiveClass!).removeClass(options.pageItemInactiveClass);
+			$activePageItem.siblings().removeClass(options.pageItemActiveClass).addClass(options.pageItemInactiveClass!);
 		};
 
 		//switch function and switch event handler

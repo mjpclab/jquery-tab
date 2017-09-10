@@ -109,10 +109,10 @@ Page-containers's template.
 `pageItemTemplate`  
 Page-item's template.
 
-`pageActiveClass`  
+`pageItemActiveClass`  
 CSS class for active page-item.
 
-`pageInactiveClass`  
+`pageItemInactiveClass`  
 CSS class for inactive page-item.
 
 `activeIndex`  

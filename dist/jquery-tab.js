@@ -104,8 +104,8 @@ $.fn.tab = function (customOptions) {
         labelItemInactiveClass: 'label-inactive',
         pageContainerTemplate: '<div class="page-container"></div>',
         pageItemTemplate: '<div class="page-item"></div>',
-        pageActiveClass: 'page-active',
-        pageInactiveClass: 'page-inactive',
+        pageItemActiveClass: 'page-active',
+        pageItemInactiveClass: 'page-inactive',
         activeIndex: 0,
         showPageItem: function ($pageItem) {
             return $pageItem && $pageItem.show && $pageItem.show();
@@ -192,7 +192,7 @@ $.fn.tab = function (customOptions) {
             return $labelItem;
         };
         var newPageItem = function (content) {
-            var $pageItem = $(options.pageItemTemplate).addClass(options.pageInactiveClass);
+            var $pageItem = $(options.pageItemTemplate).addClass(options.pageItemInactiveClass);
             var $pageItemLeaf = getLeafElement($pageItem);
             $pageItemLeaf.append(content);
             return $pageItem;
@@ -364,8 +364,8 @@ $.fn.tab = function (customOptions) {
         var updateClass = function ($activeLabelItem, $activePageItem) {
             $activeLabelItem.addClass(options.labelItemActiveClass).removeClass(options.labelItemInactiveClass);
             $activeLabelItem.siblings().removeClass(options.labelItemActiveClass).addClass(options.labelItemInactiveClass);
-            $activePageItem.addClass(options.pageActiveClass).removeClass(options.pageInactiveClass);
-            $activePageItem.siblings().removeClass(options.pageActiveClass).addClass(options.pageInactiveClass);
+            $activePageItem.addClass(options.pageItemActiveClass).removeClass(options.pageItemInactiveClass);
+            $activePageItem.siblings().removeClass(options.pageItemActiveClass).addClass(options.pageItemInactiveClass);
         };
         //switch function and switch event handler
         var switchTo = function (newIndex) {
