@@ -89,10 +89,16 @@ A callback to have an opportunity to change the html structure of label-item.
 Show page title again in the page-item. Since page title will be shown in label-container, normally it's unnecessary to be shown in page-item again.
 
 `tabContainerTemplate`  
-Tab-container's template.
+Tab container's template.
+
+`tabContainerClass`  
+CSS class for tab container.
 
 `labelContainerTemplate`  
-Label-container's template.
+Label container's template.
+
+`labelContainerClass`  
+CSS class for label container.
 
 `topLabelContainerClass`  
 CSS class for top label container.
@@ -101,25 +107,34 @@ CSS class for top label container.
 CSS class for bottom label container.
 
 `labelItemTemplate`  
-Label-item's template.
+Label item's template.
+
+`labelItemClass`  
+CSS class for bottom label item.
 
 `labelItemActiveClass`  
-CSS class for active label-item.
+CSS class for active label item.
 
 `labelItemInactiveClass`  
-CSS class for inactive label-item.
+CSS class for inactive label item.
 
 `pageContainerTemplate`  
-Page-containers's template.
+Page containers's template.
+
+`pageContainerClass`  
+CSS class for page container.
 
 `pageItemTemplate`  
 Page-item's template.
 
+`pageItemClass`  
+CSS class for page item.
+
 `pageItemActiveClass`  
-CSS class for active page-item.
+CSS class for active page item.
 
 `pageItemInactiveClass`  
-CSS class for inactive page-item.
+CSS class for inactive page item.
 
 `activeIndex`  
 The default initial active index of the tab. Will be ignored if it can get value from `statusFieldSelector` or `statusHashTemplate`.

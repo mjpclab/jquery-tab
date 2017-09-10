@@ -19,17 +19,26 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 			return this.text();
 		},
 		keepTitleVisible: false,
-		tabContainerTemplate: '<div class="tab-container"></div>',
-		labelContainerTemplate: '<div class="label-container"></div>',
+
+		tabContainerTemplate: '<div></div>',
+		tabContainerClass: 'tab-container',
+
+		labelContainerTemplate: '<div></div>',
+		labelContainerClass: 'label-container',
 		topLabelContainerClass: 'top',
 		bottomLabelContainerClass: 'bottom',
-		labelItemTemplate: '<span class="label-item"></span>',
+		labelItemTemplate: '<span></span>',
+		labelItemClass: 'label-item',
 		labelItemActiveClass: 'label-active',
 		labelItemInactiveClass: 'label-inactive',
-		pageContainerTemplate: '<div class="page-container"></div>',
-		pageItemTemplate: '<div class="page-item"></div>',
+
+		pageContainerTemplate: '<div></div>',
+		pageContainerClass: 'page-container',
+		pageItemTemplate: '<div></div>',
+		pageItemClass: 'page-item',
 		pageItemActiveClass: 'page-active',
 		pageItemInactiveClass: 'page-inactive',
+
 		activeIndex: 0,
 		showPageItem: function ($pageItem: JQuery) {
 			return $pageItem && $pageItem.show && $pageItem.show();
@@ -56,20 +65,20 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		let currentIndex = -1;
 
 		//container
-		const $outerContainer = $(options.tabContainerTemplate);
+		const $outerContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass!);
 
 		//top label
 		let $topLabelContainer: JQuery | undefined;
 		let $topLabelContainerLeaf: JQuery | undefined;
 		if (options.showTopLabelContainer) {
-			$topLabelContainer = $(options.labelContainerTemplate!).addClass(options.topLabelContainerClass!);
+			$topLabelContainer = $(options.labelContainerTemplate!).addClass(options.labelContainerClass!).addClass(options.topLabelContainerClass!);
 			$outerContainer.append($topLabelContainer);
 
 			$topLabelContainerLeaf = getLeafElement($topLabelContainer);
 		}
 
 		//page
-		const $pageContainer = $(options.pageContainerTemplate);
+		const $pageContainer = $(options.pageContainerTemplate).addClass(options.pageContainerClass!);
 		$outerContainer.append($pageContainer);
 
 		const $pageContainerLeaf = getLeafElement($pageContainer);
@@ -78,7 +87,7 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		let $bottomLabelContainer: JQuery | undefined;
 		let $bottomLabelContainerLeaf: JQuery | undefined;
 		if (options.showBottomLabelContainer) {
-			$bottomLabelContainer = $(options.labelContainerTemplate!).addClass(options.bottomLabelContainerClass!);
+			$bottomLabelContainer = $(options.labelContainerTemplate!).addClass(options.labelContainerClass!).addClass(options.bottomLabelContainerClass!);
 			$outerContainer.append($bottomLabelContainer);
 
 			$bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);
@@ -122,14 +131,14 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 
 		//add labels & pages
 		const newLabelItem = function (title: JQueriable) {
-			const $labelItem = $(options.labelItemTemplate).addClass(options.labelItemInactiveClass!);
+			const $labelItem = $(options.labelItemTemplate).addClass(options.labelItemClass!).addClass(options.labelItemInactiveClass!);
 			const $labelItemLeaf = getLeafElement($labelItem);
 			$labelItemLeaf.empty().append(title);
 
 			return $labelItem;
 		};
 		const newPageItem = function (content: JQueriable) {
-			const $pageItem = $(options.pageItemTemplate).addClass(options.pageItemInactiveClass!);
+			const $pageItem = $(options.pageItemTemplate).addClass(options.pageItemClass!).addClass(options.pageItemInactiveClass!);
 			const $pageItemLeaf = getLeafElement($pageItem);
 			$pageItemLeaf.append(content);
 

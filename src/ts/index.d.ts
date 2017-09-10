@@ -18,17 +18,26 @@ interface IJQueryTabOptions {
 	titleSelector?: string;
 	titleContentFilter?: (this: JQuery) => string;
 	keepTitleVisible?: boolean;
+
 	tabContainerTemplate?: string;
+	tabContainerClass?: string;
+
 	labelContainerTemplate?: string;
+	labelContainerClass?: string;
 	topLabelContainerClass?: string;
 	bottomLabelContainerClass?: string;
 	labelItemTemplate?: string;
+	labelItemClass?: string;
 	labelItemActiveClass?: string;
 	labelItemInactiveClass?: string;
+
 	pageContainerTemplate?: string;
+	pageContainerClass?: string;
 	pageItemTemplate?: string;
+	pageItemClass?: string;
 	pageItemActiveClass?: string;
 	pageItemInactiveClass?: string;
+
 	activeIndex?: number;
 	showPageItem?: ($pageItem: JQuery) => JQuery;
 	hidePageItem?: ($pageItem: JQuery) => JQuery;

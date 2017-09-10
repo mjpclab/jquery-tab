@@ -17,15 +17,20 @@ $.fn.tab = function (customOptions) {
             return this.text();
         },
         keepTitleVisible: false,
-        tabContainerTemplate: '<div class="tab-container"></div>',
-        labelContainerTemplate: '<div class="label-container"></div>',
+        tabContainerTemplate: '<div></div>',
+        tabContainerClass: 'tab-container',
+        labelContainerTemplate: '<div></div>',
+        labelContainerClass: 'label-container',
         topLabelContainerClass: 'top',
         bottomLabelContainerClass: 'bottom',
-        labelItemTemplate: '<span class="label-item"></span>',
+        labelItemTemplate: '<span></span>',
+        labelItemClass: 'label-item',
         labelItemActiveClass: 'label-active',
         labelItemInactiveClass: 'label-inactive',
-        pageContainerTemplate: '<div class="page-container"></div>',
-        pageItemTemplate: '<div class="page-item"></div>',
+        pageContainerTemplate: '<div></div>',
+        pageContainerClass: 'page-container',
+        pageItemTemplate: '<div></div>',
+        pageItemClass: 'page-item',
         pageItemActiveClass: 'page-active',
         pageItemInactiveClass: 'page-inactive',
         activeIndex: 0,
@@ -51,24 +56,24 @@ $.fn.tab = function (customOptions) {
         var pageCount = 0;
         var currentIndex = -1;
         //container
-        var $outerContainer = $(options.tabContainerTemplate);
+        var $outerContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass);
         //top label
         var $topLabelContainer;
         var $topLabelContainerLeaf;
         if (options.showTopLabelContainer) {
-            $topLabelContainer = $(options.labelContainerTemplate).addClass(options.topLabelContainerClass);
+            $topLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.topLabelContainerClass);
             $outerContainer.append($topLabelContainer);
             $topLabelContainerLeaf = getLeafElement($topLabelContainer);
         }
         //page
-        var $pageContainer = $(options.pageContainerTemplate);
+        var $pageContainer = $(options.pageContainerTemplate).addClass(options.pageContainerClass);
         $outerContainer.append($pageContainer);
         var $pageContainerLeaf = getLeafElement($pageContainer);
         //bottom label
         var $bottomLabelContainer;
         var $bottomLabelContainerLeaf;
         if (options.showBottomLabelContainer) {
-            $bottomLabelContainer = $(options.labelContainerTemplate).addClass(options.bottomLabelContainerClass);
+            $bottomLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.bottomLabelContainerClass);
             $outerContainer.append($bottomLabelContainer);
             $bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);
         }
@@ -108,13 +113,13 @@ $.fn.tab = function (customOptions) {
         };
         //add labels & pages
         var newLabelItem = function (title) {
-            var $labelItem = $(options.labelItemTemplate).addClass(options.labelItemInactiveClass);
+            var $labelItem = $(options.labelItemTemplate).addClass(options.labelItemClass).addClass(options.labelItemInactiveClass);
             var $labelItemLeaf = getLeafElement($labelItem);
             $labelItemLeaf.empty().append(title);
             return $labelItem;
         };
         var newPageItem = function (content) {
-            var $pageItem = $(options.pageItemTemplate).addClass(options.pageItemInactiveClass);
+            var $pageItem = $(options.pageItemTemplate).addClass(options.pageItemClass).addClass(options.pageItemInactiveClass);
             var $pageItemLeaf = getLeafElement($pageItem);
             $pageItemLeaf.append(content);
             return $pageItem;
