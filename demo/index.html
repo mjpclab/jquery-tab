@@ -116,7 +116,7 @@
 		tab2Controller.insertTabPage('inserted', '<p>inserted page content</p>', 1);
 		tab2Controller.addTabPage('<span>added</span>', '<h1>added page content</h1>');
 		tab2Controller.insert($('.to-be-insert'), 0);
-		console.log(tab2Controller.remove(2));
+		tab2Controller.remove(2);
 
 		$('.tab3').tab({
 			'fixedHeight': true,

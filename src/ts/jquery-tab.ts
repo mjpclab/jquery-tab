@@ -40,10 +40,10 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		pageItemInactiveClass: 'page-inactive',
 
 		activeIndex: 0,
-		showPageItem: function ($pageItem: JQuery) {
+		fnShowPageItem: function ($pageItem: JQuery) {
 			return $pageItem && $pageItem.show && $pageItem.show();
 		},
-		hidePageItem: function ($pageItem: JQuery) {
+		fnHidePageItem: function ($pageItem: JQuery) {
 			return $pageItem && $pageItem.hide && $pageItem.hide();
 		},
 		beforeSwitch: undefined,
@@ -147,8 +147,8 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		const insertTabPage = function (title: JQueriable, content: JQueriable, index: number = Infinity) {
 			const $labelItem = newLabelItem(title);
 			const $pageItem = newPageItem(content);
-			if (currentIndex > -1 && typeof options.hidePageItem === 'function') {
-				options.hidePageItem($pageItem);
+			if (currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
+				options.fnHidePageItem.call($pageItem, $pageItem);
 			}
 
 			if (index < 0) {
@@ -352,13 +352,13 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 			updateClass($newLabel, $newPage);
 
 			//function to hide pages
-			if (typeof options.hidePageItem === 'function') {
-				options.hidePageItem($otherPages);
+			if (typeof options.fnHidePageItem === 'function') {
+				options.fnHidePageItem.call($otherPages, $otherPages);
 			}
 
 			//function to show page
-			if (typeof options.showPageItem === 'function') {
-				options.showPageItem($newPage);
+			if (typeof options.fnShowPageItem === 'function') {
+				options.fnShowPageItem.call($newPage, $newPage);
 			}
 
 			//keep new index for restoring

@@ -34,10 +34,10 @@ $.fn.tab = function (customOptions) {
         pageItemActiveClass: 'page-active',
         pageItemInactiveClass: 'page-inactive',
         activeIndex: 0,
-        showPageItem: function ($pageItem) {
+        fnShowPageItem: function ($pageItem) {
             return $pageItem && $pageItem.show && $pageItem.show();
         },
-        hidePageItem: function ($pageItem) {
+        fnHidePageItem: function ($pageItem) {
             return $pageItem && $pageItem.hide && $pageItem.hide();
         },
         beforeSwitch: undefined,
@@ -128,8 +128,8 @@ $.fn.tab = function (customOptions) {
             if (index === void 0) { index = Infinity; }
             var $labelItem = newLabelItem(title);
             var $pageItem = newPageItem(content);
-            if (currentIndex > -1 && typeof options.hidePageItem === 'function') {
-                options.hidePageItem($pageItem);
+            if (currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
+                options.fnHidePageItem.call($pageItem, $pageItem);
             }
             if (index < 0) {
                 index = 0;
@@ -307,12 +307,12 @@ $.fn.tab = function (customOptions) {
             var $otherPages = $newPage.siblings();
             updateClass($newLabel, $newPage);
             //function to hide pages
-            if (typeof options.hidePageItem === 'function') {
-                options.hidePageItem($otherPages);
+            if (typeof options.fnHidePageItem === 'function') {
+                options.fnHidePageItem.call($otherPages, $otherPages);
             }
             //function to show page
-            if (typeof options.showPageItem === 'function') {
-                options.showPageItem($newPage);
+            if (typeof options.fnShowPageItem === 'function') {
+                options.fnShowPageItem.call($newPage, $newPage);
             }
             //keep new index for restoring
             saveIndex(newIndex);

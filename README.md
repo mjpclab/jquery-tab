@@ -139,12 +139,12 @@ CSS class for inactive page item.
 `activeIndex`  
 The default initial active index of the tab. Will be ignored if it can get value from `statusFieldSelector` or `statusHashTemplate`.
 
-`showPageItem`  
+`fnShowPageItem`  
 Define the behavior of showing an page-item when switched to it.
 Must be a function like `func($pageItem) {}`. Parameter `$pageItem` will be the current page-item's jQuery object.
 The default behavior is calling the jQuery object's `show()`.
 
-`hidePageItem`    
+`fnHidePageItem`    
 Define the behavior of hiding an page-item when switched to other page.
 Must be a function like `func($pageItem) {}`. Parameter `$pageItem` will be the current page-item's jQuery object.
 The default behavior is calling the jQuery object's `hide()`.
