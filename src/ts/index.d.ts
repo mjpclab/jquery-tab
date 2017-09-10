@@ -20,6 +20,8 @@ interface IJQueryTabOptions {
 	keepTitleVisible?: boolean;
 	containerTemplate?: string;
 	labelContainerTemplate?: string;
+	topLabelContainerClass?: string;
+	bottomLabelContainerClass?: string;
 	labelItemTemplate?: string;
 	labelItemActiveClass?: string;
 	labelItemInactiveClass?: string;

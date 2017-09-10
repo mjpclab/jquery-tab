@@ -18,7 +18,9 @@ $.fn.tab = function (customOptions) {
         },
         keepTitleVisible: false,
         containerTemplate: '<div class="tab-container"></div>',
-        labelContainerTemplate: '<div class="label-container {position}"></div>',
+        labelContainerTemplate: '<div class="label-container"></div>',
+        topLabelContainerClass: 'top',
+        bottomLabelContainerClass: 'bottom',
         labelItemTemplate: '<span class="label-item"></span>',
         labelItemActiveClass: 'label-active',
         labelItemInactiveClass: 'label-inactive',
@@ -54,7 +56,7 @@ $.fn.tab = function (customOptions) {
         var $topLabelContainer;
         var $topLabelContainerLeaf;
         if (options.showTopLabelContainer) {
-            $topLabelContainer = $(options.labelContainerTemplate.replace('{position}', 'top'));
+            $topLabelContainer = $(options.labelContainerTemplate).addClass(options.topLabelContainerClass);
             $outerContainer.append($topLabelContainer);
             $topLabelContainerLeaf = getLeafElement($topLabelContainer);
         }
@@ -66,7 +68,7 @@ $.fn.tab = function (customOptions) {
         var $bottomLabelContainer;
         var $bottomLabelContainerLeaf;
         if (options.showBottomLabelContainer) {
-            $bottomLabelContainer = $(options.labelContainerTemplate.replace('{position}', 'bottom'));
+            $bottomLabelContainer = $(options.labelContainerTemplate).addClass(options.bottomLabelContainerClass);
             $outerContainer.append($bottomLabelContainer);
             $bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);
         }

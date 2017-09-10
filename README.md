@@ -94,6 +94,12 @@ Tab-container's template.
 `labelContainerTemplate`  
 Label-container's template.
 
+`topLabelContainerClass`  
+CSS class for top label container.
+
+`bottomLabelContainerClass`  
+CSS class for bottom label container.
+
 `labelItemTemplate`  
 Label-item's template.
 
