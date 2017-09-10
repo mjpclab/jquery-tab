@@ -265,9 +265,17 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		updateFixedHeight();
 
 		//utilities
+
 		let $statusFields = $item.find(options.statusFieldSelector!);
 		if (!$statusFields.length) {
 			$statusFields = $(options.statusFieldSelector);
+		}
+		let RE_STATUS_HASH: RegExp;
+		let RE_STATUS_HASH_DIGITS: RegExp;
+		if (options.statusHashTemplate) {
+			const RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
+			RE_STATUS_HASH = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '\\d+');
+			RE_STATUS_HASH_DIGITS = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '(\\d+)');
 		}
 		const saveIndex = function (index: number) {
 			$statusFields.val(index);
@@ -275,13 +283,13 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 				let hash = location.hash;
 				const statusHash = options.statusHashTemplate + index;
 				if (hash.indexOf(options.statusHashTemplate) > -1) {
-					hash = hash.replace(new RegExp(options.statusHashTemplate + '\\d+'), statusHash);
+					hash = hash.replace(RE_STATUS_HASH, statusHash);
 				}
 				else {
 					if (hash.length) {
 						hash += options.statusHashSeparator;
 					}
-					hash += options.statusHashTemplate + index;
+					hash += statusHash;
 				}
 
 				location.hash = hash;
@@ -307,14 +315,13 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 					}
 				}
 			});
-			if (index === -1 && options.statusHashTemplate) {
-				const re = new RegExp(options.statusHashTemplate + '(\\d+)');
-				const searchResult = location.hash.match(re);
+			if ((index === -1 || isNaN(index)) && options.statusHashTemplate) {
+				const searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);
 				if (searchResult && searchResult[1]) {
 					index = parseInt(searchResult[1]);
 				}
 			}
-			if (index === -1) {
+			if (index === -1 || isNaN(index)) {
 				index = Number(options.activeIndex) || 0;
 			}
 

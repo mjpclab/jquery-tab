@@ -314,19 +314,26 @@ $.fn.tab = function (customOptions) {
         if (!$statusFields.length) {
             $statusFields = $(options.statusFieldSelector);
         }
+        var RE_STATUS_HASH;
+        var RE_STATUS_HASH_DIGITS;
+        if (options.statusHashTemplate) {
+            var RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
+            RE_STATUS_HASH = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '\\d+');
+            RE_STATUS_HASH_DIGITS = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '(\\d+)');
+        }
         var saveIndex = function (index) {
             $statusFields.val(index);
             if (options.statusHashTemplate) {
                 var hash = location.hash;
                 var statusHash = options.statusHashTemplate + index;
                 if (hash.indexOf(options.statusHashTemplate) > -1) {
-                    hash = hash.replace(new RegExp(options.statusHashTemplate + '\\d+'), statusHash);
+                    hash = hash.replace(RE_STATUS_HASH, statusHash);
                 }
                 else {
                     if (hash.length) {
                         hash += options.statusHashSeparator;
                     }
-                    hash += options.statusHashTemplate + index;
+                    hash += statusHash;
                 }
                 location.hash = hash;
             }
@@ -350,14 +357,13 @@ $.fn.tab = function (customOptions) {
                     }
                 }
             });
-            if (index === -1 && options.statusHashTemplate) {
-                var re = new RegExp(options.statusHashTemplate + '(\\d+)');
-                var searchResult = location.hash.match(re);
+            if ((index === -1 || isNaN(index)) && options.statusHashTemplate) {
+                var searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);
                 if (searchResult && searchResult[1]) {
                     index = parseInt(searchResult[1]);
                 }
             }
-            if (index === -1) {
+            if (index === -1 || isNaN(index)) {
                 index = Number(options.activeIndex) || 0;
             }
             if (index < 0) {
