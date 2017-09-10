@@ -120,8 +120,8 @@ $.fn.tab = function (customOptions) {
         fnHidePageItem: function ($pageItem) {
             return $pageItem && $pageItem.hide && $pageItem.hide();
         },
-        beforeSwitch: undefined,
-        afterSwitch: undefined
+        onBeforeSwitch: undefined,
+        onAfterSwitch: undefined
     };
     var options = $.extend({}, defaultOptions, customOptions);
     var getLeafElement = function ($node) {
@@ -136,25 +136,25 @@ $.fn.tab = function (customOptions) {
         var pageCount = 0;
         var currentIndex = -1;
         //container
-        var $outerContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass);
+        var $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass);
         //top label
         var $topLabelContainer;
         var $topLabelContainerLeaf;
         if (options.showTopLabelContainer) {
             $topLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.topLabelContainerClass);
-            $outerContainer.append($topLabelContainer);
+            $tabContainer.append($topLabelContainer);
             $topLabelContainerLeaf = getLeafElement($topLabelContainer);
         }
         //page
         var $pageContainer = $(options.pageContainerTemplate).addClass(options.pageContainerClass);
-        $outerContainer.append($pageContainer);
+        $tabContainer.append($pageContainer);
         var $pageContainerLeaf = getLeafElement($pageContainer);
         //bottom label
         var $bottomLabelContainer;
         var $bottomLabelContainerLeaf;
         if (options.showBottomLabelContainer) {
             $bottomLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.bottomLabelContainerClass);
-            $outerContainer.append($bottomLabelContainer);
+            $tabContainer.append($bottomLabelContainer);
             $bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);
         }
         //getters
@@ -294,7 +294,7 @@ $.fn.tab = function (customOptions) {
         };
         add($item);
         //replace original content
-        $item.prepend($outerContainer);
+        $item.prepend($tabContainer);
         //check if param:fixed height
         var updateFixedHeight = function () {
             if (options.fixedHeight) {
@@ -378,8 +378,8 @@ $.fn.tab = function (customOptions) {
         var switchTo = function (newIndex) {
             var oldIndex = currentIndex;
             //before switching callback
-            if (typeof (options.beforeSwitch) === 'function') {
-                options.beforeSwitch(oldIndex, newIndex);
+            if (typeof (options.onBeforeSwitch) === 'function') {
+                options.onBeforeSwitch.call($tabContainer, oldIndex, newIndex);
             }
             //labels & pages
             var $newLabel = getTopBottomLabels(newIndex);
@@ -397,8 +397,8 @@ $.fn.tab = function (customOptions) {
             //keep new index for restoring
             saveIndex(newIndex);
             //after switching callback
-            if (typeof (options.afterSwitch) === 'function') {
-                options.afterSwitch(oldIndex, newIndex);
+            if (typeof (options.onAfterSwitch) === 'function') {
+                options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);
             }
             //finalize
             currentIndex = newIndex;
@@ -496,7 +496,7 @@ $.fn.tab = function (customOptions) {
             remove: remove
         };
         $item.data('jquery-tab-controller', controller);
-        $outerContainer.data('jquery-tab-controller', controller);
+        $tabContainer.data('jquery-tab-controller', controller);
     };
     if (this.length) {
         this.each(function () {

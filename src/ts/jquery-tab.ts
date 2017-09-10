@@ -46,8 +46,8 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		fnHidePageItem: function ($pageItem: JQuery) {
 			return $pageItem && $pageItem.hide && $pageItem.hide();
 		},
-		beforeSwitch: undefined,
-		afterSwitch: undefined
+		onBeforeSwitch: undefined,
+		onAfterSwitch: undefined
 	};
 	const options = $.extend({}, defaultOptions, customOptions);
 
@@ -65,21 +65,21 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		let currentIndex = -1;
 
 		//container
-		const $outerContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass!);
+		const $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass!);
 
 		//top label
 		let $topLabelContainer: JQuery | undefined;
 		let $topLabelContainerLeaf: JQuery | undefined;
 		if (options.showTopLabelContainer) {
 			$topLabelContainer = $(options.labelContainerTemplate!).addClass(options.labelContainerClass!).addClass(options.topLabelContainerClass!);
-			$outerContainer.append($topLabelContainer);
+			$tabContainer.append($topLabelContainer);
 
 			$topLabelContainerLeaf = getLeafElement($topLabelContainer);
 		}
 
 		//page
 		const $pageContainer = $(options.pageContainerTemplate).addClass(options.pageContainerClass!);
-		$outerContainer.append($pageContainer);
+		$tabContainer.append($pageContainer);
 
 		const $pageContainerLeaf = getLeafElement($pageContainer);
 
@@ -88,7 +88,7 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		let $bottomLabelContainerLeaf: JQuery | undefined;
 		if (options.showBottomLabelContainer) {
 			$bottomLabelContainer = $(options.labelContainerTemplate!).addClass(options.labelContainerClass!).addClass(options.bottomLabelContainerClass!);
-			$outerContainer.append($bottomLabelContainer);
+			$tabContainer.append($bottomLabelContainer);
 
 			$bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);
 		}
@@ -245,7 +245,7 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		add($item);
 
 		//replace original content
-		$item.prepend($outerContainer);
+		$item.prepend($tabContainer);
 
 		//check if param:fixed height
 		const updateFixedHeight = function () {
@@ -340,8 +340,8 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 			const oldIndex = currentIndex;
 
 			//before switching callback
-			if (typeof (options.beforeSwitch) === 'function') {
-				options.beforeSwitch(oldIndex, newIndex);
+			if (typeof (options.onBeforeSwitch) === 'function') {
+				options.onBeforeSwitch.call($tabContainer, oldIndex, newIndex);
 			}
 
 			//labels & pages
@@ -365,8 +365,8 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 			saveIndex(newIndex);
 
 			//after switching callback
-			if (typeof (options.afterSwitch) === 'function') {
-				options.afterSwitch(oldIndex, newIndex);
+			if (typeof (options.onAfterSwitch) === 'function') {
+				options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);
 			}
 
 			//finalize
@@ -477,7 +477,7 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 			remove: remove
 		};
 		$item.data('jquery-tab-controller', controller);
-		$outerContainer.data('jquery-tab-controller', controller);
+		$tabContainer.data('jquery-tab-controller', controller);
 	};
 
 	if (this.length) {

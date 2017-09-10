@@ -41,8 +41,8 @@ interface IJQueryTabOptions {
 	activeIndex?: number;
 	fnShowPageItem?: (this: JQuery, $pageItem: JQuery) => JQuery;
 	fnHidePageItem?: (this: JQuery, $pageItem: JQuery) => JQuery;
-	beforeSwitch?: (oldIndex: number, newIndex: number) => void;
-	afterSwitch?: (oldIndex: number, newIndex: number) => void;
+	onBeforeSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;
+	onAfterSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;
 }
 
 interface JQuery {

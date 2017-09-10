@@ -149,10 +149,10 @@ Define the behavior of hiding an page-item when switched to other page.
 Must be a function like `func($pageItem) {}`. Parameter `$pageItem` will be the current page-item's jQuery object.
 The default behavior is calling the jQuery object's `hide()`.
 
-`beforeSwitch(oldIndex, newIndex)`  
+`onBeforeSwitch(oldIndex, newIndex)`  
 A callback before switching the tab.
 
-`afterSwitch(oldIndex, newIndex)`  
+`onAfterSwitch(oldIndex, newIndex)`  
 A callback after switching the tab.
 
 #the Controller
