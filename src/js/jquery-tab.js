@@ -324,7 +324,6 @@ $.fn.tab = function (customOptions) {
             currentIndex = newIndex;
         };
         //init show active page
-        var initialActiveIndex = loadIndex();
         switchTo(loadIndex());
         //handle delay trigger event
         var delayTriggerHandler;

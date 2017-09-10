@@ -375,7 +375,6 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		};
 
 		//init show active page
-		const initialActiveIndex = loadIndex();
 		switchTo(loadIndex());
 
 		//handle delay trigger event
