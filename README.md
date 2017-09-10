@@ -73,10 +73,10 @@ Determine a separator between multiple hash items if there are more than 1 tab-c
 `fixedHeight`  
 Tab-container's height will be fixed to fit the longest page and will not change when tabs are switched.
 
-`showTopLabel`  
+`showTopLabelContainer`  
 Show label-container on top of the tab.
 
-`showBottomLabel`  
+`showBottomLabelContainer`  
 Show label-container on bottom of the tab.
 
 `titleSelector`  

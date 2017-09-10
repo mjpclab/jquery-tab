@@ -90,8 +90,8 @@ $.fn.tab = function (customOptions) {
         statusHashTemplate: '',
         statusHashSeparator: '&',
         fixedHeight: false,
-        showTopLabel: true,
-        showBottomLabel: false,
+        showTopLabelContainer: true,
+        showBottomLabelContainer: false,
         titleSelector: 'h1,h2,h3,h4,h5,h6',
         titleContentFilter: function () {
             return this.text();
@@ -133,7 +133,7 @@ $.fn.tab = function (customOptions) {
         //top label
         var $topLabelContainer;
         var $topLabelContainerLeaf;
-        if (options.showTopLabel) {
+        if (options.showTopLabelContainer) {
             $topLabelContainer = $(options.labelContainerTemplate.replace('{position}', 'top'));
             $outerContainer.append($topLabelContainer);
             $topLabelContainerLeaf = getLeafElement($topLabelContainer);
@@ -145,7 +145,7 @@ $.fn.tab = function (customOptions) {
         //bottom label
         var $bottomLabelContainer;
         var $bottomLabelContainerLeaf;
-        if (options.showBottomLabel) {
+        if (options.showBottomLabelContainer) {
             $bottomLabelContainer = $(options.labelContainerTemplate.replace('{position}', 'bottom'));
             $outerContainer.append($bottomLabelContainer);
             $bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);
@@ -1008,7 +1008,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, ".tab-container {\n\tmargin-bottom: 2em;\n}\n\n.tab-container .label-container {\n\tposition: relative;\n}\n\n.tab-container .label-container.top {\n\tbottom: -1px;\n}\n\n.tab-container .label-container.bottom {\n\ttop: -1px;\n}\n\n.tab-container .label-container .label-item {\n\tdisplay: inline-block;\n\tmargin-right: 1em;\n\tborder: 1px solid;\n\n\tpadding: 0.5em 1em;\n\tcursor: pointer;\n}\n\n.tab-container .page-container {\n\tborder: 1px solid;\n}\n", ""]);
+exports.push([module.i, ".tab-container {\n\tmargin-bottom: 2em;\n}\n\n.tab-container .label-container {\n\tposition: relative;\n}\n\n.tab-container .label-container.top {\n\tbottom: -1px;\n}\n\n.tab-container .label-container.bottom {\n\ttop: -1px;\n}\n\n.tab-container .label-container .label-item {\n\tdisplay: inline-block;\n\tmargin-right: 1em;\n\tborder: 1px solid;\n\n\tpadding: 0.5em 1em;\n\tcursor: pointer;\n}\n\n.tab-container .label-container.top .label-item {\n\tvertical-align: bottom;\n}\n\n.tab-container .label-container.bottom .label-item {\n\tvertical-align: top;\n}\n\n.tab-container .page-container {\n\tborder: 1px solid;\n}\n", ""]);
 
 // exports
 

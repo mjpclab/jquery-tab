@@ -13,8 +13,8 @@ interface IJQueryTabOptions {
 	statusHashTemplate?: string;
 	statusHashSeparator?: string;
 	fixedHeight?: boolean;
-	showTopLabel?: boolean;
-	showBottomLabel?: boolean;
+	showTopLabelContainer?: boolean;
+	showBottomLabelContainer?: boolean;
 	titleSelector?: string;
 	titleContentFilter?: (this: JQuery) => string;
 	keepTitleVisible?: boolean;

@@ -90,8 +90,8 @@ $.fn.tab = function (customOptions) {
         statusHashTemplate: '',
         statusHashSeparator: '&',
         fixedHeight: false,
-        showTopLabel: true,
-        showBottomLabel: false,
+        showTopLabelContainer: true,
+        showBottomLabelContainer: false,
         titleSelector: 'h1,h2,h3,h4,h5,h6',
         titleContentFilter: function () {
             return this.text();
@@ -133,7 +133,7 @@ $.fn.tab = function (customOptions) {
         //top label
         var $topLabelContainer;
         var $topLabelContainerLeaf;
-        if (options.showTopLabel) {
+        if (options.showTopLabelContainer) {
             $topLabelContainer = $(options.labelContainerTemplate.replace('{position}', 'top'));
             $outerContainer.append($topLabelContainer);
             $topLabelContainerLeaf = getLeafElement($topLabelContainer);
@@ -145,7 +145,7 @@ $.fn.tab = function (customOptions) {
         //bottom label
         var $bottomLabelContainer;
         var $bottomLabelContainerLeaf;
-        if (options.showBottomLabel) {
+        if (options.showBottomLabelContainer) {
             $bottomLabelContainer = $(options.labelContainerTemplate.replace('{position}', 'bottom'));
             $outerContainer.append($bottomLabelContainer);
             $bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);

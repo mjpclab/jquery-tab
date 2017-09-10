@@ -12,8 +12,8 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		statusHashTemplate: '',
 		statusHashSeparator: '&',
 		fixedHeight: false,
-		showTopLabel: true,
-		showBottomLabel: false,
+		showTopLabelContainer: true,
+		showBottomLabelContainer: false,
 		titleSelector: 'h1,h2,h3,h4,h5,h6',
 		titleContentFilter: function () {
 			return this.text();
@@ -59,7 +59,7 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		//top label
 		let $topLabelContainer: JQuery | undefined;
 		let $topLabelContainerLeaf: JQuery | undefined;
-		if (options.showTopLabel) {
+		if (options.showTopLabelContainer) {
 			$topLabelContainer = $(options.labelContainerTemplate!.replace('{position}', 'top'));
 			$outerContainer.append($topLabelContainer);
 
@@ -75,7 +75,7 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		//bottom label
 		let $bottomLabelContainer: JQuery | undefined;
 		let $bottomLabelContainerLeaf: JQuery | undefined;
-		if (options.showBottomLabel) {
+		if (options.showBottomLabelContainer) {
 			$bottomLabelContainer = $(options.labelContainerTemplate!.replace('{position}', 'bottom'));
 			$outerContainer.append($bottomLabelContainer);
 
