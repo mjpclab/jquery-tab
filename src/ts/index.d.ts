@@ -21,8 +21,8 @@ interface IJQueryTabOptions {
 	containerTemplate?: string;
 	labelContainerTemplate?: string;
 	labelItemTemplate?: string;
-	labelActiveClass?: string;
-	labelInactiveClass?: string;
+	labelItemActiveClass?: string;
+	labelItemInactiveClass?: string;
 	pageContainerTemplate?: string;
 	pageItemTemplate?: string;
 	pageActiveClass?: string;

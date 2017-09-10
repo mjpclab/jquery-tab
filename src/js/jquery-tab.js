@@ -20,8 +20,8 @@ $.fn.tab = function (customOptions) {
         containerTemplate: '<div class="tab-container"></div>',
         labelContainerTemplate: '<div class="label-container {position}"></div>',
         labelItemTemplate: '<span class="label-item"></span>',
-        labelActiveClass: 'label-active',
-        labelInactiveClass: 'label-inactive',
+        labelItemActiveClass: 'label-active',
+        labelItemInactiveClass: 'label-inactive',
         pageContainerTemplate: '<div class="page-container"></div>',
         pageItemTemplate: '<div class="page-item"></div>',
         pageActiveClass: 'page-active',
@@ -106,7 +106,7 @@ $.fn.tab = function (customOptions) {
         };
         //add labels & pages
         var newLabelItem = function (title) {
-            var $labelItem = $(options.labelItemTemplate).addClass(options.labelInactiveClass);
+            var $labelItem = $(options.labelItemTemplate).addClass(options.labelItemInactiveClass);
             var $labelItemLeaf = getLeafElement($labelItem);
             $labelItemLeaf.empty().append(title);
             return $labelItem;
@@ -282,8 +282,8 @@ $.fn.tab = function (customOptions) {
             return index;
         };
         var updateClass = function ($activeLabelItem, $activePageItem) {
-            $activeLabelItem.addClass(options.labelActiveClass).removeClass(options.labelInactiveClass);
-            $activeLabelItem.siblings().removeClass(options.labelActiveClass).addClass(options.labelInactiveClass);
+            $activeLabelItem.addClass(options.labelItemActiveClass).removeClass(options.labelItemInactiveClass);
+            $activeLabelItem.siblings().removeClass(options.labelItemActiveClass).addClass(options.labelItemInactiveClass);
             $activePageItem.addClass(options.pageActiveClass).removeClass(options.pageInactiveClass);
             $activePageItem.siblings().removeClass(options.pageActiveClass).addClass(options.pageInactiveClass);
         };

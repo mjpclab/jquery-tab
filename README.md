@@ -97,10 +97,10 @@ Label-container's template.
 `labelItemTemplate`  
 Label-item's template.
 
-`labelActiveClass`  
+`labelItemActiveClass`  
 CSS class for active label-item.
 
-`labelInactiveClass`  
+`labelItemInactiveClass`  
 CSS class for inactive label-item.
 
 `pageContainerTemplate`  

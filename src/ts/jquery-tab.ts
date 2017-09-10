@@ -22,8 +22,8 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		containerTemplate: '<div class="tab-container"></div>',
 		labelContainerTemplate: '<div class="label-container {position}"></div>',
 		labelItemTemplate: '<span class="label-item"></span>',
-		labelActiveClass: 'label-active',
-		labelInactiveClass: 'label-inactive',
+		labelItemActiveClass: 'label-active',
+		labelItemInactiveClass: 'label-inactive',
 		pageContainerTemplate: '<div class="page-container"></div>',
 		pageItemTemplate: '<div class="page-item"></div>',
 		pageActiveClass: 'page-active',
@@ -120,7 +120,7 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 
 		//add labels & pages
 		const newLabelItem = function (title: JQueriable) {
-			const $labelItem = $(options.labelItemTemplate).addClass(options.labelInactiveClass!);
+			const $labelItem = $(options.labelItemTemplate).addClass(options.labelItemInactiveClass!);
 			const $labelItemLeaf = getLeafElement($labelItem);
 			$labelItemLeaf.empty().append(title);
 
@@ -317,8 +317,8 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		};
 
 		const updateClass = function ($activeLabelItem: JQuery, $activePageItem: JQuery) {
-			$activeLabelItem.addClass(options.labelActiveClass!).removeClass(options.labelInactiveClass);
-			$activeLabelItem.siblings().removeClass(options.labelActiveClass).addClass(options.labelInactiveClass!);
+			$activeLabelItem.addClass(options.labelItemActiveClass!).removeClass(options.labelItemInactiveClass);
+			$activeLabelItem.siblings().removeClass(options.labelItemActiveClass).addClass(options.labelItemInactiveClass!);
 
 			$activePageItem.addClass(options.pageActiveClass!).removeClass(options.pageInactiveClass);
 			$activePageItem.siblings().removeClass(options.pageActiveClass).addClass(options.pageInactiveClass!);
