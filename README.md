@@ -43,8 +43,13 @@ $('.region').tab({
 
 # Including CSS
 jquery-tab provides default CSS styles if you don't want to make layout yourself. It also provides default skin.
-To use that, importing module `jquery-tab/with-css` instead of `jquery-tab`.
-For global variable mode, referencing the '-with-css' bundle file, or directly referencing CSS files under src/css/ folder.
+
+## Use CSS bundled version
+For module environment, importing module `jquery-tab/with-css` instead of `jquery-tab`.
+For global variable mode, referencing the '-with-css' bundle file.
+
+## Use standalone CSS file
+Copying or referencing source CSS files under `src/css/` directory.
 
 # Options
 ## Behavior Options
