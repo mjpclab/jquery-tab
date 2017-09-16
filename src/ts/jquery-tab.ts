@@ -165,7 +165,7 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 				$pageContainerLeaf.children(':eq(' + index + ')').before($pageItem);
 
 				if (index <= currentIndex) {
-					currentIndex++;
+					saveIndex(++currentIndex);
 				}
 			}
 			else {
@@ -231,7 +231,7 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 			pageCount--;
 
 			if (index < currentIndex) {
-				currentIndex--;
+				saveIndex(--currentIndex);
 			}
 			else if (index === currentIndex) {
 				if (index >= pageCount) {
