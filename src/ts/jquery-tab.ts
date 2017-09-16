@@ -2,6 +2,15 @@ import $ = require('jquery');
 
 type JQueriable = JQuery.Selector | JQuery.TypeOrArray<JQuery.Node> | JQuery<JQuery.Node>
 
+function getLeafElement($node: JQuery) {
+	let $result = $node;
+	let $deeper;
+	while ($deeper = $result.children(), $deeper.length) {
+		$result = $deeper;
+	}
+	return $result.eq(0);
+}
+
 $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 	const defaultOptions: IJQueryTabOptions = {
 		triggerEvents: 'click',
@@ -51,15 +60,6 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		pageItemInactiveClass: 'page-inactive'
 	};
 	const options = $.extend({}, defaultOptions, customOptions);
-
-	const getLeafElement = function ($node: JQuery) {
-		let $result = $node;
-		let $deeper;
-		while ($deeper = $result.children(), $deeper.length) {
-			$result = $deeper;
-		}
-		return $result;
-	};
 
 	const generateStructure = function ($item: JQuery) {
 		let pageCount = 0;
@@ -372,13 +372,13 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 			//keep new index for restoring
 			saveIndex(newIndex);
 
+			//finalize
+			currentIndex = newIndex;
+
 			//after switching callback
 			if (typeof (options.onAfterSwitch) === 'function') {
 				options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);
 			}
-
-			//finalize
-			currentIndex = newIndex;
 		};
 
 		//init show active page

@@ -1,5 +1,13 @@
 "use strict";
 var $ = require("jquery");
+function getLeafElement($node) {
+    var $result = $node;
+    var $deeper;
+    while ($deeper = $result.children(), $deeper.length) {
+        $result = $deeper;
+    }
+    return $result.eq(0);
+}
 $.fn.tab = function (customOptions) {
     var defaultOptions = {
         triggerEvents: 'click',
@@ -44,14 +52,6 @@ $.fn.tab = function (customOptions) {
         pageItemInactiveClass: 'page-inactive'
     };
     var options = $.extend({}, defaultOptions, customOptions);
-    var getLeafElement = function ($node) {
-        var $result = $node;
-        var $deeper;
-        while ($deeper = $result.children(), $deeper.length) {
-            $result = $deeper;
-        }
-        return $result;
-    };
     var generateStructure = function ($item) {
         var pageCount = 0;
         var currentIndex = -1;
@@ -322,12 +322,12 @@ $.fn.tab = function (customOptions) {
             }
             //keep new index for restoring
             saveIndex(newIndex);
+            //finalize
+            currentIndex = newIndex;
             //after switching callback
             if (typeof (options.onAfterSwitch) === 'function') {
                 options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);
             }
-            //finalize
-            currentIndex = newIndex;
         };
         //init show active page
         switchTo(loadIndex());
