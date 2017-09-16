@@ -145,127 +145,9 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 
 			return $pageItem;
 		};
-		const insertTabPage = function (title: JQueriable, content: JQueriable, index: number = Infinity) {
-			const $labelItem = newLabelItem(title);
-			const $pageItem = newPageItem(content);
-			if (currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
-				options.fnHidePageItem.call($pageItem, $pageItem);
-			}
 
-			if (index < 0) {
-				index = 0;
-			}
-			if (pageCount > 0 && index < pageCount) {
-				if ($topLabelContainerLeaf) {
-					$topLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
-				}
-				if ($bottomLabelContainerLeaf) {
-					$bottomLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
-				}
-				$pageContainerLeaf.children(':eq(' + index + ')').before($pageItem);
-
-				if (index <= currentIndex) {
-					saveIndex(++currentIndex);
-				}
-			}
-			else {
-				if ($topLabelContainerLeaf) {
-					$topLabelContainerLeaf.append($labelItem.clone());
-				}
-				if ($bottomLabelContainerLeaf) {
-					$bottomLabelContainerLeaf.append($labelItem.clone());
-				}
-				$pageContainerLeaf.append($pageItem);
-			}
-
-			pageCount++;
-		};
-		const addTabPage = function (title: JQueriable, content: JQueriable) {
-			insertTabPage(title, content);
-		};
-
-		const add = function (sourceContainer: JQueriable) {
-			const $sourceContainer = $(sourceContainer);
-			while (true) {
-				const $title = $sourceContainer.find(options.titleSelector!).first();
-				if ($title.length === 0) {
-					break;
-				}
-				if (!options.keepTitleVisible) {
-					$title.hide();
-				}
-
-				const title = options.titleContentFilter!.call($title, $title);
-				const content = $title.add($title.nextUntil(options.titleSelector));
-				addTabPage(title, content);
-			}
-		};
-		const insert = function (sourceContainer: JQueriable, index: number) {
-			const $sourceContainer = $(sourceContainer);
-			let inserted = 0;
-			while (true) {
-				const $title = $sourceContainer.find(options.titleSelector!).first();
-				if ($title.length === 0) {
-					break;
-				}
-				if (!options.keepTitleVisible) {
-					$title.hide();
-				}
-
-				const title = options.titleContentFilter!.call($title, $title);
-				const content = $title.add($title.nextUntil(options.titleSelector));
-				insertTabPage(title, content, index + inserted);
-				inserted++;
-			}
-		};
-		const remove = function (index: number) {
-			if (index === undefined || !isFinite(index) || index < 0 || index >= pageCount) {
-				return;
-			}
-
-			const $labelItems = getTopBottomLabels(index);
-			const $pageItem = getPage(index);
-
-			$labelItems.remove();
-			$pageItem.remove();
-			pageCount--;
-
-			if (index < currentIndex) {
-				saveIndex(--currentIndex);
-			}
-			else if (index === currentIndex) {
-				if (index >= pageCount) {
-					currentIndex = pageCount - 1;
-				}
-				switchTo(currentIndex);
-			}
-
-			return $pageItem;
-		};
-
-		add($item);
-
-		//replace original content
-		$item.prepend($tabContainer);
-
-		//check if param:fixed height
-		const updateFixedHeight = function () {
-			if (options.fixedHeight) {
-				let maxHeight = 0;
-
-				$pageContainerLeaf.children().each(function () {
-					const $pageItem = $(this);
-					const pageHeight = $pageItem[0].scrollHeight;
-					if (pageHeight > maxHeight) {
-						maxHeight = pageHeight;
-					}
-				}).height(maxHeight);
-			}
-		};
-		updateFixedHeight();
 
 		//utilities
-
 		let $statusFields = $item.find(options.statusFieldSelector!);
 		if (!$statusFields.length) {
 			$statusFields = $(options.statusFieldSelector);
@@ -274,8 +156,8 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		let RE_STATUS_HASH_DIGITS: RegExp;
 		if (options.statusHashTemplate) {
 			const RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
-			RE_STATUS_HASH = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '\\d+');
-			RE_STATUS_HASH_DIGITS = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '(\\d+)');
+			RE_STATUS_HASH = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '-?\\d+');
+			RE_STATUS_HASH_DIGITS = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '(-?\\d+)');
 		}
 		const saveIndex = function (index: number) {
 			$statusFields.val(index);
@@ -335,7 +217,8 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 			return index;
 		};
 
-		const updateClass = function ($activeLabelItem: JQuery, $activePageItem: JQuery) {
+		//methods
+		const _updateClass = function ($activeLabelItem: JQuery, $activePageItem: JQuery) {
 			$activeLabelItem.addClass(options.labelItemActiveClass!).removeClass(options.labelItemInactiveClass);
 			$activeLabelItem.siblings().removeClass(options.labelItemActiveClass).addClass(options.labelItemInactiveClass!);
 
@@ -343,7 +226,6 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 			$activePageItem.siblings().removeClass(options.pageItemActiveClass).addClass(options.pageItemInactiveClass!);
 		};
 
-		//switch function and switch event handler
 		const switchTo = function (newIndex: number) {
 			const oldIndex = currentIndex;
 
@@ -357,7 +239,7 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 			const $newPage = getPage(newIndex);
 			const $otherPages = $newPage.siblings();
 
-			updateClass($newLabel, $newPage);
+			_updateClass($newLabel, $newPage);
 
 			//function to hide pages
 			if (typeof options.fnHidePageItem === 'function') {
@@ -380,6 +262,135 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 				options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);
 			}
 		};
+
+		const _insertTabPage = function (title: JQueriable, content: JQueriable, index: number) {
+			const $labelItem = newLabelItem(title);
+			const $pageItem = newPageItem(content);
+			if (currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
+				options.fnHidePageItem.call($pageItem, $pageItem);
+			}
+
+			if (index < 0) {
+				index = 0;
+			}
+			if (pageCount > 0 && index < pageCount) {
+				if ($topLabelContainerLeaf) {
+					$topLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
+				}
+				if ($bottomLabelContainerLeaf) {
+					$bottomLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
+				}
+				$pageContainerLeaf.children(':eq(' + index + ')').before($pageItem);
+
+				if (index <= currentIndex) {
+					saveIndex(++currentIndex);
+				}
+			}
+			else {
+				if ($topLabelContainerLeaf) {
+					$topLabelContainerLeaf.append($labelItem.clone());
+				}
+				if ($bottomLabelContainerLeaf) {
+					$bottomLabelContainerLeaf.append($labelItem.clone());
+				}
+				$pageContainerLeaf.append($pageItem);
+			}
+
+			pageCount++;
+		};
+		const insertTabPage = function (title: JQueriable, content: JQueriable, index: number) {
+			_insertTabPage(title, content, index);
+			if (currentIndex === -1 && pageCount) {
+				switchTo(0);
+			}
+		};
+		const addTabPage = function (title: JQueriable, content: JQueriable) {
+			_insertTabPage(title, content, pageCount);
+			if (currentIndex === -1 && pageCount) {
+				switchTo(0);
+			}
+		};
+
+		const _insert = function (sourceContainer: JQueriable, index: number) {
+			const $sourceContainer = $(sourceContainer);
+			let inserted = 0;
+			while (true) {
+				const $title = $sourceContainer.find(options.titleSelector!).first();
+				if ($title.length === 0) {
+					break;
+				}
+				if (!options.keepTitleVisible) {
+					$title.hide();
+				}
+
+				const title = options.titleContentFilter!.call($title, $title);
+				const content = $title.add($title.nextUntil(options.titleSelector));
+				_insertTabPage(title, content, index + inserted);
+				inserted++;
+			}
+		};
+		const insert = function (sourceContainer: JQueriable, index: number) {
+			_insert(sourceContainer, index);
+			if (currentIndex === -1 && pageCount) {
+				switchTo(0);
+			}
+		};
+		const _add = function (sourceContainer: JQueriable) {
+			_insert(sourceContainer, pageCount);
+		};
+		const add = function (sourceContainer: JQueriable) {
+			_add(sourceContainer);
+			if (currentIndex === -1 && pageCount) {
+				switchTo(0);
+			}
+		};
+		const remove = function (index: number) {
+			if (index === undefined || !isFinite(index) || index < 0 || index >= pageCount) {
+				return;
+			}
+
+			const $labelItems = getTopBottomLabels(index);
+			const $pageItem = getPage(index);
+
+			$labelItems.remove();
+			$pageItem.remove();
+			pageCount--;
+
+			if (index < currentIndex) {
+				saveIndex(--currentIndex);
+			}
+			else if (index === currentIndex) {
+				if (currentIndex === pageCount) {
+					switchTo(currentIndex - 1);
+				}
+				else {
+					switchTo(currentIndex);
+				}
+			}
+
+			return $pageItem;
+		};
+
+		_add($item);
+
+		//replace original content
+		$item.prepend($tabContainer);
+
+		//check if param:fixed height
+		const updateFixedHeight = function () {
+			if (options.fixedHeight) {
+				let maxHeight = 0;
+
+				$pageContainerLeaf.children().each(function () {
+					const $pageItem = $(this);
+					const pageHeight = $pageItem[0].scrollHeight;
+					if (pageHeight > maxHeight) {
+						maxHeight = pageHeight;
+					}
+				}).height(maxHeight);
+			}
+		};
+		updateFixedHeight();
 
 		//init show active page
 		switchTo(loadIndex());

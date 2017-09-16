@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<link rel="stylesheet" type="text/css" href="../src/css/layout.css"/>
+	<link rel="stylesheet" type="text/css" href="../src/css/skin-gray.css"/>
+	<link rel="stylesheet" type="text/css" href="css/main.css"/>
+	<title>jQuery tab example</title>
+</head>
+
+<body>
+<div class="tab1">
+	<h1>title 1</h1>
+	<p>page 1 content</p>
+
+	<h1>title 2</h1>
+	<p>page 2 content</p>
+</div>
+
+<button id="btnAppend">Append Tab</button>
+<button id="btnRemove">Remove Tab</button>
+
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../dist/jquery-tab.js"></script>
+<script type="text/javascript">
+	$('.tab1').tab({
+		statusHashTemplate: 'tab=',
+		onBeforeSwitch: function (oldIndex, newIndex) {
+			console.log('before switch: ' + oldIndex + ' -> ' + newIndex)
+		},
+		onAfterSwitch: function (oldIndex, newIndex) {
+			console.log('    after switch: ' + oldIndex + ' -> ' + newIndex)
+		}
+	});
+	var controller = $('.tab1').data('jquery-tab-controller');
+
+	btnAppend.onclick = function () {
+		var nextIndex = controller.getCount();
+		controller.addTabPage('label-' + nextIndex, '<p>content-' + nextIndex + '</p>');
+	};
+
+	btnRemove.onclick = function () {
+		controller.remove(controller.getCount() - 1);
+	};
+</script>
+
+</body>
+</html>

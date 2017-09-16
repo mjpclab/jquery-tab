@@ -204,111 +204,6 @@ $.fn.tab = function (customOptions) {
             $pageItemLeaf.append(content);
             return $pageItem;
         };
-        var insertTabPage = function (title, content, index) {
-            if (index === void 0) { index = Infinity; }
-            var $labelItem = newLabelItem(title);
-            var $pageItem = newPageItem(content);
-            if (currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
-                options.fnHidePageItem.call($pageItem, $pageItem);
-            }
-            if (index < 0) {
-                index = 0;
-            }
-            if (pageCount > 0 && index < pageCount) {
-                if ($topLabelContainerLeaf) {
-                    $topLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
-                }
-                if ($bottomLabelContainerLeaf) {
-                    $bottomLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
-                }
-                $pageContainerLeaf.children(':eq(' + index + ')').before($pageItem);
-                if (index <= currentIndex) {
-                    saveIndex(++currentIndex);
-                }
-            }
-            else {
-                if ($topLabelContainerLeaf) {
-                    $topLabelContainerLeaf.append($labelItem.clone());
-                }
-                if ($bottomLabelContainerLeaf) {
-                    $bottomLabelContainerLeaf.append($labelItem.clone());
-                }
-                $pageContainerLeaf.append($pageItem);
-            }
-            pageCount++;
-        };
-        var addTabPage = function (title, content) {
-            insertTabPage(title, content);
-        };
-        var add = function (sourceContainer) {
-            var $sourceContainer = $(sourceContainer);
-            while (true) {
-                var $title = $sourceContainer.find(options.titleSelector).first();
-                if ($title.length === 0) {
-                    break;
-                }
-                if (!options.keepTitleVisible) {
-                    $title.hide();
-                }
-                var title = options.titleContentFilter.call($title, $title);
-                var content = $title.add($title.nextUntil(options.titleSelector));
-                addTabPage(title, content);
-            }
-        };
-        var insert = function (sourceContainer, index) {
-            var $sourceContainer = $(sourceContainer);
-            var inserted = 0;
-            while (true) {
-                var $title = $sourceContainer.find(options.titleSelector).first();
-                if ($title.length === 0) {
-                    break;
-                }
-                if (!options.keepTitleVisible) {
-                    $title.hide();
-                }
-                var title = options.titleContentFilter.call($title, $title);
-                var content = $title.add($title.nextUntil(options.titleSelector));
-                insertTabPage(title, content, index + inserted);
-                inserted++;
-            }
-        };
-        var remove = function (index) {
-            if (index === undefined || !isFinite(index) || index < 0 || index >= pageCount) {
-                return;
-            }
-            var $labelItems = getTopBottomLabels(index);
-            var $pageItem = getPage(index);
-            $labelItems.remove();
-            $pageItem.remove();
-            pageCount--;
-            if (index < currentIndex) {
-                saveIndex(--currentIndex);
-            }
-            else if (index === currentIndex) {
-                if (index >= pageCount) {
-                    currentIndex = pageCount - 1;
-                }
-                switchTo(currentIndex);
-            }
-            return $pageItem;
-        };
-        add($item);
-        //replace original content
-        $item.prepend($tabContainer);
-        //check if param:fixed height
-        var updateFixedHeight = function () {
-            if (options.fixedHeight) {
-                var maxHeight_1 = 0;
-                $pageContainerLeaf.children().each(function () {
-                    var $pageItem = $(this);
-                    var pageHeight = $pageItem[0].scrollHeight;
-                    if (pageHeight > maxHeight_1) {
-                        maxHeight_1 = pageHeight;
-                    }
-                }).height(maxHeight_1);
-            }
-        };
-        updateFixedHeight();
         //utilities
         var $statusFields = $item.find(options.statusFieldSelector);
         if (!$statusFields.length) {
@@ -318,8 +213,8 @@ $.fn.tab = function (customOptions) {
         var RE_STATUS_HASH_DIGITS;
         if (options.statusHashTemplate) {
             var RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
-            RE_STATUS_HASH = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '\\d+');
-            RE_STATUS_HASH_DIGITS = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '(\\d+)');
+            RE_STATUS_HASH = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '-?\\d+');
+            RE_STATUS_HASH_DIGITS = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '(-?\\d+)');
         }
         var saveIndex = function (index) {
             $statusFields.val(index);
@@ -374,13 +269,13 @@ $.fn.tab = function (customOptions) {
             }
             return index;
         };
-        var updateClass = function ($activeLabelItem, $activePageItem) {
+        //methods
+        var _updateClass = function ($activeLabelItem, $activePageItem) {
             $activeLabelItem.addClass(options.labelItemActiveClass).removeClass(options.labelItemInactiveClass);
             $activeLabelItem.siblings().removeClass(options.labelItemActiveClass).addClass(options.labelItemInactiveClass);
             $activePageItem.addClass(options.pageItemActiveClass).removeClass(options.pageItemInactiveClass);
             $activePageItem.siblings().removeClass(options.pageItemActiveClass).addClass(options.pageItemInactiveClass);
         };
-        //switch function and switch event handler
         var switchTo = function (newIndex) {
             var oldIndex = currentIndex;
             //before switching callback
@@ -391,7 +286,7 @@ $.fn.tab = function (customOptions) {
             var $newLabel = getTopBottomLabels(newIndex);
             var $newPage = getPage(newIndex);
             var $otherPages = $newPage.siblings();
-            updateClass($newLabel, $newPage);
+            _updateClass($newLabel, $newPage);
             //function to hide pages
             if (typeof options.fnHidePageItem === 'function') {
                 options.fnHidePageItem.call($otherPages, $otherPages);
@@ -409,6 +304,121 @@ $.fn.tab = function (customOptions) {
                 options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);
             }
         };
+        var _insertTabPage = function (title, content, index) {
+            var $labelItem = newLabelItem(title);
+            var $pageItem = newPageItem(content);
+            if (currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
+                options.fnHidePageItem.call($pageItem, $pageItem);
+            }
+            if (index < 0) {
+                index = 0;
+            }
+            if (pageCount > 0 && index < pageCount) {
+                if ($topLabelContainerLeaf) {
+                    $topLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
+                }
+                if ($bottomLabelContainerLeaf) {
+                    $bottomLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
+                }
+                $pageContainerLeaf.children(':eq(' + index + ')').before($pageItem);
+                if (index <= currentIndex) {
+                    saveIndex(++currentIndex);
+                }
+            }
+            else {
+                if ($topLabelContainerLeaf) {
+                    $topLabelContainerLeaf.append($labelItem.clone());
+                }
+                if ($bottomLabelContainerLeaf) {
+                    $bottomLabelContainerLeaf.append($labelItem.clone());
+                }
+                $pageContainerLeaf.append($pageItem);
+            }
+            pageCount++;
+        };
+        var insertTabPage = function (title, content, index) {
+            _insertTabPage(title, content, index);
+            if (currentIndex === -1 && pageCount) {
+                switchTo(0);
+            }
+        };
+        var addTabPage = function (title, content) {
+            _insertTabPage(title, content, pageCount);
+            if (currentIndex === -1 && pageCount) {
+                switchTo(0);
+            }
+        };
+        var _insert = function (sourceContainer, index) {
+            var $sourceContainer = $(sourceContainer);
+            var inserted = 0;
+            while (true) {
+                var $title = $sourceContainer.find(options.titleSelector).first();
+                if ($title.length === 0) {
+                    break;
+                }
+                if (!options.keepTitleVisible) {
+                    $title.hide();
+                }
+                var title = options.titleContentFilter.call($title, $title);
+                var content = $title.add($title.nextUntil(options.titleSelector));
+                _insertTabPage(title, content, index + inserted);
+                inserted++;
+            }
+        };
+        var insert = function (sourceContainer, index) {
+            _insert(sourceContainer, index);
+            if (currentIndex === -1 && pageCount) {
+                switchTo(0);
+            }
+        };
+        var _add = function (sourceContainer) {
+            _insert(sourceContainer, pageCount);
+        };
+        var add = function (sourceContainer) {
+            _add(sourceContainer);
+            if (currentIndex === -1 && pageCount) {
+                switchTo(0);
+            }
+        };
+        var remove = function (index) {
+            if (index === undefined || !isFinite(index) || index < 0 || index >= pageCount) {
+                return;
+            }
+            var $labelItems = getTopBottomLabels(index);
+            var $pageItem = getPage(index);
+            $labelItems.remove();
+            $pageItem.remove();
+            pageCount--;
+            if (index < currentIndex) {
+                saveIndex(--currentIndex);
+            }
+            else if (index === currentIndex) {
+                if (currentIndex === pageCount) {
+                    switchTo(currentIndex - 1);
+                }
+                else {
+                    switchTo(currentIndex);
+                }
+            }
+            return $pageItem;
+        };
+        _add($item);
+        //replace original content
+        $item.prepend($tabContainer);
+        //check if param:fixed height
+        var updateFixedHeight = function () {
+            if (options.fixedHeight) {
+                var maxHeight_1 = 0;
+                $pageContainerLeaf.children().each(function () {
+                    var $pageItem = $(this);
+                    var pageHeight = $pageItem[0].scrollHeight;
+                    if (pageHeight > maxHeight_1) {
+                        maxHeight_1 = pageHeight;
+                    }
+                }).height(maxHeight_1);
+            }
+        };
+        updateFixedHeight();
         //init show active page
         switchTo(loadIndex());
         //handle delay trigger event
