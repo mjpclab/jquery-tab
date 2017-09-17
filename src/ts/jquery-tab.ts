@@ -1,6 +1,6 @@
-import $ = require('jquery');
+/// <reference path='main.d.ts' />
 
-type JQueriable = JQuery.Selector | JQuery.TypeOrArray<JQuery.Node> | JQuery<JQuery.Node>
+import $ = require('jquery');
 
 function getLeafElement($node: JQuery) {
 	let $result = $node;

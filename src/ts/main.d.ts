@@ -1,5 +1,7 @@
 /// <reference types="jquery" />
 
+type JQueriable = JQuery.Selector | JQuery.TypeOrArray<JQuery.Node> | JQuery<JQuery.Node>
+
 declare module 'jquery-tab' {
 	export = jQuery;
 }

@@ -79,6 +79,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 
+/// <reference path='main.d.ts' />
 var $ = __webpack_require__(1);
 function getLeafElement($node) {
     var $result = $node;
@@ -976,7 +977,11 @@ function updateLink (link, options, obj) {
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(6);
+"use strict";
+
+var $ = __webpack_require__(6);
+module.exports = $;
+
 
 /***/ }),
 /* 6 */

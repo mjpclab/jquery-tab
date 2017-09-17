@@ -1,4 +1,5 @@
 "use strict";
+/// <reference path='main.d.ts' />
 var $ = require("jquery");
 function getLeafElement($node) {
     var $result = $node;

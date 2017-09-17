@@ -1,1 +1,3 @@
-module.exports = require('./src/js/jquery-tab');
+"use strict";
+var $ = require("./src/ts/jquery-tab");
+module.exports = $;

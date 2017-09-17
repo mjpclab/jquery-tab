@@ -1,11 +1,11 @@
 {
   "name": "jquery-tab",
   "nameWithCss": "jquery-tab-with-css",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A jQuery tab sheet plugin",
   "main": "index.js",
   "mainWithCss": "with-css.js",
-  "types": "src/ts/index.d.ts",
+  "types": "index.d.ts",
   "dependencies": {
     "jquery": "*"
   },
@@ -27,7 +27,7 @@
   ],
   "scripts": {
     "ts": "tsc -p src/ts/",
-    "build": "sh -c 'rm -rf dist/* src/js/*; tsc -p src/ts/; webpack;'"
+    "build": "sh -c 'rm -rf dist/*; tsc; webpack;'"
   },
   "author": "MJ PC Lab",
   "license": "ISC"
