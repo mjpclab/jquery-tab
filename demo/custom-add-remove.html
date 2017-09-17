@@ -26,10 +26,14 @@
 	$('.tab1').tab({
 		statusHashTemplate: 'tab=',
 		onBeforeSwitch: function (oldIndex, newIndex) {
-			console.log('before switch: ' + oldIndex + ' -> ' + newIndex)
+			if (typeof console !== 'undefined') {
+				console.log('before switch: ' + oldIndex + ' -> ' + newIndex)
+			}
 		},
 		onAfterSwitch: function (oldIndex, newIndex) {
-			console.log('    after switch: ' + oldIndex + ' -> ' + newIndex)
+			if (typeof console !== 'undefined') {
+				console.log('    after switch: ' + oldIndex + ' -> ' + newIndex)
+			}
 		}
 	});
 	var controller = $('.tab1').data('jquery-tab-controller');
