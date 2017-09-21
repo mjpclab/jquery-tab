@@ -26,7 +26,6 @@
     "sheet"
   ],
   "scripts": {
-    "ts": "tsc -p src/ts/",
     "build": "sh -c 'rm -rf dist/*; tsc; webpack;'"
   },
   "author": "MJ PC Lab",
