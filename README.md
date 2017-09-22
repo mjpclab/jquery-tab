@@ -51,6 +51,15 @@ For global variable mode, referencing the '-with-css' bundle file.
 ## Use standalone CSS file
 Copying or referencing source CSS files under `src/css/` directory.
 
+## Vertical labels
+To use vertical labels style from default CSS, set `tabContainerClass` to 'tab-container-vert'.
+Notice that this style is implemented by CSS flex features, which means old browsers like IE10-, Chrome 20- and Firefox 27- are not supported.
+```javascript
+$('.region').tab({
+	tabContainerClass: 'tab-container-vert'
+});
+```
+
 # Options
 ## Behavior Options
 `triggerEvents`  

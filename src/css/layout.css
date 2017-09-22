@@ -1,8 +1,19 @@
-.tab-container {
+/* container */
+.tab-container,
+.tab-container-vert {
 	margin-bottom: 2em;
 }
 
-.tab-container .label-container {
+.tab-container-vert {
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-flow: row nowrap;
+	flex-flow: row nowrap;
+}
+
+/* label container */
+.tab-container .label-container,
+.tab-container-vert .label-container {
 	position: relative;
 }
 
@@ -14,23 +25,52 @@
 	top: -1px;
 }
 
+.tab-container-vert .label-container {
+	-webkit-flex: 0 0 auto;
+	flex: 0 0 auto;
+}
+
+.tab-container-vert .label-container.header-container {
+	margin-right: -1px;
+}
+
+.tab-container-vert .label-container.footer-container {
+	margin-left: -1px;
+}
+
+/* label item */
+.tab-container .label-container .label-item,
+.tab-container-vert .label-container .label-item {
+	padding: 0.5em 1em;
+	cursor: pointer;
+	border: 1px solid;
+}
+
 .tab-container .label-container .label-item {
 	display: inline-block;
 	margin-right: 1em;
-	border: 1px solid;
-
-	padding: 0.5em 1em;
-	cursor: pointer;
 }
 
-.tab-container .label-container.top .label-item {
+.tab-container .label-container.header-container .label-item {
 	vertical-align: bottom;
 }
 
-.tab-container .label-container.bottom .label-item {
+.tab-container .label-container.footer-container .label-item {
 	vertical-align: top;
 }
 
-.tab-container .page-container {
+.tab-container-vert .label-container .label-item {
+	display: block;
+	margin-bottom: 0.3em;
+}
+
+/* page container */
+.tab-container .page-container,
+.tab-container-vert .page-container {
 	border: 1px solid;
+}
+
+.tab-container-vert .page-container {
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
 }

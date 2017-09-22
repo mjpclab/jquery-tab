@@ -1,12 +1,18 @@
-.tab-container .page-container {
+.tab-container .page-container,
+.tab-container-vert .page-container {
 	border-color: #ccc;
 	padding: 1em;
 	background: #fff;
 }
 
-.tab-container .label-container .label-item {
+.tab-container .label-container .label-item,
+.tab-container-vert .label-container .label-item {
 	border-color: #ccc;
 	background: #fff;
+}
+
+.tab-container .label-container .label-inactive {
+	color: #aaa;
 }
 
 .tab-container .label-container .label-active {
@@ -21,6 +27,10 @@
 	border-top-color: #fff;
 }
 
-.tab-container .label-container .label-inactive {
-	color:#aaa;
+.tab-container-vert .label-container.header-container .label-active {
+	border-right-color: #fff;
+}
+
+.tab-container-vert .label-container.footer-container .label-active {
+	border-left-color: #fff;
 }
