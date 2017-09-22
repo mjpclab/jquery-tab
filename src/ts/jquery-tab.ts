@@ -59,9 +59,11 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		pageItemActiveClass: 'page-active',
 		pageItemInactiveClass: 'page-inactive'
 	};
-	const options = $.extend({}, defaultOptions, customOptions);
 
 	const generateStructure = function ($item: JQuery) {
+		const dataOptions = $item.data();
+		const options = $.extend({}, defaultOptions, dataOptions, customOptions);
+
 		let pageCount = 0;
 		let currentIndex = -1;
 

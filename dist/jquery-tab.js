@@ -132,8 +132,9 @@ $.fn.tab = function (customOptions) {
         pageItemActiveClass: 'page-active',
         pageItemInactiveClass: 'page-inactive'
     };
-    var options = $.extend({}, defaultOptions, customOptions);
     var generateStructure = function ($item) {
+        var dataOptions = $item.data();
+        var options = $.extend({}, defaultOptions, dataOptions, customOptions);
         var pageCount = 0;
         var currentIndex = -1;
         //container

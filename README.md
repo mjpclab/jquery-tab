@@ -60,7 +60,27 @@ $('.region').tab({
 });
 ```
 
-# Options
+# Specify options
+There are two ways to specify options. By `data-` attribute and by `tab()` method.
+## Specify options by `data-` attribute
+Option names become html attribute prefixed with `data-`. Words are always in lower case and separated by `-`. Only available for primitive option value.
+```html
+<div class="region" data-active-index="1">
+	......
+</div>
+```
+```javascript
+$('.region').tab();
+```
+## Specify options by `tab()` method
+Option names are in camel case.
+```javascript
+$('.region').tab({
+	activeIndex: 1
+});
+```
+
+# Options List
 ## Behavior Options
 `triggerEvents`  
 Determine the types of events triggered on label-item that will make the page-item switched.
