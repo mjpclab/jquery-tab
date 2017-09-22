@@ -351,11 +351,11 @@ $.fn.tab = function (customOptions) {
                 switchTo(0);
             }
         };
-        var _insert = function (sourceContainer, index) {
-            var $sourceContainer = $(sourceContainer);
+        var _insert = function (sourceRegion, index) {
+            var $sourceRegion = $(sourceRegion);
             var inserted = 0;
             while (true) {
-                var $title = $sourceContainer.find(options.titleSelector).first();
+                var $title = $sourceRegion.find(options.titleSelector).first();
                 if ($title.length === 0) {
                     break;
                 }
@@ -368,17 +368,17 @@ $.fn.tab = function (customOptions) {
                 inserted++;
             }
         };
-        var insert = function (sourceContainer, index) {
-            _insert(sourceContainer, index);
+        var insert = function (sourceRegion, index) {
+            _insert(sourceRegion, index);
             if (currentIndex === -1 && pageCount) {
                 switchTo(0);
             }
         };
-        var _add = function (sourceContainer) {
-            _insert(sourceContainer, pageCount);
+        var _add = function (sourceRegion) {
+            _insert(sourceRegion, pageCount);
         };
-        var add = function (sourceContainer) {
-            _add(sourceContainer);
+        var add = function (sourceRegion) {
+            _add(sourceRegion);
             if (currentIndex === -1 && pageCount) {
                 switchTo(0);
             }

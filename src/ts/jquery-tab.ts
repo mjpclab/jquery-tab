@@ -314,11 +314,11 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 			}
 		};
 
-		const _insert = function (sourceContainer: JQueriable, index: number) {
-			const $sourceContainer = $(sourceContainer);
+		const _insert = function (sourceRegion: JQueriable, index: number) {
+			const $sourceRegion = $(sourceRegion);
 			let inserted = 0;
 			while (true) {
-				const $title = $sourceContainer.find(options.titleSelector!).first();
+				const $title = $sourceRegion.find(options.titleSelector!).first();
 				if ($title.length === 0) {
 					break;
 				}
@@ -332,17 +332,17 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 				inserted++;
 			}
 		};
-		const insert = function (sourceContainer: JQueriable, index: number) {
-			_insert(sourceContainer, index);
+		const insert = function (sourceRegion: JQueriable, index: number) {
+			_insert(sourceRegion, index);
 			if (currentIndex === -1 && pageCount) {
 				switchTo(0);
 			}
 		};
-		const _add = function (sourceContainer: JQueriable) {
-			_insert(sourceContainer, pageCount);
+		const _add = function (sourceRegion: JQueriable) {
+			_insert(sourceRegion, pageCount);
 		};
-		const add = function (sourceContainer: JQueriable) {
-			_add(sourceContainer);
+		const add = function (sourceRegion: JQueriable) {
+			_add(sourceRegion);
 			if (currentIndex === -1 && pageCount) {
 				switchTo(0);
 			}

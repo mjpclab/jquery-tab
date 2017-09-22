@@ -249,11 +249,11 @@ Append a new tab page to existing tab container. Both `title` and `content` can 
 `insertTabPage(title, content, index)`  
 Insert a new tab page to existing tab container, before the page which current index is `index`. Both `title` and `content` can be text, HTML or jquery object.
 
-`add($container)`  
-Parse and append another $container's structure to current tab. 
+`add($region)`  
+Parse and append another $region's structure to current tab. 
 
-`insert($container, index)`  
-Parse and insert another $container's structure to current tab at position `index`.
+`insert($region, index)`  
+Parse and insert another $region's structure to current tab at position `index`.
 
 `remove(index)`  
 Remove a page from `index` and return it's page item.
