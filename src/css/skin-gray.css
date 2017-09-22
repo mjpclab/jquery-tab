@@ -13,11 +13,11 @@
 	color: #000;
 }
 
-.tab-container .label-container.top .label-active {
+.tab-container .label-container.header-container .label-active {
 	border-bottom-color: #fff;
 }
 
-.tab-container .label-container.bottom .label-active {
+.tab-container .label-container.footer-container .label-active {
 	border-top-color: #fff;
 }
 

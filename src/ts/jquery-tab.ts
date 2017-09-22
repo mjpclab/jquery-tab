@@ -43,10 +43,10 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 
 		labelContainerTemplate: '<div></div>',
 		labelContainerClass: 'label-container',
-		showTopLabelContainer: true,
-		showBottomLabelContainer: false,
-		topLabelContainerClass: 'top',
-		bottomLabelContainerClass: 'bottom',
+		showHeaderLabelContainer: true,
+		showFooterLabelContainer: false,
+		headerLabelContainerClass: 'header-container',
+		footerLabelContainerClass: 'footer-container',
 		labelItemTemplate: '<span></span>',
 		labelItemClass: 'label-item',
 		labelItemActiveClass: 'label-active',
@@ -71,8 +71,8 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		//top label
 		let $topLabelContainer: JQuery | undefined;
 		let $topLabelContainerLeaf: JQuery | undefined;
-		if (options.showTopLabelContainer) {
-			$topLabelContainer = $(options.labelContainerTemplate!).addClass(options.labelContainerClass!).addClass(options.topLabelContainerClass!);
+		if (options.showHeaderLabelContainer) {
+			$topLabelContainer = $(options.labelContainerTemplate!).addClass(options.labelContainerClass!).addClass(options.headerLabelContainerClass!);
 			$tabContainer.append($topLabelContainer);
 
 			$topLabelContainerLeaf = getLeafElement($topLabelContainer);
@@ -87,8 +87,8 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		//bottom label
 		let $bottomLabelContainer: JQuery | undefined;
 		let $bottomLabelContainerLeaf: JQuery | undefined;
-		if (options.showBottomLabelContainer) {
-			$bottomLabelContainer = $(options.labelContainerTemplate!).addClass(options.labelContainerClass!).addClass(options.bottomLabelContainerClass!);
+		if (options.showFooterLabelContainer) {
+			$bottomLabelContainer = $(options.labelContainerTemplate!).addClass(options.labelContainerClass!).addClass(options.footerLabelContainerClass!);
 			$tabContainer.append($bottomLabelContainer);
 
 			$bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);

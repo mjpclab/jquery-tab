@@ -117,10 +117,10 @@ $.fn.tab = function (customOptions) {
         tabContainerClass: 'tab-container',
         labelContainerTemplate: '<div></div>',
         labelContainerClass: 'label-container',
-        showTopLabelContainer: true,
-        showBottomLabelContainer: false,
-        topLabelContainerClass: 'top',
-        bottomLabelContainerClass: 'bottom',
+        showHeaderLabelContainer: true,
+        showFooterLabelContainer: false,
+        headerLabelContainerClass: 'header-container',
+        footerLabelContainerClass: 'footer-container',
         labelItemTemplate: '<span></span>',
         labelItemClass: 'label-item',
         labelItemActiveClass: 'label-active',
@@ -141,8 +141,8 @@ $.fn.tab = function (customOptions) {
         //top label
         var $topLabelContainer;
         var $topLabelContainerLeaf;
-        if (options.showTopLabelContainer) {
-            $topLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.topLabelContainerClass);
+        if (options.showHeaderLabelContainer) {
+            $topLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.headerLabelContainerClass);
             $tabContainer.append($topLabelContainer);
             $topLabelContainerLeaf = getLeafElement($topLabelContainer);
         }
@@ -153,8 +153,8 @@ $.fn.tab = function (customOptions) {
         //bottom label
         var $bottomLabelContainer;
         var $bottomLabelContainerLeaf;
-        if (options.showBottomLabelContainer) {
-            $bottomLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.bottomLabelContainerClass);
+        if (options.showFooterLabelContainer) {
+            $bottomLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.footerLabelContainerClass);
             $tabContainer.append($bottomLabelContainer);
             $bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);
         }
@@ -1035,7 +1035,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, ".tab-container {\n\tmargin-bottom: 2em;\n}\n\n.tab-container .label-container {\n\tposition: relative;\n}\n\n.tab-container .label-container.top {\n\tbottom: -1px;\n}\n\n.tab-container .label-container.bottom {\n\ttop: -1px;\n}\n\n.tab-container .label-container .label-item {\n\tdisplay: inline-block;\n\tmargin-right: 1em;\n\tborder: 1px solid;\n\n\tpadding: 0.5em 1em;\n\tcursor: pointer;\n}\n\n.tab-container .label-container.top .label-item {\n\tvertical-align: bottom;\n}\n\n.tab-container .label-container.bottom .label-item {\n\tvertical-align: top;\n}\n\n.tab-container .page-container {\n\tborder: 1px solid;\n}\n", ""]);
+exports.push([module.i, ".tab-container {\n\tmargin-bottom: 2em;\n}\n\n.tab-container .label-container {\n\tposition: relative;\n}\n\n.tab-container .label-container.header-container {\n\tbottom: -1px;\n}\n\n.tab-container .label-container.footer-container {\n\ttop: -1px;\n}\n\n.tab-container .label-container .label-item {\n\tdisplay: inline-block;\n\tmargin-right: 1em;\n\tborder: 1px solid;\n\n\tpadding: 0.5em 1em;\n\tcursor: pointer;\n}\n\n.tab-container .label-container.top .label-item {\n\tvertical-align: bottom;\n}\n\n.tab-container .label-container.bottom .label-item {\n\tvertical-align: top;\n}\n\n.tab-container .page-container {\n\tborder: 1px solid;\n}\n", ""]);
 
 // exports
 
@@ -1175,7 +1175,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, ".tab-container .page-container {\n\tborder-color: #ccc;\n\tpadding: 1em;\n\tbackground: #fff;\n}\n\n.tab-container .label-container .label-item {\n\tborder-color: #ccc;\n\tbackground: #fff;\n}\n\n.tab-container .label-container .label-active {\n\tcolor: #000;\n}\n\n.tab-container .label-container.top .label-active {\n\tborder-bottom-color: #fff;\n}\n\n.tab-container .label-container.bottom .label-active {\n\tborder-top-color: #fff;\n}\n\n.tab-container .label-container .label-inactive {\n\tcolor:#aaa;\n}", ""]);
+exports.push([module.i, ".tab-container .page-container {\n\tborder-color: #ccc;\n\tpadding: 1em;\n\tbackground: #fff;\n}\n\n.tab-container .label-container .label-item {\n\tborder-color: #ccc;\n\tbackground: #fff;\n}\n\n.tab-container .label-container .label-active {\n\tcolor: #000;\n}\n\n.tab-container .label-container.header-container .label-active {\n\tborder-bottom-color: #fff;\n}\n\n.tab-container .label-container.footer-container .label-active {\n\tborder-top-color: #fff;\n}\n\n.tab-container .label-container .label-inactive {\n\tcolor:#aaa;\n}", ""]);
 
 // exports
 

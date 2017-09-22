@@ -123,17 +123,17 @@ Label container's template.
 `labelContainerClass`  
 CSS class for label container.
 
-`showTopLabelContainer`  
-Show label-container on top of the tab.
+`showHeaderLabelContainer`  
+If show label container before tab page. Default value is true.
 
-`showBottomLabelContainer`  
-Show label-container on bottom of the tab.
+`showFooterLabelContainer`  
+If show label container after tab page. Default value is false.
 
-`topLabelContainerClass`  
-CSS class for top label container.
+`headerLabelContainerClass`  
+Header label container element's class name. Default value is 'header-container'.
 
-`bottomLabelContainerClass`  
-CSS class for bottom label container.
+`footerLabelContainerClass`  
+Footer label container element's class name. Default value is 'footer-container'.
 
 `labelItemTemplate`  
 Label item's template.

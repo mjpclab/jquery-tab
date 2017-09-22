@@ -6,11 +6,11 @@
 	position: relative;
 }
 
-.tab-container .label-container.top {
+.tab-container .label-container.header-container {
 	bottom: -1px;
 }
 
-.tab-container .label-container.bottom {
+.tab-container .label-container.footer-container {
 	top: -1px;
 }
 

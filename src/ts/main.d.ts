@@ -31,10 +31,10 @@ interface IJQueryTabOptions {
 
 	labelContainerTemplate?: string;
 	labelContainerClass?: string;
-	showTopLabelContainer?: boolean;
-	showBottomLabelContainer?: boolean;
-	topLabelContainerClass?: string;
-	bottomLabelContainerClass?: string;
+	showHeaderLabelContainer?: boolean;
+	showFooterLabelContainer?: boolean;
+	headerLabelContainerClass?: string;
+	footerLabelContainerClass?: string;
 	labelItemTemplate?: string;
 	labelItemClass?: string;
 	labelItemActiveClass?: string;

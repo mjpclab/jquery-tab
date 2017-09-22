@@ -37,10 +37,10 @@ $.fn.tab = function (customOptions) {
         tabContainerClass: 'tab-container',
         labelContainerTemplate: '<div></div>',
         labelContainerClass: 'label-container',
-        showTopLabelContainer: true,
-        showBottomLabelContainer: false,
-        topLabelContainerClass: 'top',
-        bottomLabelContainerClass: 'bottom',
+        showHeaderLabelContainer: true,
+        showFooterLabelContainer: false,
+        headerLabelContainerClass: 'header-container',
+        footerLabelContainerClass: 'footer-container',
         labelItemTemplate: '<span></span>',
         labelItemClass: 'label-item',
         labelItemActiveClass: 'label-active',
@@ -61,8 +61,8 @@ $.fn.tab = function (customOptions) {
         //top label
         var $topLabelContainer;
         var $topLabelContainerLeaf;
-        if (options.showTopLabelContainer) {
-            $topLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.topLabelContainerClass);
+        if (options.showHeaderLabelContainer) {
+            $topLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.headerLabelContainerClass);
             $tabContainer.append($topLabelContainer);
             $topLabelContainerLeaf = getLeafElement($topLabelContainer);
         }
@@ -73,8 +73,8 @@ $.fn.tab = function (customOptions) {
         //bottom label
         var $bottomLabelContainer;
         var $bottomLabelContainerLeaf;
-        if (options.showBottomLabelContainer) {
-            $bottomLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.bottomLabelContainerClass);
+        if (options.showFooterLabelContainer) {
+            $bottomLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.footerLabelContainerClass);
             $tabContainer.append($bottomLabelContainer);
             $bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);
         }
