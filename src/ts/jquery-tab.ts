@@ -496,8 +496,8 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 			insert: insert,
 			remove: remove
 		};
-		$item.data('jquery-tab-controller', controller);
-		$tabContainer.data('jquery-tab-controller', controller);
+		$item.data('tab-controller', controller);
+		$tabContainer.data('tab-controller', controller);
 	};
 
 	if (this.length) {

@@ -26,7 +26,7 @@ $('.region').tab({
 
 # Generated Html Structure
 ```
-.tab-container
+.region > .tab-container
 	> .label-container
 		> .label-item
 		> .label-item
@@ -197,8 +197,10 @@ CSS class for inactive page item.
 
 # the Controller
 ## Get Controller
+Get tab controller from tab container element or original content region container:
 ``` javascript
-var controller = $('.tab-container').data('jquery-tab-controller');
+var controller = $('.region').data('tab-controller');
+var controller = $('.tab-container').data('tab-controller');
 ```
 
 ## Controller Methods
