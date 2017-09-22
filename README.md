@@ -252,7 +252,7 @@ Insert a new tab page to existing tab container, before the page which current i
 `add($container)`  
 Parse and append another $container's structure to current tab. 
 
-`insert($container, index)`
+`insert($container, index)`  
 Parse and insert another $container's structure to current tab at position `index`.
 
 `remove(index)`  
