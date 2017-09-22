@@ -100,6 +100,7 @@ $.fn.tab = function (customOptions) {
         statusHashSeparator: '&',
         fixedHeight: false,
         activeIndex: 0,
+        createEmptyTab: false,
         fnShowPageItem: function ($pageItem) {
             return $pageItem && $pageItem.show && $pageItem.show();
         },
@@ -406,6 +407,9 @@ $.fn.tab = function (customOptions) {
         };
         _add($item);
         //replace original content
+        if (!pageCount && !options.createEmptyTab) {
+            return;
+        }
         $item.prepend($tabContainer);
         //check if param:fixed height
         var updateFixedHeight = function () {

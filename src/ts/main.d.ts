@@ -17,6 +17,7 @@ interface IJQueryTabOptions {
 	fixedHeight?: boolean;
 
 	activeIndex?: number;
+	createEmptyTab?: boolean;
 	fnShowPageItem?: (this: JQuery, $pageItem: JQuery) => JQuery;
 	fnHidePageItem?: (this: JQuery, $pageItem: JQuery) => JQuery;
 	onBeforeSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;

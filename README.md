@@ -111,6 +111,10 @@ Tab-container's height will be fixed to fit the longest page and will not change
 `activeIndex`  
 The default initial active index of the tab. Will be ignored if it can get value from `statusFieldSelector` or `statusHashTemplate`.
 
+`createEmptyTab`  
+Determine if still create tab container when there is no tab item found.
+Would be useful if you want to create empty tab container first, and add tab items dynamically.
+
 `fnShowPageItem`  
 Define the behavior of showing an page-item when switched to it.
 Must be a function like `func($pageItem) {}`. Parameter `$pageItem` will be the current page-item's jQuery object.
