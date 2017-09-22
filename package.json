@@ -11,10 +11,10 @@
   },
   "devDependencies": {
     "@types/jquery": "^3.2.12",
-    "css-loader": "^0.28.5",
+    "css-loader": "^0.28.7",
     "style-loader": "^0.18.2",
-    "typescript": "^2.4.2",
-    "webpack": "^3.5.5"
+    "typescript": "^2.5.2",
+    "webpack": "^3.6.0"
   },
   "repository": {
     "type": "git",
