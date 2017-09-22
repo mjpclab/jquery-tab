@@ -380,7 +380,7 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 		if (!pageCount && !options.createEmptyTab) {
 			return;
 		}
-		$item.prepend($tabContainer);
+		$item.append($tabContainer);
 
 		//check if param:fixed height
 		const updateFixedHeight = function () {
@@ -513,5 +513,7 @@ $.fn.tab = function (customOptions?: IJQueryTabOptions) {
 
 	return this;
 };
+
+$('.tab-region').tab();
 
 export = $;

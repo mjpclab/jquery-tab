@@ -330,7 +330,7 @@ $.fn.tab = function (customOptions) {
         if (!pageCount && !options.createEmptyTab) {
             return;
         }
-        $item.prepend($tabContainer);
+        $item.append($tabContainer);
         //check if param:fixed height
         var updateFixedHeight = function () {
             if (options.fixedHeight) {
@@ -447,4 +447,5 @@ $.fn.tab = function (customOptions) {
     }
     return this;
 };
+$('.tab-region').tab();
 module.exports = $;

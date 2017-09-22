@@ -80,6 +80,16 @@ $('.region').tab({
 });
 ```
 
+# Auto enable jquery-tab
+Region containers that has class `tab-region` will apply jquery-tab plugin automatically.
+
+That would be convenient if using this class name with attribute options. Then no javascript code is needed in most cases:
+```html
+<div class="tab-region" data-active-index="1">
+	......
+</div>
+```
+
 # Options List
 ## Behavior Options
 `triggerEvents`  
