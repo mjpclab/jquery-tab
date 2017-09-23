@@ -157,14 +157,14 @@ Show page title again in the page-item. Since page title will be shown in label-
 Tab container's template.
 
 `tabContainerClass`  
-CSS class for tab container.
+CSS class for tab container. Default value is 'tab-container'.
 
 ### Label
 `labelContainerTemplate`  
 Label container's template.
 
 `labelContainerClass`  
-CSS class for label container.
+CSS class for label container. Default value is 'label-container'.
 
 `showHeaderLabelContainer`  
 If show label container before tab page. Default value is true.
@@ -182,32 +182,32 @@ Footer label container element's class name. Default value is 'footer-container'
 Label item's template.
 
 `labelItemClass`  
-CSS class for bottom label item.
+CSS class for bottom label item. Default value is 'label-item'.
 
 `labelItemActiveClass`  
-CSS class for active label item.
+CSS class for active label item. Default value is 'label-active'.
 
 `labelItemInactiveClass`  
-CSS class for inactive label item.
+CSS class for inactive label item. Default value is 'label-inactive'.
 
 ### Page
 `pageContainerTemplate`  
 Page containers's template.
 
 `pageContainerClass`  
-CSS class for page container.
+CSS class for page container. Default value is 'page-container'.
 
 `pageItemTemplate`  
 Page-item's template.
 
 `pageItemClass`  
-CSS class for page item.
+CSS class for page item. Default value is 'page-item'.
 
 `pageItemActiveClass`  
-CSS class for active page item.
+CSS class for active page item. Default value is 'page-active'.
 
 `pageItemInactiveClass`  
-CSS class for inactive page item.
+CSS class for inactive page item. Default value is 'page-inactive'.
 
 # the Controller
 ## Get Controller
