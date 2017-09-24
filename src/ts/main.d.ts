@@ -1,6 +1,7 @@
 /// <reference types="jquery" />
 
 type JQueriable = JQuery.Selector | JQuery.TypeOrArray<JQuery.Node> | JQuery<JQuery.Node>
+type JQueryContent = JQuery | string | number | boolean;
 
 declare module 'jquery-tab' {
 	export = jQuery;
@@ -24,7 +25,7 @@ interface IJQueryTabOptions {
 	onAfterSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;
 
 	titleSelector?: string;
-	titleContentFilter?: (this: JQuery, $title: JQuery) => string;
+	titleContentFilter?: (this: JQuery, $title: JQuery) => (JQuery<HTMLElement | Text | Comment> | string | number);
 	keepTitleVisible?: boolean;
 
 	tabContainerTemplate?: string;
