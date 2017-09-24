@@ -7,7 +7,7 @@ declare module 'jquery-tab' {
 	export = jQuery;
 }
 
-interface IJQueryTabOptions {
+interface JQueryTabOptions {
 	triggerEvents?: string;
 	delayTriggerEvents?: string;
 	delayTriggerCancelEvents?: string;
@@ -51,5 +51,5 @@ interface IJQueryTabOptions {
 }
 
 interface JQuery {
-	tab(options?: IJQueryTabOptions): JQuery;
+	tab(options?: JQueryTabOptions): JQuery;
 }

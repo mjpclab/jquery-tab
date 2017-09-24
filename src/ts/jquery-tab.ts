@@ -11,8 +11,8 @@ function getLeafElement($node: JQuery) {
 	return $result.eq(0);
 }
 
-$.fn.tab = function (customOptions?: IJQueryTabOptions) {
-	const defaultOptions: IJQueryTabOptions = {
+$.fn.tab = function (customOptions?: JQueryTabOptions) {
+	const defaultOptions: JQueryTabOptions = {
 		triggerEvents: 'click',
 		delayTriggerEvents: '',
 		delayTriggerCancelEvents: '',
