@@ -93,20 +93,20 @@ $.fn.tab = function (customOptions) {
             }
             return $container.children(':eq(' + index + ')');
         };
-        var getTopLabel = function (index) {
+        var getHeaderLabel = function (index) {
             if ($topLabelContainerLeaf) {
                 return getLabel($topLabelContainerLeaf, index);
             }
             return $([]);
         };
-        var getBottomLabel = function (index) {
+        var getFooterLabel = function (index) {
             if ($bottomLabelContainerLeaf) {
                 return getLabel($bottomLabelContainerLeaf, index);
             }
             return $([]);
         };
-        var getTopBottomLabels = function (index) {
-            return getTopLabel(index).add(getBottomLabel(index));
+        var getHeaderFooterLabels = function (index) {
+            return getHeaderLabel(index).add(getFooterLabel(index));
         };
         var getPage = function (index) {
             if (!isFinite(index)) {
@@ -212,7 +212,7 @@ $.fn.tab = function (customOptions) {
                 options.onBeforeSwitch.call($tabContainer, oldIndex, newIndex);
             }
             //labels & pages
-            var $newLabel = getTopBottomLabels(newIndex);
+            var $newLabel = getHeaderFooterLabels(newIndex);
             var $newPage = getPage(newIndex);
             var $otherPages = $newPage.siblings();
             _updateClass($newLabel, $newPage);
@@ -313,7 +313,7 @@ $.fn.tab = function (customOptions) {
             if (index === undefined || !isFinite(index) || index < 0 || index >= pageCount) {
                 return;
             }
-            var $labelItems = getTopBottomLabels(index);
+            var $labelItems = getHeaderFooterLabels(index);
             var $pageItem = getPage(index);
             $labelItems.remove();
             $pageItem.remove();
@@ -430,9 +430,9 @@ $.fn.tab = function (customOptions) {
         var controller = {
             getCount: getCount,
             getCurrentIndex: getCurrentIndex,
-            getTopLabel: getTopLabel,
-            getBottomLabel: getBottomLabel,
-            getTopBottomLabels: getTopBottomLabels,
+            getHeaderLabel: getHeaderLabel,
+            getFooterLabel: getFooterLabel,
+            getHeaderFooterLabels: getHeaderFooterLabels,
             getPage: getPage,
             updateFixedHeight: updateFixedHeight,
             switchTo: switchTo,

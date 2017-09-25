@@ -233,14 +233,14 @@ Get the number of pages.
 `getCurrentIndex()`  
 Get current active tab Index.
 
-`getTopLabel(index)`  
-Get the top side label item by `index`.
+`getHeaderLabel(index)`  
+Get the header side label item by `index`.
 
-`getBottomLabel(index)`  
-Get the bottom side label item by `index`.
+`getFooterLabel(index)`  
+Get the footer side label item by `index`.
 
-`getTopBottomLabels(index)`  
-Get the top and bottom side label item by `index`.
+`getHeaderFooterLabels(index)`  
+Get the header and footer side label item by `index`.
 
 `getPage(index)`  
 Get page item by `index`.

@@ -111,20 +111,20 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 			}
 			return $container.children(':eq(' + index + ')');
 		};
-		const getTopLabel = function (index: number) {
+		const getHeaderLabel = function (index: number) {
 			if ($topLabelContainerLeaf) {
 				return getLabel($topLabelContainerLeaf, index);
 			}
 			return $([]);
 		};
-		const getBottomLabel = function (index: number) {
+		const getFooterLabel = function (index: number) {
 			if ($bottomLabelContainerLeaf) {
 				return getLabel($bottomLabelContainerLeaf, index);
 			}
 			return $([]);
 		};
-		const getTopBottomLabels = function (index: number) {
-			return getTopLabel(index).add(getBottomLabel(index));
+		const getHeaderFooterLabels = function (index: number) {
+			return getHeaderLabel(index).add(getFooterLabel(index));
 		};
 		const getPage = function (index: number) {
 			if (!isFinite(index)) {
@@ -246,7 +246,7 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 			}
 
 			//labels & pages
-			const $newLabel = getTopBottomLabels(newIndex);
+			const $newLabel = getHeaderFooterLabels(newIndex);
 			const $newPage = getPage(newIndex);
 			const $otherPages = $newPage.siblings();
 
@@ -360,7 +360,7 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 				return;
 			}
 
-			const $labelItems = getTopBottomLabels(index);
+			const $labelItems = getHeaderFooterLabels(index);
 			const $pageItem = getPage(index);
 
 			$labelItems.remove();
@@ -496,9 +496,9 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 		const controller = {
 			getCount: getCount,
 			getCurrentIndex: getCurrentIndex,
-			getTopLabel: getTopLabel,
-			getBottomLabel: getBottomLabel,
-			getTopBottomLabels: getTopBottomLabels,
+			getHeaderLabel: getHeaderLabel,
+			getFooterLabel: getFooterLabel,
+			getHeaderFooterLabels: getHeaderFooterLabels,
 			getPage: getPage,
 			updateFixedHeight: updateFixedHeight,
 			switchTo: switchTo,
