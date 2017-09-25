@@ -15,6 +15,8 @@ interface JQueryTabOptions {
 	statusFieldSelector?: string;
 	statusHashTemplate?: string;
 	statusHashSeparator?: string;
+	fnSaveIndex?: (this: JQuery, index: number) => void;
+	fnLoadIndex?: (this: JQuery) => number;
 	fixedHeight?: boolean;
 
 	activeIndex?: number;

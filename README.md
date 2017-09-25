@@ -106,20 +106,8 @@ Specify events on label-item that will cancel delay switching.
 `delayTriggerLatency`  
 Specify how long (milliseconds) need to wait before trigger the delayed switching events.
 
-`statusFieldSelector`  
-A jQuery selector string or object to find a form (normally hidden) field to store active tab index, thus after form post back and keep the field value on server to the browser, the jquery-tab will automatically restore the active tab.
-
-`statusHashTemplate`  
-A key-value pair template to store active tab index in URL hash, e.g. `"tab="`.
-
-`statusHashSeparator`  
-Determine a separator between multiple hash items if there are more than 1 tab-container on the same page.
-
 `fixedHeight`  
 Tab-container's height will be fixed to fit the longest page and will not change when tabs are switched.
-
-`activeIndex`  
-The default initial active index of the tab. Will be ignored if it can get value from `statusFieldSelector` or `statusHashTemplate`.
 
 `createEmptyTab`  
 Determine if still create tab container when there is no tab item found.
@@ -140,6 +128,27 @@ A callback before switching the tab.
 
 `onAfterSwitch(oldIndex, newIndex)`  
 A callback after switching the tab.
+
+## Save/Load active Index
+jquery-tab will load active index by priority of statusFieldSelector, statusHashTemplate, fnLoadIndex and activeIndex.
+
+`statusFieldSelector`  
+A jQuery selector string or object to find a form field(normally hidden) to store active tab index, thus after form post back and keep the field value on server to the browser, the jquery-tab will automatically restore the active tab.
+
+`statusHashTemplate`  
+A key-value pair template to store active tab index in URL hash, e.g. `"tab="`.
+
+`statusHashSeparator`  
+Determine a separator between multiple hash items if there are more than 1 tab-container on the same page.
+
+`fnSaveIndex(index)`  
+A callback function to customize how active index is saved, so that this index can be restored in the future, for example when refreshing the page.
+
+`fnLoadIndex`  
+A callback function to customize how active index is loaded. The return value will be treated as active index. 
+
+`activeIndex`  
+The default initial active index of the tab.
 
 ## UI Options
 ### Title

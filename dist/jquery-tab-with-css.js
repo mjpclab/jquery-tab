@@ -235,6 +235,9 @@ $.fn.tab = function (customOptions) {
                 }
                 location.hash = hash;
             }
+            if (options.fnSaveIndex) {
+                options.fnSaveIndex.call($tabContainer, index);
+            }
         };
         var loadIndex = function () {
             var index = -1;
@@ -260,6 +263,9 @@ $.fn.tab = function (customOptions) {
                 if (searchResult && searchResult[1]) {
                     index = parseInt(searchResult[1]);
                 }
+            }
+            if ((index === -1 || isNaN(index)) && options.fnLoadIndex) {
+                index = parseInt(options.fnLoadIndex.call($tabContainer));
             }
             if (index === -1 || isNaN(index)) {
                 index = Number(options.activeIndex) || 0;

@@ -164,6 +164,7 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 		}
 		const saveIndex = function (index: number) {
 			$statusFields.val(index);
+
 			if (options.statusHashTemplate) {
 				let hash = location.hash;
 				const statusHash = options.statusHashTemplate + index;
@@ -178,6 +179,10 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 				}
 
 				location.hash = hash;
+			}
+
+			if (options.fnSaveIndex) {
+				options.fnSaveIndex.call($tabContainer, index);
 			}
 		};
 		const loadIndex = function () {
@@ -205,6 +210,9 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 				if (searchResult && searchResult[1]) {
 					index = parseInt(searchResult[1]);
 				}
+			}
+			if ((index === -1 || isNaN(index)) && options.fnLoadIndex) {
+				index = parseInt(options.fnLoadIndex.call($tabContainer));
 			}
 			if (index === -1 || isNaN(index)) {
 				index = Number(options.activeIndex) || 0;
