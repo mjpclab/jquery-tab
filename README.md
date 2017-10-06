@@ -6,13 +6,13 @@ make flat html document that contains title and normal content turns into tab st
 html document:
 ``` html
 <div class="region">
-	<h1>title</h1>
-	<p>content</p>
-	<p>content</p>
+	<h1>title 1</h1>
+	<p>tab 1 content</p>
+	<p>another tab 1 content</p>
 
-	<h1>title</h1>
-	<p>content</p>
-	<p>content</p>
+	<h1>title 2</h1>
+	<p>tab 2 content</p>
+	<p>another tab 2 content</p>
 </div>
 ```
 
