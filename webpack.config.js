@@ -50,8 +50,7 @@ module.exports = [
 		output: getOutputConfig(false),
 		module: getModuleConfig(false),
 		externals: externalsConfig,
-		plugins: [],
-		devtool: 'source-map'
+		plugins: []
 	},
 	{
 		entry: getEntryConfig(),
@@ -71,7 +70,6 @@ module.exports = [
 					'NODE_ENV': JSON.stringify('production')
 				}
 			})
-		],
-		devtool: 'source-map'
+		]
 	}
 ];

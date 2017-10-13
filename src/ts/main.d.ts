@@ -27,7 +27,7 @@ interface JQueryTabOptions {
 	onAfterSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;
 
 	titleSelector?: string;
-	titleContentFilter?: (this: JQuery, $title: JQuery) => (JQuery<HTMLElement | Text | Comment> | string | number);
+	fnGetTitleContent?: (this: JQuery, $title: JQuery) => (JQuery<HTMLElement | Text | Comment> | string | number);
 	keepTitleVisible?: boolean;
 
 	tabContainerTemplate?: string;

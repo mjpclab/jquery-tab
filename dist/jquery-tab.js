@@ -110,7 +110,7 @@ $.fn.tab = function (customOptions) {
         onBeforeSwitch: undefined,
         onAfterSwitch: undefined,
         titleSelector: 'h1,h2,h3,h4,h5,h6',
-        titleContentFilter: function ($title) {
+        fnGetTitleContent: function ($title) {
             return $title.contents();
         },
         keepTitleVisible: false,
@@ -368,7 +368,7 @@ $.fn.tab = function (customOptions) {
                 if (!options.keepTitleVisible) {
                     $title.hide();
                 }
-                var title = options.titleContentFilter.call($title, $title);
+                var title = options.fnGetTitleContent.call($title, $title);
                 var content = $title.add($title.nextUntil(options.titleSelector));
                 _insertTabPage(title, content, index + inserted);
                 inserted++;
@@ -558,4 +558,3 @@ module.exports = $;
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=jquery-tab.js.map

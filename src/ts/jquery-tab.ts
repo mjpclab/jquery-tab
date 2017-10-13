@@ -34,7 +34,7 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 		onAfterSwitch: undefined,
 
 		titleSelector: 'h1,h2,h3,h4,h5,h6',
-		titleContentFilter: function ($title: JQuery) {
+		fnGetTitleContent: function ($title: JQuery) {
 			return $title.contents();
 		},
 		keepTitleVisible: false,
@@ -334,7 +334,7 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 					$title.hide();
 				}
 
-				const title = options.titleContentFilter!.call($title, $title);
+				const title = options.fnGetTitleContent!.call($title, $title);
 				const content = $title.add($title.nextUntil(options.titleSelector));
 				_insertTabPage(title, content, index + inserted);
 				inserted++;
