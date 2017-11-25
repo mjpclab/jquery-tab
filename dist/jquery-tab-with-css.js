@@ -991,7 +991,8 @@ function updateLink (link, options, obj) {
 
 "use strict";
 
-var $ = __webpack_require__(6);
+__webpack_require__(6);
+var $ = __webpack_require__(0);
 module.exports = $;
 
 
@@ -1001,10 +1002,9 @@ module.exports = $;
 
 "use strict";
 
+exports.__esModule = true;
 __webpack_require__(7);
 __webpack_require__(10);
-var $ = __webpack_require__(0);
-module.exports = $;
 
 
 /***/ }),
