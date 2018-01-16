@@ -237,7 +237,7 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 			$activePageItem.siblings().removeClass(options.pageItemActiveClass).addClass(options.pageItemInactiveClass!);
 		};
 
-		const switchTo = function (newIndex: number) {
+		const switchTo = function (newIndex: number, shouldSaveIndex = true) {
 			const oldIndex = currentIndex;
 
 			//before switching callback
@@ -263,7 +263,7 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 			}
 
 			//keep new index for restoring
-			saveIndex(newIndex);
+			shouldSaveIndex && saveIndex(newIndex);
 
 			//finalize
 			currentIndex = newIndex;
@@ -407,7 +407,7 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 		updateFixedHeight();
 
 		//init show active page
-		switchTo(loadIndex());
+		switchTo(loadIndex(), false);
 
 		//handle delay trigger event
 		let delayTriggerHandler: number;

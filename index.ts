@@ -1,3 +1,3 @@
-import $  = require('./src/ts/jquery-tab');
+import $ = require('./src/ts/jquery-tab');
 
 export = $;

@@ -205,7 +205,8 @@ $.fn.tab = function (customOptions) {
             $activePageItem.addClass(options.pageItemActiveClass).removeClass(options.pageItemInactiveClass);
             $activePageItem.siblings().removeClass(options.pageItemActiveClass).addClass(options.pageItemInactiveClass);
         };
-        var switchTo = function (newIndex) {
+        var switchTo = function (newIndex, shouldSaveIndex) {
+            if (shouldSaveIndex === void 0) { shouldSaveIndex = true; }
             var oldIndex = currentIndex;
             //before switching callback
             if (typeof (options.onBeforeSwitch) === 'function') {
@@ -225,7 +226,7 @@ $.fn.tab = function (customOptions) {
                 options.fnShowPageItem.call($newPage, $newPage);
             }
             //keep new index for restoring
-            saveIndex(newIndex);
+            shouldSaveIndex && saveIndex(newIndex);
             //finalize
             currentIndex = newIndex;
             //after switching callback
@@ -352,7 +353,7 @@ $.fn.tab = function (customOptions) {
         };
         updateFixedHeight();
         //init show active page
-        switchTo(loadIndex());
+        switchTo(loadIndex(), false);
         //handle delay trigger event
         var delayTriggerHandler;
         var startDelayTrigger = function (labelIndex) {
