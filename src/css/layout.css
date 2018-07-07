@@ -75,6 +75,7 @@
 .tab-container > .page-container,
 .tab-container-vert > .page-container {
 	border: 1px solid;
+	padding: 1em;
 }
 
 .tab-container-vert > .page-container {
