@@ -44,8 +44,8 @@ const externalsConfig = {
 	}
 };
 
-module.exports = [
-	{
+module.exports = [{
+		mode: 'development',
 		entry: getEntryConfig(),
 		output: getOutputConfig(false),
 		module: getModuleConfig(false),
@@ -53,23 +53,13 @@ module.exports = [
 		plugins: []
 	},
 	{
+		mode: 'production',
 		entry: getEntryConfig(),
 		output: getOutputConfig(true),
 		module: getModuleConfig(true),
 		externals: externalsConfig,
-		plugins: [
-			new webpack.optimize.UglifyJsPlugin({
-				compress: {
-					warnings: false,
-					properties: false
-				},
-				sourceMap: true
-			}),
-			new webpack.DefinePlugin({
-				'process.env': {
-					'NODE_ENV': JSON.stringify('production')
-				}
-			})
-		]
+		optimization: {
+			minimize: true
+		}
 	}
 ];

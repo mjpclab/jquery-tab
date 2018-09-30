@@ -7,7 +7,7 @@
 		exports["jquery-tab"] = factory(require("jquery"));
 	else
 		root["jquery-tab"] = factory(root["jQuery"]);
-})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_1__) {
+})(window, function(__WEBPACK_EXTERNAL_MODULE_jquery__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -46,12 +46,32 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -69,493 +89,47 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
 /******/
+/******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = "./index.js");
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ "./index.js":
+/*!******************!*\
+  !*** ./index.js ***!
+  \******************/
+/*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
-/// <reference path='main.d.ts' />
-var $ = __webpack_require__(1);
-function getLeafElement($node) {
-    var $result = $node;
-    var $deeper;
-    while ($deeper = $result.children(), $deeper.length) {
-        $result = $deeper;
-    }
-    return $result.eq(0);
-}
-$.fn.tab = function (customOptions) {
-    var defaultOptions = {
-        triggerEvents: 'click',
-        delayTriggerEvents: '',
-        delayTriggerCancelEvents: '',
-        delayTriggerLatency: 200,
-        statusFieldSelector: '',
-        statusHashTemplate: '',
-        statusHashSeparator: '&',
-        fixedHeight: false,
-        activeIndex: 0,
-        createEmptyTab: false,
-        fnShowPageItem: function ($pageItem) {
-            return $pageItem && $pageItem.show && $pageItem.show();
-        },
-        fnHidePageItem: function ($pageItem) {
-            return $pageItem && $pageItem.hide && $pageItem.hide();
-        },
-        onBeforeSwitch: undefined,
-        onAfterSwitch: undefined,
-        titleSelector: 'h1,h2,h3,h4,h5,h6',
-        fnGetTitleContent: function ($title) {
-            return $title.contents();
-        },
-        keepTitleVisible: false,
-        tabContainerTemplate: '<div></div>',
-        tabContainerClass: 'tab-container',
-        labelContainerTemplate: '<div></div>',
-        labelContainerClass: 'label-container',
-        showHeaderLabelContainer: true,
-        showFooterLabelContainer: false,
-        headerLabelContainerClass: 'header-container',
-        footerLabelContainerClass: 'footer-container',
-        labelItemTemplate: '<span></span>',
-        labelItemClass: 'label-item',
-        labelItemActiveClass: 'label-active',
-        labelItemInactiveClass: 'label-inactive',
-        pageContainerTemplate: '<div></div>',
-        pageContainerClass: 'page-container',
-        pageItemTemplate: '<div></div>',
-        pageItemClass: 'page-item',
-        pageItemActiveClass: 'page-active',
-        pageItemInactiveClass: 'page-inactive'
-    };
-    var generateStructure = function ($item) {
-        var dataOptions = $item.data();
-        var options = $.extend({}, defaultOptions, dataOptions, customOptions);
-        var pageCount = 0;
-        var currentIndex = -1;
-        //container
-        var $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass);
-        //top label
-        var $topLabelContainer;
-        var $topLabelContainerLeaf;
-        if (options.showHeaderLabelContainer) {
-            $topLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.headerLabelContainerClass);
-            $tabContainer.append($topLabelContainer);
-            $topLabelContainerLeaf = getLeafElement($topLabelContainer);
-        }
-        //page
-        var $pageContainer = $(options.pageContainerTemplate).addClass(options.pageContainerClass);
-        $tabContainer.append($pageContainer);
-        var $pageContainerLeaf = getLeafElement($pageContainer);
-        //bottom label
-        var $bottomLabelContainer;
-        var $bottomLabelContainerLeaf;
-        if (options.showFooterLabelContainer) {
-            $bottomLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.footerLabelContainerClass);
-            $tabContainer.append($bottomLabelContainer);
-            $bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);
-        }
-        //getters
-        var getCount = function () {
-            return pageCount;
-        };
-        var getCurrentIndex = function () {
-            return currentIndex;
-        };
-        var getLabel = function ($container, index) {
-            if (!isFinite(index)) {
-                throw new Error('invalid index');
-            }
-            return $container.children(':eq(' + index + ')');
-        };
-        var getHeaderLabel = function (index) {
-            if ($topLabelContainerLeaf) {
-                return getLabel($topLabelContainerLeaf, index);
-            }
-            return $([]);
-        };
-        var getFooterLabel = function (index) {
-            if ($bottomLabelContainerLeaf) {
-                return getLabel($bottomLabelContainerLeaf, index);
-            }
-            return $([]);
-        };
-        var getHeaderFooterLabels = function (index) {
-            return getHeaderLabel(index).add(getFooterLabel(index));
-        };
-        var getPage = function (index) {
-            if (!isFinite(index)) {
-                throw new Error('invalid index');
-            }
-            return $pageContainerLeaf.children(':eq(' + index + ')');
-        };
-        //add labels & pages
-        var newLabelItem = function (title) {
-            var $labelItem = $(options.labelItemTemplate).addClass(options.labelItemClass).addClass(options.labelItemInactiveClass);
-            var $labelItemLeaf = getLeafElement($labelItem);
-            $labelItemLeaf.empty().append(title);
-            return $labelItem;
-        };
-        var newPageItem = function (content) {
-            var $pageItem = $(options.pageItemTemplate).addClass(options.pageItemClass).addClass(options.pageItemInactiveClass);
-            var $pageItemLeaf = getLeafElement($pageItem);
-            $pageItemLeaf.append(content);
-            return $pageItem;
-        };
-        //utilities
-        var $statusFields = $item.find(options.statusFieldSelector);
-        if (!$statusFields.length) {
-            $statusFields = $(options.statusFieldSelector);
-        }
-        var RE_STATUS_HASH;
-        var RE_STATUS_HASH_DIGITS;
-        if (options.statusHashTemplate) {
-            var RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
-            RE_STATUS_HASH = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '-?\\d+');
-            RE_STATUS_HASH_DIGITS = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '(-?\\d+)');
-        }
-        var saveIndex = function (index) {
-            $statusFields.val(index);
-            if (options.statusHashTemplate) {
-                var hash = location.hash;
-                var statusHash = options.statusHashTemplate + index;
-                if (hash.indexOf(options.statusHashTemplate) > -1) {
-                    hash = hash.replace(RE_STATUS_HASH, statusHash);
-                }
-                else {
-                    if (hash.length) {
-                        hash += options.statusHashSeparator;
-                    }
-                    hash += statusHash;
-                }
-                location.hash = hash;
-            }
-            if (options.fnSaveIndex) {
-                options.fnSaveIndex.call($tabContainer, index);
-            }
-        };
-        var loadIndex = function () {
-            var index = -1;
-            if (pageCount === 0) {
-                return index;
-            }
-            $statusFields.each(function () {
-                var status = $(this).val();
-                if (typeof status === 'number') {
-                    index = status;
-                    return false;
-                }
-                else if (status.length) {
-                    var intStatus = parseInt(status);
-                    if (isFinite(intStatus) && !isNaN(intStatus)) {
-                        index = parseInt(status);
-                        return false;
-                    }
-                }
-            });
-            if ((index === -1 || isNaN(index)) && options.statusHashTemplate) {
-                var searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);
-                if (searchResult && searchResult[1]) {
-                    index = parseInt(searchResult[1]);
-                }
-            }
-            if ((index === -1 || isNaN(index)) && options.fnLoadIndex) {
-                index = parseInt(options.fnLoadIndex.call($tabContainer));
-            }
-            if (index === -1 || isNaN(index)) {
-                index = Number(options.activeIndex) || 0;
-            }
-            if (index < 0) {
-                index = 0;
-            }
-            else if (index >= pageCount) {
-                index = pageCount - 1;
-            }
-            return index;
-        };
-        //methods
-        var _updateClass = function ($activeLabelItem, $activePageItem) {
-            $activeLabelItem.addClass(options.labelItemActiveClass).removeClass(options.labelItemInactiveClass);
-            $activeLabelItem.siblings().removeClass(options.labelItemActiveClass).addClass(options.labelItemInactiveClass);
-            $activePageItem.addClass(options.pageItemActiveClass).removeClass(options.pageItemInactiveClass);
-            $activePageItem.siblings().removeClass(options.pageItemActiveClass).addClass(options.pageItemInactiveClass);
-        };
-        var switchTo = function (newIndex, shouldSaveIndex) {
-            if (shouldSaveIndex === void 0) { shouldSaveIndex = true; }
-            var oldIndex = currentIndex;
-            //before switching callback
-            if (typeof (options.onBeforeSwitch) === 'function') {
-                options.onBeforeSwitch.call($tabContainer, oldIndex, newIndex);
-            }
-            //labels & pages
-            var $newLabel = getHeaderFooterLabels(newIndex);
-            var $newPage = getPage(newIndex);
-            var $otherPages = $newPage.siblings();
-            _updateClass($newLabel, $newPage);
-            //function to hide pages
-            if (typeof options.fnHidePageItem === 'function') {
-                options.fnHidePageItem.call($otherPages, $otherPages);
-            }
-            //function to show page
-            if (typeof options.fnShowPageItem === 'function') {
-                options.fnShowPageItem.call($newPage, $newPage);
-            }
-            //keep new index for restoring
-            shouldSaveIndex && saveIndex(newIndex);
-            //finalize
-            currentIndex = newIndex;
-            //after switching callback
-            if (typeof (options.onAfterSwitch) === 'function') {
-                options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);
-            }
-        };
-        var _insertTabPage = function (title, content, index) {
-            var $labelItem = newLabelItem(title);
-            var $pageItem = newPageItem(content);
-            if (currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
-                options.fnHidePageItem.call($pageItem, $pageItem);
-            }
-            if (index < 0) {
-                index = 0;
-            }
-            if (pageCount > 0 && index < pageCount) {
-                if ($topLabelContainerLeaf) {
-                    $topLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
-                }
-                if ($bottomLabelContainerLeaf) {
-                    $bottomLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
-                }
-                $pageContainerLeaf.children(':eq(' + index + ')').before($pageItem);
-                if (index <= currentIndex) {
-                    saveIndex(++currentIndex);
-                }
-            }
-            else {
-                if ($topLabelContainerLeaf) {
-                    $topLabelContainerLeaf.append($labelItem.clone());
-                }
-                if ($bottomLabelContainerLeaf) {
-                    $bottomLabelContainerLeaf.append($labelItem.clone());
-                }
-                $pageContainerLeaf.append($pageItem);
-            }
-            pageCount++;
-        };
-        var insertTabPage = function (title, content, index) {
-            _insertTabPage(title, content, index);
-            if (currentIndex === -1 && pageCount) {
-                switchTo(0);
-            }
-        };
-        var addTabPage = function (title, content) {
-            _insertTabPage(title, content, pageCount);
-            if (currentIndex === -1 && pageCount) {
-                switchTo(0);
-            }
-        };
-        var _insert = function (sourceRegion, index) {
-            var $sourceRegion = $(sourceRegion);
-            var inserted = 0;
-            while (true) {
-                var $title = $sourceRegion.find(options.titleSelector).first();
-                if ($title.length === 0) {
-                    break;
-                }
-                if (!options.keepTitleVisible) {
-                    $title.hide();
-                }
-                var title = options.fnGetTitleContent.call($title, $title);
-                var content = $title.add($title.nextUntil(options.titleSelector));
-                _insertTabPage(title, content, index + inserted);
-                inserted++;
-            }
-        };
-        var insert = function (sourceRegion, index) {
-            _insert(sourceRegion, index);
-            if (currentIndex === -1 && pageCount) {
-                switchTo(0);
-            }
-        };
-        var _add = function (sourceRegion) {
-            _insert(sourceRegion, pageCount);
-        };
-        var add = function (sourceRegion) {
-            _add(sourceRegion);
-            if (currentIndex === -1 && pageCount) {
-                switchTo(0);
-            }
-        };
-        var remove = function (index) {
-            if (index === undefined || !isFinite(index) || index < 0 || index >= pageCount) {
-                return;
-            }
-            var $labelItems = getHeaderFooterLabels(index);
-            var $pageItem = getPage(index);
-            $labelItems.remove();
-            $pageItem.remove();
-            pageCount--;
-            if (index < currentIndex) {
-                saveIndex(--currentIndex);
-            }
-            else if (index === currentIndex) {
-                if (currentIndex === pageCount) {
-                    switchTo(currentIndex - 1);
-                }
-                else {
-                    switchTo(currentIndex);
-                }
-            }
-            return $pageItem;
-        };
-        _add($item);
-        //replace original content
-        if (!pageCount && !options.createEmptyTab) {
-            return;
-        }
-        $item.append($tabContainer);
-        //check if param:fixed height
-        var updateFixedHeight = function () {
-            if (options.fixedHeight) {
-                var maxHeight_1 = 0;
-                $pageContainerLeaf.children().each(function () {
-                    var $pageItem = $(this);
-                    var pageHeight = $pageItem[0].scrollHeight;
-                    if (pageHeight > maxHeight_1) {
-                        maxHeight_1 = pageHeight;
-                    }
-                }).height(maxHeight_1);
-            }
-        };
-        updateFixedHeight();
-        //init show active page
-        switchTo(loadIndex(), false);
-        //handle delay trigger event
-        var delayTriggerHandler;
-        var startDelayTrigger = function (labelIndex) {
-            delayTriggerHandler = setTimeout(function () {
-                switchTo(labelIndex);
-            }, options.delayTriggerLatency);
-        };
-        var cancelDelayTrigger = function () {
-            if (delayTriggerHandler) {
-                clearTimeout(delayTriggerHandler);
-                delayTriggerHandler = 0;
-            }
-        };
-        var labelItemDelayClick = function (e) {
-            if (e.currentTarget.parentNode !== e.delegateTarget) {
-                return;
-            }
-            cancelDelayTrigger();
-            var $activeLabel = $(e.currentTarget);
-            var activeLabelIndex = $activeLabel.index();
-            if (activeLabelIndex === currentIndex) {
-                return;
-            }
-            startDelayTrigger(activeLabelIndex);
-        };
-        var labelItemCancelDelayClick = function (e) {
-            if (e.currentTarget.parentNode !== e.delegateTarget) {
-                return;
-            }
-            var $activeLabel = $(e.currentTarget);
-            var activeLabelIndex = $activeLabel.index();
-            if (activeLabelIndex === currentIndex) {
-                return;
-            }
-            cancelDelayTrigger();
-        };
-        if (options.delayTriggerEvents) {
-            if ($topLabelContainerLeaf) {
-                $topLabelContainerLeaf.on(options.delayTriggerEvents, '*', labelItemDelayClick);
-            }
-            if ($bottomLabelContainerLeaf) {
-                $bottomLabelContainerLeaf.on(options.delayTriggerEvents, '*', labelItemDelayClick);
-            }
-            if (options.delayTriggerCancelEvents) {
-                if ($topLabelContainerLeaf) {
-                    $topLabelContainerLeaf.on(options.delayTriggerCancelEvents, '*', labelItemCancelDelayClick);
-                }
-                if ($bottomLabelContainerLeaf) {
-                    $bottomLabelContainerLeaf.on(options.delayTriggerCancelEvents, '*', labelItemCancelDelayClick);
-                }
-            }
-        }
-        //handle trigger event
-        var labelItemClick = function (e) {
-            if (e.currentTarget.parentNode !== e.delegateTarget) {
-                return;
-            }
-            cancelDelayTrigger();
-            var $activeLabel = $(e.currentTarget);
-            var activeLabelIndex = $activeLabel.index();
-            if (activeLabelIndex === currentIndex) {
-                return;
-            }
-            switchTo(activeLabelIndex);
-        };
-        if (options.triggerEvents) {
-            if ($topLabelContainerLeaf) {
-                $topLabelContainerLeaf.on(options.triggerEvents, '*', labelItemClick);
-            }
-            if ($bottomLabelContainerLeaf) {
-                $bottomLabelContainerLeaf.on(options.triggerEvents, '*', labelItemClick);
-            }
-        }
-        //controller
-        var controller = {
-            getCount: getCount,
-            getCurrentIndex: getCurrentIndex,
-            getHeaderLabel: getHeaderLabel,
-            getFooterLabel: getFooterLabel,
-            getHeaderFooterLabels: getHeaderFooterLabels,
-            getPage: getPage,
-            updateFixedHeight: updateFixedHeight,
-            switchTo: switchTo,
-            addTabPage: addTabPage,
-            insertTabPage: insertTabPage,
-            add: add,
-            insert: insert,
-            remove: remove
-        };
-        $item.data('tab-controller', controller);
-        $tabContainer.data('tab-controller', controller);
-    };
-    if (this.length) {
-        this.each(function () {
-            var $item = $(this);
-            generateStructure($item);
-        });
-    }
-    return this;
-};
-$('.tab-region').tab();
-module.exports = $;
-
+eval("\nvar $ = __webpack_require__(/*! ./src/ts/jquery-tab */ \"./src/ts/jquery-tab.js\");\nmodule.exports = $;\n\n\n//# sourceURL=webpack://%5Bname%5D/./index.js?");
 
 /***/ }),
-/* 1 */
+
+/***/ "./src/ts/jquery-tab.js":
+/*!******************************!*\
+  !*** ./src/ts/jquery-tab.js ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n/// <reference path='main.d.ts' />\nvar $ = __webpack_require__(/*! jquery */ \"jquery\");\nfunction getLeafElement($node) {\n    var $result = $node;\n    var $deeper;\n    while ($deeper = $result.children(), $deeper.length) {\n        $result = $deeper;\n    }\n    return $result.eq(0);\n}\n$.fn.tab = function (customOptions) {\n    var defaultOptions = {\n        triggerEvents: 'click',\n        delayTriggerEvents: '',\n        delayTriggerCancelEvents: '',\n        delayTriggerLatency: 200,\n        statusFieldSelector: '',\n        statusHashTemplate: '',\n        statusHashSeparator: '&',\n        fixedHeight: false,\n        activeIndex: 0,\n        createEmptyTab: false,\n        fnShowPageItem: function ($pageItem) {\n            return $pageItem && $pageItem.show && $pageItem.show();\n        },\n        fnHidePageItem: function ($pageItem) {\n            return $pageItem && $pageItem.hide && $pageItem.hide();\n        },\n        onBeforeSwitch: undefined,\n        onAfterSwitch: undefined,\n        titleSelector: 'h1,h2,h3,h4,h5,h6',\n        fnGetTitleContent: function ($title) {\n            return $title.contents();\n        },\n        keepTitleVisible: false,\n        tabContainerTemplate: '<div></div>',\n        tabContainerClass: 'tab-container',\n        labelContainerTemplate: '<div></div>',\n        labelContainerClass: 'label-container',\n        showHeaderLabelContainer: true,\n        showFooterLabelContainer: false,\n        headerLabelContainerClass: 'header-container',\n        footerLabelContainerClass: 'footer-container',\n        labelItemTemplate: '<span></span>',\n        labelItemClass: 'label-item',\n        labelItemActiveClass: 'label-active',\n        labelItemInactiveClass: 'label-inactive',\n        pageContainerTemplate: '<div></div>',\n        pageContainerClass: 'page-container',\n        pageItemTemplate: '<div></div>',\n        pageItemClass: 'page-item',\n        pageItemActiveClass: 'page-active',\n        pageItemInactiveClass: 'page-inactive'\n    };\n    var generateStructure = function ($item) {\n        var dataOptions = $item.data();\n        var options = $.extend({}, defaultOptions, dataOptions, customOptions);\n        var pageCount = 0;\n        var currentIndex = -1;\n        //container\n        var $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass);\n        //top label\n        var $topLabelContainer;\n        var $topLabelContainerLeaf;\n        if (options.showHeaderLabelContainer) {\n            $topLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.headerLabelContainerClass);\n            $tabContainer.append($topLabelContainer);\n            $topLabelContainerLeaf = getLeafElement($topLabelContainer);\n        }\n        //page\n        var $pageContainer = $(options.pageContainerTemplate).addClass(options.pageContainerClass);\n        $tabContainer.append($pageContainer);\n        var $pageContainerLeaf = getLeafElement($pageContainer);\n        //bottom label\n        var $bottomLabelContainer;\n        var $bottomLabelContainerLeaf;\n        if (options.showFooterLabelContainer) {\n            $bottomLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.footerLabelContainerClass);\n            $tabContainer.append($bottomLabelContainer);\n            $bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);\n        }\n        //getters\n        var getCount = function () {\n            return pageCount;\n        };\n        var getCurrentIndex = function () {\n            return currentIndex;\n        };\n        var getLabel = function ($container, index) {\n            if (!isFinite(index)) {\n                throw new Error('invalid index');\n            }\n            return $container.children(':eq(' + index + ')');\n        };\n        var getHeaderLabel = function (index) {\n            if ($topLabelContainerLeaf) {\n                return getLabel($topLabelContainerLeaf, index);\n            }\n            return $([]);\n        };\n        var getFooterLabel = function (index) {\n            if ($bottomLabelContainerLeaf) {\n                return getLabel($bottomLabelContainerLeaf, index);\n            }\n            return $([]);\n        };\n        var getHeaderFooterLabels = function (index) {\n            return getHeaderLabel(index).add(getFooterLabel(index));\n        };\n        var getPage = function (index) {\n            if (!isFinite(index)) {\n                throw new Error('invalid index');\n            }\n            return $pageContainerLeaf.children(':eq(' + index + ')');\n        };\n        //add labels & pages\n        var newLabelItem = function (title) {\n            var $labelItem = $(options.labelItemTemplate).addClass(options.labelItemClass).addClass(options.labelItemInactiveClass);\n            var $labelItemLeaf = getLeafElement($labelItem);\n            $labelItemLeaf.empty().append(title);\n            return $labelItem;\n        };\n        var newPageItem = function (content) {\n            var $pageItem = $(options.pageItemTemplate).addClass(options.pageItemClass).addClass(options.pageItemInactiveClass);\n            var $pageItemLeaf = getLeafElement($pageItem);\n            $pageItemLeaf.append(content);\n            return $pageItem;\n        };\n        //utilities\n        var $statusFields = $item.find(options.statusFieldSelector);\n        if (!$statusFields.length) {\n            $statusFields = $(options.statusFieldSelector);\n        }\n        var RE_STATUS_HASH;\n        var RE_STATUS_HASH_DIGITS;\n        if (options.statusHashTemplate) {\n            var RE_ESCAPE_CHARS = /[.?*+\\\\\\(\\)\\[\\]\\{\\}]/g;\n            RE_STATUS_HASH = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\\\$&') + '-?\\\\d+');\n            RE_STATUS_HASH_DIGITS = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\\\$&') + '(-?\\\\d+)');\n        }\n        var saveIndex = function (index) {\n            $statusFields.val(index);\n            if (options.statusHashTemplate) {\n                var hash = location.hash;\n                var statusHash = options.statusHashTemplate + index;\n                if (hash.indexOf(options.statusHashTemplate) > -1) {\n                    hash = hash.replace(RE_STATUS_HASH, statusHash);\n                }\n                else {\n                    if (hash.length) {\n                        hash += options.statusHashSeparator;\n                    }\n                    hash += statusHash;\n                }\n                location.hash = hash;\n            }\n            if (options.fnSaveIndex) {\n                options.fnSaveIndex.call($tabContainer, index);\n            }\n        };\n        var loadIndex = function () {\n            var index = -1;\n            if (pageCount === 0) {\n                return index;\n            }\n            $statusFields.each(function () {\n                var status = $(this).val();\n                if (typeof status === 'number') {\n                    index = status;\n                    return false;\n                }\n                else if (status.length) {\n                    var intStatus = parseInt(status);\n                    if (isFinite(intStatus) && !isNaN(intStatus)) {\n                        index = parseInt(status);\n                        return false;\n                    }\n                }\n            });\n            if ((index === -1 || isNaN(index)) && options.statusHashTemplate) {\n                var searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);\n                if (searchResult && searchResult[1]) {\n                    index = parseInt(searchResult[1]);\n                }\n            }\n            if ((index === -1 || isNaN(index)) && options.fnLoadIndex) {\n                index = parseInt(options.fnLoadIndex.call($tabContainer));\n            }\n            if (index === -1 || isNaN(index)) {\n                index = Number(options.activeIndex) || 0;\n            }\n            if (index < 0) {\n                index = 0;\n            }\n            else if (index >= pageCount) {\n                index = pageCount - 1;\n            }\n            return index;\n        };\n        //methods\n        var _updateClass = function ($activeLabelItem, $activePageItem) {\n            $activeLabelItem.addClass(options.labelItemActiveClass).removeClass(options.labelItemInactiveClass);\n            $activeLabelItem.siblings().removeClass(options.labelItemActiveClass).addClass(options.labelItemInactiveClass);\n            $activePageItem.addClass(options.pageItemActiveClass).removeClass(options.pageItemInactiveClass);\n            $activePageItem.siblings().removeClass(options.pageItemActiveClass).addClass(options.pageItemInactiveClass);\n        };\n        var switchTo = function (newIndex, shouldSaveIndex) {\n            if (shouldSaveIndex === void 0) { shouldSaveIndex = true; }\n            var oldIndex = currentIndex;\n            //before switching callback\n            if (typeof (options.onBeforeSwitch) === 'function') {\n                options.onBeforeSwitch.call($tabContainer, oldIndex, newIndex);\n            }\n            //labels & pages\n            var $newLabel = getHeaderFooterLabels(newIndex);\n            var $newPage = getPage(newIndex);\n            var $otherPages = $newPage.siblings();\n            _updateClass($newLabel, $newPage);\n            //function to hide pages\n            if (typeof options.fnHidePageItem === 'function') {\n                options.fnHidePageItem.call($otherPages, $otherPages);\n            }\n            //function to show page\n            if (typeof options.fnShowPageItem === 'function') {\n                options.fnShowPageItem.call($newPage, $newPage);\n            }\n            //keep new index for restoring\n            shouldSaveIndex && saveIndex(newIndex);\n            //finalize\n            currentIndex = newIndex;\n            //after switching callback\n            if (typeof (options.onAfterSwitch) === 'function') {\n                options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);\n            }\n        };\n        var _insertTabPage = function (title, content, index) {\n            var $labelItem = newLabelItem(title);\n            var $pageItem = newPageItem(content);\n            if (currentIndex > -1 && typeof options.fnHidePageItem === 'function') {\n                options.fnHidePageItem.call($pageItem, $pageItem);\n            }\n            if (index < 0) {\n                index = 0;\n            }\n            if (pageCount > 0 && index < pageCount) {\n                if ($topLabelContainerLeaf) {\n                    $topLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());\n                }\n                if ($bottomLabelContainerLeaf) {\n                    $bottomLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());\n                }\n                $pageContainerLeaf.children(':eq(' + index + ')').before($pageItem);\n                if (index <= currentIndex) {\n                    saveIndex(++currentIndex);\n                }\n            }\n            else {\n                if ($topLabelContainerLeaf) {\n                    $topLabelContainerLeaf.append($labelItem.clone());\n                }\n                if ($bottomLabelContainerLeaf) {\n                    $bottomLabelContainerLeaf.append($labelItem.clone());\n                }\n                $pageContainerLeaf.append($pageItem);\n            }\n            pageCount++;\n        };\n        var insertTabPage = function (title, content, index) {\n            _insertTabPage(title, content, index);\n            if (currentIndex === -1 && pageCount) {\n                switchTo(0);\n            }\n        };\n        var addTabPage = function (title, content) {\n            _insertTabPage(title, content, pageCount);\n            if (currentIndex === -1 && pageCount) {\n                switchTo(0);\n            }\n        };\n        var _insert = function (sourceRegion, index) {\n            var $sourceRegion = $(sourceRegion);\n            var inserted = 0;\n            while (true) {\n                var $title = $sourceRegion.find(options.titleSelector).first();\n                if ($title.length === 0) {\n                    break;\n                }\n                if (!options.keepTitleVisible) {\n                    $title.hide();\n                }\n                var title = options.fnGetTitleContent.call($title, $title);\n                var content = $title.add($title.nextUntil(options.titleSelector));\n                _insertTabPage(title, content, index + inserted);\n                inserted++;\n            }\n        };\n        var insert = function (sourceRegion, index) {\n            _insert(sourceRegion, index);\n            if (currentIndex === -1 && pageCount) {\n                switchTo(0);\n            }\n        };\n        var _add = function (sourceRegion) {\n            _insert(sourceRegion, pageCount);\n        };\n        var add = function (sourceRegion) {\n            _add(sourceRegion);\n            if (currentIndex === -1 && pageCount) {\n                switchTo(0);\n            }\n        };\n        var remove = function (index) {\n            if (index === undefined || !isFinite(index) || index < 0 || index >= pageCount) {\n                return;\n            }\n            var $labelItems = getHeaderFooterLabels(index);\n            var $pageItem = getPage(index);\n            $labelItems.remove();\n            $pageItem.remove();\n            pageCount--;\n            if (index < currentIndex) {\n                saveIndex(--currentIndex);\n            }\n            else if (index === currentIndex) {\n                if (currentIndex === pageCount) {\n                    switchTo(currentIndex - 1);\n                }\n                else {\n                    switchTo(currentIndex);\n                }\n            }\n            return $pageItem;\n        };\n        _add($item);\n        //replace original content\n        if (!pageCount && !options.createEmptyTab) {\n            return;\n        }\n        $item.append($tabContainer);\n        //check if param:fixed height\n        var updateFixedHeight = function () {\n            if (options.fixedHeight) {\n                var maxHeight_1 = 0;\n                $pageContainerLeaf.children().each(function () {\n                    var $pageItem = $(this);\n                    var pageHeight = $pageItem[0].scrollHeight;\n                    if (pageHeight > maxHeight_1) {\n                        maxHeight_1 = pageHeight;\n                    }\n                }).height(maxHeight_1);\n            }\n        };\n        updateFixedHeight();\n        //init show active page\n        switchTo(loadIndex(), false);\n        //handle delay trigger event\n        var delayTriggerHandler;\n        var startDelayTrigger = function (labelIndex) {\n            delayTriggerHandler = setTimeout(function () {\n                switchTo(labelIndex);\n            }, options.delayTriggerLatency);\n        };\n        var cancelDelayTrigger = function () {\n            if (delayTriggerHandler) {\n                clearTimeout(delayTriggerHandler);\n                delayTriggerHandler = 0;\n            }\n        };\n        var labelItemDelayClick = function (e) {\n            if (e.currentTarget.parentNode !== e.delegateTarget) {\n                return;\n            }\n            cancelDelayTrigger();\n            var $activeLabel = $(e.currentTarget);\n            var activeLabelIndex = $activeLabel.index();\n            if (activeLabelIndex === currentIndex) {\n                return;\n            }\n            startDelayTrigger(activeLabelIndex);\n        };\n        var labelItemCancelDelayClick = function (e) {\n            if (e.currentTarget.parentNode !== e.delegateTarget) {\n                return;\n            }\n            var $activeLabel = $(e.currentTarget);\n            var activeLabelIndex = $activeLabel.index();\n            if (activeLabelIndex === currentIndex) {\n                return;\n            }\n            cancelDelayTrigger();\n        };\n        if (options.delayTriggerEvents) {\n            if ($topLabelContainerLeaf) {\n                $topLabelContainerLeaf.on(options.delayTriggerEvents, '*', labelItemDelayClick);\n            }\n            if ($bottomLabelContainerLeaf) {\n                $bottomLabelContainerLeaf.on(options.delayTriggerEvents, '*', labelItemDelayClick);\n            }\n            if (options.delayTriggerCancelEvents) {\n                if ($topLabelContainerLeaf) {\n                    $topLabelContainerLeaf.on(options.delayTriggerCancelEvents, '*', labelItemCancelDelayClick);\n                }\n                if ($bottomLabelContainerLeaf) {\n                    $bottomLabelContainerLeaf.on(options.delayTriggerCancelEvents, '*', labelItemCancelDelayClick);\n                }\n            }\n        }\n        //handle trigger event\n        var labelItemClick = function (e) {\n            if (e.currentTarget.parentNode !== e.delegateTarget) {\n                return;\n            }\n            cancelDelayTrigger();\n            var $activeLabel = $(e.currentTarget);\n            var activeLabelIndex = $activeLabel.index();\n            if (activeLabelIndex === currentIndex) {\n                return;\n            }\n            switchTo(activeLabelIndex);\n        };\n        if (options.triggerEvents) {\n            if ($topLabelContainerLeaf) {\n                $topLabelContainerLeaf.on(options.triggerEvents, '*', labelItemClick);\n            }\n            if ($bottomLabelContainerLeaf) {\n                $bottomLabelContainerLeaf.on(options.triggerEvents, '*', labelItemClick);\n            }\n        }\n        //controller\n        var controller = {\n            getCount: getCount,\n            getCurrentIndex: getCurrentIndex,\n            getHeaderLabel: getHeaderLabel,\n            getFooterLabel: getFooterLabel,\n            getHeaderFooterLabels: getHeaderFooterLabels,\n            getPage: getPage,\n            updateFixedHeight: updateFixedHeight,\n            switchTo: switchTo,\n            addTabPage: addTabPage,\n            insertTabPage: insertTabPage,\n            add: add,\n            insert: insert,\n            remove: remove\n        };\n        $item.data('tab-controller', controller);\n        $tabContainer.data('tab-controller', controller);\n    };\n    if (this.length) {\n        this.each(function () {\n            var $item = $(this);\n            generateStructure($item);\n        });\n    }\n    return this;\n};\n$('.tab-region').tab();\nmodule.exports = $;\n\n\n//# sourceURL=webpack://%5Bname%5D/./src/ts/jquery-tab.js?");
+
+/***/ }),
+
+/***/ "jquery":
+/*!******************************************************************************************!*\
+  !*** external {"commonjs":"jquery","commonjs2":"jquery","amd":"jquery","root":"jQuery"} ***!
+  \******************************************************************************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
-
-/***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var $ = __webpack_require__(0);
-module.exports = $;
-
+eval("module.exports = __WEBPACK_EXTERNAL_MODULE_jquery__;\n\n//# sourceURL=webpack://%5Bname%5D/external_%7B%22commonjs%22:%22jquery%22,%22commonjs2%22:%22jquery%22,%22amd%22:%22jquery%22,%22root%22:%22jQuery%22%7D?");
 
 /***/ })
-/******/ ]);
+
+/******/ });
 });
