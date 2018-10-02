@@ -42,14 +42,16 @@ $('.region').tab({
 ```
 
 # Including CSS
-jquery-tab provides default CSS styles if you don't want to make layout yourself. It also provides default skin.
+jquery-tab provides default CSS styles if you don't want to make it yourself.
 
-## Use CSS bundled version
-For module environment, importing module `jquery-tab/with-css` instead of `jquery-tab`.
-For global variable mode, referencing the '-with-css' bundle file.
+## Importing by module
+Importing default theme which contains layout style and skin style:
+```javascript
+import 'jquery-tab/src/built/theme/gray'
+```
 
 ## Use standalone CSS file
-Copying or referencing source CSS files under `src/css/` directory.
+Copying or referencing CSS files from `dist/theeme/` directory.
 
 ## Vertical labels
 To use vertical labels style from default CSS, set `tabContainerClass` to 'tab-container-vert'.

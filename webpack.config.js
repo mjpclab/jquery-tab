@@ -1,41 +1,30 @@
-const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
 
 const PACKAGE_FILE = 'package.json';
 const thePackage = JSON.parse(fs.readFileSync(PACKAGE_FILE));
 
-const getEntryConfig = function () {
-	return {
-		[thePackage.name]: path.resolve(__dirname, thePackage.main),
-		[thePackage.nameWithCss]: path.resolve(__dirname, thePackage.mainWithCss)
-	};
+const jsEntryConfig = {
+	[thePackage.name]: path.resolve(__dirname, thePackage.main),
 };
 
-const getOutputConfig = function (isMinify) {
+const jsModuleConfig = {
+	rules: [
+		{test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"}
+	]
+};
+
+const getJsOutputConfig = function (isMinify) {
 	return {
 		library: '[name]',
 		libraryTarget: 'umd',
+		libraryExport: 'default',
 		path: path.resolve(__dirname, 'dist/'),
 		filename: '[name]' + (isMinify ? '.min' : '') + '.js'
 	};
 };
 
-const getModuleConfig = function (isMinify) {
-	return {
-		rules: [
-			{
-				test: /\.css$/,
-				use: [
-					{ loader: 'style-loader' },
-					{ loader: 'css-loader', options: { minimize: isMinify } }
-				]
-			}
-		]
-	};
-};
-
-const externalsConfig = {
+const jsExternalsConfig = {
 	jquery: {
 		commonjs: 'jquery',
 		commonjs2: 'jquery',
@@ -44,22 +33,18 @@ const externalsConfig = {
 	}
 };
 
-module.exports = [{
-		mode: 'development',
-		entry: getEntryConfig(),
-		output: getOutputConfig(false),
-		module: getModuleConfig(false),
-		externals: externalsConfig,
-		plugins: []
-	},
+module.exports = [
 	{
+		mode: 'none',
+		entry: jsEntryConfig,
+		module: jsModuleConfig,
+		output: getJsOutputConfig(false),
+		externals: jsExternalsConfig,
+	}, {
 		mode: 'production',
-		entry: getEntryConfig(),
-		output: getOutputConfig(true),
-		module: getModuleConfig(true),
-		externals: externalsConfig,
-		optimization: {
-			minimize: true
-		}
+		entry: jsEntryConfig,
+		module: jsModuleConfig,
+		output: getJsOutputConfig(true),
+		externals: jsExternalsConfig,
 	}
 ];

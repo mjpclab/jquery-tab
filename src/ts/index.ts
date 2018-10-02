@@ -1,6 +1,6 @@
-/// <reference path='main.d.ts' />
+/// <reference path='index.d.ts' />
 
-import $ = require('jquery');
+import $ from 'jquery';
 
 function getLeafElement($node: JQuery) {
 	let $result = $node;
@@ -11,8 +11,8 @@ function getLeafElement($node: JQuery) {
 	return $result.eq(0);
 }
 
-$.fn.tab = function (customOptions?: JQueryTabOptions) {
-	const defaultOptions: JQueryTabOptions = {
+$.fn.tab = function (customOptions?: JQueryTab.Options) {
+	const defaultOptions: JQueryTab.NecessaryOptions = {
 		triggerEvents: 'click',
 		delayTriggerEvents: '',
 		delayTriggerCancelEvents: '',
@@ -63,26 +63,26 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 
 	const generateStructure = function ($item: JQuery) {
 		const dataOptions = $item.data();
-		const options = $.extend({}, defaultOptions, dataOptions, customOptions);
+		const options = {...defaultOptions, ...dataOptions, ...customOptions};
 
 		let pageCount = 0;
 		let currentIndex = -1;
 
 		//container
-		const $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass!);
+		const $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass);
 
 		//top label
 		let $topLabelContainer: JQuery | undefined;
 		let $topLabelContainerLeaf: JQuery | undefined;
 		if (options.showHeaderLabelContainer) {
-			$topLabelContainer = $(options.labelContainerTemplate!).addClass(options.labelContainerClass!).addClass(options.headerLabelContainerClass!);
+			$topLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.headerLabelContainerClass);
 			$tabContainer.append($topLabelContainer);
 
 			$topLabelContainerLeaf = getLeafElement($topLabelContainer);
 		}
 
 		//page
-		const $pageContainer = $(options.pageContainerTemplate).addClass(options.pageContainerClass!);
+		const $pageContainer = $(options.pageContainerTemplate).addClass(options.pageContainerClass);
 		$tabContainer.append($pageContainer);
 
 		const $pageContainerLeaf = getLeafElement($pageContainer);
@@ -91,7 +91,7 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 		let $bottomLabelContainer: JQuery | undefined;
 		let $bottomLabelContainerLeaf: JQuery | undefined;
 		if (options.showFooterLabelContainer) {
-			$bottomLabelContainer = $(options.labelContainerTemplate!).addClass(options.labelContainerClass!).addClass(options.footerLabelContainerClass!);
+			$bottomLabelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.footerLabelContainerClass);
 			$tabContainer.append($bottomLabelContainer);
 
 			$bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);
@@ -134,15 +134,15 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 		};
 
 		//add labels & pages
-		const newLabelItem = function (title: JQueriable) {
-			const $labelItem = $(options.labelItemTemplate).addClass(options.labelItemClass!).addClass(options.labelItemInactiveClass!);
+		const newLabelItem = function (title: JQueryTab.JQueriable) {
+			const $labelItem = $(options.labelItemTemplate).addClass(options.labelItemClass).addClass(options.labelItemInactiveClass);
 			const $labelItemLeaf = getLeafElement($labelItem);
 			$labelItemLeaf.empty().append(title);
 
 			return $labelItem;
 		};
-		const newPageItem = function (content: JQueriable) {
-			const $pageItem = $(options.pageItemTemplate).addClass(options.pageItemClass!).addClass(options.pageItemInactiveClass!);
+		const newPageItem = function (content: JQueryTab.JQueriable) {
+			const $pageItem = $(options.pageItemTemplate).addClass(options.pageItemClass).addClass(options.pageItemInactiveClass);
 			const $pageItemLeaf = getLeafElement($pageItem);
 			$pageItemLeaf.append(content);
 
@@ -151,7 +151,7 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 
 
 		//utilities
-		let $statusFields = $item.find(options.statusFieldSelector!);
+		let $statusFields = $item.find(options.statusFieldSelector);
 		if (!$statusFields.length) {
 			$statusFields = $(options.statusFieldSelector);
 		}
@@ -230,11 +230,11 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 
 		//methods
 		const _updateClass = function ($activeLabelItem: JQuery, $activePageItem: JQuery) {
-			$activeLabelItem.addClass(options.labelItemActiveClass!).removeClass(options.labelItemInactiveClass);
-			$activeLabelItem.siblings().removeClass(options.labelItemActiveClass).addClass(options.labelItemInactiveClass!);
+			$activeLabelItem.addClass(options.labelItemActiveClass).removeClass(options.labelItemInactiveClass);
+			$activeLabelItem.siblings().removeClass(options.labelItemActiveClass).addClass(options.labelItemInactiveClass);
 
-			$activePageItem.addClass(options.pageItemActiveClass!).removeClass(options.pageItemInactiveClass);
-			$activePageItem.siblings().removeClass(options.pageItemActiveClass).addClass(options.pageItemInactiveClass!);
+			$activePageItem.addClass(options.pageItemActiveClass).removeClass(options.pageItemInactiveClass);
+			$activePageItem.siblings().removeClass(options.pageItemActiveClass).addClass(options.pageItemInactiveClass);
 		};
 
 		const switchTo = function (newIndex: number, shouldSaveIndex = true) {
@@ -274,7 +274,7 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 			}
 		};
 
-		const _insertTabPage = function (title: JQueriable, content: JQueriable, index: number) {
+		const _insertTabPage = function (title: JQueryTab.JQueriable, content: JQueryTab.JQueriable, index: number) {
 			const $labelItem = newLabelItem(title);
 			const $pageItem = newPageItem(content);
 			if (currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
@@ -309,24 +309,24 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 
 			pageCount++;
 		};
-		const insertTabPage = function (title: JQueriable, content: JQueriable, index: number) {
+		const insertTabPage = function (title: JQueryTab.JQueriable, content: JQueryTab.JQueriable, index: number) {
 			_insertTabPage(title, content, index);
 			if (currentIndex === -1 && pageCount) {
 				switchTo(0);
 			}
 		};
-		const addTabPage = function (title: JQueriable, content: JQueriable) {
+		const addTabPage = function (title: JQueryTab.JQueriable, content: JQueryTab.JQueriable) {
 			_insertTabPage(title, content, pageCount);
 			if (currentIndex === -1 && pageCount) {
 				switchTo(0);
 			}
 		};
 
-		const _insert = function (sourceRegion: JQueriable, index: number) {
+		const _insert = function (sourceRegion: JQueryTab.JQueriable, index: number) {
 			const $sourceRegion = $(sourceRegion);
 			let inserted = 0;
 			while (true) {
-				const $title = $sourceRegion.find(options.titleSelector!).first();
+				const $title = $sourceRegion.find(options.titleSelector).first();
 				if ($title.length === 0) {
 					break;
 				}
@@ -334,22 +334,22 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 					$title.hide();
 				}
 
-				const title = options.fnGetTitleContent!.call($title, $title);
+				const title = options.fnGetTitleContent.call($title, $title);
 				const content = $title.add($title.nextUntil(options.titleSelector));
 				_insertTabPage(title, content, index + inserted);
 				inserted++;
 			}
 		};
-		const insert = function (sourceRegion: JQueriable, index: number) {
+		const insert = function (sourceRegion: JQueryTab.JQueriable, index: number) {
 			_insert(sourceRegion, index);
 			if (currentIndex === -1 && pageCount) {
 				switchTo(0);
 			}
 		};
-		const _add = function (sourceRegion: JQueriable) {
+		const _add = function (sourceRegion: JQueryTab.JQueriable) {
 			_insert(sourceRegion, pageCount);
 		};
-		const add = function (sourceRegion: JQueriable) {
+		const add = function (sourceRegion: JQueryTab.JQueriable) {
 			_add(sourceRegion);
 			if (currentIndex === -1 && pageCount) {
 				switchTo(0);
@@ -524,4 +524,4 @@ $.fn.tab = function (customOptions?: JQueryTabOptions) {
 
 $('.tab-region').tab();
 
-export = $;
+export default $;
