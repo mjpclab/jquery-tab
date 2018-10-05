@@ -23,7 +23,7 @@ function tablize($region, customOptions) {
     //getters
     const { getCount, getCurrentIndex, getLabel, getHeaderLabel, getFooterLabel, getHeaderFooterLabels, getPanel } = generateGetters(containers, context);
     //save/load
-    const { saveIndex, loadIndex } = generateSaveLoadIndex(containers, context, options);
+    const { saveIndex, loadIndex, parseHashIndex } = generateSaveLoadIndex(containers, context, options);
     //methods
     const _switchTo = function (newIndex) {
         const oldIndex = context.currentIndex;
@@ -172,8 +172,16 @@ function tablize($region, customOptions) {
         }
     };
     updateFixedHeight();
-    //init show active panel
+    //show active panel
     _switchTo(loadIndex());
+    if (options.statusHashTemplate && window) {
+        $(window).on('hashchange', function () {
+            const hashIndex = parseHashIndex();
+            if (hashIndex > -1) {
+                switchTo(hashIndex);
+            }
+        });
+    }
     //handle delay trigger event
     let delayTriggerHandler;
     const startDelayTrigger = function (labelIndex) {

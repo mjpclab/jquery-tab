@@ -40,7 +40,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	} = generateGetters(containers, context);
 
 	//save/load
-	const {saveIndex, loadIndex} = generateSaveLoadIndex(containers, context, options);
+	const {saveIndex, loadIndex, parseHashIndex} = generateSaveLoadIndex(containers, context, options);
 
 	//methods
 	const _switchTo = function (newIndex: number) {
@@ -212,8 +212,16 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	};
 	updateFixedHeight();
 
-	//init show active panel
+	//show active panel
 	_switchTo(loadIndex());
+	if (options.statusHashTemplate && window) {
+		$(window).on('hashchange', function () {
+			const hashIndex = parseHashIndex();
+			if (hashIndex > -1) {
+				switchTo(hashIndex);
+			}
+		});
+	}
 
 	//handle delay trigger event
 	let delayTriggerHandler: number;

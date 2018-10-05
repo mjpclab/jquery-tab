@@ -41,6 +41,14 @@ function generateSaveLoadIndex(containers: JQueryTab.Containers, context: JQuery
 		}
 	};
 
+	const parseHashIndex = function () {
+		const searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);
+		if (searchResult && searchResult[1]) {
+			return parseInt(searchResult[1]);
+		}
+		return -1;
+	};
+
 	const loadIndex = function () {
 		const {itemCount} = context;
 
@@ -64,10 +72,7 @@ function generateSaveLoadIndex(containers: JQueryTab.Containers, context: JQuery
 			}
 		});
 		if ((index === -1 || isNaN(index)) && statusHashTemplate) {
-			const searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);
-			if (searchResult && searchResult[1]) {
-				index = parseInt(searchResult[1]);
-			}
+			index = parseHashIndex();
 		}
 		if ((index === -1 || isNaN(index)) && fnLoadIndex) {
 			index = parseInt(fnLoadIndex.call($tabContainer));
@@ -86,7 +91,7 @@ function generateSaveLoadIndex(containers: JQueryTab.Containers, context: JQuery
 		return index;
 	};
 
-	return {saveIndex, loadIndex};
+	return {saveIndex, loadIndex, parseHashIndex};
 }
 
 export default generateSaveLoadIndex;

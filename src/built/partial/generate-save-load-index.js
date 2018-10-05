@@ -33,6 +33,13 @@ function generateSaveLoadIndex(containers, context, options) {
             fnSaveIndex.call($tabContainer, index);
         }
     };
+    const parseHashIndex = function () {
+        const searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);
+        if (searchResult && searchResult[1]) {
+            return parseInt(searchResult[1]);
+        }
+        return -1;
+    };
     const loadIndex = function () {
         const { itemCount } = context;
         let index = -1;
@@ -54,10 +61,7 @@ function generateSaveLoadIndex(containers, context, options) {
             }
         });
         if ((index === -1 || isNaN(index)) && statusHashTemplate) {
-            const searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);
-            if (searchResult && searchResult[1]) {
-                index = parseInt(searchResult[1]);
-            }
+            index = parseHashIndex();
         }
         if ((index === -1 || isNaN(index)) && fnLoadIndex) {
             index = parseInt(fnLoadIndex.call($tabContainer));
@@ -73,6 +77,6 @@ function generateSaveLoadIndex(containers, context, options) {
         }
         return index;
     };
-    return { saveIndex, loadIndex };
+    return { saveIndex, loadIndex, parseHashIndex };
 }
 export default generateSaveLoadIndex;

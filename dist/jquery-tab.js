@@ -186,7 +186,8 @@ function tablize($region, customOptions) {
 
   var _generateSaveLoadInde = Object(_generate_save_load_index__WEBPACK_IMPORTED_MODULE_5__["default"])(containers, context, options),
       saveIndex = _generateSaveLoadInde.saveIndex,
-      loadIndex = _generateSaveLoadInde.loadIndex; //methods
+      loadIndex = _generateSaveLoadInde.loadIndex,
+      parseHashIndex = _generateSaveLoadInde.parseHashIndex; //methods
 
 
   var _switchTo = function _switchTo(newIndex) {
@@ -374,9 +375,19 @@ function tablize($region, customOptions) {
     }
   };
 
-  updateFixedHeight(); //init show active panel
+  updateFixedHeight(); //show active panel
 
-  _switchTo(loadIndex()); //handle delay trigger event
+  _switchTo(loadIndex());
+
+  if (options.statusHashTemplate && window) {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(window).on('hashchange', function () {
+      var hashIndex = parseHashIndex();
+
+      if (hashIndex > -1) {
+        switchTo(hashIndex);
+      }
+    });
+  } //handle delay trigger event
 
 
   var delayTriggerHandler;
@@ -958,6 +969,16 @@ function generateSaveLoadIndex(containers, context, options) {
     }
   };
 
+  var parseHashIndex = function parseHashIndex() {
+    var searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);
+
+    if (searchResult && searchResult[1]) {
+      return parseInt(searchResult[1]);
+    }
+
+    return -1;
+  };
+
   var loadIndex = function loadIndex() {
     var itemCount = context.itemCount;
     var index = -1;
@@ -983,11 +1004,7 @@ function generateSaveLoadIndex(containers, context, options) {
     });
 
     if ((index === -1 || isNaN(index)) && statusHashTemplate) {
-      var searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);
-
-      if (searchResult && searchResult[1]) {
-        index = parseInt(searchResult[1]);
-      }
+      index = parseHashIndex();
     }
 
     if ((index === -1 || isNaN(index)) && fnLoadIndex) {
@@ -1009,7 +1026,8 @@ function generateSaveLoadIndex(containers, context, options) {
 
   return {
     saveIndex: saveIndex,
-    loadIndex: loadIndex
+    loadIndex: loadIndex,
+    parseHashIndex: parseHashIndex
   };
 }
 
