@@ -8,17 +8,14 @@ import updateActiveState from './update-active-state';
 let nextContainerId = 0;
 function tablize($region, customOptions) {
     const dataOptions = $region.data();
-    const options = { ...defaultOptions, ...dataOptions, ...customOptions };
+    const options = $.extend({}, defaultOptions, dataOptions, customOptions);
     const context = {
         containerId: nextContainerId++,
         nextItemId: 0,
         itemCount: 0,
         currentIndex: -1
     };
-    const containers = {
-        $region,
-        ...createTabContainer(options)
-    };
+    const containers = $.extend({ $region }, createTabContainer(options));
     const { $tabContainer, $headerLabelContainerLeaf, $panelContainerLeaf, $footerLabelContainerLeaf } = containers;
     //getters
     const { getCount, getCurrentIndex, getLabel, getHeaderLabel, getFooterLabel, getHeaderFooterLabels, getPanel } = generateGetters(containers, context);
@@ -192,7 +189,7 @@ function tablize($region, customOptions) {
     const cancelDelayTrigger = function () {
         if (delayTriggerHandler) {
             clearTimeout(delayTriggerHandler);
-            delayTriggerHandler = 0;
+            delayTriggerHandler = undefined;
         }
     };
     const labelItemDelayClick = function (e) {

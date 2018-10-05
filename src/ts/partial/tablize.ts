@@ -11,7 +11,7 @@ let nextContainerId = 0;
 
 function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	const dataOptions = $region.data();
-	const options: JQueryTab.NecessaryOptions = {...defaultOptions, ...dataOptions, ...customOptions};
+	const options: JQueryTab.NecessaryOptions = $.extend({}, defaultOptions, dataOptions, customOptions);
 
 	const context: JQueryTab.Context = {
 		containerId: nextContainerId++,
@@ -20,10 +20,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 		currentIndex: -1
 	};
 
-	const containers: JQueryTab.Containers = {
-		$region,
-		...createTabContainer(options)
-	};
+	const containers: JQueryTab.Containers = $.extend({$region}, createTabContainer(options));
 	const {
 		$tabContainer, $headerLabelContainerLeaf, $panelContainerLeaf, $footerLabelContainerLeaf
 	} = containers;
@@ -224,7 +221,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	}
 
 	//handle delay trigger event
-	let delayTriggerHandler: number;
+	let delayTriggerHandler: any;
 	const startDelayTrigger = function (labelIndex: number) {
 		delayTriggerHandler = setTimeout(function () {
 			switchTo(labelIndex);
@@ -234,7 +231,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	const cancelDelayTrigger = function () {
 		if (delayTriggerHandler) {
 			clearTimeout(delayTriggerHandler);
-			delayTriggerHandler = 0;
+			delayTriggerHandler = undefined;
 		}
 	};
 

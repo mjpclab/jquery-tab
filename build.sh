@@ -1,9 +1,12 @@
 #!/bin/sh
 
+# install required node scripts:
+# npm install --global typescript rollup uglify
+
 cd "$(dirname $0)"
 rm -rf src/built/* dist/*
 tsc
-webpack
+rollup --config
 
 mkdir -p dist/theme/
 cat src/css/layout.css src/css/skin-gray.css > dist/theme/gray.css
