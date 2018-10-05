@@ -3,13 +3,13 @@ import defaultOptions from "../utility/default-options";
 
 import createTabContainer from './create-tab-container';
 import createTabItem from './create-tab-item';
+import generateGetters from './generate-getters';
+import generateSaveLoadIndex from './generate-save-load-index';
 import updateActiveState from './update-active-state';
-
-const RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
 
 let nextContainerId = 0;
 
-function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
+function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	const dataOptions = $region.data();
 	const options: JQueryTab.NecessaryOptions = {...defaultOptions, ...dataOptions, ...customOptions};
 
@@ -29,119 +29,21 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 	} = containers;
 
 	//getters
-	const getCount = function () {
-		return context.itemCount;
-	};
-	const getCurrentIndex = function () {
-		return context.currentIndex;
-	};
-	const getLabel = function ($container: JQuery, index: number) {
-		if (!isFinite(index)) {
-			throw new Error('invalid index');
-		}
-		return $container.children(':eq(' + index + ')');
-	};
-	const getHeaderLabel = function (index: number) {
-		if ($headerLabelContainerLeaf) {
-			return getLabel($headerLabelContainerLeaf, index);
-		}
-		return $([]);
-	};
-	const getFooterLabel = function (index: number) {
-		if ($footerLabelContainerLeaf) {
-			return getLabel($footerLabelContainerLeaf, index);
-		}
-		return $([]);
-	};
-	const getHeaderFooterLabels = function (index: number) {
-		return getHeaderLabel(index).add(getFooterLabel(index));
-	};
-	const getPanel = function (index: number) {
-		if (!isFinite(index)) {
-			throw new Error('invalid index');
-		}
-		return $panelContainerLeaf.children(':eq(' + index + ')');
-	};
+	const {
+		getCount,
+		getCurrentIndex,
+		getLabel,
+		getHeaderLabel,
+		getFooterLabel,
+		getHeaderFooterLabels,
+		getPanel
+	} = generateGetters(containers, context);
 
-	//utilities
-	let $statusFields = $region.find(options.statusFieldSelector);
-	if (!$statusFields.length) {
-		$statusFields = $(options.statusFieldSelector);
-	}
-	let RE_STATUS_HASH: RegExp;
-	let RE_STATUS_HASH_DIGITS: RegExp;
-	if (options.statusHashTemplate) {
-		RE_STATUS_HASH = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '-?\\d+');
-		RE_STATUS_HASH_DIGITS = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '(-?\\d+)');
-	}
-	const saveIndex = function saveIndex(index: number) {
-		$statusFields.val(index);
-
-		if (options.statusHashTemplate) {
-			let hash = location.hash;
-			const statusHash = options.statusHashTemplate + index;
-			if (hash.indexOf(options.statusHashTemplate) > -1) {
-				hash = hash.replace(RE_STATUS_HASH, statusHash);
-			}
-			else {
-				if (hash.length) {
-					hash += options.statusHashSeparator;
-				}
-				hash += statusHash;
-			}
-
-			location.hash = hash;
-		}
-
-		if (options.fnSaveIndex) {
-			options.fnSaveIndex.call($tabContainer, index);
-		}
-	};
-	const loadIndex = function () {
-		let index = -1;
-		if (context.itemCount === 0) {
-			return index;
-		}
-
-		$statusFields.each(function () {
-			const status = $(this).val() as string | number;
-			if (typeof status === 'number') {
-				index = status;
-				return false;
-			}
-			else if (status.length) {
-				const intStatus = parseInt(status);
-				if (isFinite(intStatus) && !isNaN(intStatus)) {
-					index = parseInt(status);
-					return false;
-				}
-			}
-		});
-		if ((index === -1 || isNaN(index)) && options.statusHashTemplate) {
-			const searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);
-			if (searchResult && searchResult[1]) {
-				index = parseInt(searchResult[1]);
-			}
-		}
-		if ((index === -1 || isNaN(index)) && options.fnLoadIndex) {
-			index = parseInt(options.fnLoadIndex.call($tabContainer));
-		}
-		if (index === -1 || isNaN(index)) {
-			index = Number(options.activeIndex) || 0;
-		}
-
-		if (index < 0) {
-			index = 0;
-		}
-		else if (index >= context.itemCount) {
-			index = context.itemCount - 1;
-		}
-
-		return index;
-	};
+	//save/load
+	const {saveIndex, loadIndex} = generateSaveLoadIndex(containers, context, options);
 
 	//methods
-	const switchTo = function (newIndex: number, shouldSaveIndex = true) {
+	const _switchTo = function (newIndex: number) {
 		const oldIndex = context.currentIndex;
 
 		//before switching callback
@@ -166,9 +68,6 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 			options.fnShowPanelItem.call($newPanel, $newPanel);
 		}
 
-		//keep new index for restoring
-		shouldSaveIndex && saveIndex(newIndex);
-
 		//finalize
 		context.currentIndex = newIndex;
 
@@ -176,6 +75,10 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 		if (typeof (options.onAfterSwitch) === 'function') {
 			options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);
 		}
+	};
+	const switchTo = function (newIndex: number) {
+		_switchTo(newIndex);
+		saveIndex(newIndex);
 	};
 
 	const _insertTabItem = function (title: JQueryTab.JQueriable, content: JQueryTab.JQueriable, index: number) {
@@ -310,7 +213,7 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 	updateFixedHeight();
 
 	//init show active panel
-	switchTo(loadIndex(), false);
+	_switchTo(loadIndex());
 
 	//handle delay trigger event
 	let delayTriggerHandler: number;
@@ -415,4 +318,4 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 	$tabContainer.data('tab-controller', controller);
 }
 
-export default generateTab;
+export default tablize;

@@ -102,8 +102,8 @@ return /******/ (function(modules) { // webpackBootstrap
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _partial_generate_tab__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var _partial_auto_enable_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
+/* harmony import */ var _partial_tablize__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var _partial_auto_enable_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(16);
 /// <reference path='public.d.ts' />
 
 
@@ -112,7 +112,7 @@ __webpack_require__.r(__webpack_exports__);
 jquery__WEBPACK_IMPORTED_MODULE_0___default.a.fn.tab = function (customOptions) {
   this.each(function (index, region) {
     var $region = jquery__WEBPACK_IMPORTED_MODULE_0___default()(region);
-    Object(_partial_generate_tab__WEBPACK_IMPORTED_MODULE_1__["default"])($region, customOptions);
+    Object(_partial_tablize__WEBPACK_IMPORTED_MODULE_1__["default"])($region, customOptions);
   });
   return this;
 };
@@ -137,7 +137,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utility_default_options__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 /* harmony import */ var _create_tab_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var _create_tab_item__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
-/* harmony import */ var _update_active_state__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(13);
+/* harmony import */ var _generate_getters__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(13);
+/* harmony import */ var _generate_save_load_index__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(14);
+/* harmony import */ var _update_active_state__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(15);
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -147,10 +149,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-var RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
+
+
 var nextContainerId = 0;
 
-function generateTab($region, customOptions) {
+function tablize($region, customOptions) {
   var dataOptions = $region.data();
 
   var options = _objectSpread({}, _utility_default_options__WEBPACK_IMPORTED_MODULE_1__["default"], dataOptions, customOptions);
@@ -171,141 +174,22 @@ function generateTab($region, customOptions) {
       $panelContainerLeaf = containers.$panelContainerLeaf,
       $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf; //getters
 
-  var getCount = function getCount() {
-    return context.itemCount;
-  };
-
-  var getCurrentIndex = function getCurrentIndex() {
-    return context.currentIndex;
-  };
-
-  var getLabel = function getLabel($container, index) {
-    if (!isFinite(index)) {
-      throw new Error('invalid index');
-    }
-
-    return $container.children(':eq(' + index + ')');
-  };
-
-  var getHeaderLabel = function getHeaderLabel(index) {
-    if ($headerLabelContainerLeaf) {
-      return getLabel($headerLabelContainerLeaf, index);
-    }
-
-    return jquery__WEBPACK_IMPORTED_MODULE_0___default()([]);
-  };
-
-  var getFooterLabel = function getFooterLabel(index) {
-    if ($footerLabelContainerLeaf) {
-      return getLabel($footerLabelContainerLeaf, index);
-    }
-
-    return jquery__WEBPACK_IMPORTED_MODULE_0___default()([]);
-  };
-
-  var getHeaderFooterLabels = function getHeaderFooterLabels(index) {
-    return getHeaderLabel(index).add(getFooterLabel(index));
-  };
-
-  var getPanel = function getPanel(index) {
-    if (!isFinite(index)) {
-      throw new Error('invalid index');
-    }
-
-    return $panelContainerLeaf.children(':eq(' + index + ')');
-  }; //utilities
+  var _generateGetters = Object(_generate_getters__WEBPACK_IMPORTED_MODULE_4__["default"])(containers, context),
+      getCount = _generateGetters.getCount,
+      getCurrentIndex = _generateGetters.getCurrentIndex,
+      getLabel = _generateGetters.getLabel,
+      getHeaderLabel = _generateGetters.getHeaderLabel,
+      getFooterLabel = _generateGetters.getFooterLabel,
+      getHeaderFooterLabels = _generateGetters.getHeaderFooterLabels,
+      getPanel = _generateGetters.getPanel; //save/load
 
 
-  var $statusFields = $region.find(options.statusFieldSelector);
-
-  if (!$statusFields.length) {
-    $statusFields = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.statusFieldSelector);
-  }
-
-  var RE_STATUS_HASH;
-  var RE_STATUS_HASH_DIGITS;
-
-  if (options.statusHashTemplate) {
-    RE_STATUS_HASH = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '-?\\d+');
-    RE_STATUS_HASH_DIGITS = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '(-?\\d+)');
-  }
-
-  var saveIndex = function saveIndex(index) {
-    $statusFields.val(index);
-
-    if (options.statusHashTemplate) {
-      var hash = location.hash;
-      var statusHash = options.statusHashTemplate + index;
-
-      if (hash.indexOf(options.statusHashTemplate) > -1) {
-        hash = hash.replace(RE_STATUS_HASH, statusHash);
-      } else {
-        if (hash.length) {
-          hash += options.statusHashSeparator;
-        }
-
-        hash += statusHash;
-      }
-
-      location.hash = hash;
-    }
-
-    if (options.fnSaveIndex) {
-      options.fnSaveIndex.call($tabContainer, index);
-    }
-  };
-
-  var loadIndex = function loadIndex() {
-    var index = -1;
-
-    if (context.itemCount === 0) {
-      return index;
-    }
-
-    $statusFields.each(function () {
-      var status = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).val();
-
-      if (typeof status === 'number') {
-        index = status;
-        return false;
-      } else if (status.length) {
-        var intStatus = parseInt(status);
-
-        if (isFinite(intStatus) && !isNaN(intStatus)) {
-          index = parseInt(status);
-          return false;
-        }
-      }
-    });
-
-    if ((index === -1 || isNaN(index)) && options.statusHashTemplate) {
-      var searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);
-
-      if (searchResult && searchResult[1]) {
-        index = parseInt(searchResult[1]);
-      }
-    }
-
-    if ((index === -1 || isNaN(index)) && options.fnLoadIndex) {
-      index = parseInt(options.fnLoadIndex.call($tabContainer));
-    }
-
-    if (index === -1 || isNaN(index)) {
-      index = Number(options.activeIndex) || 0;
-    }
-
-    if (index < 0) {
-      index = 0;
-    } else if (index >= context.itemCount) {
-      index = context.itemCount - 1;
-    }
-
-    return index;
-  }; //methods
+  var _generateSaveLoadInde = Object(_generate_save_load_index__WEBPACK_IMPORTED_MODULE_5__["default"])(containers, context, options),
+      saveIndex = _generateSaveLoadInde.saveIndex,
+      loadIndex = _generateSaveLoadInde.loadIndex; //methods
 
 
-  var switchTo = function switchTo(newIndex) {
-    var shouldSaveIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  var _switchTo = function _switchTo(newIndex) {
     var oldIndex = context.currentIndex; //before switching callback
 
     if (typeof options.onBeforeSwitch === 'function') {
@@ -316,7 +200,7 @@ function generateTab($region, customOptions) {
     var $newLabel = getHeaderFooterLabels(newIndex);
     var $newPanel = getPanel(newIndex);
     var $otherPanels = $newPanel.siblings();
-    Object(_update_active_state__WEBPACK_IMPORTED_MODULE_4__["default"])($newLabel, $newPanel, options); //function to hide panels
+    Object(_update_active_state__WEBPACK_IMPORTED_MODULE_6__["default"])($newLabel, $newPanel, options); //function to hide panels
 
     if (typeof options.fnHidePanelItem === 'function') {
       options.fnHidePanelItem.call($otherPanels, $otherPanels);
@@ -325,16 +209,20 @@ function generateTab($region, customOptions) {
 
     if (typeof options.fnShowPanelItem === 'function') {
       options.fnShowPanelItem.call($newPanel, $newPanel);
-    } //keep new index for restoring
+    } //finalize
 
-
-    shouldSaveIndex && saveIndex(newIndex); //finalize
 
     context.currentIndex = newIndex; //after switching callback
 
     if (typeof options.onAfterSwitch === 'function') {
       options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);
     }
+  };
+
+  var switchTo = function switchTo(newIndex) {
+    _switchTo(newIndex);
+
+    saveIndex(newIndex);
   };
 
   var _insertTabItem = function _insertTabItem(title, content, index) {
@@ -488,7 +376,8 @@ function generateTab($region, customOptions) {
 
   updateFixedHeight(); //init show active panel
 
-  switchTo(loadIndex(), false); //handle delay trigger event
+  _switchTo(loadIndex()); //handle delay trigger event
+
 
   var delayTriggerHandler;
 
@@ -603,7 +492,7 @@ function generateTab($region, customOptions) {
   $tabContainer.data('tab-controller', controller);
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (generateTab);
+/* harmony default export */ __webpack_exports__["default"] = (tablize);
 
 /***/ }),
 /* 3 */
@@ -944,6 +833,194 @@ function createPanelItem(content, options) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function generateGetters(containers, context) {
+  var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf,
+      $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf,
+      $panelContainerLeaf = containers.$panelContainerLeaf;
+
+  var getCount = function getCount() {
+    return context.itemCount;
+  };
+
+  var getCurrentIndex = function getCurrentIndex() {
+    return context.currentIndex;
+  };
+
+  var getLabel = function getLabel($container, index) {
+    if (!isFinite(index)) {
+      throw new Error('invalid index');
+    }
+
+    return $container.children(':eq(' + index + ')');
+  };
+
+  var getHeaderLabel = function getHeaderLabel(index) {
+    if ($headerLabelContainerLeaf) {
+      return getLabel($headerLabelContainerLeaf, index);
+    }
+
+    return jquery__WEBPACK_IMPORTED_MODULE_0___default()([]);
+  };
+
+  var getFooterLabel = function getFooterLabel(index) {
+    if ($footerLabelContainerLeaf) {
+      return getLabel($footerLabelContainerLeaf, index);
+    }
+
+    return jquery__WEBPACK_IMPORTED_MODULE_0___default()([]);
+  };
+
+  var getHeaderFooterLabels = function getHeaderFooterLabels(index) {
+    return getHeaderLabel(index).add(getFooterLabel(index));
+  };
+
+  var getPanel = function getPanel(index) {
+    if (!isFinite(index)) {
+      throw new Error('invalid index');
+    }
+
+    return $panelContainerLeaf.children(':eq(' + index + ')');
+  };
+
+  return {
+    getCount: getCount,
+    getCurrentIndex: getCurrentIndex,
+    getLabel: getLabel,
+    getHeaderLabel: getHeaderLabel,
+    getFooterLabel: getFooterLabel,
+    getHeaderFooterLabels: getHeaderFooterLabels,
+    getPanel: getPanel
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (generateGetters);
+
+/***/ }),
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+var RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
+
+function generateSaveLoadIndex(containers, context, options) {
+  var $region = containers.$region,
+      $tabContainer = containers.$tabContainer;
+  var statusFieldSelector = options.statusFieldSelector,
+      statusHashTemplate = options.statusHashTemplate,
+      statusHashSeparator = options.statusHashSeparator,
+      fnSaveIndex = options.fnSaveIndex,
+      fnLoadIndex = options.fnLoadIndex,
+      activeIndex = options.activeIndex;
+  var $statusFields = $region.find(statusFieldSelector);
+
+  if (!$statusFields.length) {
+    $statusFields = jquery__WEBPACK_IMPORTED_MODULE_0___default()(statusFieldSelector);
+  }
+
+  var RE_STATUS_HASH;
+  var RE_STATUS_HASH_DIGITS;
+
+  if (statusHashTemplate) {
+    RE_STATUS_HASH = new RegExp(statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '-?\\d+');
+    RE_STATUS_HASH_DIGITS = new RegExp(statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '(-?\\d+)');
+  }
+
+  var saveIndex = function saveIndex(index) {
+    $statusFields.val(index);
+
+    if (statusHashTemplate) {
+      var hash = location.hash;
+      var statusHash = statusHashTemplate + index;
+
+      if (hash.indexOf(statusHashTemplate) > -1) {
+        hash = hash.replace(RE_STATUS_HASH, statusHash);
+      } else {
+        if (hash.length) {
+          hash += statusHashSeparator;
+        }
+
+        hash += statusHash;
+      }
+
+      location.hash = hash;
+    }
+
+    if (fnSaveIndex) {
+      fnSaveIndex.call($tabContainer, index);
+    }
+  };
+
+  var loadIndex = function loadIndex() {
+    var itemCount = context.itemCount;
+    var index = -1;
+
+    if (itemCount === 0) {
+      return index;
+    }
+
+    $statusFields.each(function () {
+      var status = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).val();
+
+      if (typeof status === 'number') {
+        index = status;
+        return false;
+      } else if (status.length) {
+        var intStatus = parseInt(status);
+
+        if (isFinite(intStatus) && !isNaN(intStatus)) {
+          index = parseInt(status);
+          return false;
+        }
+      }
+    });
+
+    if ((index === -1 || isNaN(index)) && statusHashTemplate) {
+      var searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);
+
+      if (searchResult && searchResult[1]) {
+        index = parseInt(searchResult[1]);
+      }
+    }
+
+    if ((index === -1 || isNaN(index)) && fnLoadIndex) {
+      index = parseInt(fnLoadIndex.call($tabContainer));
+    }
+
+    if (index === -1 || isNaN(index)) {
+      index = Number(activeIndex) || 0;
+    }
+
+    if (index < 0) {
+      index = 0;
+    } else if (index >= itemCount) {
+      index = itemCount - 1;
+    }
+
+    return index;
+  };
+
+  return {
+    saveIndex: saveIndex,
+    loadIndex: loadIndex
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (generateSaveLoadIndex);
+
+/***/ }),
+/* 15 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 function updateActiveState($activeLabelItem, $activePanelItem, options) {
   var labelItemActiveClass = options.labelItemActiveClass,
       labelItemInactiveClass = options.labelItemInactiveClass,
@@ -960,7 +1037,7 @@ function updateActiveState($activeLabelItem, $activePanelItem, options) {
 /* harmony default export */ __webpack_exports__["default"] = (updateActiveState);
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
