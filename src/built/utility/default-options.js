@@ -30,7 +30,7 @@ const defaultOptions = {
     showFooterLabelContainer: false,
     headerLabelContainerClass: 'header-container',
     footerLabelContainerClass: 'footer-container',
-    labelItemTemplate: '<span></span>',
+    labelItemTemplate: '<label></label>',
     labelItemClass: 'label-item',
     labelItemActiveClass: 'label-active',
     labelItemInactiveClass: 'label-inactive',

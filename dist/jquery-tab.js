@@ -103,8 +103,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _partial_generate_tab__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var _partial_auto_enable_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(13);
-/// <reference path='index.d.ts' />
+/* harmony import */ var _partial_auto_enable_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(14);
+/// <reference path='public.d.ts' />
 
 
 
@@ -136,9 +136,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _utility_default_options__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 /* harmony import */ var _create_tab_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _create_label_item__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
-/* harmony import */ var _create_page_item__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(11);
-/* harmony import */ var _update_active_class__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(12);
+/* harmony import */ var _create_tab_item__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
+/* harmony import */ var _update_active_state__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(13);
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -148,16 +147,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-
 var RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
+var nextContainerId = 0;
 
 function generateTab($region, customOptions) {
   var dataOptions = $region.data();
 
   var options = _objectSpread({}, _utility_default_options__WEBPACK_IMPORTED_MODULE_1__["default"], dataOptions, customOptions);
 
-  var pageCount = 0;
-  var currentIndex = -1;
+  var context = {
+    containerId: nextContainerId++,
+    nextItemId: 0,
+    itemCount: 0,
+    currentIndex: -1
+  };
 
   var _createTabContainer = Object(_create_tab_container__WEBPACK_IMPORTED_MODULE_2__["default"])(options),
       $tabContainer = _createTabContainer.$tabContainer,
@@ -167,11 +170,11 @@ function generateTab($region, customOptions) {
 
 
   var getCount = function getCount() {
-    return pageCount;
+    return context.itemCount;
   };
 
   var getCurrentIndex = function getCurrentIndex() {
-    return currentIndex;
+    return context.currentIndex;
   };
 
   var getLabel = function getLabel($container, index) {
@@ -253,7 +256,7 @@ function generateTab($region, customOptions) {
   var loadIndex = function loadIndex() {
     var index = -1;
 
-    if (pageCount === 0) {
+    if (context.itemCount === 0) {
       return index;
     }
 
@@ -291,8 +294,8 @@ function generateTab($region, customOptions) {
 
     if (index < 0) {
       index = 0;
-    } else if (index >= pageCount) {
-      index = pageCount - 1;
+    } else if (index >= context.itemCount) {
+      index = context.itemCount - 1;
     }
 
     return index;
@@ -301,7 +304,7 @@ function generateTab($region, customOptions) {
 
   var switchTo = function switchTo(newIndex) {
     var shouldSaveIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-    var oldIndex = currentIndex; //before switching callback
+    var oldIndex = context.currentIndex; //before switching callback
 
     if (typeof options.onBeforeSwitch === 'function') {
       options.onBeforeSwitch.call($tabContainer, oldIndex, newIndex);
@@ -311,7 +314,7 @@ function generateTab($region, customOptions) {
     var $newLabel = getHeaderFooterLabels(newIndex);
     var $newPage = getPage(newIndex);
     var $otherPages = $newPage.siblings();
-    Object(_update_active_class__WEBPACK_IMPORTED_MODULE_5__["default"])($newLabel, $newPage, options); //function to hide pages
+    Object(_update_active_state__WEBPACK_IMPORTED_MODULE_4__["default"])($newLabel, $newPage, options); //function to hide pages
 
     if (typeof options.fnHidePageItem === 'function') {
       options.fnHidePageItem.call($otherPages, $otherPages);
@@ -325,7 +328,7 @@ function generateTab($region, customOptions) {
 
     shouldSaveIndex && saveIndex(newIndex); //finalize
 
-    currentIndex = newIndex; //after switching callback
+    context.currentIndex = newIndex; //after switching callback
 
     if (typeof options.onAfterSwitch === 'function') {
       options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);
@@ -333,13 +336,11 @@ function generateTab($region, customOptions) {
   };
 
   var _insertTabItem = function _insertTabItem(title, content, index) {
-    var _createLabelItem = Object(_create_label_item__WEBPACK_IMPORTED_MODULE_3__["default"])(title, options),
-        $labelItem = _createLabelItem.$labelItem;
+    var _createTabItem = Object(_create_tab_item__WEBPACK_IMPORTED_MODULE_3__["default"])(title, content, context, options),
+        $pageItem = _createTabItem.$pageItem,
+        cloneLabelItem = _createTabItem.cloneLabelItem;
 
-    var _createPageItem = Object(_create_page_item__WEBPACK_IMPORTED_MODULE_4__["default"])(content, options),
-        $pageItem = _createPageItem.$pageItem;
-
-    if (currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
+    if (context.currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
       options.fnHidePageItem.call($pageItem, $pageItem);
     }
 
@@ -347,47 +348,47 @@ function generateTab($region, customOptions) {
       index = 0;
     }
 
-    if (pageCount > 0 && index < pageCount) {
+    if (context.itemCount > 0 && index < context.itemCount) {
       if ($headerLabelContainerLeaf) {
-        $headerLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
+        $headerLabelContainerLeaf.children(':eq(' + index + ')').before(cloneLabelItem());
       }
 
       if ($footerLabelContainerLeaf) {
-        $footerLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
+        $footerLabelContainerLeaf.children(':eq(' + index + ')').before(cloneLabelItem());
       }
 
       $pageContainerLeaf.children(':eq(' + index + ')').before($pageItem);
 
-      if (index <= currentIndex) {
-        saveIndex(++currentIndex);
+      if (index <= context.currentIndex) {
+        saveIndex(++context.currentIndex);
       }
     } else {
       if ($headerLabelContainerLeaf) {
-        $headerLabelContainerLeaf.append($labelItem.clone());
+        $headerLabelContainerLeaf.append(cloneLabelItem());
       }
 
       if ($footerLabelContainerLeaf) {
-        $footerLabelContainerLeaf.append($labelItem.clone());
+        $footerLabelContainerLeaf.append(cloneLabelItem());
       }
 
       $pageContainerLeaf.append($pageItem);
     }
 
-    pageCount++;
+    context.itemCount++;
   };
 
   var insertTabItem = function insertTabItem(title, content, index) {
     _insertTabItem(title, content, index);
 
-    if (currentIndex === -1 && pageCount) {
+    if (context.currentIndex === -1 && context.itemCount) {
       switchTo(0);
     }
   };
 
   var addTabItem = function addTabItem(title, content) {
-    _insertTabItem(title, content, pageCount);
+    _insertTabItem(title, content, context.itemCount);
 
-    if (currentIndex === -1 && pageCount) {
+    if (context.currentIndex === -1 && context.itemCount) {
       switchTo(0);
     }
   };
@@ -419,25 +420,25 @@ function generateTab($region, customOptions) {
   var insert = function insert(sourceRegion, index) {
     _insert(sourceRegion, index);
 
-    if (currentIndex === -1 && pageCount) {
+    if (context.currentIndex === -1 && context.itemCount) {
       switchTo(0);
     }
   };
 
   var _add = function _add(sourceRegion) {
-    _insert(sourceRegion, pageCount);
+    _insert(sourceRegion, context.itemCount);
   };
 
   var add = function add(sourceRegion) {
     _add(sourceRegion);
 
-    if (currentIndex === -1 && pageCount) {
+    if (context.currentIndex === -1 && context.itemCount) {
       switchTo(0);
     }
   };
 
   var remove = function remove(index) {
-    if (index === undefined || !isFinite(index) || index < 0 || index >= pageCount) {
+    if (index === undefined || !isFinite(index) || index < 0 || index >= context.itemCount) {
       return;
     }
 
@@ -445,15 +446,15 @@ function generateTab($region, customOptions) {
     var $pageItem = getPage(index);
     $labelItems.remove();
     $pageItem.remove();
-    pageCount--;
+    context.itemCount--;
 
-    if (index < currentIndex) {
-      saveIndex(--currentIndex);
-    } else if (index === currentIndex) {
-      if (currentIndex === pageCount) {
-        switchTo(currentIndex - 1);
+    if (index < context.currentIndex) {
+      saveIndex(--context.currentIndex);
+    } else if (index === context.currentIndex) {
+      if (context.currentIndex === context.itemCount) {
+        switchTo(context.currentIndex - 1);
       } else {
-        switchTo(currentIndex);
+        switchTo(context.currentIndex);
       }
     }
 
@@ -463,7 +464,7 @@ function generateTab($region, customOptions) {
   _add($region); //replace original content
 
 
-  if (!pageCount && !options.createEmptyTab) {
+  if (!context.itemCount && !options.createEmptyTab) {
     return;
   }
 
@@ -511,7 +512,7 @@ function generateTab($region, customOptions) {
     var $activeLabel = jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.currentTarget);
     var activeLabelIndex = $activeLabel.index();
 
-    if (activeLabelIndex === currentIndex) {
+    if (activeLabelIndex === context.currentIndex) {
       return;
     }
 
@@ -526,7 +527,7 @@ function generateTab($region, customOptions) {
     var $activeLabel = jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.currentTarget);
     var activeLabelIndex = $activeLabel.index();
 
-    if (activeLabelIndex === currentIndex) {
+    if (activeLabelIndex === context.currentIndex) {
       return;
     }
 
@@ -563,7 +564,7 @@ function generateTab($region, customOptions) {
     var $activeLabel = jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.currentTarget);
     var activeLabelIndex = $activeLabel.index();
 
-    if (activeLabelIndex === currentIndex) {
+    if (activeLabelIndex === context.currentIndex) {
       return;
     }
 
@@ -640,7 +641,7 @@ var defaultOptions = {
   showFooterLabelContainer: false,
   headerLabelContainerClass: 'header-container',
   footerLabelContainerClass: 'footer-container',
-  labelItemTemplate: '<span></span>',
+  labelItemTemplate: '<label></label>',
   labelItemClass: 'label-item',
   labelItemActiveClass: 'label-active',
   labelItemInactiveClass: 'label-inactive',
@@ -747,7 +748,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function createLabelContainer(options) {
-  var $labelContainer = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.labelContainerTemplate).addClass(options.labelContainerClass);
+  var $labelContainer = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.labelContainerTemplate).addClass(options.labelContainerClass).attr('role', 'tablist');
+
+  if (options.tabContainerClass.toLocaleLowerCase().indexOf('vert') >= 0) {
+    $labelContainer.attr('aria-orientation', 'vertical');
+  }
+
   var $labelContainerLeaf = Object(_utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__["default"])($labelContainer);
   return {
     $labelContainer: $labelContainer,
@@ -836,23 +842,51 @@ function createFooterLabelContainer(options) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
+/* harmony import */ var _create_label_item__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
+/* harmony import */ var _create_page_item__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 
 
 
-function createLabelItem(title, options) {
-  var $labelItem = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.labelItemTemplate).addClass(options.labelItemClass).addClass(options.labelItemInactiveClass);
-  var $labelItemLeaf = Object(_utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__["default"])($labelItem);
-  $labelItemLeaf.empty().append(title);
+function createTabItem(title, content, context, options) {
+  var _createLabelItem = Object(_create_label_item__WEBPACK_IMPORTED_MODULE_0__["default"])(title, options),
+      $labelItem = _createLabelItem.$labelItem,
+      $labelItemLeaf = _createLabelItem.$labelItemLeaf;
+
+  var _createPageItem = Object(_create_page_item__WEBPACK_IMPORTED_MODULE_1__["default"])(content, options),
+      $pageItem = _createPageItem.$pageItem,
+      $pageItemLeaf = _createPageItem.$pageItemLeaf;
+
+  var containerId = context.containerId,
+      itemId = context.nextItemId;
+  context.nextItemId++;
+  var nextCloneId = 0;
+  var labelItemIdPrefix = "__jquery-tab-label__".concat(containerId, "__").concat(itemId);
+  var pageItemIdPrefix = "__jquery-tab-page__".concat(containerId, "__").concat(itemId);
+  var labelItemId = "".concat(labelItemIdPrefix, "__").concat(nextCloneId);
+  var pageItemId = pageItemIdPrefix;
+
+  var cloneLabelItem = function cloneLabelItem() {
+    var clonedLabelItemId = "".concat(labelItemIdPrefix, "__").concat(nextCloneId++);
+
+    if (clonedLabelItemId === labelItemId) {
+      return $labelItem;
+    }
+
+    return $labelItem.clone().attr('id', clonedLabelItemId);
+  };
+
+  $labelItem.attr('id', labelItemId).attr('aria-controls', pageItemIdPrefix);
+  $pageItem.attr('id', pageItemId).attr('aria-labelledby', labelItemId);
   return {
     $labelItem: $labelItem,
-    $labelItemLeaf: $labelItemLeaf
+    $labelItemLeaf: $labelItemLeaf,
+    $pageItem: $pageItem,
+    $pageItemLeaf: $pageItemLeaf,
+    cloneLabelItem: cloneLabelItem
   };
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (createLabelItem);
+/* harmony default export */ __webpack_exports__["default"] = (createTabItem);
 
 /***/ }),
 /* 11 */
@@ -866,8 +900,32 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+function createLabelItem(title, options) {
+  var $labelItem = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.labelItemTemplate).addClass(options.labelItemClass).addClass(options.labelItemInactiveClass).attr('role', 'tab');
+  var $labelItemLeaf = Object(_utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__["default"])($labelItem);
+  $labelItemLeaf.empty().append(title);
+  return {
+    $labelItem: $labelItem,
+    $labelItemLeaf: $labelItemLeaf
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (createLabelItem);
+
+/***/ }),
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
+
+
+
 function createPageItem(content, options) {
-  var $pageItem = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.pageItemTemplate).addClass(options.pageItemClass).addClass(options.pageItemInactiveClass);
+  var $pageItem = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.pageItemTemplate).addClass(options.pageItemClass).addClass(options.pageItemInactiveClass).attr('role', 'tabpanel');
   var $pageItemLeaf = Object(_utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__["default"])($pageItem);
   $pageItemLeaf.append(content);
   return {
@@ -879,26 +937,28 @@ function createPageItem(content, options) {
 /* harmony default export */ __webpack_exports__["default"] = (createPageItem);
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function updateActiveClass($activeLabelItem, $activePageItem, options) {
+function updateActiveState($activeLabelItem, $activePageItem, options) {
   var labelItemActiveClass = options.labelItemActiveClass,
       labelItemInactiveClass = options.labelItemInactiveClass,
       pageItemActiveClass = options.pageItemActiveClass,
-      pageItemInactiveClass = options.pageItemInactiveClass;
-  $activeLabelItem.addClass(labelItemActiveClass).removeClass(labelItemInactiveClass);
-  $activeLabelItem.siblings().removeClass(labelItemActiveClass).addClass(labelItemInactiveClass);
-  $activePageItem.addClass(pageItemActiveClass).removeClass(pageItemInactiveClass);
-  $activePageItem.siblings().removeClass(pageItemActiveClass).addClass(pageItemInactiveClass);
+      pageItemInactiveClass = options.pageItemInactiveClass; //label items
+
+  $activeLabelItem.addClass(labelItemActiveClass).removeClass(labelItemInactiveClass).attr('aria-selected', 'true').attr('aria-expanded', 'true');
+  $activeLabelItem.siblings().removeClass(labelItemActiveClass).addClass(labelItemInactiveClass).attr('aria-selected', 'false').attr('aria-expanded', 'false'); //page items
+
+  $activePageItem.addClass(pageItemActiveClass).removeClass(pageItemInactiveClass).attr('aria-hidden', 'false');
+  $activePageItem.siblings().removeClass(pageItemActiveClass).addClass(pageItemInactiveClass).attr('aria-hidden', 'true');
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (updateActiveClass);
+/* harmony default export */ __webpack_exports__["default"] = (updateActiveState);
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

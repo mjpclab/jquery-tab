@@ -1,3 +1,3 @@
-/// <reference path="../ts/index.d.ts" />
+/// <reference path="../ts/public.d.ts" />
 import $ from 'jquery';
 export default $;

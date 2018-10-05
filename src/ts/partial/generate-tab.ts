@@ -2,28 +2,34 @@ import $ from "jquery";
 import defaultOptions from "../utility/default-options";
 
 import createTabContainer from './create-tab-container';
-import createLabelItem from './create-label-item';
-import createPageItem from './create-page-item';
-import updateActiveClass from './update-active-class';
+import createTabItem from './create-tab-item';
+import updateActiveState from './update-active-state';
 
 const RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
+
+let nextContainerId = 0;
 
 function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 	const dataOptions = $region.data();
 	const options: JQueryTab.NecessaryOptions = {...defaultOptions, ...dataOptions, ...customOptions};
 
-	let pageCount = 0;
-	let currentIndex = -1;
+	const context: JQueryTab.Context = {
+		containerId: nextContainerId++,
+		nextItemId: 0,
+		itemCount: 0,
+		currentIndex: -1
+	};
+
 	const {
 		$tabContainer, $headerLabelContainerLeaf, $pageContainerLeaf, $footerLabelContainerLeaf
 	} = createTabContainer(options);
 
 	//getters
 	const getCount = function () {
-		return pageCount;
+		return context.itemCount;
 	};
 	const getCurrentIndex = function () {
-		return currentIndex;
+		return context.currentIndex;
 	};
 	const getLabel = function ($container: JQuery, index: number) {
 		if (!isFinite(index)) {
@@ -89,7 +95,7 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 	};
 	const loadIndex = function () {
 		let index = -1;
-		if (pageCount === 0) {
+		if (context.itemCount === 0) {
 			return index;
 		}
 
@@ -123,8 +129,8 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 		if (index < 0) {
 			index = 0;
 		}
-		else if (index >= pageCount) {
-			index = pageCount - 1;
+		else if (index >= context.itemCount) {
+			index = context.itemCount - 1;
 		}
 
 		return index;
@@ -132,7 +138,7 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 
 	//methods
 	const switchTo = function (newIndex: number, shouldSaveIndex = true) {
-		const oldIndex = currentIndex;
+		const oldIndex = context.currentIndex;
 
 		//before switching callback
 		if (typeof (options.onBeforeSwitch) === 'function') {
@@ -144,7 +150,7 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 		const $newPage = getPage(newIndex);
 		const $otherPages = $newPage.siblings();
 
-		updateActiveClass($newLabel, $newPage, options);
+		updateActiveState($newLabel, $newPage, options);
 
 		//function to hide pages
 		if (typeof options.fnHidePageItem === 'function') {
@@ -160,7 +166,7 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 		shouldSaveIndex && saveIndex(newIndex);
 
 		//finalize
-		currentIndex = newIndex;
+		context.currentIndex = newIndex;
 
 		//after switching callback
 		if (typeof (options.onAfterSwitch) === 'function') {
@@ -169,49 +175,48 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 	};
 
 	const _insertTabItem = function (title: JQueryTab.JQueriable, content: JQueryTab.JQueriable, index: number) {
-		const {$labelItem} = createLabelItem(title, options);
-		const {$pageItem} = createPageItem(content, options);
-		if (currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
+		const {$pageItem, cloneLabelItem} = createTabItem(title, content, context, options);
+		if (context.currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
 			options.fnHidePageItem.call($pageItem, $pageItem);
 		}
 
 		if (index < 0) {
 			index = 0;
 		}
-		if (pageCount > 0 && index < pageCount) {
+		if (context.itemCount > 0 && index < context.itemCount) {
 			if ($headerLabelContainerLeaf) {
-				$headerLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
+				$headerLabelContainerLeaf.children(':eq(' + index + ')').before(cloneLabelItem());
 			}
 			if ($footerLabelContainerLeaf) {
-				$footerLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
+				$footerLabelContainerLeaf.children(':eq(' + index + ')').before(cloneLabelItem());
 			}
 			$pageContainerLeaf.children(':eq(' + index + ')').before($pageItem);
 
-			if (index <= currentIndex) {
-				saveIndex(++currentIndex);
+			if (index <= context.currentIndex) {
+				saveIndex(++context.currentIndex);
 			}
 		}
 		else {
 			if ($headerLabelContainerLeaf) {
-				$headerLabelContainerLeaf.append($labelItem.clone());
+				$headerLabelContainerLeaf.append(cloneLabelItem());
 			}
 			if ($footerLabelContainerLeaf) {
-				$footerLabelContainerLeaf.append($labelItem.clone());
+				$footerLabelContainerLeaf.append(cloneLabelItem());
 			}
 			$pageContainerLeaf.append($pageItem);
 		}
 
-		pageCount++;
+		context.itemCount++;
 	};
 	const insertTabItem = function (title: JQueryTab.JQueriable, content: JQueryTab.JQueriable, index: number) {
 		_insertTabItem(title, content, index);
-		if (currentIndex === -1 && pageCount) {
+		if (context.currentIndex === -1 && context.itemCount) {
 			switchTo(0);
 		}
 	};
 	const addTabItem = function (title: JQueryTab.JQueriable, content: JQueryTab.JQueriable) {
-		_insertTabItem(title, content, pageCount);
-		if (currentIndex === -1 && pageCount) {
+		_insertTabItem(title, content, context.itemCount);
+		if (context.currentIndex === -1 && context.itemCount) {
 			switchTo(0);
 		}
 	};
@@ -236,21 +241,21 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 	};
 	const insert = function (sourceRegion: JQueryTab.JQueriable, index: number) {
 		_insert(sourceRegion, index);
-		if (currentIndex === -1 && pageCount) {
+		if (context.currentIndex === -1 && context.itemCount) {
 			switchTo(0);
 		}
 	};
 	const _add = function (sourceRegion: JQueryTab.JQueriable) {
-		_insert(sourceRegion, pageCount);
+		_insert(sourceRegion, context.itemCount);
 	};
 	const add = function (sourceRegion: JQueryTab.JQueriable) {
 		_add(sourceRegion);
-		if (currentIndex === -1 && pageCount) {
+		if (context.currentIndex === -1 && context.itemCount) {
 			switchTo(0);
 		}
 	};
 	const remove = function (index: number) {
-		if (index === undefined || !isFinite(index) || index < 0 || index >= pageCount) {
+		if (index === undefined || !isFinite(index) || index < 0 || index >= context.itemCount) {
 			return;
 		}
 
@@ -259,17 +264,17 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 
 		$labelItems.remove();
 		$pageItem.remove();
-		pageCount--;
+		context.itemCount--;
 
-		if (index < currentIndex) {
-			saveIndex(--currentIndex);
+		if (index < context.currentIndex) {
+			saveIndex(--context.currentIndex);
 		}
-		else if (index === currentIndex) {
-			if (currentIndex === pageCount) {
-				switchTo(currentIndex - 1);
+		else if (index === context.currentIndex) {
+			if (context.currentIndex === context.itemCount) {
+				switchTo(context.currentIndex - 1);
 			}
 			else {
-				switchTo(currentIndex);
+				switchTo(context.currentIndex);
 			}
 		}
 
@@ -279,7 +284,7 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 	_add($region);
 
 	//replace original content
-	if (!pageCount && !options.createEmptyTab) {
+	if (!context.itemCount && !options.createEmptyTab) {
 		return;
 	}
 	$region.append($tabContainer);
@@ -325,7 +330,7 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 		cancelDelayTrigger();
 		const $activeLabel = $(e.currentTarget);
 		const activeLabelIndex = $activeLabel.index();
-		if (activeLabelIndex === currentIndex) {
+		if (activeLabelIndex === context.currentIndex) {
 			return;
 		}
 
@@ -337,7 +342,7 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 		}
 		const $activeLabel = $(e.currentTarget);
 		const activeLabelIndex = $activeLabel.index();
-		if (activeLabelIndex === currentIndex) {
+		if (activeLabelIndex === context.currentIndex) {
 			return;
 		}
 
@@ -370,7 +375,7 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 		cancelDelayTrigger();
 		const $activeLabel = $(e.currentTarget);
 		const activeLabelIndex = $activeLabel.index();
-		if (activeLabelIndex === currentIndex) {
+		if (activeLabelIndex === context.currentIndex) {
 			return;
 		}
 

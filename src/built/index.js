@@ -1,4 +1,4 @@
-/// <reference path='index.d.ts' />
+/// <reference path='public.d.ts' />
 import $ from 'jquery';
 import generateTab from './partial/generate-tab';
 import autoEnableTabs from './partial/auto-enable-tabs';

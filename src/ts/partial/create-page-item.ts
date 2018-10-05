@@ -2,7 +2,10 @@ import $ from "jquery";
 import getLeafElement from "../utility/get-leaf-element";
 
 function createPageItem(content: JQueryTab.JQueriable, options: JQueryTab.NecessaryOptions) {
-	const $pageItem = $(options.pageItemTemplate).addClass(options.pageItemClass).addClass(options.pageItemInactiveClass);
+	const $pageItem = $(options.pageItemTemplate)
+		.addClass(options.pageItemClass)
+		.addClass(options.pageItemInactiveClass)
+		.attr('role','tabpanel');
 	const $pageItemLeaf = getLeafElement($pageItem);
 	$pageItemLeaf.append(content);
 
