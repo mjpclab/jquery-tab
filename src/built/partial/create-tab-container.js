@@ -1,6 +1,6 @@
 import $ from "jquery";
 import createHeaderLabelContainer from './create-header-label-container';
-import createPageContainer from './create-page-container';
+import createPanelContainer from './create-panel-container';
 import createFooterLabelContainer from './create-footer-label-container';
 function createTabContainer(options) {
     //container
@@ -8,9 +8,9 @@ function createTabContainer(options) {
     //header labels
     const { $headerLabelContainer, $headerLabelContainerLeaf } = createHeaderLabelContainer(options);
     $headerLabelContainer && $tabContainer.append($headerLabelContainer);
-    //page
-    const { $pageContainer, $pageContainerLeaf } = createPageContainer(options);
-    $tabContainer.append($pageContainer);
+    //panel
+    const { $panelContainer, $panelContainerLeaf } = createPanelContainer(options);
+    $tabContainer.append($panelContainer);
     //footer labels
     const { $footerLabelContainer, $footerLabelContainerLeaf } = createFooterLabelContainer(options);
     $footerLabelContainer && $tabContainer.append($footerLabelContainer);
@@ -18,8 +18,8 @@ function createTabContainer(options) {
         $tabContainer,
         $headerLabelContainer,
         $headerLabelContainerLeaf,
-        $pageContainer,
-        $pageContainerLeaf,
+        $panelContainer,
+        $panelContainerLeaf,
         $footerLabelContainer,
         $footerLabelContainerLeaf
     };

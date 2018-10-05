@@ -1,5 +1,5 @@
-function updateActiveState($activeLabelItem: JQuery, $activePageItem: JQuery, options: JQueryTab.NecessaryOptions) {
-	const {labelItemActiveClass, labelItemInactiveClass, pageItemActiveClass, pageItemInactiveClass} = options;
+function updateActiveState($activeLabelItem: JQuery, $activePanelItem: JQuery, options: JQueryTab.NecessaryOptions) {
+	const {labelItemActiveClass, labelItemInactiveClass, panelItemActiveClass, panelItemInactiveClass} = options;
 
 	//label items
 	$activeLabelItem
@@ -13,14 +13,14 @@ function updateActiveState($activeLabelItem: JQuery, $activePageItem: JQuery, op
 		.attr('aria-selected', 'false')
 		.attr('aria-expanded', 'false');
 
-	//page items
-	$activePageItem
-		.addClass(pageItemActiveClass)
-		.removeClass(pageItemInactiveClass)
+	//panel items
+	$activePanelItem
+		.addClass(panelItemActiveClass)
+		.removeClass(panelItemInactiveClass)
 		.attr('aria-hidden', 'false');
-	$activePageItem.siblings()
-		.removeClass(pageItemActiveClass)
-		.addClass(pageItemInactiveClass)
+	$activePanelItem.siblings()
+		.removeClass(panelItemActiveClass)
+		.addClass(panelItemInactiveClass)
 		.attr('aria-hidden', 'true');
 }
 

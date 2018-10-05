@@ -165,7 +165,7 @@ function generateTab($region, customOptions) {
   var _createTabContainer = Object(_create_tab_container__WEBPACK_IMPORTED_MODULE_2__["default"])(options),
       $tabContainer = _createTabContainer.$tabContainer,
       $headerLabelContainerLeaf = _createTabContainer.$headerLabelContainerLeaf,
-      $pageContainerLeaf = _createTabContainer.$pageContainerLeaf,
+      $panelContainerLeaf = _createTabContainer.$panelContainerLeaf,
       $footerLabelContainerLeaf = _createTabContainer.$footerLabelContainerLeaf; //getters
 
 
@@ -205,12 +205,12 @@ function generateTab($region, customOptions) {
     return getHeaderLabel(index).add(getFooterLabel(index));
   };
 
-  var getPage = function getPage(index) {
+  var getPanel = function getPanel(index) {
     if (!isFinite(index)) {
       throw new Error('invalid index');
     }
 
-    return $pageContainerLeaf.children(':eq(' + index + ')');
+    return $panelContainerLeaf.children(':eq(' + index + ')');
   }; //utilities
 
 
@@ -308,21 +308,21 @@ function generateTab($region, customOptions) {
 
     if (typeof options.onBeforeSwitch === 'function') {
       options.onBeforeSwitch.call($tabContainer, oldIndex, newIndex);
-    } //labels & pages
+    } //labels & panels
 
 
     var $newLabel = getHeaderFooterLabels(newIndex);
-    var $newPage = getPage(newIndex);
-    var $otherPages = $newPage.siblings();
-    Object(_update_active_state__WEBPACK_IMPORTED_MODULE_4__["default"])($newLabel, $newPage, options); //function to hide pages
+    var $newPanel = getPanel(newIndex);
+    var $otherPanels = $newPanel.siblings();
+    Object(_update_active_state__WEBPACK_IMPORTED_MODULE_4__["default"])($newLabel, $newPanel, options); //function to hide panels
 
-    if (typeof options.fnHidePageItem === 'function') {
-      options.fnHidePageItem.call($otherPages, $otherPages);
-    } //function to show page
+    if (typeof options.fnHidePanelItem === 'function') {
+      options.fnHidePanelItem.call($otherPanels, $otherPanels);
+    } //function to show panel
 
 
-    if (typeof options.fnShowPageItem === 'function') {
-      options.fnShowPageItem.call($newPage, $newPage);
+    if (typeof options.fnShowPanelItem === 'function') {
+      options.fnShowPanelItem.call($newPanel, $newPanel);
     } //keep new index for restoring
 
 
@@ -337,11 +337,11 @@ function generateTab($region, customOptions) {
 
   var _insertTabItem = function _insertTabItem(title, content, index) {
     var _createTabItem = Object(_create_tab_item__WEBPACK_IMPORTED_MODULE_3__["default"])(title, content, context, options),
-        $pageItem = _createTabItem.$pageItem,
+        $panelItem = _createTabItem.$panelItem,
         cloneLabelItem = _createTabItem.cloneLabelItem;
 
-    if (context.currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
-      options.fnHidePageItem.call($pageItem, $pageItem);
+    if (context.currentIndex > -1 && typeof options.fnHidePanelItem === 'function') {
+      options.fnHidePanelItem.call($panelItem, $panelItem);
     }
 
     if (index < 0) {
@@ -357,7 +357,7 @@ function generateTab($region, customOptions) {
         $footerLabelContainerLeaf.children(':eq(' + index + ')').before(cloneLabelItem());
       }
 
-      $pageContainerLeaf.children(':eq(' + index + ')').before($pageItem);
+      $panelContainerLeaf.children(':eq(' + index + ')').before($panelItem);
 
       if (index <= context.currentIndex) {
         saveIndex(++context.currentIndex);
@@ -371,7 +371,7 @@ function generateTab($region, customOptions) {
         $footerLabelContainerLeaf.append(cloneLabelItem());
       }
 
-      $pageContainerLeaf.append($pageItem);
+      $panelContainerLeaf.append($panelItem);
     }
 
     context.itemCount++;
@@ -443,9 +443,9 @@ function generateTab($region, customOptions) {
     }
 
     var $labelItems = getHeaderFooterLabels(index);
-    var $pageItem = getPage(index);
+    var $panelItem = getPanel(index);
     $labelItems.remove();
-    $pageItem.remove();
+    $panelItem.remove();
     context.itemCount--;
 
     if (index < context.currentIndex) {
@@ -458,7 +458,7 @@ function generateTab($region, customOptions) {
       }
     }
 
-    return $pageItem;
+    return $panelItem;
   };
 
   _add($region); //replace original content
@@ -473,18 +473,18 @@ function generateTab($region, customOptions) {
   var updateFixedHeight = function updateFixedHeight() {
     if (options.fixedHeight) {
       var maxHeight = 0;
-      $pageContainerLeaf.children().each(function () {
-        var $pageItem = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this);
-        var pageHeight = $pageItem[0].scrollHeight;
+      $panelContainerLeaf.children().each(function () {
+        var $panelItem = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this);
+        var panelHeight = $panelItem[0].scrollHeight;
 
-        if (pageHeight > maxHeight) {
-          maxHeight = pageHeight;
+        if (panelHeight > maxHeight) {
+          maxHeight = panelHeight;
         }
       }).height(maxHeight);
     }
   };
 
-  updateFixedHeight(); //init show active page
+  updateFixedHeight(); //init show active panel
 
   switchTo(loadIndex(), false); //handle delay trigger event
 
@@ -588,7 +588,7 @@ function generateTab($region, customOptions) {
     getHeaderLabel: getHeaderLabel,
     getFooterLabel: getFooterLabel,
     getHeaderFooterLabels: getHeaderFooterLabels,
-    getPage: getPage,
+    getPanel: getPanel,
     updateFixedHeight: updateFixedHeight,
     switchTo: switchTo,
     addTabItem: addTabItem,
@@ -620,11 +620,11 @@ var defaultOptions = {
   fixedHeight: false,
   activeIndex: 0,
   createEmptyTab: false,
-  fnShowPageItem: function fnShowPageItem($pageItem) {
-    return $pageItem && $pageItem.show && $pageItem.show();
+  fnShowPanelItem: function fnShowPanelItem($panelItem) {
+    return $panelItem && $panelItem.show && $panelItem.show();
   },
-  fnHidePageItem: function fnHidePageItem($pageItem) {
-    return $pageItem && $pageItem.hide && $pageItem.hide();
+  fnHidePanelItem: function fnHidePanelItem($panelItem) {
+    return $panelItem && $panelItem.hide && $panelItem.hide();
   },
   onBeforeSwitch: undefined,
   onAfterSwitch: undefined,
@@ -645,12 +645,12 @@ var defaultOptions = {
   labelItemClass: 'label-item',
   labelItemActiveClass: 'label-active',
   labelItemInactiveClass: 'label-inactive',
-  pageContainerTemplate: '<div></div>',
-  pageContainerClass: 'page-container',
-  pageItemTemplate: '<div></div>',
-  pageItemClass: 'page-item',
-  pageItemActiveClass: 'page-active',
-  pageItemInactiveClass: 'page-inactive'
+  panelContainerTemplate: '<div></div>',
+  panelContainerClass: 'panel-container',
+  panelItemTemplate: '<div></div>',
+  panelItemClass: 'panel-item',
+  panelItemActiveClass: 'panel-active',
+  panelItemInactiveClass: 'panel-inactive'
 };
 /* harmony default export */ __webpack_exports__["default"] = (defaultOptions);
 
@@ -663,7 +663,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _create_header_label_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
-/* harmony import */ var _create_page_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
+/* harmony import */ var _create_panel_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
 /* harmony import */ var _create_footer_label_container__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9);
 
 
@@ -678,13 +678,13 @@ function createTabContainer(options) {
       $headerLabelContainer = _createHeaderLabelCon.$headerLabelContainer,
       $headerLabelContainerLeaf = _createHeaderLabelCon.$headerLabelContainerLeaf;
 
-  $headerLabelContainer && $tabContainer.append($headerLabelContainer); //page
+  $headerLabelContainer && $tabContainer.append($headerLabelContainer); //panel
 
-  var _createPageContainer = Object(_create_page_container__WEBPACK_IMPORTED_MODULE_2__["default"])(options),
-      $pageContainer = _createPageContainer.$pageContainer,
-      $pageContainerLeaf = _createPageContainer.$pageContainerLeaf;
+  var _createPanelContainer = Object(_create_panel_container__WEBPACK_IMPORTED_MODULE_2__["default"])(options),
+      $panelContainer = _createPanelContainer.$panelContainer,
+      $panelContainerLeaf = _createPanelContainer.$panelContainerLeaf;
 
-  $tabContainer.append($pageContainer); //footer labels
+  $tabContainer.append($panelContainer); //footer labels
 
   var _createFooterLabelCon = Object(_create_footer_label_container__WEBPACK_IMPORTED_MODULE_3__["default"])(options),
       $footerLabelContainer = _createFooterLabelCon.$footerLabelContainer,
@@ -695,8 +695,8 @@ function createTabContainer(options) {
     $tabContainer: $tabContainer,
     $headerLabelContainer: $headerLabelContainer,
     $headerLabelContainerLeaf: $headerLabelContainerLeaf,
-    $pageContainer: $pageContainer,
-    $pageContainerLeaf: $pageContainerLeaf,
+    $panelContainer: $panelContainer,
+    $panelContainerLeaf: $panelContainerLeaf,
     $footerLabelContainer: $footerLabelContainer,
     $footerLabelContainerLeaf: $footerLabelContainerLeaf
   };
@@ -794,16 +794,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function createPageContainer(options) {
-  var $pageContainer = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.pageContainerTemplate).addClass(options.pageContainerClass);
-  var $pageContainerLeaf = Object(_utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__["default"])($pageContainer);
+function createPanelContainer(options) {
+  var $panelContainer = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.panelContainerTemplate).addClass(options.panelContainerClass);
+  var $panelContainerLeaf = Object(_utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__["default"])($panelContainer);
   return {
-    $pageContainer: $pageContainer,
-    $pageContainerLeaf: $pageContainerLeaf
+    $panelContainer: $panelContainer,
+    $panelContainerLeaf: $panelContainerLeaf
   };
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (createPageContainer);
+/* harmony default export */ __webpack_exports__["default"] = (createPanelContainer);
 
 /***/ }),
 /* 9 */
@@ -843,7 +843,7 @@ function createFooterLabelContainer(options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _create_label_item__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
-/* harmony import */ var _create_page_item__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
+/* harmony import */ var _create_panel_item__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 
 
 
@@ -852,18 +852,18 @@ function createTabItem(title, content, context, options) {
       $labelItem = _createLabelItem.$labelItem,
       $labelItemLeaf = _createLabelItem.$labelItemLeaf;
 
-  var _createPageItem = Object(_create_page_item__WEBPACK_IMPORTED_MODULE_1__["default"])(content, options),
-      $pageItem = _createPageItem.$pageItem,
-      $pageItemLeaf = _createPageItem.$pageItemLeaf;
+  var _createPanelItem = Object(_create_panel_item__WEBPACK_IMPORTED_MODULE_1__["default"])(content, options),
+      $panelItem = _createPanelItem.$panelItem,
+      $panelItemLeaf = _createPanelItem.$panelItemLeaf;
 
   var containerId = context.containerId,
       itemId = context.nextItemId;
   context.nextItemId++;
   var nextCloneId = 0;
   var labelItemIdPrefix = "__jquery-tab-label__".concat(containerId, "__").concat(itemId);
-  var pageItemIdPrefix = "__jquery-tab-page__".concat(containerId, "__").concat(itemId);
+  var panelItemIdPrefix = "__jquery-tab-panel__".concat(containerId, "__").concat(itemId);
   var labelItemId = "".concat(labelItemIdPrefix, "__").concat(nextCloneId);
-  var pageItemId = pageItemIdPrefix;
+  var panelItemId = panelItemIdPrefix;
 
   var cloneLabelItem = function cloneLabelItem() {
     var clonedLabelItemId = "".concat(labelItemIdPrefix, "__").concat(nextCloneId++);
@@ -875,13 +875,13 @@ function createTabItem(title, content, context, options) {
     return $labelItem.clone().attr('id', clonedLabelItemId);
   };
 
-  $labelItem.attr('id', labelItemId).attr('aria-controls', pageItemIdPrefix);
-  $pageItem.attr('id', pageItemId).attr('aria-labelledby', labelItemId);
+  $labelItem.attr('id', labelItemId).attr('aria-controls', panelItemIdPrefix);
+  $panelItem.attr('id', panelItemId).attr('aria-labelledby', labelItemId);
   return {
     $labelItem: $labelItem,
     $labelItemLeaf: $labelItemLeaf,
-    $pageItem: $pageItem,
-    $pageItemLeaf: $pageItemLeaf,
+    $panelItem: $panelItem,
+    $panelItemLeaf: $panelItemLeaf,
     cloneLabelItem: cloneLabelItem
   };
 }
@@ -924,17 +924,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function createPageItem(content, options) {
-  var $pageItem = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.pageItemTemplate).addClass(options.pageItemClass).addClass(options.pageItemInactiveClass).attr('role', 'tabpanel');
-  var $pageItemLeaf = Object(_utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__["default"])($pageItem);
-  $pageItemLeaf.append(content);
+function createPanelItem(content, options) {
+  var $panelItem = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.panelItemTemplate).addClass(options.panelItemClass).addClass(options.panelItemInactiveClass).attr('role', 'tabpanel');
+  var $panelItemLeaf = Object(_utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__["default"])($panelItem);
+  $panelItemLeaf.append(content);
   return {
-    $pageItem: $pageItem,
-    $pageItemLeaf: $pageItemLeaf
+    $panelItem: $panelItem,
+    $panelItemLeaf: $panelItemLeaf
   };
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (createPageItem);
+/* harmony default export */ __webpack_exports__["default"] = (createPanelItem);
 
 /***/ }),
 /* 13 */
@@ -942,17 +942,17 @@ function createPageItem(content, options) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function updateActiveState($activeLabelItem, $activePageItem, options) {
+function updateActiveState($activeLabelItem, $activePanelItem, options) {
   var labelItemActiveClass = options.labelItemActiveClass,
       labelItemInactiveClass = options.labelItemInactiveClass,
-      pageItemActiveClass = options.pageItemActiveClass,
-      pageItemInactiveClass = options.pageItemInactiveClass; //label items
+      panelItemActiveClass = options.panelItemActiveClass,
+      panelItemInactiveClass = options.panelItemInactiveClass; //label items
 
   $activeLabelItem.addClass(labelItemActiveClass).removeClass(labelItemInactiveClass).attr('aria-selected', 'true').attr('aria-expanded', 'true');
-  $activeLabelItem.siblings().removeClass(labelItemActiveClass).addClass(labelItemInactiveClass).attr('aria-selected', 'false').attr('aria-expanded', 'false'); //page items
+  $activeLabelItem.siblings().removeClass(labelItemActiveClass).addClass(labelItemInactiveClass).attr('aria-selected', 'false').attr('aria-expanded', 'false'); //panel items
 
-  $activePageItem.addClass(pageItemActiveClass).removeClass(pageItemInactiveClass).attr('aria-hidden', 'false');
-  $activePageItem.siblings().removeClass(pageItemActiveClass).addClass(pageItemInactiveClass).attr('aria-hidden', 'true');
+  $activePanelItem.addClass(panelItemActiveClass).removeClass(panelItemInactiveClass).attr('aria-hidden', 'false');
+  $activePanelItem.siblings().removeClass(panelItemActiveClass).addClass(panelItemInactiveClass).attr('aria-hidden', 'true');
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (updateActiveState);

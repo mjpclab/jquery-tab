@@ -1,7 +1,7 @@
 import $ from "jquery";
 
 import createHeaderLabelContainer from './create-header-label-container';
-import createPageContainer from './create-page-container';
+import createPanelContainer from './create-panel-container';
 import createFooterLabelContainer from './create-footer-label-container';
 
 function createTabContainer(options: JQueryTab.NecessaryOptions) {
@@ -12,9 +12,9 @@ function createTabContainer(options: JQueryTab.NecessaryOptions) {
 	const {$headerLabelContainer, $headerLabelContainerLeaf} = createHeaderLabelContainer(options);
 	$headerLabelContainer && $tabContainer.append($headerLabelContainer);
 
-	//page
-	const {$pageContainer, $pageContainerLeaf} = createPageContainer(options);
-	$tabContainer.append($pageContainer);
+	//panel
+	const {$panelContainer, $panelContainerLeaf} = createPanelContainer(options);
+	$tabContainer.append($panelContainer);
 
 	//footer labels
 	const {$footerLabelContainer, $footerLabelContainerLeaf} = createFooterLabelContainer(options);
@@ -24,8 +24,8 @@ function createTabContainer(options: JQueryTab.NecessaryOptions) {
 		$tabContainer,
 		$headerLabelContainer,
 		$headerLabelContainerLeaf,
-		$pageContainer,
-		$pageContainerLeaf,
+		$panelContainer,
+		$panelContainerLeaf,
 		$footerLabelContainer,
 		$footerLabelContainerLeaf
 	}

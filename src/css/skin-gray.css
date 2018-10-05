@@ -1,5 +1,5 @@
-.tab-container > .page-container,
-.tab-container-vert > .page-container {
+.tab-container > .panel-container,
+.tab-container-vert > .panel-container {
 	border-color: #ccc;
 	background: #fff;
 }

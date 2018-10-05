@@ -10,11 +10,11 @@ const defaultOptions: JQueryTab.NecessaryOptions = {
 
 	activeIndex: 0,
 	createEmptyTab: false,
-	fnShowPageItem: function ($pageItem: JQuery) {
-		return $pageItem && $pageItem.show && $pageItem.show();
+	fnShowPanelItem: function ($panelItem: JQuery) {
+		return $panelItem && $panelItem.show && $panelItem.show();
 	},
-	fnHidePageItem: function ($pageItem: JQuery) {
-		return $pageItem && $pageItem.hide && $pageItem.hide();
+	fnHidePanelItem: function ($panelItem: JQuery) {
+		return $panelItem && $panelItem.hide && $panelItem.hide();
 	},
 	onBeforeSwitch: undefined,
 	onAfterSwitch: undefined,
@@ -39,12 +39,12 @@ const defaultOptions: JQueryTab.NecessaryOptions = {
 	labelItemActiveClass: 'label-active',
 	labelItemInactiveClass: 'label-inactive',
 
-	pageContainerTemplate: '<div></div>',
-	pageContainerClass: 'page-container',
-	pageItemTemplate: '<div></div>',
-	pageItemClass: 'page-item',
-	pageItemActiveClass: 'page-active',
-	pageItemInactiveClass: 'page-inactive'
+	panelContainerTemplate: '<div></div>',
+	panelContainerClass: 'panel-container',
+	panelItemTemplate: '<div></div>',
+	panelItemClass: 'panel-item',
+	panelItemActiveClass: 'panel-active',
+	panelItemInactiveClass: 'panel-inactive'
 };
 
 export default defaultOptions;

@@ -1,5 +1,5 @@
-function updateActiveState($activeLabelItem, $activePageItem, options) {
-    const { labelItemActiveClass, labelItemInactiveClass, pageItemActiveClass, pageItemInactiveClass } = options;
+function updateActiveState($activeLabelItem, $activePanelItem, options) {
+    const { labelItemActiveClass, labelItemInactiveClass, panelItemActiveClass, panelItemInactiveClass } = options;
     //label items
     $activeLabelItem
         .addClass(labelItemActiveClass)
@@ -11,14 +11,14 @@ function updateActiveState($activeLabelItem, $activePageItem, options) {
         .addClass(labelItemInactiveClass)
         .attr('aria-selected', 'false')
         .attr('aria-expanded', 'false');
-    //page items
-    $activePageItem
-        .addClass(pageItemActiveClass)
-        .removeClass(pageItemInactiveClass)
+    //panel items
+    $activePanelItem
+        .addClass(panelItemActiveClass)
+        .removeClass(panelItemInactiveClass)
         .attr('aria-hidden', 'false');
-    $activePageItem.siblings()
-        .removeClass(pageItemActiveClass)
-        .addClass(pageItemInactiveClass)
+    $activePanelItem.siblings()
+        .removeClass(panelItemActiveClass)
+        .addClass(panelItemInactiveClass)
         .attr('aria-hidden', 'true');
 }
 export default updateActiveState;

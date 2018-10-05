@@ -14,7 +14,7 @@ function generateTab($region, customOptions) {
         itemCount: 0,
         currentIndex: -1
     };
-    const { $tabContainer, $headerLabelContainerLeaf, $pageContainerLeaf, $footerLabelContainerLeaf } = createTabContainer(options);
+    const { $tabContainer, $headerLabelContainerLeaf, $panelContainerLeaf, $footerLabelContainerLeaf } = createTabContainer(options);
     //getters
     const getCount = function () {
         return context.itemCount;
@@ -43,11 +43,11 @@ function generateTab($region, customOptions) {
     const getHeaderFooterLabels = function (index) {
         return getHeaderLabel(index).add(getFooterLabel(index));
     };
-    const getPage = function (index) {
+    const getPanel = function (index) {
         if (!isFinite(index)) {
             throw new Error('invalid index');
         }
-        return $pageContainerLeaf.children(':eq(' + index + ')');
+        return $panelContainerLeaf.children(':eq(' + index + ')');
     };
     //utilities
     let $statusFields = $region.find(options.statusFieldSelector);
@@ -126,18 +126,18 @@ function generateTab($region, customOptions) {
         if (typeof (options.onBeforeSwitch) === 'function') {
             options.onBeforeSwitch.call($tabContainer, oldIndex, newIndex);
         }
-        //labels & pages
+        //labels & panels
         const $newLabel = getHeaderFooterLabels(newIndex);
-        const $newPage = getPage(newIndex);
-        const $otherPages = $newPage.siblings();
-        updateActiveState($newLabel, $newPage, options);
-        //function to hide pages
-        if (typeof options.fnHidePageItem === 'function') {
-            options.fnHidePageItem.call($otherPages, $otherPages);
+        const $newPanel = getPanel(newIndex);
+        const $otherPanels = $newPanel.siblings();
+        updateActiveState($newLabel, $newPanel, options);
+        //function to hide panels
+        if (typeof options.fnHidePanelItem === 'function') {
+            options.fnHidePanelItem.call($otherPanels, $otherPanels);
         }
-        //function to show page
-        if (typeof options.fnShowPageItem === 'function') {
-            options.fnShowPageItem.call($newPage, $newPage);
+        //function to show panel
+        if (typeof options.fnShowPanelItem === 'function') {
+            options.fnShowPanelItem.call($newPanel, $newPanel);
         }
         //keep new index for restoring
         shouldSaveIndex && saveIndex(newIndex);
@@ -149,9 +149,9 @@ function generateTab($region, customOptions) {
         }
     };
     const _insertTabItem = function (title, content, index) {
-        const { $pageItem, cloneLabelItem } = createTabItem(title, content, context, options);
-        if (context.currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
-            options.fnHidePageItem.call($pageItem, $pageItem);
+        const { $panelItem, cloneLabelItem } = createTabItem(title, content, context, options);
+        if (context.currentIndex > -1 && typeof options.fnHidePanelItem === 'function') {
+            options.fnHidePanelItem.call($panelItem, $panelItem);
         }
         if (index < 0) {
             index = 0;
@@ -163,7 +163,7 @@ function generateTab($region, customOptions) {
             if ($footerLabelContainerLeaf) {
                 $footerLabelContainerLeaf.children(':eq(' + index + ')').before(cloneLabelItem());
             }
-            $pageContainerLeaf.children(':eq(' + index + ')').before($pageItem);
+            $panelContainerLeaf.children(':eq(' + index + ')').before($panelItem);
             if (index <= context.currentIndex) {
                 saveIndex(++context.currentIndex);
             }
@@ -175,7 +175,7 @@ function generateTab($region, customOptions) {
             if ($footerLabelContainerLeaf) {
                 $footerLabelContainerLeaf.append(cloneLabelItem());
             }
-            $pageContainerLeaf.append($pageItem);
+            $panelContainerLeaf.append($panelItem);
         }
         context.itemCount++;
     };
@@ -228,9 +228,9 @@ function generateTab($region, customOptions) {
             return;
         }
         const $labelItems = getHeaderFooterLabels(index);
-        const $pageItem = getPage(index);
+        const $panelItem = getPanel(index);
         $labelItems.remove();
-        $pageItem.remove();
+        $panelItem.remove();
         context.itemCount--;
         if (index < context.currentIndex) {
             saveIndex(--context.currentIndex);
@@ -243,7 +243,7 @@ function generateTab($region, customOptions) {
                 switchTo(context.currentIndex);
             }
         }
-        return $pageItem;
+        return $panelItem;
     };
     _add($region);
     //replace original content
@@ -255,17 +255,17 @@ function generateTab($region, customOptions) {
     const updateFixedHeight = function () {
         if (options.fixedHeight) {
             let maxHeight = 0;
-            $pageContainerLeaf.children().each(function () {
-                const $pageItem = $(this);
-                const pageHeight = $pageItem[0].scrollHeight;
-                if (pageHeight > maxHeight) {
-                    maxHeight = pageHeight;
+            $panelContainerLeaf.children().each(function () {
+                const $panelItem = $(this);
+                const panelHeight = $panelItem[0].scrollHeight;
+                if (panelHeight > maxHeight) {
+                    maxHeight = panelHeight;
                 }
             }).height(maxHeight);
         }
     };
     updateFixedHeight();
-    //init show active page
+    //init show active panel
     switchTo(loadIndex(), false);
     //handle delay trigger event
     let delayTriggerHandler;
@@ -347,7 +347,7 @@ function generateTab($region, customOptions) {
         getHeaderLabel,
         getFooterLabel,
         getHeaderFooterLabels,
-        getPage,
+        getPanel,
         updateFixedHeight,
         switchTo,
         addTabItem,

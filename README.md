@@ -33,11 +33,11 @@ $('.region').tab({
 		> .label-item
 		> .label-item
 		> ...
-	> .page-container
-		> .page-item
-		> .page-item
-		> .page-item
-		> .page-item
+	> .panel-container
+		> .panel-item
+		> .panel-item
+		> .panel-item
+		> .panel-item
 		> ...
 ```
 
@@ -95,11 +95,11 @@ That would be convenient if using this class name with attribute options. Then n
 # Options List
 ## Behavior Options
 `triggerEvents`  
-Determine the types of events triggered on label-item that will make the page-item switched.
+Determine the types of events triggered on label-item that will make the panel-item switched.
 Default value is `click`.
 
 `delayTriggerEvents`  
-Specify events on label-item that will trigger page switch after delay a small piece of time.
+Specify events on label-item that will trigger panel switch after delay a small piece of time.
 Quite useful if you want to keep hover a little time before switching.
 
 `delayTriggerCancelEvents`  
@@ -109,20 +109,20 @@ Specify events on label-item that will cancel delay switching.
 Specify how long (milliseconds) need to wait before trigger the delayed switching events.
 
 `fixedHeight`  
-Tab-container's height will be fixed to fit the longest page and will not change when tabs are switched.
+Tab-container's height will be fixed to fit the longest panel and will not change when tabs are switched.
 
 `createEmptyTab`  
 Determine if still create tab container when there is no tab item found.
 Would be useful if you want to create empty tab container first, and add tab items dynamically.
 
-`fnShowPageItem`  
-Define the behavior of showing an page-item when switched to it.
-Must be a function like `func($pageItem) {}`. Parameter `$pageItem` will be the current page-item's jQuery object.
+`fnShowPanelItem`  
+Define the behavior of showing an panel-item when switched to it.
+Must be a function like `func($panelItem) {}`. Parameter `$panelItem` will be the current panel-item's jQuery object.
 The default behavior is calling the jQuery object's `show()`.
 
-`fnHidePageItem`  
-Define the behavior of hiding an page-item when switched to other page.
-Must be a function like `func($pageItem) {}`. Parameter `$pageItem` will be the current page-item's jQuery object.
+`fnHidePanelItem`  
+Define the behavior of hiding an panel-item when switched to other panel.
+Must be a function like `func($panelItem) {}`. Parameter `$panelItem` will be the current panel-item's jQuery object.
 The default behavior is calling the jQuery object's `hide()`.
 
 `onBeforeSwitch(oldIndex, newIndex)`  
@@ -161,7 +161,7 @@ A jQuery selector string or object to pick up "title" element to be a label-item
 A callback to have an opportunity to change the html structure of label-item.
 
 `keepTitleVisible`  
-Show page title again in the page-item. Since page title will be shown in label-container, normally it's unnecessary to be shown in page-item again.
+Show panel title again in the panel-item. Since panel title will be shown in label-container, normally it's unnecessary to be shown in panel-item again.
 
 ### Tab
 `tabContainerTemplate`  
@@ -178,10 +178,10 @@ Label container's template.
 CSS class for label container. Default value is 'label-container'.
 
 `showHeaderLabelContainer`  
-If show label container before tab page. Default value is true.
+If show label container before panel container. Default value is true.
 
 `showFooterLabelContainer`  
-If show label container after tab page. Default value is false.
+If show label container after panel container. Default value is false.
 
 `headerLabelContainerClass`  
 Header label container element's class name. Default value is 'header-container'.
@@ -201,24 +201,24 @@ CSS class for active label item. Default value is 'label-active'.
 `labelItemInactiveClass`  
 CSS class for inactive label item. Default value is 'label-inactive'.
 
-### Page
-`pageContainerTemplate`  
-Page containers's template.
+### Panel
+`panelContainerTemplate`  
+Panel containers's template.
 
-`pageContainerClass`  
-CSS class for page container. Default value is 'page-container'.
+`panelContainerClass`  
+CSS class for panel container. Default value is 'panel-container'.
 
-`pageItemTemplate`  
-Page-item's template.
+`panelItemTemplate`  
+Panel-item's template.
 
-`pageItemClass`  
-CSS class for page item. Default value is 'page-item'.
+`panelItemClass`  
+CSS class for panel item. Default value is 'panel-item'.
 
-`pageItemActiveClass`  
-CSS class for active page item. Default value is 'page-active'.
+`panelItemActiveClass`  
+CSS class for active panel item. Default value is 'panel-active'.
 
-`pageItemInactiveClass`  
-CSS class for inactive page item. Default value is 'page-inactive'.
+`panelItemInactiveClass`  
+CSS class for inactive panel item. Default value is 'panel-inactive'.
 
 # the Controller
 ## Get Controller
@@ -230,10 +230,10 @@ var controller = $('.tab-container').data('tab-controller');
 
 ## Controller Methods
 `getCount()`  
-Get the number of pages.
+Get the number of panels.
 
 `getCurrentIndex()`  
-Get current active tab Index.
+Get current active panel Index.
 
 `getHeaderLabel(index)`  
 Get the header side label item by `index`.
@@ -244,21 +244,21 @@ Get the footer side label item by `index`.
 `getHeaderFooterLabels(index)`  
 Get the header and footer side label item by `index`.
 
-`getPage(index)`  
-Get page item by `index`.
+`getPanel(index)`  
+Get panel item by `index`.
 
 `updateFixedHeight()`  
-When page item's content is dynamically changed and becomes longer, use this method to update the height of the page container.
+When panel item's content is dynamically changed and becomes longer, use this method to update the height of the panel container.
 Only available in height fixed mode by setting option `fixedHeight`.
 
 `switchTo(index)`  
-Switch active(selected) page item by `index`.
+Switch active(selected) panel item by `index`.
 
 `addTabItem(title, content)`  
 Append a new tab item to existing tab container. Both `title` and `content` can be text, HTML or jquery object.
 
 `insertTabItem(title, content, index)`  
-Insert a new tab item to existing tab container, before the page which current index is `index`. Both `title` and `content` can be text, HTML or jquery object.
+Insert a new tab item to existing tab container, before the panel which current index is `index`. Both `title` and `content` can be text, HTML or jquery object.
 
 `add($region)`  
 Parse and append another $region's structure to current tab. 
@@ -267,4 +267,4 @@ Parse and append another $region's structure to current tab.
 Parse and insert another $region's structure to current tab at position `index`.
 
 `remove(index)`  
-Remove a page from `index` and return it's page item.
+Remove a panel from `index` and return it's panel item.

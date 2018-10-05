@@ -18,8 +18,8 @@ declare namespace JQueryTab {
 
 		activeIndex: number;
 		createEmptyTab: boolean;
-		fnShowPageItem: (this: JQuery, $pageItem: JQuery) => JQuery;
-		fnHidePageItem: (this: JQuery, $pageItem: JQuery) => JQuery;
+		fnShowPanelItem: (this: JQuery, $panelItem: JQuery) => JQuery;
+		fnHidePanelItem: (this: JQuery, $panelItem: JQuery) => JQuery;
 		onBeforeSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;
 		onAfterSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;
 
@@ -41,12 +41,12 @@ declare namespace JQueryTab {
 		labelItemActiveClass: string;
 		labelItemInactiveClass: string;
 
-		pageContainerTemplate: Template;
-		pageContainerClass: string;
-		pageItemTemplate: Template;
-		pageItemClass: string;
-		pageItemActiveClass: string;
-		pageItemInactiveClass: string;
+		panelContainerTemplate: Template;
+		panelContainerClass: string;
+		panelItemTemplate: Template;
+		panelItemClass: string;
+		panelItemActiveClass: string;
+		panelItemInactiveClass: string;
 	}
 
 	type Options = Partial<NecessaryOptions>;

@@ -71,19 +71,19 @@
 	margin-bottom: 0.3em;
 }
 
-/* page container */
-.tab-container > .page-container,
-.tab-container-vert > .page-container {
+/* panel container */
+.tab-container > .panel-container,
+.tab-container-vert > .panel-container {
 	border: 1px solid;
 	padding: 1em;
 }
 
-.tab-container-vert > .page-container {
+.tab-container-vert > .panel-container {
 	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
 }
-.tab-container > .page-container,
-.tab-container-vert > .page-container {
+.tab-container > .panel-container,
+.tab-container-vert > .panel-container {
 	border-color: #ccc;
 	background: #fff;
 }

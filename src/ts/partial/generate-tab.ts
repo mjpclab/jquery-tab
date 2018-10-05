@@ -21,7 +21,7 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 	};
 
 	const {
-		$tabContainer, $headerLabelContainerLeaf, $pageContainerLeaf, $footerLabelContainerLeaf
+		$tabContainer, $headerLabelContainerLeaf, $panelContainerLeaf, $footerLabelContainerLeaf
 	} = createTabContainer(options);
 
 	//getters
@@ -52,11 +52,11 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 	const getHeaderFooterLabels = function (index: number) {
 		return getHeaderLabel(index).add(getFooterLabel(index));
 	};
-	const getPage = function (index: number) {
+	const getPanel = function (index: number) {
 		if (!isFinite(index)) {
 			throw new Error('invalid index');
 		}
-		return $pageContainerLeaf.children(':eq(' + index + ')');
+		return $panelContainerLeaf.children(':eq(' + index + ')');
 	};
 
 	//utilities
@@ -145,21 +145,21 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 			options.onBeforeSwitch.call($tabContainer, oldIndex, newIndex);
 		}
 
-		//labels & pages
+		//labels & panels
 		const $newLabel = getHeaderFooterLabels(newIndex);
-		const $newPage = getPage(newIndex);
-		const $otherPages = $newPage.siblings();
+		const $newPanel = getPanel(newIndex);
+		const $otherPanels = $newPanel.siblings();
 
-		updateActiveState($newLabel, $newPage, options);
+		updateActiveState($newLabel, $newPanel, options);
 
-		//function to hide pages
-		if (typeof options.fnHidePageItem === 'function') {
-			options.fnHidePageItem.call($otherPages, $otherPages);
+		//function to hide panels
+		if (typeof options.fnHidePanelItem === 'function') {
+			options.fnHidePanelItem.call($otherPanels, $otherPanels);
 		}
 
-		//function to show page
-		if (typeof options.fnShowPageItem === 'function') {
-			options.fnShowPageItem.call($newPage, $newPage);
+		//function to show panel
+		if (typeof options.fnShowPanelItem === 'function') {
+			options.fnShowPanelItem.call($newPanel, $newPanel);
 		}
 
 		//keep new index for restoring
@@ -175,9 +175,9 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 	};
 
 	const _insertTabItem = function (title: JQueryTab.JQueriable, content: JQueryTab.JQueriable, index: number) {
-		const {$pageItem, cloneLabelItem} = createTabItem(title, content, context, options);
-		if (context.currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
-			options.fnHidePageItem.call($pageItem, $pageItem);
+		const {$panelItem, cloneLabelItem} = createTabItem(title, content, context, options);
+		if (context.currentIndex > -1 && typeof options.fnHidePanelItem === 'function') {
+			options.fnHidePanelItem.call($panelItem, $panelItem);
 		}
 
 		if (index < 0) {
@@ -190,7 +190,7 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 			if ($footerLabelContainerLeaf) {
 				$footerLabelContainerLeaf.children(':eq(' + index + ')').before(cloneLabelItem());
 			}
-			$pageContainerLeaf.children(':eq(' + index + ')').before($pageItem);
+			$panelContainerLeaf.children(':eq(' + index + ')').before($panelItem);
 
 			if (index <= context.currentIndex) {
 				saveIndex(++context.currentIndex);
@@ -203,7 +203,7 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 			if ($footerLabelContainerLeaf) {
 				$footerLabelContainerLeaf.append(cloneLabelItem());
 			}
-			$pageContainerLeaf.append($pageItem);
+			$panelContainerLeaf.append($panelItem);
 		}
 
 		context.itemCount++;
@@ -260,10 +260,10 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 		}
 
 		const $labelItems = getHeaderFooterLabels(index);
-		const $pageItem = getPage(index);
+		const $panelItem = getPanel(index);
 
 		$labelItems.remove();
-		$pageItem.remove();
+		$panelItem.remove();
 		context.itemCount--;
 
 		if (index < context.currentIndex) {
@@ -278,7 +278,7 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 			}
 		}
 
-		return $pageItem;
+		return $panelItem;
 	};
 
 	_add($region);
@@ -294,18 +294,18 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 		if (options.fixedHeight) {
 			let maxHeight = 0;
 
-			$pageContainerLeaf.children().each(function () {
-				const $pageItem = $(this);
-				const pageHeight = $pageItem[0].scrollHeight;
-				if (pageHeight > maxHeight) {
-					maxHeight = pageHeight;
+			$panelContainerLeaf.children().each(function () {
+				const $panelItem = $(this);
+				const panelHeight = $panelItem[0].scrollHeight;
+				if (panelHeight > maxHeight) {
+					maxHeight = panelHeight;
 				}
 			}).height(maxHeight);
 		}
 	};
 	updateFixedHeight();
 
-	//init show active page
+	//init show active panel
 	switchTo(loadIndex(), false);
 
 	//handle delay trigger event
@@ -398,7 +398,7 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 		getHeaderLabel,
 		getFooterLabel,
 		getHeaderFooterLabels,
-		getPage,
+		getPanel,
 		updateFixedHeight,
 		switchTo,
 		addTabItem,
