@@ -102,13 +102,667 @@ return /******/ (function(modules) { // webpackBootstrap
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _partial_generate_tab__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var _partial_auto_enable_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(13);
+/// <reference path='index.d.ts' />
+
+
+
+
+jquery__WEBPACK_IMPORTED_MODULE_0___default.a.fn.tab = function (customOptions) {
+  this.each(function (index, region) {
+    var $region = jquery__WEBPACK_IMPORTED_MODULE_0___default()(region);
+    Object(_partial_generate_tab__WEBPACK_IMPORTED_MODULE_1__["default"])($region, customOptions);
+  });
+  return this;
+};
+
+Object(_partial_auto_enable_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])();
+/* harmony default export */ __webpack_exports__["default"] = (jquery__WEBPACK_IMPORTED_MODULE_0___default.a);
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__1__;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utility_default_options__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+/* harmony import */ var _create_tab_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
+/* harmony import */ var _create_label_item__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
+/* harmony import */ var _create_page_item__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(11);
+/* harmony import */ var _update_active_class__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(12);
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-/// <reference path='index.d.ts' />
 
 
+
+
+
+
+var RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
+
+function generateTab($region, customOptions) {
+  var dataOptions = $region.data();
+
+  var options = _objectSpread({}, _utility_default_options__WEBPACK_IMPORTED_MODULE_1__["default"], dataOptions, customOptions);
+
+  var pageCount = 0;
+  var currentIndex = -1;
+
+  var _createTabContainer = Object(_create_tab_container__WEBPACK_IMPORTED_MODULE_2__["default"])(options),
+      $tabContainer = _createTabContainer.$tabContainer,
+      $headerLabelContainerLeaf = _createTabContainer.$headerLabelContainerLeaf,
+      $pageContainerLeaf = _createTabContainer.$pageContainerLeaf,
+      $footerLabelContainerLeaf = _createTabContainer.$footerLabelContainerLeaf; //getters
+
+
+  var getCount = function getCount() {
+    return pageCount;
+  };
+
+  var getCurrentIndex = function getCurrentIndex() {
+    return currentIndex;
+  };
+
+  var getLabel = function getLabel($container, index) {
+    if (!isFinite(index)) {
+      throw new Error('invalid index');
+    }
+
+    return $container.children(':eq(' + index + ')');
+  };
+
+  var getHeaderLabel = function getHeaderLabel(index) {
+    if ($headerLabelContainerLeaf) {
+      return getLabel($headerLabelContainerLeaf, index);
+    }
+
+    return jquery__WEBPACK_IMPORTED_MODULE_0___default()([]);
+  };
+
+  var getFooterLabel = function getFooterLabel(index) {
+    if ($footerLabelContainerLeaf) {
+      return getLabel($footerLabelContainerLeaf, index);
+    }
+
+    return jquery__WEBPACK_IMPORTED_MODULE_0___default()([]);
+  };
+
+  var getHeaderFooterLabels = function getHeaderFooterLabels(index) {
+    return getHeaderLabel(index).add(getFooterLabel(index));
+  };
+
+  var getPage = function getPage(index) {
+    if (!isFinite(index)) {
+      throw new Error('invalid index');
+    }
+
+    return $pageContainerLeaf.children(':eq(' + index + ')');
+  }; //utilities
+
+
+  var $statusFields = $region.find(options.statusFieldSelector);
+
+  if (!$statusFields.length) {
+    $statusFields = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.statusFieldSelector);
+  }
+
+  var RE_STATUS_HASH;
+  var RE_STATUS_HASH_DIGITS;
+
+  if (options.statusHashTemplate) {
+    RE_STATUS_HASH = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '-?\\d+');
+    RE_STATUS_HASH_DIGITS = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '(-?\\d+)');
+  }
+
+  var saveIndex = function saveIndex(index) {
+    $statusFields.val(index);
+
+    if (options.statusHashTemplate) {
+      var hash = location.hash;
+      var statusHash = options.statusHashTemplate + index;
+
+      if (hash.indexOf(options.statusHashTemplate) > -1) {
+        hash = hash.replace(RE_STATUS_HASH, statusHash);
+      } else {
+        if (hash.length) {
+          hash += options.statusHashSeparator;
+        }
+
+        hash += statusHash;
+      }
+
+      location.hash = hash;
+    }
+
+    if (options.fnSaveIndex) {
+      options.fnSaveIndex.call($tabContainer, index);
+    }
+  };
+
+  var loadIndex = function loadIndex() {
+    var index = -1;
+
+    if (pageCount === 0) {
+      return index;
+    }
+
+    $statusFields.each(function () {
+      var status = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).val();
+
+      if (typeof status === 'number') {
+        index = status;
+        return false;
+      } else if (status.length) {
+        var intStatus = parseInt(status);
+
+        if (isFinite(intStatus) && !isNaN(intStatus)) {
+          index = parseInt(status);
+          return false;
+        }
+      }
+    });
+
+    if ((index === -1 || isNaN(index)) && options.statusHashTemplate) {
+      var searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);
+
+      if (searchResult && searchResult[1]) {
+        index = parseInt(searchResult[1]);
+      }
+    }
+
+    if ((index === -1 || isNaN(index)) && options.fnLoadIndex) {
+      index = parseInt(options.fnLoadIndex.call($tabContainer));
+    }
+
+    if (index === -1 || isNaN(index)) {
+      index = Number(options.activeIndex) || 0;
+    }
+
+    if (index < 0) {
+      index = 0;
+    } else if (index >= pageCount) {
+      index = pageCount - 1;
+    }
+
+    return index;
+  }; //methods
+
+
+  var switchTo = function switchTo(newIndex) {
+    var shouldSaveIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+    var oldIndex = currentIndex; //before switching callback
+
+    if (typeof options.onBeforeSwitch === 'function') {
+      options.onBeforeSwitch.call($tabContainer, oldIndex, newIndex);
+    } //labels & pages
+
+
+    var $newLabel = getHeaderFooterLabels(newIndex);
+    var $newPage = getPage(newIndex);
+    var $otherPages = $newPage.siblings();
+    Object(_update_active_class__WEBPACK_IMPORTED_MODULE_5__["default"])($newLabel, $newPage, options); //function to hide pages
+
+    if (typeof options.fnHidePageItem === 'function') {
+      options.fnHidePageItem.call($otherPages, $otherPages);
+    } //function to show page
+
+
+    if (typeof options.fnShowPageItem === 'function') {
+      options.fnShowPageItem.call($newPage, $newPage);
+    } //keep new index for restoring
+
+
+    shouldSaveIndex && saveIndex(newIndex); //finalize
+
+    currentIndex = newIndex; //after switching callback
+
+    if (typeof options.onAfterSwitch === 'function') {
+      options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);
+    }
+  };
+
+  var _insertTabItem = function _insertTabItem(title, content, index) {
+    var _createLabelItem = Object(_create_label_item__WEBPACK_IMPORTED_MODULE_3__["default"])(title, options),
+        $labelItem = _createLabelItem.$labelItem;
+
+    var _createPageItem = Object(_create_page_item__WEBPACK_IMPORTED_MODULE_4__["default"])(content, options),
+        $pageItem = _createPageItem.$pageItem;
+
+    if (currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
+      options.fnHidePageItem.call($pageItem, $pageItem);
+    }
+
+    if (index < 0) {
+      index = 0;
+    }
+
+    if (pageCount > 0 && index < pageCount) {
+      if ($headerLabelContainerLeaf) {
+        $headerLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
+      }
+
+      if ($footerLabelContainerLeaf) {
+        $footerLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
+      }
+
+      $pageContainerLeaf.children(':eq(' + index + ')').before($pageItem);
+
+      if (index <= currentIndex) {
+        saveIndex(++currentIndex);
+      }
+    } else {
+      if ($headerLabelContainerLeaf) {
+        $headerLabelContainerLeaf.append($labelItem.clone());
+      }
+
+      if ($footerLabelContainerLeaf) {
+        $footerLabelContainerLeaf.append($labelItem.clone());
+      }
+
+      $pageContainerLeaf.append($pageItem);
+    }
+
+    pageCount++;
+  };
+
+  var insertTabItem = function insertTabItem(title, content, index) {
+    _insertTabItem(title, content, index);
+
+    if (currentIndex === -1 && pageCount) {
+      switchTo(0);
+    }
+  };
+
+  var addTabItem = function addTabItem(title, content) {
+    _insertTabItem(title, content, pageCount);
+
+    if (currentIndex === -1 && pageCount) {
+      switchTo(0);
+    }
+  };
+
+  var _insert = function _insert(sourceRegion, index) {
+    var $sourceRegion = jquery__WEBPACK_IMPORTED_MODULE_0___default()(sourceRegion);
+    var inserted = 0;
+
+    while (true) {
+      var $title = $sourceRegion.find(options.titleSelector).first();
+
+      if ($title.length === 0) {
+        break;
+      }
+
+      if (!options.keepTitleVisible) {
+        $title.hide();
+      }
+
+      var title = options.fnGetTitleContent.call($title, $title);
+      var content = $title.add($title.nextUntil(options.titleSelector));
+
+      _insertTabItem(title, content, index + inserted);
+
+      inserted++;
+    }
+  };
+
+  var insert = function insert(sourceRegion, index) {
+    _insert(sourceRegion, index);
+
+    if (currentIndex === -1 && pageCount) {
+      switchTo(0);
+    }
+  };
+
+  var _add = function _add(sourceRegion) {
+    _insert(sourceRegion, pageCount);
+  };
+
+  var add = function add(sourceRegion) {
+    _add(sourceRegion);
+
+    if (currentIndex === -1 && pageCount) {
+      switchTo(0);
+    }
+  };
+
+  var remove = function remove(index) {
+    if (index === undefined || !isFinite(index) || index < 0 || index >= pageCount) {
+      return;
+    }
+
+    var $labelItems = getHeaderFooterLabels(index);
+    var $pageItem = getPage(index);
+    $labelItems.remove();
+    $pageItem.remove();
+    pageCount--;
+
+    if (index < currentIndex) {
+      saveIndex(--currentIndex);
+    } else if (index === currentIndex) {
+      if (currentIndex === pageCount) {
+        switchTo(currentIndex - 1);
+      } else {
+        switchTo(currentIndex);
+      }
+    }
+
+    return $pageItem;
+  };
+
+  _add($region); //replace original content
+
+
+  if (!pageCount && !options.createEmptyTab) {
+    return;
+  }
+
+  $region.append($tabContainer); //check if param:fixed height
+
+  var updateFixedHeight = function updateFixedHeight() {
+    if (options.fixedHeight) {
+      var maxHeight = 0;
+      $pageContainerLeaf.children().each(function () {
+        var $pageItem = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this);
+        var pageHeight = $pageItem[0].scrollHeight;
+
+        if (pageHeight > maxHeight) {
+          maxHeight = pageHeight;
+        }
+      }).height(maxHeight);
+    }
+  };
+
+  updateFixedHeight(); //init show active page
+
+  switchTo(loadIndex(), false); //handle delay trigger event
+
+  var delayTriggerHandler;
+
+  var startDelayTrigger = function startDelayTrigger(labelIndex) {
+    delayTriggerHandler = setTimeout(function () {
+      switchTo(labelIndex);
+    }, options.delayTriggerLatency);
+  };
+
+  var cancelDelayTrigger = function cancelDelayTrigger() {
+    if (delayTriggerHandler) {
+      clearTimeout(delayTriggerHandler);
+      delayTriggerHandler = 0;
+    }
+  };
+
+  var labelItemDelayClick = function labelItemDelayClick(e) {
+    if (e.currentTarget.parentNode !== e.delegateTarget) {
+      return;
+    }
+
+    cancelDelayTrigger();
+    var $activeLabel = jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.currentTarget);
+    var activeLabelIndex = $activeLabel.index();
+
+    if (activeLabelIndex === currentIndex) {
+      return;
+    }
+
+    startDelayTrigger(activeLabelIndex);
+  };
+
+  var labelItemCancelDelayClick = function labelItemCancelDelayClick(e) {
+    if (e.currentTarget.parentNode !== e.delegateTarget) {
+      return;
+    }
+
+    var $activeLabel = jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.currentTarget);
+    var activeLabelIndex = $activeLabel.index();
+
+    if (activeLabelIndex === currentIndex) {
+      return;
+    }
+
+    cancelDelayTrigger();
+  };
+
+  if (options.delayTriggerEvents) {
+    if ($headerLabelContainerLeaf) {
+      $headerLabelContainerLeaf.on(options.delayTriggerEvents, '*', labelItemDelayClick);
+    }
+
+    if ($footerLabelContainerLeaf) {
+      $footerLabelContainerLeaf.on(options.delayTriggerEvents, '*', labelItemDelayClick);
+    }
+
+    if (options.delayTriggerCancelEvents) {
+      if ($headerLabelContainerLeaf) {
+        $headerLabelContainerLeaf.on(options.delayTriggerCancelEvents, '*', labelItemCancelDelayClick);
+      }
+
+      if ($footerLabelContainerLeaf) {
+        $footerLabelContainerLeaf.on(options.delayTriggerCancelEvents, '*', labelItemCancelDelayClick);
+      }
+    }
+  } //handle trigger event
+
+
+  var labelItemClick = function labelItemClick(e) {
+    if (e.currentTarget.parentNode !== e.delegateTarget) {
+      return;
+    }
+
+    cancelDelayTrigger();
+    var $activeLabel = jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.currentTarget);
+    var activeLabelIndex = $activeLabel.index();
+
+    if (activeLabelIndex === currentIndex) {
+      return;
+    }
+
+    switchTo(activeLabelIndex);
+  };
+
+  if (options.triggerEvents) {
+    if ($headerLabelContainerLeaf) {
+      $headerLabelContainerLeaf.on(options.triggerEvents, '*', labelItemClick);
+    }
+
+    if ($footerLabelContainerLeaf) {
+      $footerLabelContainerLeaf.on(options.triggerEvents, '*', labelItemClick);
+    }
+  } //controller
+
+
+  var controller = {
+    getCount: getCount,
+    getCurrentIndex: getCurrentIndex,
+    getHeaderLabel: getHeaderLabel,
+    getFooterLabel: getFooterLabel,
+    getHeaderFooterLabels: getHeaderFooterLabels,
+    getPage: getPage,
+    updateFixedHeight: updateFixedHeight,
+    switchTo: switchTo,
+    addTabItem: addTabItem,
+    insertTabItem: insertTabItem,
+    add: add,
+    insert: insert,
+    remove: remove
+  };
+  $region.data('tab-controller', controller);
+  $tabContainer.data('tab-controller', controller);
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (generateTab);
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var defaultOptions = {
+  triggerEvents: 'click',
+  delayTriggerEvents: '',
+  delayTriggerCancelEvents: '',
+  delayTriggerLatency: 200,
+  statusFieldSelector: '',
+  statusHashTemplate: '',
+  statusHashSeparator: '&',
+  fixedHeight: false,
+  activeIndex: 0,
+  createEmptyTab: false,
+  fnShowPageItem: function fnShowPageItem($pageItem) {
+    return $pageItem && $pageItem.show && $pageItem.show();
+  },
+  fnHidePageItem: function fnHidePageItem($pageItem) {
+    return $pageItem && $pageItem.hide && $pageItem.hide();
+  },
+  onBeforeSwitch: undefined,
+  onAfterSwitch: undefined,
+  titleSelector: 'h1,h2,h3,h4,h5,h6',
+  fnGetTitleContent: function fnGetTitleContent($title) {
+    return $title.contents();
+  },
+  keepTitleVisible: false,
+  tabContainerTemplate: '<div></div>',
+  tabContainerClass: 'tab-container',
+  labelContainerTemplate: '<div></div>',
+  labelContainerClass: 'label-container',
+  showHeaderLabelContainer: true,
+  showFooterLabelContainer: false,
+  headerLabelContainerClass: 'header-container',
+  footerLabelContainerClass: 'footer-container',
+  labelItemTemplate: '<span></span>',
+  labelItemClass: 'label-item',
+  labelItemActiveClass: 'label-active',
+  labelItemInactiveClass: 'label-inactive',
+  pageContainerTemplate: '<div></div>',
+  pageContainerClass: 'page-container',
+  pageItemTemplate: '<div></div>',
+  pageItemClass: 'page-item',
+  pageItemActiveClass: 'page-active',
+  pageItemInactiveClass: 'page-inactive'
+};
+/* harmony default export */ __webpack_exports__["default"] = (defaultOptions);
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _create_header_label_container__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
+/* harmony import */ var _create_page_container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
+/* harmony import */ var _create_footer_label_container__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9);
+
+
+
+
+
+function createTabContainer(options) {
+  //container
+  var $tabContainer = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.tabContainerTemplate).addClass(options.tabContainerClass); //header labels
+
+  var _createHeaderLabelCon = Object(_create_header_label_container__WEBPACK_IMPORTED_MODULE_1__["default"])(options),
+      $headerLabelContainer = _createHeaderLabelCon.$headerLabelContainer,
+      $headerLabelContainerLeaf = _createHeaderLabelCon.$headerLabelContainerLeaf;
+
+  $headerLabelContainer && $tabContainer.append($headerLabelContainer); //page
+
+  var _createPageContainer = Object(_create_page_container__WEBPACK_IMPORTED_MODULE_2__["default"])(options),
+      $pageContainer = _createPageContainer.$pageContainer,
+      $pageContainerLeaf = _createPageContainer.$pageContainerLeaf;
+
+  $tabContainer.append($pageContainer); //footer labels
+
+  var _createFooterLabelCon = Object(_create_footer_label_container__WEBPACK_IMPORTED_MODULE_3__["default"])(options),
+      $footerLabelContainer = _createFooterLabelCon.$footerLabelContainer,
+      $footerLabelContainerLeaf = _createFooterLabelCon.$footerLabelContainerLeaf;
+
+  $footerLabelContainer && $tabContainer.append($footerLabelContainer);
+  return {
+    $tabContainer: $tabContainer,
+    $headerLabelContainer: $headerLabelContainer,
+    $headerLabelContainerLeaf: $headerLabelContainerLeaf,
+    $pageContainer: $pageContainer,
+    $pageContainerLeaf: $pageContainerLeaf,
+    $footerLabelContainer: $footerLabelContainer,
+    $footerLabelContainerLeaf: $footerLabelContainerLeaf
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (createTabContainer);
+
+/***/ }),
+/* 5 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _create_label_container__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
+
+
+function createHeaderLabelContainer(options) {
+  var $headerLabelContainer;
+  var $headerLabelContainerLeaf;
+
+  if (options.showHeaderLabelContainer) {
+    var _createLabelContainer = Object(_create_label_container__WEBPACK_IMPORTED_MODULE_0__["default"])(options),
+        $labelContainer = _createLabelContainer.$labelContainer,
+        $labelContainerLeaf = _createLabelContainer.$labelContainerLeaf;
+
+    $labelContainerLeaf.addClass(options.headerLabelContainerClass);
+    $headerLabelContainer = $labelContainer;
+    $headerLabelContainerLeaf = $labelContainerLeaf;
+  }
+
+  return {
+    $headerLabelContainer: $headerLabelContainer,
+    $headerLabelContainerLeaf: $headerLabelContainerLeaf
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (createHeaderLabelContainer);
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
+
+
+
+function createLabelContainer(options) {
+  var $labelContainer = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.labelContainerTemplate).addClass(options.labelContainerClass);
+  var $labelContainerLeaf = Object(_utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__["default"])($labelContainer);
+  return {
+    $labelContainer: $labelContainer,
+    $labelContainerLeaf: $labelContainerLeaf
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (createLabelContainer);
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 function getLeafElement($node) {
   var $result = $node;
   var $deeper;
@@ -120,559 +774,144 @@ function getLeafElement($node) {
   return $result.eq(0);
 }
 
-jquery__WEBPACK_IMPORTED_MODULE_0___default.a.fn.tab = function (customOptions) {
-  var defaultOptions = {
-    triggerEvents: 'click',
-    delayTriggerEvents: '',
-    delayTriggerCancelEvents: '',
-    delayTriggerLatency: 200,
-    statusFieldSelector: '',
-    statusHashTemplate: '',
-    statusHashSeparator: '&',
-    fixedHeight: false,
-    activeIndex: 0,
-    createEmptyTab: false,
-    fnShowPageItem: function fnShowPageItem($pageItem) {
-      return $pageItem && $pageItem.show && $pageItem.show();
-    },
-    fnHidePageItem: function fnHidePageItem($pageItem) {
-      return $pageItem && $pageItem.hide && $pageItem.hide();
-    },
-    onBeforeSwitch: undefined,
-    onAfterSwitch: undefined,
-    titleSelector: 'h1,h2,h3,h4,h5,h6',
-    fnGetTitleContent: function fnGetTitleContent($title) {
-      return $title.contents();
-    },
-    keepTitleVisible: false,
-    tabContainerTemplate: '<div></div>',
-    tabContainerClass: 'tab-container',
-    labelContainerTemplate: '<div></div>',
-    labelContainerClass: 'label-container',
-    showHeaderLabelContainer: true,
-    showFooterLabelContainer: false,
-    headerLabelContainerClass: 'header-container',
-    footerLabelContainerClass: 'footer-container',
-    labelItemTemplate: '<span></span>',
-    labelItemClass: 'label-item',
-    labelItemActiveClass: 'label-active',
-    labelItemInactiveClass: 'label-inactive',
-    pageContainerTemplate: '<div></div>',
-    pageContainerClass: 'page-container',
-    pageItemTemplate: '<div></div>',
-    pageItemClass: 'page-item',
-    pageItemActiveClass: 'page-active',
-    pageItemInactiveClass: 'page-inactive'
-  };
-
-  var generateStructure = function generateStructure($item) {
-    var dataOptions = $item.data();
-
-    var options = _objectSpread({}, defaultOptions, dataOptions, customOptions);
-
-    var pageCount = 0;
-    var currentIndex = -1; //container
-
-    var $tabContainer = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.tabContainerTemplate).addClass(options.tabContainerClass); //top label
-
-    var $topLabelContainer;
-    var $topLabelContainerLeaf;
-
-    if (options.showHeaderLabelContainer) {
-      $topLabelContainer = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.headerLabelContainerClass);
-      $tabContainer.append($topLabelContainer);
-      $topLabelContainerLeaf = getLeafElement($topLabelContainer);
-    } //page
-
-
-    var $pageContainer = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.pageContainerTemplate).addClass(options.pageContainerClass);
-    $tabContainer.append($pageContainer);
-    var $pageContainerLeaf = getLeafElement($pageContainer); //bottom label
-
-    var $bottomLabelContainer;
-    var $bottomLabelContainerLeaf;
-
-    if (options.showFooterLabelContainer) {
-      $bottomLabelContainer = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.labelContainerTemplate).addClass(options.labelContainerClass).addClass(options.footerLabelContainerClass);
-      $tabContainer.append($bottomLabelContainer);
-      $bottomLabelContainerLeaf = getLeafElement($bottomLabelContainer);
-    } //getters
-
-
-    var getCount = function getCount() {
-      return pageCount;
-    };
-
-    var getCurrentIndex = function getCurrentIndex() {
-      return currentIndex;
-    };
-
-    var getLabel = function getLabel($container, index) {
-      if (!isFinite(index)) {
-        throw new Error('invalid index');
-      }
-
-      return $container.children(':eq(' + index + ')');
-    };
-
-    var getHeaderLabel = function getHeaderLabel(index) {
-      if ($topLabelContainerLeaf) {
-        return getLabel($topLabelContainerLeaf, index);
-      }
-
-      return jquery__WEBPACK_IMPORTED_MODULE_0___default()([]);
-    };
-
-    var getFooterLabel = function getFooterLabel(index) {
-      if ($bottomLabelContainerLeaf) {
-        return getLabel($bottomLabelContainerLeaf, index);
-      }
-
-      return jquery__WEBPACK_IMPORTED_MODULE_0___default()([]);
-    };
-
-    var getHeaderFooterLabels = function getHeaderFooterLabels(index) {
-      return getHeaderLabel(index).add(getFooterLabel(index));
-    };
-
-    var getPage = function getPage(index) {
-      if (!isFinite(index)) {
-        throw new Error('invalid index');
-      }
-
-      return $pageContainerLeaf.children(':eq(' + index + ')');
-    }; //add labels & pages
-
-
-    var newLabelItem = function newLabelItem(title) {
-      var $labelItem = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.labelItemTemplate).addClass(options.labelItemClass).addClass(options.labelItemInactiveClass);
-      var $labelItemLeaf = getLeafElement($labelItem);
-      $labelItemLeaf.empty().append(title);
-      return $labelItem;
-    };
-
-    var newPageItem = function newPageItem(content) {
-      var $pageItem = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.pageItemTemplate).addClass(options.pageItemClass).addClass(options.pageItemInactiveClass);
-      var $pageItemLeaf = getLeafElement($pageItem);
-      $pageItemLeaf.append(content);
-      return $pageItem;
-    }; //utilities
-
-
-    var $statusFields = $item.find(options.statusFieldSelector);
-
-    if (!$statusFields.length) {
-      $statusFields = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.statusFieldSelector);
-    }
-
-    var RE_STATUS_HASH;
-    var RE_STATUS_HASH_DIGITS;
-
-    if (options.statusHashTemplate) {
-      var RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
-      RE_STATUS_HASH = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '-?\\d+');
-      RE_STATUS_HASH_DIGITS = new RegExp(options.statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '(-?\\d+)');
-    }
-
-    var saveIndex = function saveIndex(index) {
-      $statusFields.val(index);
-
-      if (options.statusHashTemplate) {
-        var hash = location.hash;
-        var statusHash = options.statusHashTemplate + index;
-
-        if (hash.indexOf(options.statusHashTemplate) > -1) {
-          hash = hash.replace(RE_STATUS_HASH, statusHash);
-        } else {
-          if (hash.length) {
-            hash += options.statusHashSeparator;
-          }
-
-          hash += statusHash;
-        }
-
-        location.hash = hash;
-      }
-
-      if (options.fnSaveIndex) {
-        options.fnSaveIndex.call($tabContainer, index);
-      }
-    };
-
-    var loadIndex = function loadIndex() {
-      var index = -1;
-
-      if (pageCount === 0) {
-        return index;
-      }
-
-      $statusFields.each(function () {
-        var status = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).val();
-
-        if (typeof status === 'number') {
-          index = status;
-          return false;
-        } else if (status.length) {
-          var intStatus = parseInt(status);
-
-          if (isFinite(intStatus) && !isNaN(intStatus)) {
-            index = parseInt(status);
-            return false;
-          }
-        }
-      });
-
-      if ((index === -1 || isNaN(index)) && options.statusHashTemplate) {
-        var searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);
-
-        if (searchResult && searchResult[1]) {
-          index = parseInt(searchResult[1]);
-        }
-      }
-
-      if ((index === -1 || isNaN(index)) && options.fnLoadIndex) {
-        index = parseInt(options.fnLoadIndex.call($tabContainer));
-      }
-
-      if (index === -1 || isNaN(index)) {
-        index = Number(options.activeIndex) || 0;
-      }
-
-      if (index < 0) {
-        index = 0;
-      } else if (index >= pageCount) {
-        index = pageCount - 1;
-      }
-
-      return index;
-    }; //methods
-
-
-    var _updateClass = function _updateClass($activeLabelItem, $activePageItem) {
-      $activeLabelItem.addClass(options.labelItemActiveClass).removeClass(options.labelItemInactiveClass);
-      $activeLabelItem.siblings().removeClass(options.labelItemActiveClass).addClass(options.labelItemInactiveClass);
-      $activePageItem.addClass(options.pageItemActiveClass).removeClass(options.pageItemInactiveClass);
-      $activePageItem.siblings().removeClass(options.pageItemActiveClass).addClass(options.pageItemInactiveClass);
-    };
-
-    var switchTo = function switchTo(newIndex) {
-      var shouldSaveIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-      var oldIndex = currentIndex; //before switching callback
-
-      if (typeof options.onBeforeSwitch === 'function') {
-        options.onBeforeSwitch.call($tabContainer, oldIndex, newIndex);
-      } //labels & pages
-
-
-      var $newLabel = getHeaderFooterLabels(newIndex);
-      var $newPage = getPage(newIndex);
-      var $otherPages = $newPage.siblings();
-
-      _updateClass($newLabel, $newPage); //function to hide pages
-
-
-      if (typeof options.fnHidePageItem === 'function') {
-        options.fnHidePageItem.call($otherPages, $otherPages);
-      } //function to show page
-
-
-      if (typeof options.fnShowPageItem === 'function') {
-        options.fnShowPageItem.call($newPage, $newPage);
-      } //keep new index for restoring
-
-
-      shouldSaveIndex && saveIndex(newIndex); //finalize
-
-      currentIndex = newIndex; //after switching callback
-
-      if (typeof options.onAfterSwitch === 'function') {
-        options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);
-      }
-    };
-
-    var _insertTabPage = function _insertTabPage(title, content, index) {
-      var $labelItem = newLabelItem(title);
-      var $pageItem = newPageItem(content);
-
-      if (currentIndex > -1 && typeof options.fnHidePageItem === 'function') {
-        options.fnHidePageItem.call($pageItem, $pageItem);
-      }
-
-      if (index < 0) {
-        index = 0;
-      }
-
-      if (pageCount > 0 && index < pageCount) {
-        if ($topLabelContainerLeaf) {
-          $topLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
-        }
-
-        if ($bottomLabelContainerLeaf) {
-          $bottomLabelContainerLeaf.children(':eq(' + index + ')').before($labelItem.clone());
-        }
-
-        $pageContainerLeaf.children(':eq(' + index + ')').before($pageItem);
-
-        if (index <= currentIndex) {
-          saveIndex(++currentIndex);
-        }
-      } else {
-        if ($topLabelContainerLeaf) {
-          $topLabelContainerLeaf.append($labelItem.clone());
-        }
-
-        if ($bottomLabelContainerLeaf) {
-          $bottomLabelContainerLeaf.append($labelItem.clone());
-        }
-
-        $pageContainerLeaf.append($pageItem);
-      }
-
-      pageCount++;
-    };
-
-    var insertTabPage = function insertTabPage(title, content, index) {
-      _insertTabPage(title, content, index);
-
-      if (currentIndex === -1 && pageCount) {
-        switchTo(0);
-      }
-    };
-
-    var addTabPage = function addTabPage(title, content) {
-      _insertTabPage(title, content, pageCount);
-
-      if (currentIndex === -1 && pageCount) {
-        switchTo(0);
-      }
-    };
-
-    var _insert = function _insert(sourceRegion, index) {
-      var $sourceRegion = jquery__WEBPACK_IMPORTED_MODULE_0___default()(sourceRegion);
-      var inserted = 0;
-
-      while (true) {
-        var $title = $sourceRegion.find(options.titleSelector).first();
-
-        if ($title.length === 0) {
-          break;
-        }
-
-        if (!options.keepTitleVisible) {
-          $title.hide();
-        }
-
-        var title = options.fnGetTitleContent.call($title, $title);
-        var content = $title.add($title.nextUntil(options.titleSelector));
-
-        _insertTabPage(title, content, index + inserted);
-
-        inserted++;
-      }
-    };
-
-    var insert = function insert(sourceRegion, index) {
-      _insert(sourceRegion, index);
-
-      if (currentIndex === -1 && pageCount) {
-        switchTo(0);
-      }
-    };
-
-    var _add = function _add(sourceRegion) {
-      _insert(sourceRegion, pageCount);
-    };
-
-    var add = function add(sourceRegion) {
-      _add(sourceRegion);
-
-      if (currentIndex === -1 && pageCount) {
-        switchTo(0);
-      }
-    };
-
-    var remove = function remove(index) {
-      if (index === undefined || !isFinite(index) || index < 0 || index >= pageCount) {
-        return;
-      }
-
-      var $labelItems = getHeaderFooterLabels(index);
-      var $pageItem = getPage(index);
-      $labelItems.remove();
-      $pageItem.remove();
-      pageCount--;
-
-      if (index < currentIndex) {
-        saveIndex(--currentIndex);
-      } else if (index === currentIndex) {
-        if (currentIndex === pageCount) {
-          switchTo(currentIndex - 1);
-        } else {
-          switchTo(currentIndex);
-        }
-      }
-
-      return $pageItem;
-    };
-
-    _add($item); //replace original content
-
-
-    if (!pageCount && !options.createEmptyTab) {
-      return;
-    }
-
-    $item.append($tabContainer); //check if param:fixed height
-
-    var updateFixedHeight = function updateFixedHeight() {
-      if (options.fixedHeight) {
-        var maxHeight = 0;
-        $pageContainerLeaf.children().each(function () {
-          var $pageItem = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this);
-          var pageHeight = $pageItem[0].scrollHeight;
-
-          if (pageHeight > maxHeight) {
-            maxHeight = pageHeight;
-          }
-        }).height(maxHeight);
-      }
-    };
-
-    updateFixedHeight(); //init show active page
-
-    switchTo(loadIndex(), false); //handle delay trigger event
-
-    var delayTriggerHandler;
-
-    var startDelayTrigger = function startDelayTrigger(labelIndex) {
-      delayTriggerHandler = setTimeout(function () {
-        switchTo(labelIndex);
-      }, options.delayTriggerLatency);
-    };
-
-    var cancelDelayTrigger = function cancelDelayTrigger() {
-      if (delayTriggerHandler) {
-        clearTimeout(delayTriggerHandler);
-        delayTriggerHandler = 0;
-      }
-    };
-
-    var labelItemDelayClick = function labelItemDelayClick(e) {
-      if (e.currentTarget.parentNode !== e.delegateTarget) {
-        return;
-      }
-
-      cancelDelayTrigger();
-      var $activeLabel = jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.currentTarget);
-      var activeLabelIndex = $activeLabel.index();
-
-      if (activeLabelIndex === currentIndex) {
-        return;
-      }
-
-      startDelayTrigger(activeLabelIndex);
-    };
-
-    var labelItemCancelDelayClick = function labelItemCancelDelayClick(e) {
-      if (e.currentTarget.parentNode !== e.delegateTarget) {
-        return;
-      }
-
-      var $activeLabel = jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.currentTarget);
-      var activeLabelIndex = $activeLabel.index();
-
-      if (activeLabelIndex === currentIndex) {
-        return;
-      }
-
-      cancelDelayTrigger();
-    };
-
-    if (options.delayTriggerEvents) {
-      if ($topLabelContainerLeaf) {
-        $topLabelContainerLeaf.on(options.delayTriggerEvents, '*', labelItemDelayClick);
-      }
-
-      if ($bottomLabelContainerLeaf) {
-        $bottomLabelContainerLeaf.on(options.delayTriggerEvents, '*', labelItemDelayClick);
-      }
-
-      if (options.delayTriggerCancelEvents) {
-        if ($topLabelContainerLeaf) {
-          $topLabelContainerLeaf.on(options.delayTriggerCancelEvents, '*', labelItemCancelDelayClick);
-        }
-
-        if ($bottomLabelContainerLeaf) {
-          $bottomLabelContainerLeaf.on(options.delayTriggerCancelEvents, '*', labelItemCancelDelayClick);
-        }
-      }
-    } //handle trigger event
-
-
-    var labelItemClick = function labelItemClick(e) {
-      if (e.currentTarget.parentNode !== e.delegateTarget) {
-        return;
-      }
-
-      cancelDelayTrigger();
-      var $activeLabel = jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.currentTarget);
-      var activeLabelIndex = $activeLabel.index();
-
-      if (activeLabelIndex === currentIndex) {
-        return;
-      }
-
-      switchTo(activeLabelIndex);
-    };
-
-    if (options.triggerEvents) {
-      if ($topLabelContainerLeaf) {
-        $topLabelContainerLeaf.on(options.triggerEvents, '*', labelItemClick);
-      }
-
-      if ($bottomLabelContainerLeaf) {
-        $bottomLabelContainerLeaf.on(options.triggerEvents, '*', labelItemClick);
-      }
-    } //controller
-
-
-    var controller = {
-      getCount: getCount,
-      getCurrentIndex: getCurrentIndex,
-      getHeaderLabel: getHeaderLabel,
-      getFooterLabel: getFooterLabel,
-      getHeaderFooterLabels: getHeaderFooterLabels,
-      getPage: getPage,
-      updateFixedHeight: updateFixedHeight,
-      switchTo: switchTo,
-      addTabPage: addTabPage,
-      insertTabPage: insertTabPage,
-      add: add,
-      insert: insert,
-      remove: remove
-    };
-    $item.data('tab-controller', controller);
-    $tabContainer.data('tab-controller', controller);
-  };
-
-  if (this.length) {
-    this.each(function () {
-      var $item = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this);
-      generateStructure($item);
-    });
-  }
-
-  return this;
-};
-
-jquery__WEBPACK_IMPORTED_MODULE_0___default()('.tab-region').tab();
-/* harmony default export */ __webpack_exports__["default"] = (jquery__WEBPACK_IMPORTED_MODULE_0___default.a);
+/* harmony default export */ __webpack_exports__["default"] = (getLeafElement);
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports) {
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__1__;
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
+
+
+
+function createPageContainer(options) {
+  var $pageContainer = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.pageContainerTemplate).addClass(options.pageContainerClass);
+  var $pageContainerLeaf = Object(_utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__["default"])($pageContainer);
+  return {
+    $pageContainer: $pageContainer,
+    $pageContainerLeaf: $pageContainerLeaf
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (createPageContainer);
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _create_label_container__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
+
+
+function createFooterLabelContainer(options) {
+  var $footerLabelContainer;
+  var $footerLabelContainerLeaf;
+
+  if (options.showFooterLabelContainer) {
+    var _createLabelContainer = Object(_create_label_container__WEBPACK_IMPORTED_MODULE_0__["default"])(options),
+        $labelContainer = _createLabelContainer.$labelContainer,
+        $labelContainerLeaf = _createLabelContainer.$labelContainerLeaf;
+
+    $labelContainerLeaf.addClass(options.footerLabelContainerClass);
+    $footerLabelContainer = $labelContainer;
+    $footerLabelContainerLeaf = $labelContainerLeaf;
+  }
+
+  return {
+    $footerLabelContainer: $footerLabelContainer,
+    $footerLabelContainerLeaf: $footerLabelContainerLeaf
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (createFooterLabelContainer);
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
+
+
+
+function createLabelItem(title, options) {
+  var $labelItem = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.labelItemTemplate).addClass(options.labelItemClass).addClass(options.labelItemInactiveClass);
+  var $labelItemLeaf = Object(_utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__["default"])($labelItem);
+  $labelItemLeaf.empty().append(title);
+  return {
+    $labelItem: $labelItem,
+    $labelItemLeaf: $labelItemLeaf
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (createLabelItem);
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
+
+
+
+function createPageItem(content, options) {
+  var $pageItem = jquery__WEBPACK_IMPORTED_MODULE_0___default()(options.pageItemTemplate).addClass(options.pageItemClass).addClass(options.pageItemInactiveClass);
+  var $pageItemLeaf = Object(_utility_get_leaf_element__WEBPACK_IMPORTED_MODULE_1__["default"])($pageItem);
+  $pageItemLeaf.append(content);
+  return {
+    $pageItem: $pageItem,
+    $pageItemLeaf: $pageItemLeaf
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (createPageItem);
+
+/***/ }),
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function updateActiveClass($activeLabelItem, $activePageItem, options) {
+  var labelItemActiveClass = options.labelItemActiveClass,
+      labelItemInactiveClass = options.labelItemInactiveClass,
+      pageItemActiveClass = options.pageItemActiveClass,
+      pageItemInactiveClass = options.pageItemInactiveClass;
+  $activeLabelItem.addClass(labelItemActiveClass).removeClass(labelItemInactiveClass);
+  $activeLabelItem.siblings().removeClass(labelItemActiveClass).addClass(labelItemInactiveClass);
+  $activePageItem.addClass(pageItemActiveClass).removeClass(pageItemInactiveClass);
+  $activePageItem.siblings().removeClass(pageItemActiveClass).addClass(pageItemInactiveClass);
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (updateActiveClass);
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function autoEnableTabs() {
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()('.tab-region').tab();
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (autoEnableTabs);
 
 /***/ })
 /******/ ])["default"];
