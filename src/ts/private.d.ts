@@ -5,4 +5,15 @@ declare namespace JQueryTab {
 		itemCount: number;
 		currentIndex: number;
 	}
+
+	interface Containers {
+		$region: JQuery;
+		$tabContainer: JQuery;
+		$headerLabelContainer?: JQuery;
+		$headerLabelContainerLeaf?: JQuery;
+		$panelContainer: JQuery;
+		$panelContainerLeaf: JQuery;
+		$footerLabelContainer?: JQuery;
+		$footerLabelContainerLeaf?: JQuery;
+	}
 }

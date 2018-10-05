@@ -162,12 +162,14 @@ function generateTab($region, customOptions) {
     currentIndex: -1
   };
 
-  var _createTabContainer = Object(_create_tab_container__WEBPACK_IMPORTED_MODULE_2__["default"])(options),
-      $tabContainer = _createTabContainer.$tabContainer,
-      $headerLabelContainerLeaf = _createTabContainer.$headerLabelContainerLeaf,
-      $panelContainerLeaf = _createTabContainer.$panelContainerLeaf,
-      $footerLabelContainerLeaf = _createTabContainer.$footerLabelContainerLeaf; //getters
+  var containers = _objectSpread({
+    $region: $region
+  }, Object(_create_tab_container__WEBPACK_IMPORTED_MODULE_2__["default"])(options));
 
+  var $tabContainer = containers.$tabContainer,
+      $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf,
+      $panelContainerLeaf = containers.$panelContainerLeaf,
+      $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf; //getters
 
   var getCount = function getCount() {
     return context.itemCount;

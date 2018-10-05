@@ -14,7 +14,11 @@ function generateTab($region, customOptions) {
         itemCount: 0,
         currentIndex: -1
     };
-    const { $tabContainer, $headerLabelContainerLeaf, $panelContainerLeaf, $footerLabelContainerLeaf } = createTabContainer(options);
+    const containers = {
+        $region,
+        ...createTabContainer(options)
+    };
+    const { $tabContainer, $headerLabelContainerLeaf, $panelContainerLeaf, $footerLabelContainerLeaf } = containers;
     //getters
     const getCount = function () {
         return context.itemCount;

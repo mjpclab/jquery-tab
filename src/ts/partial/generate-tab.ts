@@ -20,9 +20,13 @@ function generateTab($region: JQuery, customOptions?: JQueryTab.Options) {
 		currentIndex: -1
 	};
 
+	const containers: JQueryTab.Containers = {
+		$region,
+		...createTabContainer(options)
+	};
 	const {
 		$tabContainer, $headerLabelContainerLeaf, $panelContainerLeaf, $footerLabelContainerLeaf
-	} = createTabContainer(options);
+	} = containers;
 
 	//getters
 	const getCount = function () {
