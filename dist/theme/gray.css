@@ -90,13 +90,9 @@
 
 .tab-container > .label-container > .label-item,
 .tab-container-vert > .label-container > .label-item {
+	color: #aaa;
 	border-color: #ccc;
 	background: #fff;
-}
-
-.tab-container > .label-container > .label-inactive,
-.tab-container-vert > .label-container > .label-inactive {
-	color: #aaa;
 }
 
 .tab-container > .label-container > .label-active,
