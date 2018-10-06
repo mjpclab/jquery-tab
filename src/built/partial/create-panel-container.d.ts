@@ -1,4 +1,4 @@
-declare function createPanelContainer(options: JQueryTab.NecessaryOptions): {
+declare function createPanelContainer(options: JQueryTab.ExpandedOptions): {
     $panelContainer: JQuery<HTMLElement>;
     $panelContainerLeaf: JQuery<HTMLElement>;
 };

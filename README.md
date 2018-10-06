@@ -42,7 +42,7 @@ $('.region').tab({
 ```
 
 # Including CSS
-jquery-tab provides default CSS styles if you don't want to make it yourself.
+jquery-tab provides default CSS styles if you don't want to make it yourself. Make sure CSS class name related options are not customized.
 
 ## Importing by module
 Importing default theme which contains layout style and skin style:
@@ -54,11 +54,11 @@ import 'jquery-tab/src/built/theme/gray'
 Copying or referencing CSS files from `dist/theeme/` directory.
 
 ## Vertical labels
-To use vertical labels style from default CSS, set `tabContainerClass` to 'tab-container-vert'.
-Notice that this style is implemented by CSS flex features, which means old browsers like IE10-, Chrome 20- and Firefox 27- are not supported.
+To use vertical labels, specify option `mode` to "vertical".  
+Notice that vertical style is implemented by CSS flex features, which means old browsers like IE10-, Chrome 20- and Firefox 27- are not supported.
 ```javascript
 $('.region').tab({
-	tabContainerClass: 'tab-container-vert'
+	mode: 'vertical'
 });
 ```
 
@@ -147,7 +147,7 @@ Determine a separator between multiple hash items if there are more than 1 tab-c
 A callback function to customize how active index is saved, so that this index can be restored in the future, for example when refreshing the page.
 
 `fnLoadIndex`  
-A callback function to customize how active index is loaded. The return value will be treated as active index. 
+A callback function to customize how active index is loaded. The returned value will be treated as active index.
 
 `activeIndex`  
 The default initial active index of the tab.
@@ -168,14 +168,18 @@ Show panel title again in the panel-item. Since panel title will be shown in lab
 Tab container's template.
 
 `tabContainerClass`  
-CSS class for tab container. Default value is 'tab-container'.
+CSS class for tab container. Default value is 'tab-container'.  
+If `mode` is "horizontal", then also append class "`tabContainerClass`-horizontal".  
+If `mode` is "vertical", then also append class "`tabContainerClass`-vertical".
 
 ### Label
 `labelContainerTemplate`  
 Label container's template.
 
 `labelContainerClass`  
-CSS class for label container. Default value is 'label-container'.
+CSS class for label container. Default value is 'label-container'.  
+if it is header label container, then also append class "`labelContainerClass`-header".  
+if it is footer label container, then also append class "`labelContainerClass`-footer".
 
 `showHeaderLabelContainer`  
 If show label container before panel container. Default value is true.
@@ -183,23 +187,13 @@ If show label container before panel container. Default value is true.
 `showFooterLabelContainer`  
 If show label container after panel container. Default value is false.
 
-`headerLabelContainerClass`  
-Header label container element's class name. Default value is 'header-container'.
-
-`footerLabelContainerClass`  
-Footer label container element's class name. Default value is 'footer-container'.
-
 `labelItemTemplate`  
 Label item's template.
 
 `labelItemClass`  
-CSS class for bottom label item. Default value is 'label-item'.
-
-`labelItemActiveClass`  
-CSS class for active label item. Default value is 'label-active'.
-
-`labelItemInactiveClass`  
-CSS class for inactive label item. Default value is 'label-inactive'.
+CSS class for label item. Default value is 'label-item'.  
+If it is current active label item, then also append class "`labelItemClass`-active",
+otherwise append class "`labelItemClass`-inactive".
 
 ### Panel
 `panelContainerTemplate`  
@@ -212,13 +206,9 @@ CSS class for panel container. Default value is 'panel-container'.
 Panel-item's template.
 
 `panelItemClass`  
-CSS class for panel item. Default value is 'panel-item'.
-
-`panelItemActiveClass`  
-CSS class for active panel item. Default value is 'panel-active'.
-
-`panelItemInactiveClass`  
-CSS class for inactive panel item. Default value is 'panel-inactive'.
+CSS class for panel item. Default value is 'panel-item'.  
+If it is current active panel item, then also append class "`panelItemClass`-active",
+otherwise append class "`panelItemClass`-inactive".
 
 # the Controller
 ## Get Controller

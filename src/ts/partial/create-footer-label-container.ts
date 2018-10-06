@@ -1,6 +1,6 @@
 import createLabelContainer from "./create-label-container";
 
-function createFooterLabelContainer(options: JQueryTab.NecessaryOptions) {
+function createFooterLabelContainer(options: JQueryTab.ExpandedOptions) {
 	let $footerLabelContainer: JQuery | undefined;
 	let $footerLabelContainerLeaf: JQuery | undefined;
 
@@ -9,7 +9,7 @@ function createFooterLabelContainer(options: JQueryTab.NecessaryOptions) {
 			$labelContainer,
 			$labelContainerLeaf
 		} = createLabelContainer(options);
-		$labelContainerLeaf.addClass(options.footerLabelContainerClass);
+		$labelContainer.addClass(options.footerLabelContainerClass);
 
 		$footerLabelContainer = $labelContainer;
 		$footerLabelContainerLeaf = $labelContainerLeaf;

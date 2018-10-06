@@ -4,7 +4,7 @@ function createHeaderLabelContainer(options) {
     let $headerLabelContainerLeaf;
     if (options.showHeaderLabelContainer) {
         const { $labelContainer, $labelContainerLeaf } = createLabelContainer(options);
-        $labelContainerLeaf.addClass(options.headerLabelContainerClass);
+        $labelContainer.addClass(options.headerLabelContainerClass);
         $headerLabelContainer = $labelContainer;
         $headerLabelContainerLeaf = $labelContainerLeaf;
     }

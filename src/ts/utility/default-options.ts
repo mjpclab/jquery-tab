@@ -33,19 +33,13 @@ const defaultOptions: JQueryTab.NecessaryOptions = {
 	labelContainerClass: 'label-container',
 	showHeaderLabelContainer: true,
 	showFooterLabelContainer: false,
-	headerLabelContainerClass: 'header-container',
-	footerLabelContainerClass: 'footer-container',
 	labelItemTemplate: '<label></label>',
 	labelItemClass: 'label-item',
-	labelItemActiveClass: 'label-active',
-	labelItemInactiveClass: 'label-inactive',
 
 	panelContainerTemplate: '<div></div>',
 	panelContainerClass: 'panel-container',
 	panelItemTemplate: '<div></div>',
 	panelItemClass: 'panel-item',
-	panelItemActiveClass: 'panel-active',
-	panelItemInactiveClass: 'panel-inactive'
 };
 
 export default defaultOptions;

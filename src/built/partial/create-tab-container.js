@@ -6,10 +6,10 @@ function createTabContainer(options) {
     //container
     const $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass);
     if (options.mode === "horizontal" /* Horizontal */) {
-        $tabContainer.addClass(options.tabContainerClass + '-horizontal');
+        $tabContainer.addClass(options.horizontalTabContainerClass);
     }
     else if (options.mode === "vertical" /* Vertical */) {
-        $tabContainer.addClass(options.tabContainerClass + '-vertical');
+        $tabContainer.addClass(options.verticalTabContainerClass);
     }
     //header labels
     const { $headerLabelContainer, $headerLabelContainerLeaf } = createHeaderLabelContainer(options);

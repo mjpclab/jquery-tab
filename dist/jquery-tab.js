@@ -39,19 +39,32 @@
       labelContainerClass: 'label-container',
       showHeaderLabelContainer: true,
       showFooterLabelContainer: false,
-      headerLabelContainerClass: 'header-container',
-      footerLabelContainerClass: 'footer-container',
       labelItemTemplate: '<label></label>',
       labelItemClass: 'label-item',
-      labelItemActiveClass: 'label-active',
-      labelItemInactiveClass: 'label-inactive',
       panelContainerTemplate: '<div></div>',
       panelContainerClass: 'panel-container',
       panelItemTemplate: '<div></div>',
-      panelItemClass: 'panel-item',
-      panelItemActiveClass: 'panel-active',
-      panelItemInactiveClass: 'panel-inactive'
+      panelItemClass: 'panel-item'
     };
+
+    function getExpandedOptions(defaultOptions, dataOptions, customOptions) {
+      var options = $.extend({}, defaultOptions, dataOptions, customOptions);
+      var tabContainerClass = options.tabContainerClass,
+          labelContainerClass = options.labelContainerClass,
+          labelItemClass = options.labelItemClass,
+          panelItemClass = options.panelItemClass;
+      var expandedOptions = $.extend(options, {
+        horizontalTabContainerClass: tabContainerClass + '-horizontal',
+        verticalTabContainerClass: tabContainerClass + '-vertical',
+        headerLabelContainerClass: labelContainerClass + '-header',
+        footerLabelContainerClass: labelContainerClass + '-footer',
+        activeLabelItemClass: labelItemClass + '-active',
+        inactiveLabelItemClass: labelItemClass + '-inactive',
+        activePanelItemClass: panelItemClass + '-active',
+        inactivePanelItemClass: panelItemClass + '-inactive'
+      });
+      return expandedOptions;
+    }
 
     function getLeafElement($node) {
       var $result = $node;
@@ -89,7 +102,7 @@
             $labelContainer = _createLabelContainer.$labelContainer,
             $labelContainerLeaf = _createLabelContainer.$labelContainerLeaf;
 
-        $labelContainerLeaf.addClass(options.headerLabelContainerClass);
+        $labelContainer.addClass(options.headerLabelContainerClass);
         $headerLabelContainer = $labelContainer;
         $headerLabelContainerLeaf = $labelContainerLeaf;
       }
@@ -118,7 +131,7 @@
             $labelContainer = _createLabelContainer.$labelContainer,
             $labelContainerLeaf = _createLabelContainer.$labelContainerLeaf;
 
-        $labelContainerLeaf.addClass(options.footerLabelContainerClass);
+        $labelContainer.addClass(options.footerLabelContainerClass);
         $footerLabelContainer = $labelContainer;
         $footerLabelContainerLeaf = $labelContainerLeaf;
       }
@@ -136,11 +149,11 @@
       if (options.mode === "horizontal"
       /* Horizontal */
       ) {
-          $tabContainer.addClass(options.tabContainerClass + '-horizontal');
+          $tabContainer.addClass(options.horizontalTabContainerClass);
         } else if (options.mode === "vertical"
       /* Vertical */
       ) {
-          $tabContainer.addClass(options.tabContainerClass + '-vertical');
+          $tabContainer.addClass(options.verticalTabContainerClass);
         } //header labels
 
 
@@ -173,7 +186,7 @@
     }
 
     function createLabelItem(title, options) {
-      var $labelItem = $(options.labelItemTemplate).addClass(options.labelItemClass).addClass(options.labelItemInactiveClass).attr('role', 'tab');
+      var $labelItem = $(options.labelItemTemplate).addClass(options.labelItemClass).addClass(options.inactiveLabelItemClass).attr('role', 'tab');
       var $labelItemLeaf = getLeafElement($labelItem);
       $labelItemLeaf.empty().append(title);
       return {
@@ -183,7 +196,7 @@
     }
 
     function createPanelItem(content, options) {
-      var $panelItem = $(options.panelItemTemplate).addClass(options.panelItemClass).addClass(options.panelItemInactiveClass).attr('role', 'tabpanel');
+      var $panelItem = $(options.panelItemTemplate).addClass(options.panelItemClass).addClass(options.inactivePanelItemClass).attr('role', 'tabpanel');
       var $panelItemLeaf = getLeafElement($panelItem);
       $panelItemLeaf.append(content);
       return {
@@ -404,23 +417,23 @@
     }
 
     function updateActiveState($activeLabelItem, $activePanelItem, options) {
-      var labelItemActiveClass = options.labelItemActiveClass,
-          labelItemInactiveClass = options.labelItemInactiveClass,
-          panelItemActiveClass = options.panelItemActiveClass,
-          panelItemInactiveClass = options.panelItemInactiveClass; //label items
+      var activeLabelItemClass = options.activeLabelItemClass,
+          inactiveLabelItemClass = options.inactiveLabelItemClass,
+          activePanelItemClass = options.activePanelItemClass,
+          inactivePanelItemClass = options.inactivePanelItemClass; //label items
 
-      $activeLabelItem.addClass(labelItemActiveClass).removeClass(labelItemInactiveClass).attr('aria-selected', 'true').attr('aria-expanded', 'true');
-      $activeLabelItem.siblings().removeClass(labelItemActiveClass).addClass(labelItemInactiveClass).attr('aria-selected', 'false').attr('aria-expanded', 'false'); //panel items
+      $activeLabelItem.removeClass(inactiveLabelItemClass).addClass(activeLabelItemClass).attr('aria-selected', 'true').attr('aria-expanded', 'true');
+      $activeLabelItem.siblings().removeClass(activeLabelItemClass).addClass(inactiveLabelItemClass).attr('aria-selected', 'false').attr('aria-expanded', 'false'); //panel items
 
-      $activePanelItem.addClass(panelItemActiveClass).removeClass(panelItemInactiveClass).attr('aria-hidden', 'false');
-      $activePanelItem.siblings().removeClass(panelItemActiveClass).addClass(panelItemInactiveClass).attr('aria-hidden', 'true');
+      $activePanelItem.removeClass(inactivePanelItemClass).addClass(activePanelItemClass).attr('aria-hidden', 'false');
+      $activePanelItem.siblings().removeClass(activePanelItemClass).addClass(inactivePanelItemClass).attr('aria-hidden', 'true');
     }
 
     var nextContainerId = 0;
 
     function tablize($region, customOptions) {
       var dataOptions = $region.data();
-      var options = $.extend({}, defaultOptions, dataOptions, customOptions);
+      var options = getExpandedOptions(defaultOptions, dataOptions, customOptions);
       var context = {
         containerId: nextContainerId++,
         nextItemId: 0,

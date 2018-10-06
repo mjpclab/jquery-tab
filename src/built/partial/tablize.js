@@ -1,5 +1,6 @@
 import $ from "jquery";
 import defaultOptions from "../utility/default-options";
+import getExpandedOptions from '../utility/get-expanded-options';
 import createTabContainer from './create-tab-container';
 import createTabItem from './create-tab-item';
 import generateGetters from './generate-getters';
@@ -8,7 +9,7 @@ import updateActiveState from './update-active-state';
 let nextContainerId = 0;
 function tablize($region, customOptions) {
     const dataOptions = $region.data();
-    const options = $.extend({}, defaultOptions, dataOptions, customOptions);
+    const options = getExpandedOptions(defaultOptions, dataOptions, customOptions);
     const context = {
         containerId: nextContainerId++,
         nextItemId: 0,

@@ -2,7 +2,7 @@ import $ from "jquery";
 
 const RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
 
-function generateSaveLoadIndex(containers: JQueryTab.Containers, context: JQueryTab.Context, options: JQueryTab.NecessaryOptions) {
+function generateSaveLoadIndex(containers: JQueryTab.Containers, context: JQueryTab.Context, options: JQueryTab.ExpandedOptions) {
 	const {$region, $tabContainer} = containers;
 	const {statusFieldSelector, statusHashTemplate, statusHashSeparator, fnSaveIndex, fnLoadIndex, activeIndex} = options;
 

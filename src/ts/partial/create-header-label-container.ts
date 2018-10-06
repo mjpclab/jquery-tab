@@ -1,6 +1,6 @@
 import createLabelContainer from "./create-label-container";
 
-function createHeaderLabelContainer(options: JQueryTab.NecessaryOptions) {
+function createHeaderLabelContainer(options: JQueryTab.ExpandedOptions) {
 	let $headerLabelContainer: JQuery | undefined;
 	let $headerLabelContainerLeaf: JQuery | undefined;
 
@@ -9,7 +9,7 @@ function createHeaderLabelContainer(options: JQueryTab.NecessaryOptions) {
 			$labelContainer,
 			$labelContainerLeaf
 		} = createLabelContainer(options);
-		$labelContainerLeaf.addClass(options.headerLabelContainerClass);
+		$labelContainer.addClass(options.headerLabelContainerClass);
 
 		$headerLabelContainer = $labelContainer;
 		$headerLabelContainerLeaf = $labelContainerLeaf;

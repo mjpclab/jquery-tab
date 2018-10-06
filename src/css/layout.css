@@ -19,11 +19,11 @@
 	position: relative;
 }
 
-.tab-container-horizontal > .label-container.header-container {
+.tab-container-horizontal > .label-container-header {
 	bottom: -1px;
 }
 
-.tab-container-horizontal > .label-container.footer-container {
+.tab-container-horizontal > .label-container-footer {
 	top: -1px;
 }
 
@@ -32,11 +32,11 @@
 	flex: 0 0 auto;
 }
 
-.tab-container-vertical > .label-container.header-container {
+.tab-container-vertical > .label-container-header {
 	margin-right: -1px;
 }
 
-.tab-container-vertical > .label-container.footer-container {
+.tab-container-vertical > .label-container-footer {
 	margin-left: -1px;
 }
 
@@ -52,11 +52,11 @@
 	margin-right: 1em;
 }
 
-.tab-container-horizontal > .label-container.header-container .label-item {
+.tab-container-horizontal > .label-container-header .label-item {
 	vertical-align: bottom;
 }
 
-.tab-container-horizontal > .label-container.footer-container .label-item {
+.tab-container-horizontal > .label-container-footer .label-item {
 	vertical-align: top;
 }
 

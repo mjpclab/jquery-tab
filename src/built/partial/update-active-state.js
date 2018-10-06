@@ -1,24 +1,24 @@
 function updateActiveState($activeLabelItem, $activePanelItem, options) {
-    const { labelItemActiveClass, labelItemInactiveClass, panelItemActiveClass, panelItemInactiveClass } = options;
+    const { activeLabelItemClass, inactiveLabelItemClass, activePanelItemClass, inactivePanelItemClass } = options;
     //label items
     $activeLabelItem
-        .addClass(labelItemActiveClass)
-        .removeClass(labelItemInactiveClass)
+        .removeClass(inactiveLabelItemClass)
+        .addClass(activeLabelItemClass)
         .attr('aria-selected', 'true')
         .attr('aria-expanded', 'true');
     $activeLabelItem.siblings()
-        .removeClass(labelItemActiveClass)
-        .addClass(labelItemInactiveClass)
+        .removeClass(activeLabelItemClass)
+        .addClass(inactiveLabelItemClass)
         .attr('aria-selected', 'false')
         .attr('aria-expanded', 'false');
     //panel items
     $activePanelItem
-        .addClass(panelItemActiveClass)
-        .removeClass(panelItemInactiveClass)
+        .removeClass(inactivePanelItemClass)
+        .addClass(activePanelItemClass)
         .attr('aria-hidden', 'false');
     $activePanelItem.siblings()
-        .removeClass(panelItemActiveClass)
-        .addClass(panelItemInactiveClass)
+        .removeClass(activePanelItemClass)
+        .addClass(inactivePanelItemClass)
         .attr('aria-hidden', 'true');
 }
 export default updateActiveState;

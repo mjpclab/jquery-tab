@@ -19,11 +19,11 @@
 	position: relative;
 }
 
-.tab-container-horizontal > .label-container.header-container {
+.tab-container-horizontal > .label-container-header {
 	bottom: -1px;
 }
 
-.tab-container-horizontal > .label-container.footer-container {
+.tab-container-horizontal > .label-container-footer {
 	top: -1px;
 }
 
@@ -32,11 +32,11 @@
 	flex: 0 0 auto;
 }
 
-.tab-container-vertical > .label-container.header-container {
+.tab-container-vertical > .label-container-header {
 	margin-right: -1px;
 }
 
-.tab-container-vertical > .label-container.footer-container {
+.tab-container-vertical > .label-container-footer {
 	margin-left: -1px;
 }
 
@@ -52,11 +52,11 @@
 	margin-right: 1em;
 }
 
-.tab-container-horizontal > .label-container.header-container .label-item {
+.tab-container-horizontal > .label-container-header .label-item {
 	vertical-align: bottom;
 }
 
-.tab-container-horizontal > .label-container.footer-container .label-item {
+.tab-container-horizontal > .label-container-footer .label-item {
 	vertical-align: top;
 }
 
@@ -86,46 +86,46 @@
 	background: #fff;
 }
 
-.tab-container .label-container .label-active {
+.tab-container .label-container .label-item-active {
 	color: #000;
 }
 
-.tab-container-horizontal > .label-container.header-container > .label-active {
+.tab-container-horizontal > .label-container-header > .label-item-active {
 	border-bottom-color: #fff;
 }
 
-.tab-container-horizontal > .label-container.footer-container > .label-active {
+.tab-container-horizontal > .label-container-footer > .label-item-active {
 	border-top-color: #fff;
 }
 
-.tab-container-vertical > .label-container.header-container > .label-active {
+.tab-container-vertical > .label-container-header > .label-item-active {
 	border-right-color: #fff;
 }
 
-.tab-container-vertical > .label-container.footer-container > .label-active {
+.tab-container-vertical > .label-container-footer > .label-item-active {
 	border-left-color: #fff;
 }
 
 
-*html .tab-container .label-container.header-container {
+*html .tab-container .label-container-header {
 	bottom: -1px;
 }
-*html .tab-container .label-container.footer-container {
+*html .tab-container .label-container-footer {
 	top: -1px;
 }
 *html .tab-container .label-container .label-item {
 	display: inline-block;
 	margin-right: 1em;
 }
-*html .tab-container .label-container.header-container .label-item {
+*html .tab-container .label-container-header .label-item {
 	vertical-align: bottom;
 }
-*html .tab-container .label-container.footer-container .label-item {
+*html .tab-container .label-container-footer .label-item {
 	vertical-align: top;
 }
-*html .tab-container .label-container.header-container .label-active {
+*html .tab-container .label-container-header .label-item-active {
 	border-bottom-color: #fff;
 }
-*html .tab-container .label-container.footer-container .label-active {
+*html .tab-container .label-container-footer .label-item-active {
 	border-top-color: #fff;
 }

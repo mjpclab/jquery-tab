@@ -1,4 +1,4 @@
-declare function createTabContainer(options: JQueryTab.NecessaryOptions): {
+declare function createTabContainer(options: JQueryTab.ExpandedOptions): {
     $tabContainer: JQuery<HTMLElement>;
     $headerLabelContainer: JQuery<HTMLElement> | undefined;
     $headerLabelContainerLeaf: JQuery<HTMLElement> | undefined;

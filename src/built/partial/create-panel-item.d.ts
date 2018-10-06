@@ -1,4 +1,4 @@
-declare function createPanelItem(content: JQueryTab.JQueriable, options: JQueryTab.NecessaryOptions): {
+declare function createPanelItem(content: JQueryTab.JQueriable, options: JQueryTab.ExpandedOptions): {
     $panelItem: JQuery<HTMLElement>;
     $panelItemLeaf: JQuery<HTMLElement>;
 };

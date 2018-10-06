@@ -9,22 +9,22 @@
 	background: #fff;
 }
 
-.tab-container .label-container .label-active {
+.tab-container .label-container .label-item-active {
 	color: #000;
 }
 
-.tab-container-horizontal > .label-container.header-container > .label-active {
+.tab-container-horizontal > .label-container-header > .label-item-active {
 	border-bottom-color: #fff;
 }
 
-.tab-container-horizontal > .label-container.footer-container > .label-active {
+.tab-container-horizontal > .label-container-footer > .label-item-active {
 	border-top-color: #fff;
 }
 
-.tab-container-vertical > .label-container.header-container > .label-active {
+.tab-container-vertical > .label-container-header > .label-item-active {
 	border-right-color: #fff;
 }
 
-.tab-container-vertical > .label-container.footer-container > .label-active {
+.tab-container-vertical > .label-container-footer > .label-item-active {
 	border-left-color: #fff;
 }

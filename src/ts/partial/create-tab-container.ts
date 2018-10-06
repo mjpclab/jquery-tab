@@ -4,13 +4,13 @@ import createHeaderLabelContainer from './create-header-label-container';
 import createPanelContainer from './create-panel-container';
 import createFooterLabelContainer from './create-footer-label-container';
 
-function createTabContainer(options: JQueryTab.NecessaryOptions) {
+function createTabContainer(options: JQueryTab.ExpandedOptions) {
 	//container
 	const $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass);
 	if (options.mode === JQueryTab.Mode.Horizontal) {
-		$tabContainer.addClass(options.tabContainerClass + '-horizontal');
+		$tabContainer.addClass(options.horizontalTabContainerClass);
 	} else if (options.mode === JQueryTab.Mode.Vertical) {
-		$tabContainer.addClass(options.tabContainerClass + '-vertical');
+		$tabContainer.addClass(options.verticalTabContainerClass);
 	}
 
 	//header labels

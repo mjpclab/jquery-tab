@@ -40,19 +40,13 @@ declare namespace JQueryTab {
 		labelContainerClass: string;
 		showHeaderLabelContainer: boolean;
 		showFooterLabelContainer: boolean;
-		headerLabelContainerClass: string;
-		footerLabelContainerClass: string;
 		labelItemTemplate: Template;
 		labelItemClass: string;
-		labelItemActiveClass: string;
-		labelItemInactiveClass: string;
 
 		panelContainerTemplate: Template;
 		panelContainerClass: string;
 		panelItemTemplate: Template;
 		panelItemClass: string;
-		panelItemActiveClass: string;
-		panelItemInactiveClass: string;
 	}
 
 	type Options = Partial<NecessaryOptions>;

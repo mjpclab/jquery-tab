@@ -1,7 +1,7 @@
 import $ from "jquery";
 import getLeafElement from "../utility/get-leaf-element";
 
-function createLabelContainer(options: JQueryTab.NecessaryOptions) {
+function createLabelContainer(options: JQueryTab.ExpandedOptions) {
 	const $labelContainer = $(options.labelContainerTemplate)
 		.addClass(options.labelContainerClass)
 		.attr('role', 'tablist');

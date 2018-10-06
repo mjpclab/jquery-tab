@@ -3,10 +3,10 @@
 	- role="tablist"
 - labelItem
 	- role="tab"
-	- aria-controls=`pageItemId`
+	- aria-controls=`panelItemId`
 	- aria-selected=`boolean`
 	- aria-expanded=`boolean`
-- pageItem
+- panelItem
 	- role="tabpanel"
 	- aria-labelledby=`labelItemId`
 	- aria-hidden=`boolean`

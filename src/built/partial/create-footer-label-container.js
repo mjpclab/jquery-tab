@@ -4,7 +4,7 @@ function createFooterLabelContainer(options) {
     let $footerLabelContainerLeaf;
     if (options.showFooterLabelContainer) {
         const { $labelContainer, $labelContainerLeaf } = createLabelContainer(options);
-        $labelContainerLeaf.addClass(options.footerLabelContainerClass);
+        $labelContainer.addClass(options.footerLabelContainerClass);
         $footerLabelContainer = $labelContainer;
         $footerLabelContainerLeaf = $labelContainerLeaf;
     }

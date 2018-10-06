@@ -5,7 +5,7 @@ function createTabItem(
 	title: JQueryTab.JQueriable,
 	content: JQueryTab.JQueriable,
 	context: JQueryTab.Context,
-	options: JQueryTab.NecessaryOptions
+	options: JQueryTab.ExpandedOptions
 ) {
 	const {$labelItem, $labelItemLeaf} = createLabelItem(title, options);
 	const {$panelItem, $panelItemLeaf} = createPanelItem(content, options);
