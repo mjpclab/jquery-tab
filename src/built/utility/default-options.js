@@ -7,6 +7,7 @@ const defaultOptions = {
     statusHashTemplate: '',
     statusHashSeparator: '&',
     fixedHeight: false,
+    mode: "horizontal" /* Horizontal */,
     activeIndex: 0,
     createEmptyTab: false,
     fnShowPanelItem: function ($panelItem) {

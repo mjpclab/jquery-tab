@@ -4,6 +4,11 @@ declare namespace JQueryTab {
 	type JQueriable = string | JQuery.TypeOrArray<JQuery.Node | JQuery<JQuery.Node>>;
 	type Template = string | JQuery.Node | JQuery<JQuery.Node>;
 
+	const enum Mode {
+		Horizontal = 'horizontal',
+		Vertical = 'vertical',
+	}
+
 	interface NecessaryOptions {
 		triggerEvents: string;
 		delayTriggerEvents: string;
@@ -16,6 +21,7 @@ declare namespace JQueryTab {
 		fnLoadIndex?: (this: JQuery) => number;
 		fixedHeight: boolean;
 
+		mode: Mode;
 		activeIndex: number;
 		createEmptyTab: boolean;
 		fnShowPanelItem: (this: JQuery, $panelItem: JQuery) => JQuery;

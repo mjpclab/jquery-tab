@@ -15,6 +15,9 @@
       statusHashTemplate: '',
       statusHashSeparator: '&',
       fixedHeight: false,
+      mode: "horizontal"
+      /* Horizontal */
+      ,
       activeIndex: 0,
       createEmptyTab: false,
       fnShowPanelItem: function fnShowPanelItem($panelItem) {
@@ -64,9 +67,11 @@
     function createLabelContainer(options) {
       var $labelContainer = $(options.labelContainerTemplate).addClass(options.labelContainerClass).attr('role', 'tablist');
 
-      if (options.tabContainerClass.toLocaleLowerCase().indexOf('vert') >= 0) {
-        $labelContainer.attr('aria-orientation', 'vertical');
-      }
+      if (options.mode === "vertical"
+      /* Vertical */
+      ) {
+          $labelContainer.attr('aria-orientation', 'vertical');
+        }
 
       var $labelContainerLeaf = getLeafElement($labelContainer);
       return {
@@ -126,7 +131,18 @@
 
     function createTabContainer(options) {
       //container
-      var $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass); //header labels
+      var $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass);
+
+      if (options.mode === "horizontal"
+      /* Horizontal */
+      ) {
+          $tabContainer.addClass(options.tabContainerClass + '-horizontal');
+        } else if (options.mode === "vertical"
+      /* Vertical */
+      ) {
+          $tabContainer.addClass(options.tabContainerClass + '-vertical');
+        } //header labels
+
 
       var _createHeaderLabelCon = createHeaderLabelContainer(options),
           $headerLabelContainer = _createHeaderLabelCon.$headerLabelContainer,

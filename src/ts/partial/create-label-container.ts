@@ -5,7 +5,7 @@ function createLabelContainer(options: JQueryTab.NecessaryOptions) {
 	const $labelContainer = $(options.labelContainerTemplate)
 		.addClass(options.labelContainerClass)
 		.attr('role', 'tablist');
-	if (options.tabContainerClass.toLocaleLowerCase().indexOf('vert') >= 0) {
+	if (options.mode === JQueryTab.Mode.Vertical) {
 		$labelContainer.attr('aria-orientation', 'vertical');
 	}
 	const $labelContainerLeaf = getLeafElement($labelContainer);

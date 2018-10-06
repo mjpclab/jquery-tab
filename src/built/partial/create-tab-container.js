@@ -5,6 +5,12 @@ import createFooterLabelContainer from './create-footer-label-container';
 function createTabContainer(options) {
     //container
     const $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass);
+    if (options.mode === "horizontal" /* Horizontal */) {
+        $tabContainer.addClass(options.tabContainerClass + '-horizontal');
+    }
+    else if (options.mode === "vertical" /* Vertical */) {
+        $tabContainer.addClass(options.tabContainerClass + '-vertical');
+    }
     //header labels
     const { $headerLabelContainer, $headerLabelContainerLeaf } = createHeaderLabelContainer(options);
     $headerLabelContainer && $tabContainer.append($headerLabelContainer);

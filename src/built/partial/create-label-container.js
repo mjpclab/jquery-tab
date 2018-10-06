@@ -4,7 +4,7 @@ function createLabelContainer(options) {
     const $labelContainer = $(options.labelContainerTemplate)
         .addClass(options.labelContainerClass)
         .attr('role', 'tablist');
-    if (options.tabContainerClass.toLocaleLowerCase().indexOf('vert') >= 0) {
+    if (options.mode === "vertical" /* Vertical */) {
         $labelContainer.attr('aria-orientation', 'vertical');
     }
     const $labelContainerLeaf = getLeafElement($labelContainer);

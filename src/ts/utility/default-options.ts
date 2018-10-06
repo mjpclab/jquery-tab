@@ -8,6 +8,7 @@ const defaultOptions: JQueryTab.NecessaryOptions = {
 	statusHashSeparator: '&',
 	fixedHeight: false,
 
+	mode: JQueryTab.Mode.Horizontal,
 	activeIndex: 0,
 	createEmptyTab: false,
 	fnShowPanelItem: function ($panelItem: JQuery) {
