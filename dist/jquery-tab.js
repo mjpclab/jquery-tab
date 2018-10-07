@@ -304,6 +304,7 @@
       };
     }
 
+    var HASH_PREFIX = '#';
     var RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
 
     function generateSaveLoadIndex(containers, context, options) {
@@ -339,14 +340,18 @@
           if (hash.indexOf(statusHashTemplate) > -1) {
             hash = hash.replace(RE_STATUS_HASH, statusHash);
           } else {
-            if (hash.length) {
-              hash += statusHashSeparator;
+            if (hash !== HASH_PREFIX) {
+              if (hash.length) {
+                hash += statusHashSeparator;
+              } else {
+                hash = HASH_PREFIX;
+              }
             }
 
             hash += statusHash;
           }
 
-          location.hash = hash;
+          location.replace(hash);
         }
 
         if (fnSaveIndex) {

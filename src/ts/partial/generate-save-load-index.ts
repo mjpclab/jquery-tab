@@ -1,5 +1,6 @@
 import $ from "jquery";
 
+const HASH_PREFIX = '#';
 const RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
 
 function generateSaveLoadIndex(containers: JQueryTab.Containers, context: JQueryTab.Context, options: JQueryTab.ExpandedOptions) {
@@ -27,13 +28,19 @@ function generateSaveLoadIndex(containers: JQueryTab.Containers, context: JQuery
 				hash = hash.replace(RE_STATUS_HASH, statusHash);
 			}
 			else {
-				if (hash.length) {
-					hash += statusHashSeparator;
+				if (hash !== HASH_PREFIX) {
+					if (hash.length) {
+						hash += statusHashSeparator;
+					}
+					else {
+						hash = HASH_PREFIX;
+					}
 				}
+
 				hash += statusHash;
 			}
 
-			location.hash = hash;
+			location.replace(hash);
 		}
 
 		if (fnSaveIndex) {
