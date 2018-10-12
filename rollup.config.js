@@ -20,7 +20,7 @@ const getConfig = function (isMinify) {
 			resolve(), // so Rollup can find `ms`
 			commonjs(), // so Rollup can convert `ms` to an ES module
 			babel(),
-			isMinify && uglify()
+			isMinify && uglify({ie8:true})
 		],
 	};
 
