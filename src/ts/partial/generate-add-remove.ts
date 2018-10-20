@@ -10,10 +10,13 @@ function generateAddRemove(
 	context: JQueryTab.Context,
 	options: JQueryTab.ExpandedOptions
 ) {
-	const insertTabItemWithoutSwitch = function (title: JQueryTab.JQueriable, content: JQueryTab.JQueriable, index: number) {
+	const insertTabItemWithoutSwitch = function (
+		$labelContent: JQueryTab.JQueriable,
+		$panelContent: JQueryTab.JQueriable, index: number
+	) {
 		const {$headerLabelContainerLeaf, $footerLabelContainerLeaf, $panelContainerLeaf} = containers;
 
-		const {$panelItem, cloneLabelItem} = createTabItem(title, content, context, options);
+		const {$panelItem, cloneLabelItem} = createTabItem($labelContent, $panelContent, context, options);
 		if (context.currentIndex > -1 && typeof options.fnHidePanelItem === 'function') {
 			options.fnHidePanelItem.call($panelItem, $panelItem);
 		}
@@ -63,20 +66,24 @@ function generateAddRemove(
 	};
 
 	const insertWithoutSwitch = function (sourceRegion: JQueryTab.JQueriable, index: number) {
+		const {titleSelector, fnGetTitleContent, keepTitleVisible} = options;
+
 		const $sourceRegion = $(sourceRegion);
 		let inserted = 0;
 		while (true) {
-			const $title = $sourceRegion.find(options.titleSelector).first();
+			const $title = $sourceRegion.find(titleSelector).first();
 			if ($title.length === 0) {
 				break;
 			}
-			if (!options.keepTitleVisible) {
+			if (!keepTitleVisible) {
 				$title.hide();
 			}
 
-			const title = options.fnGetTitleContent.call($title, $title);
-			const content = $title.add($title.nextUntil(options.titleSelector));
-			insertTabItemWithoutSwitch(title, content, index + inserted);
+			const $rest = $title.nextUntil(titleSelector);
+
+			const $labelContent = fnGetTitleContent.call($title, $title);
+			const $panelContent = $([]).add($title).add($rest);
+			insertTabItemWithoutSwitch($labelContent, $panelContent, index + inserted);
 			inserted++;
 		}
 	};

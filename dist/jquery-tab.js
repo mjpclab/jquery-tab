@@ -418,32 +418,32 @@
       };
     }
 
-    function createLabelItem(title, options) {
+    function createLabelItem($labelContent, options) {
       var $labelItem = $(options.labelItemTemplate).addClass(options.labelItemClass).addClass(options.inactiveLabelItemClass).attr('role', 'tab');
       var $labelItemLeaf = getLeafElement($labelItem);
-      $labelItemLeaf.empty().append(title);
+      $labelItemLeaf.empty().append($labelContent);
       return {
         $labelItem: $labelItem,
         $labelItemLeaf: $labelItemLeaf
       };
     }
 
-    function createPanelItem(content, options) {
+    function createPanelItem($panelContent, options) {
       var $panelItem = $(options.panelItemTemplate).addClass(options.panelItemClass).addClass(options.inactivePanelItemClass).attr('role', 'tabpanel');
       var $panelItemLeaf = getLeafElement($panelItem);
-      $panelItemLeaf.append(content);
+      $panelItemLeaf.append($panelContent);
       return {
         $panelItem: $panelItem,
         $panelItemLeaf: $panelItemLeaf
       };
     }
 
-    function createTabItem(title, content, context, options) {
-      var _createLabelItem = createLabelItem(title, options),
+    function createTabItem($labelContent, $panelContent, context, options) {
+      var _createLabelItem = createLabelItem($labelContent, options),
           $labelItem = _createLabelItem.$labelItem,
           $labelItemLeaf = _createLabelItem.$labelItemLeaf;
 
-      var _createPanelItem = createPanelItem(content, options),
+      var _createPanelItem = createPanelItem($panelContent, options),
           $panelItem = _createPanelItem.$panelItem,
           $panelItemLeaf = _createPanelItem.$panelItemLeaf;
 
@@ -478,12 +478,12 @@
     }
 
     function generateAddRemove(fnGetHeaderFooterLabels, fnGetPanel, fnSaveIndex, fnSwitchTo, containers, context, options) {
-      var insertTabItemWithoutSwitch = function insertTabItemWithoutSwitch(title, content, index) {
+      var insertTabItemWithoutSwitch = function insertTabItemWithoutSwitch($labelContent, $panelContent, index) {
         var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf,
             $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf,
             $panelContainerLeaf = containers.$panelContainerLeaf;
 
-        var _createTabItem = createTabItem(title, content, context, options),
+        var _createTabItem = createTabItem($labelContent, $panelContent, context, options),
             $panelItem = _createTabItem.$panelItem,
             cloneLabelItem = _createTabItem.cloneLabelItem;
 
@@ -545,23 +545,27 @@
       };
 
       var insertWithoutSwitch = function insertWithoutSwitch(sourceRegion, index) {
+        var titleSelector = options.titleSelector,
+            fnGetTitleContent = options.fnGetTitleContent,
+            keepTitleVisible = options.keepTitleVisible;
         var $sourceRegion = $(sourceRegion);
         var inserted = 0;
 
         while (true) {
-          var $title = $sourceRegion.find(options.titleSelector).first();
+          var $title = $sourceRegion.find(titleSelector).first();
 
           if ($title.length === 0) {
             break;
           }
 
-          if (!options.keepTitleVisible) {
+          if (!keepTitleVisible) {
             $title.hide();
           }
 
-          var title = options.fnGetTitleContent.call($title, $title);
-          var content = $title.add($title.nextUntil(options.titleSelector));
-          insertTabItemWithoutSwitch(title, content, index + inserted);
+          var $rest = $title.nextUntil(titleSelector);
+          var $labelContent = fnGetTitleContent.call($title, $title);
+          var $panelContent = $([]).add($title).add($rest);
+          insertTabItemWithoutSwitch($labelContent, $panelContent, index + inserted);
           inserted++;
         }
       };

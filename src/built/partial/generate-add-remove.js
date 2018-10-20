@@ -1,9 +1,9 @@
 import createTabItem from "./create-tab-item";
 import $ from "jquery";
 function generateAddRemove(fnGetHeaderFooterLabels, fnGetPanel, fnSaveIndex, fnSwitchTo, containers, context, options) {
-    const insertTabItemWithoutSwitch = function (title, content, index) {
+    const insertTabItemWithoutSwitch = function ($labelContent, $panelContent, index) {
         const { $headerLabelContainerLeaf, $footerLabelContainerLeaf, $panelContainerLeaf } = containers;
-        const { $panelItem, cloneLabelItem } = createTabItem(title, content, context, options);
+        const { $panelItem, cloneLabelItem } = createTabItem($labelContent, $panelContent, context, options);
         if (context.currentIndex > -1 && typeof options.fnHidePanelItem === 'function') {
             options.fnHidePanelItem.call($panelItem, $panelItem);
         }
@@ -49,19 +49,21 @@ function generateAddRemove(fnGetHeaderFooterLabels, fnGetPanel, fnSaveIndex, fnS
         }
     };
     const insertWithoutSwitch = function (sourceRegion, index) {
+        const { titleSelector, fnGetTitleContent, keepTitleVisible } = options;
         const $sourceRegion = $(sourceRegion);
         let inserted = 0;
         while (true) {
-            const $title = $sourceRegion.find(options.titleSelector).first();
+            const $title = $sourceRegion.find(titleSelector).first();
             if ($title.length === 0) {
                 break;
             }
-            if (!options.keepTitleVisible) {
+            if (!keepTitleVisible) {
                 $title.hide();
             }
-            const title = options.fnGetTitleContent.call($title, $title);
-            const content = $title.add($title.nextUntil(options.titleSelector));
-            insertTabItemWithoutSwitch(title, content, index + inserted);
+            const $rest = $title.nextUntil(titleSelector);
+            const $labelContent = fnGetTitleContent.call($title, $title);
+            const $panelContent = $([]).add($title).add($rest);
+            insertTabItemWithoutSwitch($labelContent, $panelContent, index + inserted);
             inserted++;
         }
     };

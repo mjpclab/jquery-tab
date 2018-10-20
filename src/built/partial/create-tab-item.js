@@ -1,8 +1,8 @@
 import createLabelItem from "./create-label-item";
 import createPanelItem from "./create-panel-item";
-function createTabItem(title, content, context, options) {
-    const { $labelItem, $labelItemLeaf } = createLabelItem(title, options);
-    const { $panelItem, $panelItemLeaf } = createPanelItem(content, options);
+function createTabItem($labelContent, $panelContent, context, options) {
+    const { $labelItem, $labelItemLeaf } = createLabelItem($labelContent, options);
+    const { $panelItem, $panelItemLeaf } = createPanelItem($panelContent, options);
     const { containerId, nextItemId: itemId } = context;
     context.nextItemId++;
     let nextCloneId = 0;

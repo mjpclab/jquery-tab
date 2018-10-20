@@ -1,13 +1,16 @@
 import $ from "jquery";
 import getLeafElement from "../utility/get-leaf-element";
 
-function createPanelItem(content: JQueryTab.JQueriable, options: JQueryTab.ExpandedOptions) {
+function createPanelItem(
+	$panelContent: JQueryTab.JQueriable,
+	options: JQueryTab.ExpandedOptions
+) {
 	const $panelItem = $(options.panelItemTemplate)
 		.addClass(options.panelItemClass)
 		.addClass(options.inactivePanelItemClass)
 		.attr('role', 'tabpanel');
 	const $panelItemLeaf = getLeafElement($panelItem);
-	$panelItemLeaf.append(content);
+	$panelItemLeaf.append($panelContent);
 
 	return {$panelItem, $panelItemLeaf};
 }

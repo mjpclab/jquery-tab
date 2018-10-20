@@ -2,13 +2,13 @@ import createLabelItem from "./create-label-item";
 import createPanelItem from "./create-panel-item";
 
 function createTabItem(
-	title: JQueryTab.JQueriable,
-	content: JQueryTab.JQueriable,
+	$labelContent: JQueryTab.JQueriable,
+	$panelContent: JQueryTab.JQueriable,
 	context: JQueryTab.Context,
 	options: JQueryTab.ExpandedOptions
 ) {
-	const {$labelItem, $labelItemLeaf} = createLabelItem(title, options);
-	const {$panelItem, $panelItemLeaf} = createPanelItem(content, options);
+	const {$labelItem, $labelItemLeaf} = createLabelItem($labelContent, options);
+	const {$panelItem, $panelItemLeaf} = createPanelItem($panelContent, options);
 
 	const {containerId, nextItemId: itemId} = context;
 	context.nextItemId++;
