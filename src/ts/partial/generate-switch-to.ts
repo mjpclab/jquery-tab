@@ -1,17 +1,21 @@
 import updateActiveState from "./update-active-state";
 
 function generateSwitchTo(
+	fnTabItemPositionToIndex: JQueryTab.fnPositionToIndex,
 	fnGetHeaderFooterLabels: JQueryTab.fnGetLabel,
 	fnGetPanel: JQueryTab.fnGetPanel,
-	fnSaveIndex: JQueryTab.fnSaveIndex,
+	fnSavePosition: JQueryTab.fnSavePosition,
 	containers: JQueryTab.Containers,
 	context: JQueryTab.Context,
 	options: JQueryTab.ExpandedOptions
 ) {
-	const switchToWithoutSave = function (newIndex: number) {
-		const {$tabContainer} = containers;
-
+	const switchToWithoutSave = function (newPosition: JQueryTab.TabItemPosition) {
+		const newIndex = fnTabItemPositionToIndex(newPosition);
+		if (newIndex < 0 || newIndex >= context.itemCount) {
+			return;
+		}
 		const oldIndex = context.currentIndex;
+		const {$tabContainer} = containers;
 
 		//before switching callback
 		if (typeof (options.onBeforeSwitch) === 'function') {
@@ -43,9 +47,9 @@ function generateSwitchTo(
 			options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);
 		}
 	};
-	const switchTo = function (newIndex: number) {
-		switchToWithoutSave(newIndex);
-		fnSaveIndex(newIndex);
+	const switchTo = function (newPosition: JQueryTab.TabItemPosition) {
+		switchToWithoutSave(newPosition);
+		fnSavePosition(newPosition);
 	};
 
 	return {switchToWithoutSave, switchTo};

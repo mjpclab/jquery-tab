@@ -30,18 +30,24 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	const {
 		getCount,
 		getCurrentIndex,
-		getLabel,
+		getIndexByName,
+		PositionToIndex,
 		getHeaderLabel,
 		getFooterLabel,
 		getHeaderFooterLabels,
-		getPanel
+		getPanel,
+		getCurrentHeaderLabel,
+		getCurrentFooterLabel,
+		getCurrentHeaderFooterLabels,
+		getCurrentPanel,
+		getName
 	} = generateGetters(containers, context);
 
 	//save/load
-	const {saveIndex, loadIndex, parseHashIndex} = generateSaveLoadIndex(containers, context, options);
+	const {savePosition, loadPosition, parseHashPosition} = generateSaveLoadIndex(containers, context, options);
 
 	//methods
-	const {switchToWithoutSave, switchTo} = genrateSwitchTo(getHeaderFooterLabels, getPanel, saveIndex, containers, context, options);
+	const {switchToWithoutSave, switchTo} = genrateSwitchTo(PositionToIndex, getHeaderFooterLabels, getPanel, savePosition, containers, context, options);
 
 	const {
 		addTabItem,
@@ -50,7 +56,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 		addWithoutSwitch,
 		insert,
 		remove,
-	} = generateAddRemove(getHeaderFooterLabels, getPanel, saveIndex, switchTo, containers, context, options);
+	} = generateAddRemove(PositionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, containers, context, options);
 
 	addWithoutSwitch($region);
 
@@ -65,18 +71,24 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	updateFixedHeight();
 
 	//show active panel
-	switchToWithoutSave(loadIndex());
-	handleHashChangeEvent(parseHashIndex, switchTo, context, options);
+	switchToWithoutSave(loadPosition());
+	handleHashChangeEvent(parseHashPosition, switchTo, context, options);
 	handleClickEvent(switchTo, containers, context, options);
 
 	//controller
 	const controller = {
 		getCount,
 		getCurrentIndex,
+		getIndexByName,
 		getHeaderLabel,
 		getFooterLabel,
 		getHeaderFooterLabels,
 		getPanel,
+		getCurrentHeaderLabel,
+		getCurrentFooterLabel,
+		getCurrentHeaderFooterLabels,
+		getCurrentPanel,
+		getName,
 		updateFixedHeight,
 		switchTo,
 		addTabItem,

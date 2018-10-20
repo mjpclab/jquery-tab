@@ -9,7 +9,7 @@ const defaultOptions: JQueryTab.NecessaryOptions = {
 	fixedHeight: false,
 
 	mode: JQueryTab.Mode.Horizontal,
-	activeIndex: 0,
+	activePosition: 0,
 	createEmptyTab: false,
 	fnShowPanelItem: function ($panelItem: JQuery) {
 		return $panelItem && $panelItem.show && $panelItem.show();
@@ -25,6 +25,9 @@ const defaultOptions: JQueryTab.NecessaryOptions = {
 		return $title.contents();
 	},
 	keepTitleVisible: false,
+	fnGetName: function ($title: JQuery) {
+		return $title.attr('data-tab-item-name');
+	},
 
 	tabContainerTemplate: '<div></div>',
 	tabContainerClass: 'tab-container',

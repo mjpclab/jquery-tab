@@ -4,11 +4,16 @@ import createPanelItem from "./create-panel-item";
 function createTabItem(
 	$labelContent: JQueryTab.JQueriable,
 	$panelContent: JQueryTab.JQueriable,
+	tabItemName: string,
 	context: JQueryTab.Context,
 	options: JQueryTab.ExpandedOptions
 ) {
 	const {$labelItem, $labelItemLeaf} = createLabelItem($labelContent, options);
 	const {$panelItem, $panelItemLeaf} = createPanelItem($panelContent, options);
+	if (tabItemName) {
+		$labelItem.attr('data-tab-item-name', tabItemName);
+		$panelItem.attr('data-tab-item-name', tabItemName);
+	}
 
 	const {containerId, nextItemId: itemId} = context;
 	context.nextItemId++;

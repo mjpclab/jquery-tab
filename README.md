@@ -40,6 +40,7 @@ $('.region').tab({
 		> .panel-item
 		> ...
 ```
+`label-item` and `page-item` pair is a "tab item".
 
 # Including CSS
 jquery-tab provides default CSS styles if you don't want to make it yourself. Make sure CSS class name related options are not customized.
@@ -67,7 +68,7 @@ There are two ways to specify options. By `data-` attribute and by `tab()` metho
 ## Specify options by `data-` attribute
 Option names become html attribute prefixed with `data-`. Words are always in lower case and separated by `-`. Only available for primitive option value.
 ```html
-<div class="region" data-active-index="1">
+<div class="region" data-fixed-height="true">
 	......
 </div>
 ```
@@ -78,7 +79,7 @@ $('.region').tab();
 Option names are in camel case.
 ```javascript
 $('.region').tab({
-	activeIndex: 1
+	fixedHeight: true
 });
 ```
 
@@ -87,7 +88,7 @@ Region containers that has class `tab-region` will apply jquery-tab plugin autom
 
 That would be convenient if using this class name with attribute options. Then no javascript code is needed in most cases:
 ```html
-<div class="tab-region" data-active-index="1">
+<div class="tab-region" data-fixed-height="true">
 	......
 </div>
 ```
@@ -126,13 +127,13 @@ Must be a function like `func($panelItem) {}`. Parameter `$panelItem` will be th
 The default behavior is calling the jQuery object's `hide()`.
 
 `onBeforeSwitch(oldIndex, newIndex)`  
-A callback before switching the tab.
+A callback before switching the tab. Returns `false` to cancel a switching attempt.
 
 `onAfterSwitch(oldIndex, newIndex)`  
 A callback after switching the tab.
 
 ## Save/Load active Index
-jquery-tab will load active index by priority of statusFieldSelector, statusHashTemplate, fnLoadIndex and activeIndex.
+jquery-tab will load active index by priority of statusFieldSelector, statusHashTemplate, fnLoadIndex and activePosition.
 
 `statusFieldSelector`  
 A jQuery selector string or object to find a form field(normally hidden) to store active tab index, thus after form post back and keep the field value on server to the browser, the jquery-tab will automatically restore the active tab.
@@ -143,14 +144,18 @@ A key-value pair template to store active tab index in URL hash, e.g. `"tab="`.
 `statusHashSeparator`  
 Determine a separator between multiple hash items if there are more than 1 tab-container on the same page.
 
-`fnSaveIndex(index)`  
+`fnSavePosition(name | index)`  
 A callback function to customize how active index is saved, so that this index can be restored in the future, for example when refreshing the page.
 
-`fnLoadIndex`  
-A callback function to customize how active index is loaded. The returned value will be treated as active index.
+`fnLoadPosition`  
+A callback function to customize how active index is loaded.
+The returned value is either a number/number of string which represents active tab index,
+or a string represents active tab item name.
 
-`activeIndex`  
-The default initial active index of the tab.
+`activePosition`  
+The default initial active position of the tab.
+The value is either a number/number of string which represents active tab index,
+or a string represents active tab item name.
 
 ## UI Options
 ### Title
@@ -211,6 +216,26 @@ If it is current active panel item, then also append class "`panelItemClass`-act
 otherwise append class "`panelItemClass`-inactive".
 
 # the Controller
+## Specify tab item name
+Some controller methods allow you to specify tab item name instead of tab item index.
+This is more meaningful and readable for human.
+Adding `data-tab-item-name` to title element to specify tab item name:
+``` html
+<div class="region">
+	<h1 data-tab-item-name="first-item">title 1</h1>
+	<p>tab 1 content</p>
+	<p>another tab 1 content</p>
+
+	<h1 data-tab-item-name="second-item">title 2</h1>
+	<p>tab 2 content</p>
+	<p>another tab 2 content</p>
+</div>
+```
+The tab item name is optional.
+The name should be a non-numeric string, otherwise in controller method parameters, it will be treated as a index.
+The name can only contains letters, digits, dashes and underlines.
+If names are duplicated in the same tab container, only first item will be recognized.
+
 ## Get Controller
 Get tab controller from tab container element or original content region container:
 ``` javascript
@@ -225,36 +250,47 @@ Get the number of panels.
 `getCurrentIndex()`  
 Get current active panel Index.
 
-`getHeaderLabel(index)`  
-Get the header side label item by `index`.
+`getIndexByName(name)`  
+Get tab item index by `name`.
 
-`getFooterLabel(index)`  
-Get the footer side label item by `index`.
+`getName(index)`  
+Get tab item name by `index`.
 
-`getHeaderFooterLabels(index)`  
-Get the header and footer side label item by `index`.
+`getHeaderLabel(name | index)`    
+`getFooterLabel(name | index)`  
+`getHeaderFooterLabels(name | index)`    
+Get the header/footer side label items by index or tab item name.
+
+`getCurrentHeaderLabel()`  
+`getCurrentFooterLabel()`  
+`getCurrentHeaderFooterLabels()`  
+Get current active header/footer label items.
 
 `getPanel(index)`  
 Get panel item by `index`.
+
+`getCurrentPanel()`  
+Get current active panel item.
 
 `updateFixedHeight()`  
 When panel item's content is dynamically changed and becomes longer, use this method to update the height of the panel container.
 Only available in height fixed mode by setting option `fixedHeight`.
 
-`switchTo(index)`  
-Switch active(selected) panel item by `index`.
+`switchTo(name | index)`  
+Switch active(selected) panel item by index or tab item name.
 
-`addTabItem(title, content)`  
+`addTabItem(title, content, name=undefined)`  
 Append a new tab item to existing tab container. Both `title` and `content` can be text, HTML or jquery object.
 
-`insertTabItem(title, content, index)`  
-Insert a new tab item to existing tab container, before the panel which current index is `index`. Both `title` and `content` can be text, HTML or jquery object.
+`insertTabItem(title, content, name=undefined, before-name | before-index)`  
+Insert a new tab item to existing tab container, before the tab item which its name is `before-name` or its index is `before-index`.
+Both `title` and `content` can be text, HTML or jquery object.
 
 `add($region)`  
 Parse and append another $region's structure to current tab. 
 
-`insert($region, index)`  
-Parse and insert another $region's structure to current tab at position `index`.
+`insert($region, before-name | before-index)`  
+Parse and insert another $region's structure before tab item which its name is `before-name` or its index is `before-index`.
 
-`remove(index)`  
-Remove a panel from `index` and return it's panel item.
+`remove(name | index)`  
+Remove a tab item by `name` or `index` and return it's panel item.

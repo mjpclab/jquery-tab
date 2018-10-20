@@ -18,7 +18,7 @@
       mode: "horizontal"
       /* Horizontal */
       ,
-      activeIndex: 0,
+      activePosition: 0,
       createEmptyTab: false,
       fnShowPanelItem: function fnShowPanelItem($panelItem) {
         return $panelItem && $panelItem.show && $panelItem.show();
@@ -33,6 +33,9 @@
         return $title.contents();
       },
       keepTitleVisible: false,
+      fnGetName: function fnGetName($title) {
+        return $title.attr('data-tab-item-name');
+      },
       tabContainerTemplate: '<div></div>',
       tabContainerClass: 'tab-container',
       labelContainerTemplate: '<div></div>',
@@ -188,6 +191,7 @@
     function generateGetters(containers, context) {
       var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf,
           $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf,
+          $panelContainer = containers.$panelContainer,
           $panelContainerLeaf = containers.$panelContainerLeaf;
 
       var getCount = function getCount() {
@@ -198,55 +202,102 @@
         return context.currentIndex;
       };
 
-      var getLabel = function getLabel($container, index) {
-        if (!isFinite(index)) {
-          throw new Error('invalid index');
-        }
+      var getIndexByName = function getIndexByName(name) {
+        var tabItemIndex = -1;
+        $panelContainer.children().each(function (index, panel) {
+          var $panel = $(panel);
 
-        return $container.children(':eq(' + index + ')');
+          if ($panel.attr('data-tab-item-name') === name) {
+            tabItemIndex = $panel.index();
+            return false;
+          }
+        });
+        return tabItemIndex;
       };
 
-      var getHeaderLabel = function getHeaderLabel(index) {
+      var PositionToIndex = function PositionToIndex(position) {
+        if (typeof position === 'number') {
+          return position;
+        } else if (isFinite(position)) {
+          return parseInt(position);
+        } else if (position) {
+          return getIndexByName(position);
+        } else {
+          return -1;
+        }
+      };
+
+      var getHeaderLabel = function getHeaderLabel(position) {
         if ($headerLabelContainerLeaf) {
-          return getLabel($headerLabelContainerLeaf, index);
+          var index = PositionToIndex(position);
+          return $headerLabelContainerLeaf.children(':eq(' + index + ')');
         }
 
         return $([]);
       };
 
-      var getFooterLabel = function getFooterLabel(index) {
+      var getFooterLabel = function getFooterLabel(position) {
         if ($footerLabelContainerLeaf) {
-          return getLabel($footerLabelContainerLeaf, index);
+          var index = PositionToIndex(position);
+          return $footerLabelContainerLeaf.children(':eq(' + index + ')');
         }
 
         return $([]);
       };
 
-      var getHeaderFooterLabels = function getHeaderFooterLabels(index) {
+      var getHeaderFooterLabels = function getHeaderFooterLabels(position) {
+        var index = PositionToIndex(position);
         return getHeaderLabel(index).add(getFooterLabel(index));
       };
 
-      var getPanel = function getPanel(index) {
-        if (!isFinite(index)) {
-          throw new Error('invalid index');
-        }
-
+      var getPanel = function getPanel(position) {
+        var index = PositionToIndex(position);
         return $panelContainerLeaf.children(':eq(' + index + ')');
+      };
+
+      var getCurrentHeaderLabel = function getCurrentHeaderLabel() {
+        return getHeaderLabel(context.currentIndex);
+      };
+
+      var getCurrentFooterLabel = function getCurrentFooterLabel() {
+        return getFooterLabel(context.currentIndex);
+      };
+
+      var getCurrentHeaderFooterLabels = function getCurrentHeaderFooterLabels() {
+        return getHeaderFooterLabels(context.currentIndex);
+      };
+
+      var getCurrentPanel = function getCurrentPanel() {
+        return getPanel(context.currentIndex);
+      };
+
+      var getName = function getName(index) {
+        return getPanel(index).attr('data-tab-item-name');
       };
 
       return {
         getCount: getCount,
         getCurrentIndex: getCurrentIndex,
-        getLabel: getLabel,
+        getIndexByName: getIndexByName,
+        PositionToIndex: PositionToIndex,
         getHeaderLabel: getHeaderLabel,
         getFooterLabel: getFooterLabel,
         getHeaderFooterLabels: getHeaderFooterLabels,
-        getPanel: getPanel
+        getPanel: getPanel,
+        getCurrentHeaderLabel: getCurrentHeaderLabel,
+        getCurrentFooterLabel: getCurrentFooterLabel,
+        getCurrentHeaderFooterLabels: getCurrentHeaderFooterLabels,
+        getCurrentPanel: getCurrentPanel,
+        getName: getName
       };
     }
 
     var HASH_PREFIX = '#';
     var RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
+
+    function isValidPosition(position) {
+      return position !== -1 && position !== undefined && position !== null && position !== '';
+    }
 
     function generateSaveLoadIndex(containers, context, options) {
       var $region = containers.$region,
@@ -254,9 +305,9 @@
       var statusFieldSelector = options.statusFieldSelector,
           statusHashTemplate = options.statusHashTemplate,
           statusHashSeparator = options.statusHashSeparator,
-          fnSaveIndex = options.fnSaveIndex,
-          fnLoadIndex = options.fnLoadIndex,
-          activeIndex = options.activeIndex;
+          fnSavePosition = options.fnSavePosition,
+          fnLoadPosition = options.fnLoadPosition,
+          activePosition = options.activePosition;
       var $statusFields = $region.find(statusFieldSelector);
 
       if (!$statusFields.length) {
@@ -264,19 +315,17 @@
       }
 
       var RE_STATUS_HASH;
-      var RE_STATUS_HASH_DIGITS;
 
       if (statusHashTemplate) {
-        RE_STATUS_HASH = new RegExp(statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '-?\\d+');
-        RE_STATUS_HASH_DIGITS = new RegExp(statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '(-?\\d+)');
+        RE_STATUS_HASH = new RegExp(statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '([-\\w]+)');
       }
 
-      var saveIndex = function saveIndex(index) {
-        $statusFields.val(index);
+      var savePosition = function saveIndex(position) {
+        $statusFields.val(position);
 
         if (statusHashTemplate) {
           var hash = location.hash;
-          var statusHash = statusHashTemplate + index;
+          var statusHash = statusHashTemplate + position;
 
           if (hash.indexOf(statusHashTemplate) > -1) {
             hash = hash.replace(RE_STATUS_HASH, statusHash);
@@ -295,13 +344,13 @@
           location.replace(hash);
         }
 
-        if (fnSaveIndex) {
-          fnSaveIndex.call($tabContainer, index);
+        if (fnSavePosition) {
+          fnSavePosition.call($tabContainer, position);
         }
       };
 
-      var parseHashIndex = function parseHashIndex() {
-        var searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);
+      var parseHashPosition = function parseHashPosition() {
+        var searchResult = location.hash.match(RE_STATUS_HASH);
 
         if (searchResult && searchResult[1]) {
           return parseInt(searchResult[1]);
@@ -310,55 +359,48 @@
         return -1;
       };
 
-      var loadIndex = function loadIndex() {
-        var itemCount = context.itemCount;
-        var index = -1;
-
-        if (itemCount === 0) {
-          return index;
-        }
-
+      var loadPosition = function loadPosition() {
+        var position = -1;
         $statusFields.each(function () {
           var status = $(this).val();
 
-          if (typeof status === 'number') {
-            index = status;
+          if (typeof status === 'number' || status.length) {
+            position = status;
             return false;
-          } else if (status.length) {
-            var intStatus = parseInt(status);
-
-            if (isFinite(intStatus) && !isNaN(intStatus)) {
-              index = parseInt(status);
-              return false;
-            }
           }
         });
 
-        if ((index === -1 || isNaN(index)) && statusHashTemplate) {
-          index = parseHashIndex();
+        if (isValidPosition(position)) {
+          return position;
         }
 
-        if ((index === -1 || isNaN(index)) && fnLoadIndex) {
-          index = parseInt(fnLoadIndex.call($tabContainer));
+        if (statusHashTemplate) {
+          position = parseHashPosition();
+
+          if (isValidPosition(position)) {
+            return position;
+          }
         }
 
-        if (index === -1 || isNaN(index)) {
-          index = Number(activeIndex) || 0;
+        if (fnLoadPosition) {
+          position = fnLoadPosition.call($tabContainer);
+
+          if (isValidPosition(position)) {
+            return position;
+          }
         }
 
-        if (index < 0) {
-          index = 0;
-        } else if (index >= itemCount) {
-          index = itemCount - 1;
+        if (isValidPosition(activePosition)) {
+          return activePosition;
         }
 
-        return index;
+        return 0;
       };
 
       return {
-        saveIndex: saveIndex,
-        loadIndex: loadIndex,
-        parseHashIndex: parseHashIndex
+        savePosition: savePosition,
+        loadPosition: loadPosition,
+        parseHashPosition: parseHashPosition
       };
     }
 
@@ -375,10 +417,16 @@
       $activePanelItem.siblings().removeClass(activePanelItemClass).addClass(inactivePanelItemClass).attr('aria-hidden', 'true');
     }
 
-    function generateSwitchTo(fnGetHeaderFooterLabels, fnGetPanel, fnSaveIndex, containers, context, options) {
-      var switchToWithoutSave = function switchToWithoutSave(newIndex) {
-        var $tabContainer = containers.$tabContainer;
-        var oldIndex = context.currentIndex; //before switching callback
+    function generateSwitchTo(fnTabItemPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, containers, context, options) {
+      var switchToWithoutSave = function switchToWithoutSave(newPosition) {
+        var newIndex = fnTabItemPositionToIndex(newPosition);
+
+        if (newIndex < 0 || newIndex >= context.itemCount) {
+          return;
+        }
+
+        var oldIndex = context.currentIndex;
+        var $tabContainer = containers.$tabContainer; //before switching callback
 
         if (typeof options.onBeforeSwitch === 'function') {
           options.onBeforeSwitch.call($tabContainer, oldIndex, newIndex);
@@ -407,9 +455,9 @@
         }
       };
 
-      var switchTo = function switchTo(newIndex) {
-        switchToWithoutSave(newIndex);
-        fnSaveIndex(newIndex);
+      var switchTo = function switchTo(newPosition) {
+        switchToWithoutSave(newPosition);
+        fnSavePosition(newPosition);
       };
 
       return {
@@ -438,7 +486,7 @@
       };
     }
 
-    function createTabItem($labelContent, $panelContent, context, options) {
+    function createTabItem($labelContent, $panelContent, tabItemName, context, options) {
       var _createLabelItem = createLabelItem($labelContent, options),
           $labelItem = _createLabelItem.$labelItem,
           $labelItemLeaf = _createLabelItem.$labelItemLeaf;
@@ -446,6 +494,11 @@
       var _createPanelItem = createPanelItem($panelContent, options),
           $panelItem = _createPanelItem.$panelItem,
           $panelItemLeaf = _createPanelItem.$panelItemLeaf;
+
+      if (tabItemName) {
+        $labelItem.attr('data-tab-item-name', tabItemName);
+        $panelItem.attr('data-tab-item-name', tabItemName);
+      }
 
       var containerId = context.containerId,
           itemId = context.nextItemId;
@@ -477,19 +530,21 @@
       };
     }
 
-    function generateAddRemove(fnGetHeaderFooterLabels, fnGetPanel, fnSaveIndex, fnSwitchTo, containers, context, options) {
-      var insertTabItemWithoutSwitch = function insertTabItemWithoutSwitch($labelContent, $panelContent, index) {
+    function generateAddRemove(fnTabItemPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, fnSwitchTo, containers, context, options) {
+      var insertTabItemWithoutSwitch = function insertTabItemWithoutSwitch($labelContent, $panelContent, tabItemName, position) {
         var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf,
             $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf,
             $panelContainerLeaf = containers.$panelContainerLeaf;
 
-        var _createTabItem = createTabItem($labelContent, $panelContent, context, options),
+        var _createTabItem = createTabItem($labelContent, $panelContent, tabItemName, context, options),
             $panelItem = _createTabItem.$panelItem,
             cloneLabelItem = _createTabItem.cloneLabelItem;
 
         if (context.currentIndex > -1 && typeof options.fnHidePanelItem === 'function') {
           options.fnHidePanelItem.call($panelItem, $panelItem);
         }
+
+        var index = fnTabItemPositionToIndex(position);
 
         if (index < 0) {
           index = 0;
@@ -507,7 +562,8 @@
           $panelContainerLeaf.children(':eq(' + index + ')').before($panelItem);
 
           if (index <= context.currentIndex) {
-            fnSaveIndex(++context.currentIndex);
+            context.currentIndex++;
+            fnSavePosition(tabItemName || context.currentIndex);
           }
         } else {
           if ($headerLabelContainerLeaf) {
@@ -524,32 +580,34 @@
         context.itemCount++;
       };
 
-      var insertTabItem = function insertTabItem(title, content, index) {
-        insertTabItemWithoutSwitch(title, content, index);
+      var insertTabItem = function insertTabItem(title, content, tabItemName, position) {
+        insertTabItemWithoutSwitch(title, content, tabItemName, position);
 
         if (context.currentIndex === -1 && context.itemCount) {
           fnSwitchTo(0);
         }
       };
 
-      var addTabItemWithoutSwitch = function addTabItemWithoutSwitch(title, content) {
-        insertTabItemWithoutSwitch(title, content, context.itemCount);
+      var addTabItemWithoutSwitch = function addTabItemWithoutSwitch(title, content, tabItemName) {
+        insertTabItemWithoutSwitch(title, content, tabItemName, context.itemCount);
       };
 
-      var addTabItem = function addTabItem(title, content) {
-        addTabItemWithoutSwitch(title, content);
+      var addTabItem = function addTabItem(title, content, tabItemName) {
+        addTabItemWithoutSwitch(title, content, tabItemName);
 
         if (context.currentIndex === -1 && context.itemCount) {
           fnSwitchTo(0);
         }
       };
 
-      var insertWithoutSwitch = function insertWithoutSwitch(sourceRegion, index) {
+      var insertWithoutSwitch = function insertWithoutSwitch(sourceRegion, position) {
         var titleSelector = options.titleSelector,
             fnGetTitleContent = options.fnGetTitleContent,
-            keepTitleVisible = options.keepTitleVisible;
+            keepTitleVisible = options.keepTitleVisible,
+            fnGetName = options.fnGetName;
         var $sourceRegion = $(sourceRegion);
         var inserted = 0;
+        var index = fnTabItemPositionToIndex(position);
 
         while (true) {
           var $title = $sourceRegion.find(titleSelector).first();
@@ -565,13 +623,14 @@
           var $rest = $title.nextUntil(titleSelector);
           var $labelContent = fnGetTitleContent.call($title, $title);
           var $panelContent = $([]).add($title).add($rest);
-          insertTabItemWithoutSwitch($labelContent, $panelContent, index + inserted);
+          var tabItemName = fnGetName.call($sourceRegion, $title, $rest);
+          insertTabItemWithoutSwitch($labelContent, $panelContent, tabItemName, index + inserted);
           inserted++;
         }
       };
 
-      var insert = function insert(sourceRegion, index) {
-        insertWithoutSwitch(sourceRegion, index);
+      var insert = function insert(sourceRegion, position) {
+        insertWithoutSwitch(sourceRegion, position);
 
         if (context.currentIndex === -1 && context.itemCount) {
           fnSwitchTo(0);
@@ -590,8 +649,10 @@
         }
       };
 
-      var remove = function remove(index) {
-        if (index === undefined || !isFinite(index) || index < 0 || index >= context.itemCount) {
+      var remove = function remove(position) {
+        var index = fnTabItemPositionToIndex(position);
+
+        if (index < 0 || index >= context.itemCount) {
           return;
         }
 
@@ -602,9 +663,9 @@
         context.itemCount--;
 
         if (index < context.currentIndex) {
-          fnSaveIndex(--context.currentIndex);
+          fnSwitchTo(context.currentIndex - 1);
         } else if (index === context.currentIndex) {
-          if (context.currentIndex === context.itemCount) {
+          if (index === context.itemCount) {
             fnSwitchTo(context.currentIndex - 1);
           } else {
             fnSwitchTo(context.currentIndex);
@@ -644,10 +705,10 @@
       };
     }
 
-    function handleHashChangeEvent(fnParseHashIndex, fnSwitchTo, context, options) {
+    function handleHashChangeEvent(fnParseHashPosition, fnSwitchTo, context, options) {
       if (options.statusHashTemplate && window) {
         $(window).on('hashchange', function () {
-          var hashIndex = fnParseHashIndex();
+          var hashIndex = fnParseHashPosition();
 
           if (hashIndex > -1 && hashIndex !== context.currentIndex) {
             fnSwitchTo(hashIndex);
@@ -666,9 +727,9 @@
 
       var delayTriggerTimeoutHandler;
 
-      var startDelayTrigger = function startDelayTrigger(labelIndex) {
+      var startDelayTrigger = function startDelayTrigger(position) {
         delayTriggerTimeoutHandler = setTimeout(function () {
-          fnSwitchTo(labelIndex);
+          fnSwitchTo(position);
           delayTriggerTimeoutHandler = undefined;
         }, delayTriggerLatency);
       };
@@ -693,7 +754,8 @@
           return;
         }
 
-        startDelayTrigger(labelIndex);
+        var tabItemName = $label.attr('data-tab-item-name');
+        startDelayTrigger(tabItemName || labelIndex);
       };
 
       var labelItemCancelDelayClick = function labelItemCancelDelayClick(e) {
@@ -745,7 +807,8 @@
           return;
         }
 
-        fnSwitchTo(labelIndex);
+        var tabItemName = $label.attr('data-tab-item-name');
+        fnSwitchTo(tabItemName || labelIndex);
       };
 
       if (triggerEvents) {
@@ -778,24 +841,30 @@
       var _generateGetters = generateGetters(containers, context),
           getCount = _generateGetters.getCount,
           getCurrentIndex = _generateGetters.getCurrentIndex,
-          getLabel = _generateGetters.getLabel,
+          getIndexByName = _generateGetters.getIndexByName,
+          PositionToIndex = _generateGetters.PositionToIndex,
           getHeaderLabel = _generateGetters.getHeaderLabel,
           getFooterLabel = _generateGetters.getFooterLabel,
           getHeaderFooterLabels = _generateGetters.getHeaderFooterLabels,
-          getPanel = _generateGetters.getPanel; //save/load
+          getPanel = _generateGetters.getPanel,
+          getCurrentHeaderLabel = _generateGetters.getCurrentHeaderLabel,
+          getCurrentFooterLabel = _generateGetters.getCurrentFooterLabel,
+          getCurrentHeaderFooterLabels = _generateGetters.getCurrentHeaderFooterLabels,
+          getCurrentPanel = _generateGetters.getCurrentPanel,
+          getName = _generateGetters.getName; //save/load
 
 
       var _generateSaveLoadInde = generateSaveLoadIndex(containers, context, options),
-          saveIndex = _generateSaveLoadInde.saveIndex,
-          loadIndex = _generateSaveLoadInde.loadIndex,
-          parseHashIndex = _generateSaveLoadInde.parseHashIndex; //methods
+          savePosition = _generateSaveLoadInde.savePosition,
+          loadPosition = _generateSaveLoadInde.loadPosition,
+          parseHashPosition = _generateSaveLoadInde.parseHashPosition; //methods
 
 
-      var _genrateSwitchTo = generateSwitchTo(getHeaderFooterLabels, getPanel, saveIndex, containers, context, options),
+      var _genrateSwitchTo = generateSwitchTo(PositionToIndex, getHeaderFooterLabels, getPanel, savePosition, containers, context, options),
           switchToWithoutSave = _genrateSwitchTo.switchToWithoutSave,
           switchTo = _genrateSwitchTo.switchTo;
 
-      var _generateAddRemove = generateAddRemove(getHeaderFooterLabels, getPanel, saveIndex, switchTo, containers, context, options),
+      var _generateAddRemove = generateAddRemove(PositionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, containers, context, options),
           addTabItem = _generateAddRemove.addTabItem,
           insertTabItem = _generateAddRemove.insertTabItem,
           add = _generateAddRemove.add,
@@ -814,17 +883,23 @@
       var updateFixedHeight = generateUpdateFixedHeight(containers, options);
       updateFixedHeight(); //show active panel
 
-      switchToWithoutSave(loadIndex());
-      handleHashChangeEvent(parseHashIndex, switchTo, context, options);
+      switchToWithoutSave(loadPosition());
+      handleHashChangeEvent(parseHashPosition, switchTo, context, options);
       hahdleClickEvent(switchTo, containers, context, options); //controller
 
       var controller = {
         getCount: getCount,
         getCurrentIndex: getCurrentIndex,
+        getIndexByName: getIndexByName,
         getHeaderLabel: getHeaderLabel,
         getFooterLabel: getFooterLabel,
         getHeaderFooterLabels: getHeaderFooterLabels,
         getPanel: getPanel,
+        getCurrentHeaderLabel: getCurrentHeaderLabel,
+        getCurrentFooterLabel: getCurrentFooterLabel,
+        getCurrentHeaderFooterLabels: getCurrentHeaderFooterLabels,
+        getCurrentPanel: getCurrentPanel,
+        getName: getName,
         updateFixedHeight: updateFixedHeight,
         switchTo: switchTo,
         addTabItem: addTabItem,

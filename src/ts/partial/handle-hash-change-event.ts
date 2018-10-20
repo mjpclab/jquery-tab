@@ -1,14 +1,14 @@
 import $ from "jquery";
 
 function handleHashChangeEvent(
-	fnParseHashIndex: JQueryTab.fnParseHashIndex,
+	fnParseHashPosition: JQueryTab.fnParseHashPosition,
 	fnSwitchTo: JQueryTab.fnSwitchTo,
 	context: JQueryTab.Context,
 	options: JQueryTab.ExpandedOptions
 ) {
 	if (options.statusHashTemplate && window) {
 		$(window).on('hashchange', function () {
-			const hashIndex = fnParseHashIndex();
+			const hashIndex = fnParseHashPosition();
 			if (hashIndex > -1 && hashIndex !== context.currentIndex) {
 				fnSwitchTo(hashIndex);
 			}

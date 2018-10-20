@@ -3,31 +3,33 @@ import $ from "jquery";
 const HASH_PREFIX = '#';
 const RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
 
+function isValidPosition(position: JQueryTab.TabItemPosition) {
+	return position !== -1 && position !== undefined && position !== null && position !== '';
+}
+
 function generateSaveLoadIndex(
 	containers: JQueryTab.Containers,
 	context: JQueryTab.Context,
 	options: JQueryTab.ExpandedOptions
 ) {
 	const {$region, $tabContainer} = containers;
-	const {statusFieldSelector, statusHashTemplate, statusHashSeparator, fnSaveIndex, fnLoadIndex, activeIndex} = options;
+	const {statusFieldSelector, statusHashTemplate, statusHashSeparator, fnSavePosition, fnLoadPosition, activePosition} = options;
 
 	let $statusFields = $region.find(statusFieldSelector);
 	if (!$statusFields.length) {
 		$statusFields = $(statusFieldSelector);
 	}
 	let RE_STATUS_HASH: RegExp;
-	let RE_STATUS_HASH_DIGITS: RegExp;
 	if (statusHashTemplate) {
-		RE_STATUS_HASH = new RegExp(statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '-?\\d+');
-		RE_STATUS_HASH_DIGITS = new RegExp(statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '(-?\\d+)');
+		RE_STATUS_HASH = new RegExp(statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '([-\\w]+)');
 	}
 
-	const saveIndex = function saveIndex(index: number) {
-		$statusFields.val(index);
+	const savePosition = function saveIndex(position: JQueryTab.TabItemPosition) {
+		$statusFields.val(position);
 
 		if (statusHashTemplate) {
 			let hash = location.hash;
-			const statusHash = statusHashTemplate + index;
+			const statusHash = statusHashTemplate + position;
 			if (hash.indexOf(statusHashTemplate) > -1) {
 				hash = hash.replace(RE_STATUS_HASH, statusHash);
 			}
@@ -47,62 +49,54 @@ function generateSaveLoadIndex(
 			location.replace(hash);
 		}
 
-		if (fnSaveIndex) {
-			fnSaveIndex.call($tabContainer, index);
+		if (fnSavePosition) {
+			fnSavePosition.call($tabContainer, position);
 		}
 	};
 
-	const parseHashIndex = function () {
-		const searchResult = location.hash.match(RE_STATUS_HASH_DIGITS);
+	const parseHashPosition = function () {
+		const searchResult = location.hash.match(RE_STATUS_HASH);
 		if (searchResult && searchResult[1]) {
 			return parseInt(searchResult[1]);
 		}
 		return -1;
 	};
 
-	const loadIndex = function () {
-		const {itemCount} = context;
-
-		let index = -1;
-		if (itemCount === 0) {
-			return index;
-		}
-
+	const loadPosition = function () {
+		let position: JQueryTab.TabItemPosition = -1;
 		$statusFields.each(function () {
 			const status = $(this).val() as string | number;
-			if (typeof status === 'number') {
-				index = status;
+			if (typeof status === 'number' || status.length) {
+				position = status;
 				return false;
 			}
-			else if (status.length) {
-				const intStatus = parseInt(status);
-				if (isFinite(intStatus) && !isNaN(intStatus)) {
-					index = parseInt(status);
-					return false;
-				}
-			}
 		});
-		if ((index === -1 || isNaN(index)) && statusHashTemplate) {
-			index = parseHashIndex();
-		}
-		if ((index === -1 || isNaN(index)) && fnLoadIndex) {
-			index = parseInt(fnLoadIndex.call($tabContainer));
-		}
-		if (index === -1 || isNaN(index)) {
-			index = Number(activeIndex) || 0;
+		if (isValidPosition(position)) {
+			return position;
 		}
 
-		if (index < 0) {
-			index = 0;
-		}
-		else if (index >= itemCount) {
-			index = itemCount - 1;
+		if (statusHashTemplate) {
+			position = parseHashPosition();
+			if (isValidPosition(position)) {
+				return position;
+			}
 		}
 
-		return index;
+		if (fnLoadPosition) {
+			position = fnLoadPosition.call($tabContainer);
+			if (isValidPosition(position)) {
+				return position;
+			}
+		}
+
+		if (isValidPosition(activePosition)) {
+			return activePosition;
+		}
+
+		return 0;
 	};
 
-	return {saveIndex, loadIndex, parseHashIndex};
+	return {savePosition, loadPosition, parseHashPosition};
 }
 
 export default generateSaveLoadIndex;

@@ -1,12 +1,13 @@
 import createTabItem from "./create-tab-item";
 import $ from "jquery";
-function generateAddRemove(fnGetHeaderFooterLabels, fnGetPanel, fnSaveIndex, fnSwitchTo, containers, context, options) {
-    const insertTabItemWithoutSwitch = function ($labelContent, $panelContent, index) {
+function generateAddRemove(fnTabItemPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, fnSwitchTo, containers, context, options) {
+    const insertTabItemWithoutSwitch = function ($labelContent, $panelContent, tabItemName, position) {
         const { $headerLabelContainerLeaf, $footerLabelContainerLeaf, $panelContainerLeaf } = containers;
-        const { $panelItem, cloneLabelItem } = createTabItem($labelContent, $panelContent, context, options);
+        const { $panelItem, cloneLabelItem } = createTabItem($labelContent, $panelContent, tabItemName, context, options);
         if (context.currentIndex > -1 && typeof options.fnHidePanelItem === 'function') {
             options.fnHidePanelItem.call($panelItem, $panelItem);
         }
+        let index = fnTabItemPositionToIndex(position);
         if (index < 0) {
             index = 0;
         }
@@ -19,7 +20,8 @@ function generateAddRemove(fnGetHeaderFooterLabels, fnGetPanel, fnSaveIndex, fnS
             }
             $panelContainerLeaf.children(':eq(' + index + ')').before($panelItem);
             if (index <= context.currentIndex) {
-                fnSaveIndex(++context.currentIndex);
+                context.currentIndex++;
+                fnSavePosition(tabItemName || context.currentIndex);
             }
         }
         else {
@@ -33,25 +35,26 @@ function generateAddRemove(fnGetHeaderFooterLabels, fnGetPanel, fnSaveIndex, fnS
         }
         context.itemCount++;
     };
-    const insertTabItem = function (title, content, index) {
-        insertTabItemWithoutSwitch(title, content, index);
+    const insertTabItem = function (title, content, tabItemName, position) {
+        insertTabItemWithoutSwitch(title, content, tabItemName, position);
         if (context.currentIndex === -1 && context.itemCount) {
             fnSwitchTo(0);
         }
     };
-    const addTabItemWithoutSwitch = function (title, content) {
-        insertTabItemWithoutSwitch(title, content, context.itemCount);
+    const addTabItemWithoutSwitch = function (title, content, tabItemName) {
+        insertTabItemWithoutSwitch(title, content, tabItemName, context.itemCount);
     };
-    const addTabItem = function (title, content) {
-        addTabItemWithoutSwitch(title, content);
+    const addTabItem = function (title, content, tabItemName) {
+        addTabItemWithoutSwitch(title, content, tabItemName);
         if (context.currentIndex === -1 && context.itemCount) {
             fnSwitchTo(0);
         }
     };
-    const insertWithoutSwitch = function (sourceRegion, index) {
-        const { titleSelector, fnGetTitleContent, keepTitleVisible } = options;
+    const insertWithoutSwitch = function (sourceRegion, position) {
+        const { titleSelector, fnGetTitleContent, keepTitleVisible, fnGetName } = options;
         const $sourceRegion = $(sourceRegion);
         let inserted = 0;
+        const index = fnTabItemPositionToIndex(position);
         while (true) {
             const $title = $sourceRegion.find(titleSelector).first();
             if ($title.length === 0) {
@@ -63,12 +66,13 @@ function generateAddRemove(fnGetHeaderFooterLabels, fnGetPanel, fnSaveIndex, fnS
             const $rest = $title.nextUntil(titleSelector);
             const $labelContent = fnGetTitleContent.call($title, $title);
             const $panelContent = $([]).add($title).add($rest);
-            insertTabItemWithoutSwitch($labelContent, $panelContent, index + inserted);
+            const tabItemName = fnGetName.call($sourceRegion, $title, $rest);
+            insertTabItemWithoutSwitch($labelContent, $panelContent, tabItemName, index + inserted);
             inserted++;
         }
     };
-    const insert = function (sourceRegion, index) {
-        insertWithoutSwitch(sourceRegion, index);
+    const insert = function (sourceRegion, position) {
+        insertWithoutSwitch(sourceRegion, position);
         if (context.currentIndex === -1 && context.itemCount) {
             fnSwitchTo(0);
         }
@@ -82,8 +86,9 @@ function generateAddRemove(fnGetHeaderFooterLabels, fnGetPanel, fnSaveIndex, fnS
             fnSwitchTo(0);
         }
     };
-    const remove = function (index) {
-        if (index === undefined || !isFinite(index) || index < 0 || index >= context.itemCount) {
+    const remove = function (position) {
+        const index = fnTabItemPositionToIndex(position);
+        if (index < 0 || index >= context.itemCount) {
             return;
         }
         const $labelItems = fnGetHeaderFooterLabels(index);
@@ -92,10 +97,10 @@ function generateAddRemove(fnGetHeaderFooterLabels, fnGetPanel, fnSaveIndex, fnS
         $panelItem.remove();
         context.itemCount--;
         if (index < context.currentIndex) {
-            fnSaveIndex(--context.currentIndex);
+            fnSwitchTo(context.currentIndex - 1);
         }
         else if (index === context.currentIndex) {
-            if (context.currentIndex === context.itemCount) {
+            if (index === context.itemCount) {
                 fnSwitchTo(context.currentIndex - 1);
             }
             else {

@@ -19,9 +19,9 @@ function hahdleClickEvent(
 
 	//handle delay trigger event
 	let delayTriggerTimeoutHandler: any;
-	const startDelayTrigger = function (labelIndex: number) {
+	const startDelayTrigger = function (position: JQueryTab.TabItemPosition) {
 		delayTriggerTimeoutHandler = setTimeout(function () {
-			fnSwitchTo(labelIndex);
+			fnSwitchTo(position);
 			delayTriggerTimeoutHandler = undefined;
 		}, delayTriggerLatency);
 	};
@@ -43,8 +43,9 @@ function hahdleClickEvent(
 		if (labelIndex === context.currentIndex) {
 			return;
 		}
+		const tabItemName = $label.attr('data-tab-item-name');
 
-		startDelayTrigger(labelIndex);
+		startDelayTrigger(tabItemName || labelIndex);
 	};
 	const labelItemCancelDelayClick = function (e: any) {
 		if (e.currentTarget.parentNode !== e.delegateTarget) {
@@ -89,7 +90,9 @@ function hahdleClickEvent(
 			return;
 		}
 
-		fnSwitchTo(labelIndex);
+		const tabItemName = $label.attr('data-tab-item-name');
+
+		fnSwitchTo(tabItemName || labelIndex);
 	};
 
 	if (triggerEvents) {

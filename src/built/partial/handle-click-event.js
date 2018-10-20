@@ -4,9 +4,9 @@ function hahdleClickEvent(fnSwitchTo, containers, context, options) {
     const { $headerLabelContainerLeaf, $footerLabelContainerLeaf } = containers;
     //handle delay trigger event
     let delayTriggerTimeoutHandler;
-    const startDelayTrigger = function (labelIndex) {
+    const startDelayTrigger = function (position) {
         delayTriggerTimeoutHandler = setTimeout(function () {
-            fnSwitchTo(labelIndex);
+            fnSwitchTo(position);
             delayTriggerTimeoutHandler = undefined;
         }, delayTriggerLatency);
     };
@@ -26,7 +26,8 @@ function hahdleClickEvent(fnSwitchTo, containers, context, options) {
         if (labelIndex === context.currentIndex) {
             return;
         }
-        startDelayTrigger(labelIndex);
+        const tabItemName = $label.attr('data-tab-item-name');
+        startDelayTrigger(tabItemName || labelIndex);
     };
     const labelItemCancelDelayClick = function (e) {
         if (e.currentTarget.parentNode !== e.delegateTarget) {
@@ -66,7 +67,8 @@ function hahdleClickEvent(fnSwitchTo, containers, context, options) {
         if (labelIndex === context.currentIndex) {
             return;
         }
-        fnSwitchTo(labelIndex);
+        const tabItemName = $label.attr('data-tab-item-name');
+        fnSwitchTo(tabItemName || labelIndex);
     };
     if (triggerEvents) {
         if ($headerLabelContainerLeaf) {

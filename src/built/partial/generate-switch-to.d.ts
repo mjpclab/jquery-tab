@@ -1,5 +1,5 @@
-declare function generateSwitchTo(fnGetHeaderFooterLabels: JQueryTab.fnGetLabel, fnGetPanel: JQueryTab.fnGetPanel, fnSaveIndex: JQueryTab.fnSaveIndex, containers: JQueryTab.Containers, context: JQueryTab.Context, options: JQueryTab.ExpandedOptions): {
-    switchToWithoutSave: (newIndex: number) => void;
-    switchTo: (newIndex: number) => void;
+declare function generateSwitchTo(fnTabItemPositionToIndex: JQueryTab.fnPositionToIndex, fnGetHeaderFooterLabels: JQueryTab.fnGetLabel, fnGetPanel: JQueryTab.fnGetPanel, fnSavePosition: JQueryTab.fnSavePosition, containers: JQueryTab.Containers, context: JQueryTab.Context, options: JQueryTab.ExpandedOptions): {
+    switchToWithoutSave: (newPosition: string | number) => void;
+    switchTo: (newPosition: string | number) => void;
 };
 export default generateSwitchTo;

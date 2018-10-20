@@ -1,8 +1,12 @@
 import updateActiveState from "./update-active-state";
-function generateSwitchTo(fnGetHeaderFooterLabels, fnGetPanel, fnSaveIndex, containers, context, options) {
-    const switchToWithoutSave = function (newIndex) {
-        const { $tabContainer } = containers;
+function generateSwitchTo(fnTabItemPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, containers, context, options) {
+    const switchToWithoutSave = function (newPosition) {
+        const newIndex = fnTabItemPositionToIndex(newPosition);
+        if (newIndex < 0 || newIndex >= context.itemCount) {
+            return;
+        }
         const oldIndex = context.currentIndex;
+        const { $tabContainer } = containers;
         //before switching callback
         if (typeof (options.onBeforeSwitch) === 'function') {
             options.onBeforeSwitch.call($tabContainer, oldIndex, newIndex);
@@ -27,9 +31,9 @@ function generateSwitchTo(fnGetHeaderFooterLabels, fnGetPanel, fnSaveIndex, cont
             options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);
         }
     };
-    const switchTo = function (newIndex) {
-        switchToWithoutSave(newIndex);
-        fnSaveIndex(newIndex);
+    const switchTo = function (newPosition) {
+        switchToWithoutSave(newPosition);
+        fnSavePosition(newPosition);
     };
     return { switchToWithoutSave, switchTo };
 }

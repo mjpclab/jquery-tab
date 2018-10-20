@@ -22,12 +22,12 @@ function tablize($region, customOptions) {
     const containers = $.extend({ $region }, createTabContainer(options));
     const { $tabContainer } = containers;
     //getters
-    const { getCount, getCurrentIndex, getLabel, getHeaderLabel, getFooterLabel, getHeaderFooterLabels, getPanel } = generateGetters(containers, context);
+    const { getCount, getCurrentIndex, getIndexByName, PositionToIndex, getHeaderLabel, getFooterLabel, getHeaderFooterLabels, getPanel, getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels, getCurrentPanel, getName } = generateGetters(containers, context);
     //save/load
-    const { saveIndex, loadIndex, parseHashIndex } = generateSaveLoadIndex(containers, context, options);
+    const { savePosition, loadPosition, parseHashPosition } = generateSaveLoadIndex(containers, context, options);
     //methods
-    const { switchToWithoutSave, switchTo } = genrateSwitchTo(getHeaderFooterLabels, getPanel, saveIndex, containers, context, options);
-    const { addTabItem, insertTabItem, add, addWithoutSwitch, insert, remove, } = generateAddRemove(getHeaderFooterLabels, getPanel, saveIndex, switchTo, containers, context, options);
+    const { switchToWithoutSave, switchTo } = genrateSwitchTo(PositionToIndex, getHeaderFooterLabels, getPanel, savePosition, containers, context, options);
+    const { addTabItem, insertTabItem, add, addWithoutSwitch, insert, remove, } = generateAddRemove(PositionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, containers, context, options);
     addWithoutSwitch($region);
     //replace original content
     if (!context.itemCount && !options.createEmptyTab) {
@@ -38,17 +38,23 @@ function tablize($region, customOptions) {
     const updateFixedHeight = generateUpdateFixedHeight(containers, options);
     updateFixedHeight();
     //show active panel
-    switchToWithoutSave(loadIndex());
-    handleHashChangeEvent(parseHashIndex, switchTo, context, options);
+    switchToWithoutSave(loadPosition());
+    handleHashChangeEvent(parseHashPosition, switchTo, context, options);
     handleClickEvent(switchTo, containers, context, options);
     //controller
     const controller = {
         getCount,
         getCurrentIndex,
+        getIndexByName,
         getHeaderLabel,
         getFooterLabel,
         getHeaderFooterLabels,
         getPanel,
+        getCurrentHeaderLabel,
+        getCurrentFooterLabel,
+        getCurrentHeaderFooterLabels,
+        getCurrentPanel,
+        getName,
         updateFixedHeight,
         switchTo,
         addTabItem,

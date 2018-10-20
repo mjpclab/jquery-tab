@@ -9,6 +9,8 @@ declare namespace JQueryTab {
 		Vertical = 'vertical',
 	}
 
+	type TabItemPosition = number | string;
+
 	interface NecessaryOptions {
 		triggerEvents: string;
 		delayTriggerEvents: string;
@@ -17,12 +19,12 @@ declare namespace JQueryTab {
 		statusFieldSelector: string;
 		statusHashTemplate: string;
 		statusHashSeparator: string;
-		fnSaveIndex?: (this: JQuery, index: number) => void;
-		fnLoadIndex?: (this: JQuery) => number;
+		fnSavePosition?: (this: JQuery, position: TabItemPosition) => void;
+		fnLoadPosition?: (this: JQuery) => TabItemPosition;
 		fixedHeight: boolean;
 
 		mode: Mode;
-		activeIndex: number;
+		activePosition: TabItemPosition;
 		createEmptyTab: boolean;
 		fnShowPanelItem: (this: JQuery, $panelItem: JQuery) => JQuery;
 		fnHidePanelItem: (this: JQuery, $panelItem: JQuery) => JQuery;
@@ -32,6 +34,7 @@ declare namespace JQueryTab {
 		titleSelector: string;
 		fnGetTitleContent: (this: JQuery, $title: JQuery) => (JQuery<HTMLElement | Text | Comment> | string | number);
 		keepTitleVisible: boolean;
+		fnGetName: (this: JQuery, $title: JQuery, $rest: JQuery) => string | undefined;
 
 		tabContainerTemplate: Template;
 		tabContainerClass: string;

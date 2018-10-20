@@ -1,8 +1,8 @@
 import $ from "jquery";
-function handleHashChangeEvent(fnParseHashIndex, fnSwitchTo, context, options) {
+function handleHashChangeEvent(fnParseHashPosition, fnSwitchTo, context, options) {
     if (options.statusHashTemplate && window) {
         $(window).on('hashchange', function () {
-            const hashIndex = fnParseHashIndex();
+            const hashIndex = fnParseHashPosition();
             if (hashIndex > -1 && hashIndex !== context.currentIndex) {
                 fnSwitchTo(hashIndex);
             }

@@ -8,7 +8,7 @@ const defaultOptions = {
     statusHashSeparator: '&',
     fixedHeight: false,
     mode: "horizontal" /* Horizontal */,
-    activeIndex: 0,
+    activePosition: 0,
     createEmptyTab: false,
     fnShowPanelItem: function ($panelItem) {
         return $panelItem && $panelItem.show && $panelItem.show();
@@ -23,6 +23,9 @@ const defaultOptions = {
         return $title.contents();
     },
     keepTitleVisible: false,
+    fnGetName: function ($title) {
+        return $title.attr('data-tab-item-name');
+    },
     tabContainerTemplate: '<div></div>',
     tabContainerClass: 'tab-container',
     labelContainerTemplate: '<div></div>',
