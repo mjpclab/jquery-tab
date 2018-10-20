@@ -1,4 +1,8 @@
-function updateActiveState($activeLabelItem: JQuery, $activePanelItem: JQuery, options: JQueryTab.ExpandedOptions) {
+function updateActiveState(
+	$activeLabelItem: JQuery,
+	$activePanelItem: JQuery,
+	options: JQueryTab.ExpandedOptions
+) {
 	const {activeLabelItemClass, inactiveLabelItemClass, activePanelItemClass, inactivePanelItemClass} = options;
 
 	//label items

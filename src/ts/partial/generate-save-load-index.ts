@@ -3,7 +3,11 @@ import $ from "jquery";
 const HASH_PREFIX = '#';
 const RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
 
-function generateSaveLoadIndex(containers: JQueryTab.Containers, context: JQueryTab.Context, options: JQueryTab.ExpandedOptions) {
+function generateSaveLoadIndex(
+	containers: JQueryTab.Containers,
+	context: JQueryTab.Context,
+	options: JQueryTab.ExpandedOptions
+) {
 	const {$region, $tabContainer} = containers;
 	const {statusFieldSelector, statusHashTemplate, statusHashSeparator, fnSaveIndex, fnLoadIndex, activeIndex} = options;
 

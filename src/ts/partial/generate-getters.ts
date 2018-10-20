@@ -1,6 +1,9 @@
 import $ from "jquery";
 
-function generateGetters(containers: JQueryTab.Containers, context: JQueryTab.Context) {
+function generateGetters(
+	containers: JQueryTab.Containers,
+	context: JQueryTab.Context
+) {
 	const {$headerLabelContainerLeaf, $footerLabelContainerLeaf, $panelContainerLeaf} = containers;
 
 	const getCount = function () {

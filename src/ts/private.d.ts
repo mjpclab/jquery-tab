@@ -30,4 +30,10 @@ declare namespace JQueryTab {
 		$footerLabelContainer?: JQuery;
 		$footerLabelContainerLeaf?: JQuery;
 	}
+
+	type fnParseHashIndex = () => number;
+	type fnSwitchTo = (index: number) => void;
+	type fnSaveIndex = (index: number) => void;
+	type fnGetLabel = (index: number) => JQuery;
+	type fnGetPanel = (index: number) => JQuery;
 }
