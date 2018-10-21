@@ -24,14 +24,14 @@
 <script type="text/javascript">
 	$('.tab1').tab({
 		statusHashTemplate: 'tab=',
-		onBeforeSwitch: function (oldIndex, newIndex) {
+		onBeforeSwitch: function (from, to) {
 			if (typeof console !== 'undefined') {
-				console.log('before switch: ' + oldIndex + ' -> ' + newIndex)
+				console.log('before switch: ' + from.index + ' -> ' + to.index)
 			}
 		},
-		onAfterSwitch: function (oldIndex, newIndex) {
+		onAfterSwitch: function (from, to) {
 			if (typeof console !== 'undefined') {
-				console.log('    after switch: ' + oldIndex + ' -> ' + newIndex)
+				console.log('    after switch: ' + from.index + ' -> ' + to.index)
 			}
 		}
 	});

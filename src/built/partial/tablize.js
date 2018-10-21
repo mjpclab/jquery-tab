@@ -22,12 +22,12 @@ function tablize($region, customOptions) {
     const containers = $.extend({ $region }, createTabContainer(options));
     const { $tabContainer } = containers;
     //getters
-    const { getCount, getCurrentIndex, getIndexByName, PositionToIndex, getHeaderLabel, getFooterLabel, getHeaderFooterLabels, getPanel, getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels, getCurrentPanel, getName } = generateGetters(containers, context);
+    const { getCount, getCurrentIndex, getIndexByName, positionToIndex, parsePosition, getHeaderLabel, getFooterLabel, getHeaderFooterLabels, getPanel, getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels, getCurrentPanel, getName } = generateGetters(containers, context);
     //save/load
     const { savePosition, loadPosition, parseHashPosition } = generateSaveLoadIndex(containers, context, options);
     //methods
-    const { switchToWithoutSave, switchTo } = genrateSwitchTo(PositionToIndex, getHeaderFooterLabels, getPanel, savePosition, containers, context, options);
-    const { addTabItem, insertTabItem, add, addWithoutSwitch, insert, remove, } = generateAddRemove(PositionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, containers, context, options);
+    const { switchToWithoutSave, switchTo } = genrateSwitchTo(parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options);
+    const { addTabItem, insertTabItem, add, addWithoutSwitch, insert, remove, } = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, containers, context, options);
     addWithoutSwitch($region);
     //replace original content
     if (!context.itemCount && !options.createEmptyTab) {

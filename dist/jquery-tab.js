@@ -202,6 +202,10 @@
         return context.currentIndex;
       };
 
+      var getName = function getName(index) {
+        return $panelContainerLeaf.children().eq(index).attr('data-tab-item-name');
+      };
+
       var getIndexByName = function getIndexByName(name) {
         var tabItemIndex = -1;
         $panelContainer.children().each(function (index, panel) {
@@ -215,22 +219,47 @@
         return tabItemIndex;
       };
 
-      var PositionToIndex = function PositionToIndex(position) {
+      var positionToIndex = function positionToIndex(position) {
         if (typeof position === 'number') {
           return position;
         } else if (isFinite(position)) {
           return parseInt(position);
-        } else if (position) {
+        } else if (position !== undefined) {
           return getIndexByName(position);
         } else {
           return -1;
         }
       };
 
+      var parsePosition = function parsePosition(position) {
+        if (typeof position === 'number') {
+          return {
+            index: position,
+            name: getName(position)
+          };
+        } else if (isFinite(position)) {
+          var index = parseInt(position);
+          return {
+            index: index,
+            name: getName(index)
+          };
+        } else if (position) {
+          return {
+            index: getIndexByName(position),
+            name: position
+          };
+        } else {
+          return {
+            index: -1,
+            name: undefined
+          };
+        }
+      };
+
       var getHeaderLabel = function getHeaderLabel(position) {
         if ($headerLabelContainerLeaf) {
-          var index = PositionToIndex(position);
-          return $headerLabelContainerLeaf.children(':eq(' + index + ')');
+          var index = positionToIndex(position);
+          return $headerLabelContainerLeaf.children().eq(index);
         }
 
         return $([]);
@@ -238,21 +267,21 @@
 
       var getFooterLabel = function getFooterLabel(position) {
         if ($footerLabelContainerLeaf) {
-          var index = PositionToIndex(position);
-          return $footerLabelContainerLeaf.children(':eq(' + index + ')');
+          var index = positionToIndex(position);
+          return $footerLabelContainerLeaf.children().eq(index);
         }
 
         return $([]);
       };
 
       var getHeaderFooterLabels = function getHeaderFooterLabels(position) {
-        var index = PositionToIndex(position);
+        var index = positionToIndex(position);
         return getHeaderLabel(index).add(getFooterLabel(index));
       };
 
       var getPanel = function getPanel(position) {
-        var index = PositionToIndex(position);
-        return $panelContainerLeaf.children(':eq(' + index + ')');
+        var index = positionToIndex(position);
+        return $panelContainerLeaf.children().eq(index);
       };
 
       var getCurrentHeaderLabel = function getCurrentHeaderLabel() {
@@ -271,15 +300,12 @@
         return getPanel(context.currentIndex);
       };
 
-      var getName = function getName(index) {
-        return getPanel(index).attr('data-tab-item-name');
-      };
-
       return {
         getCount: getCount,
         getCurrentIndex: getCurrentIndex,
         getIndexByName: getIndexByName,
-        PositionToIndex: PositionToIndex,
+        positionToIndex: positionToIndex,
+        parsePosition: parsePosition,
         getHeaderLabel: getHeaderLabel,
         getFooterLabel: getFooterLabel,
         getHeaderFooterLabels: getHeaderFooterLabels,
@@ -417,19 +443,28 @@
       $activePanelItem.siblings().removeClass(activePanelItemClass).addClass(inactivePanelItemClass).attr('aria-hidden', 'true');
     }
 
-    function generateSwitchTo(fnTabItemPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, containers, context, options) {
+    function generateSwitchTo(fnParsePosition, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, containers, context, options) {
       var switchToWithoutSave = function switchToWithoutSave(newPosition) {
-        var newIndex = fnTabItemPositionToIndex(newPosition);
+        var _fnParsePosition = fnParsePosition(newPosition),
+            newIndex = _fnParsePosition.index,
+            newName = _fnParsePosition.name;
 
         if (newIndex < 0 || newIndex >= context.itemCount) {
           return;
         }
 
-        var oldIndex = context.currentIndex;
+        var oldIndex = context.currentIndex,
+            oldName = context.currentName;
         var $tabContainer = containers.$tabContainer; //before switching callback
 
         if (typeof options.onBeforeSwitch === 'function') {
-          options.onBeforeSwitch.call($tabContainer, oldIndex, newIndex);
+          options.onBeforeSwitch.call($tabContainer, {
+            index: oldIndex,
+            name: oldName
+          }, {
+            index: newIndex,
+            name: newName
+          });
         } //labels & panels
 
 
@@ -448,16 +483,33 @@
         } //finalize
 
 
-        context.currentIndex = newIndex; //after switching callback
+        context.currentIndex = newIndex;
+        context.currentName = newName; //after switching callback
 
         if (typeof options.onAfterSwitch === 'function') {
-          options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);
+          options.onAfterSwitch.call($tabContainer, {
+            index: oldIndex,
+            name: oldName
+          }, {
+            index: newIndex,
+            name: newName
+          });
         }
+
+        return {
+          index: newIndex,
+          name: newName
+        };
       };
 
       var switchTo = function switchTo(newPosition) {
-        switchToWithoutSave(newPosition);
-        fnSavePosition(newPosition);
+        var result = switchToWithoutSave(newPosition);
+
+        if (result) {
+          var index = result.index,
+              name = result.name;
+          fnSavePosition(name || index);
+        }
       };
 
       return {
@@ -552,14 +604,14 @@
 
         if (context.itemCount > 0 && index < context.itemCount) {
           if ($headerLabelContainerLeaf) {
-            $headerLabelContainerLeaf.children(':eq(' + index + ')').before(cloneLabelItem());
+            $headerLabelContainerLeaf.children().eq(index).before(cloneLabelItem());
           }
 
           if ($footerLabelContainerLeaf) {
-            $footerLabelContainerLeaf.children(':eq(' + index + ')').before(cloneLabelItem());
+            $footerLabelContainerLeaf.children().eq(index).before(cloneLabelItem());
           }
 
-          $panelContainerLeaf.children(':eq(' + index + ')').before($panelItem);
+          $panelContainerLeaf.children().eq(index).before($panelItem);
 
           if (index <= context.currentIndex) {
             context.currentIndex++;
@@ -662,7 +714,10 @@
         $panelItem.remove();
         context.itemCount--;
 
-        if (index < context.currentIndex) {
+        if (context.itemCount === 0) {
+          context.currentIndex = -1;
+          context.currentName = undefined;
+        } else if (index < context.currentIndex) {
           fnSwitchTo(context.currentIndex - 1);
         } else if (index === context.currentIndex) {
           if (index === context.itemCount) {
@@ -842,7 +897,8 @@
           getCount = _generateGetters.getCount,
           getCurrentIndex = _generateGetters.getCurrentIndex,
           getIndexByName = _generateGetters.getIndexByName,
-          PositionToIndex = _generateGetters.PositionToIndex,
+          positionToIndex = _generateGetters.positionToIndex,
+          parsePosition = _generateGetters.parsePosition,
           getHeaderLabel = _generateGetters.getHeaderLabel,
           getFooterLabel = _generateGetters.getFooterLabel,
           getHeaderFooterLabels = _generateGetters.getHeaderFooterLabels,
@@ -860,11 +916,11 @@
           parseHashPosition = _generateSaveLoadInde.parseHashPosition; //methods
 
 
-      var _genrateSwitchTo = generateSwitchTo(PositionToIndex, getHeaderFooterLabels, getPanel, savePosition, containers, context, options),
+      var _genrateSwitchTo = generateSwitchTo(parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options),
           switchToWithoutSave = _genrateSwitchTo.switchToWithoutSave,
           switchTo = _genrateSwitchTo.switchTo;
 
-      var _generateAddRemove = generateAddRemove(PositionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, containers, context, options),
+      var _generateAddRemove = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, containers, context, options),
           addTabItem = _generateAddRemove.addTabItem,
           insertTabItem = _generateAddRemove.insertTabItem,
           add = _generateAddRemove.add,

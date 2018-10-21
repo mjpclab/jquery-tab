@@ -30,12 +30,12 @@ function generateAddRemove(
 		}
 		if (context.itemCount > 0 && index < context.itemCount) {
 			if ($headerLabelContainerLeaf) {
-				$headerLabelContainerLeaf.children(':eq(' + index + ')').before(cloneLabelItem());
+				$headerLabelContainerLeaf.children().eq(index).before(cloneLabelItem());
 			}
 			if ($footerLabelContainerLeaf) {
-				$footerLabelContainerLeaf.children(':eq(' + index + ')').before(cloneLabelItem());
+				$footerLabelContainerLeaf.children().eq(index).before(cloneLabelItem());
 			}
-			$panelContainerLeaf.children(':eq(' + index + ')').before($panelItem);
+			$panelContainerLeaf.children().eq(index).before($panelItem);
 
 			if (index <= context.currentIndex) {
 				context.currentIndex++;
@@ -141,7 +141,11 @@ function generateAddRemove(
 		$panelItem.remove();
 		context.itemCount--;
 
-		if (index < context.currentIndex) {
+		if (context.itemCount === 0) {
+			context.currentIndex = -1;
+			context.currentName = undefined;
+		}
+		else if (index < context.currentIndex) {
 			fnSwitchTo(context.currentIndex - 1);
 		}
 		else if (index === context.currentIndex) {

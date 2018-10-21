@@ -2,7 +2,11 @@ declare function generateGetters(containers: JQueryTab.Containers, context: JQue
     getCount: () => number;
     getCurrentIndex: () => number;
     getIndexByName: (name: string) => number;
-    PositionToIndex: (position: string | number) => number;
+    positionToIndex: (position: string | number) => number;
+    parsePosition: (position: string | number) => {
+        index: number;
+        name: string | undefined;
+    };
     getHeaderLabel: (position: string | number) => JQuery<HTMLElement>;
     getFooterLabel: (position: string | number) => JQuery<HTMLElement>;
     getHeaderFooterLabels: (position: string | number) => JQuery<HTMLElement>;

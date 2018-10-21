@@ -1,15 +1,15 @@
 import updateActiveState from "./update-active-state";
-function generateSwitchTo(fnTabItemPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, containers, context, options) {
+function generateSwitchTo(fnParsePosition, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, containers, context, options) {
     const switchToWithoutSave = function (newPosition) {
-        const newIndex = fnTabItemPositionToIndex(newPosition);
+        const { index: newIndex, name: newName } = fnParsePosition(newPosition);
         if (newIndex < 0 || newIndex >= context.itemCount) {
             return;
         }
-        const oldIndex = context.currentIndex;
+        const { currentIndex: oldIndex, currentName: oldName } = context;
         const { $tabContainer } = containers;
         //before switching callback
         if (typeof (options.onBeforeSwitch) === 'function') {
-            options.onBeforeSwitch.call($tabContainer, oldIndex, newIndex);
+            options.onBeforeSwitch.call($tabContainer, { index: oldIndex, name: oldName }, { index: newIndex, name: newName });
         }
         //labels & panels
         const $newLabel = fnGetHeaderFooterLabels(newIndex);
@@ -26,14 +26,19 @@ function generateSwitchTo(fnTabItemPositionToIndex, fnGetHeaderFooterLabels, fnG
         }
         //finalize
         context.currentIndex = newIndex;
+        context.currentName = newName;
         //after switching callback
         if (typeof (options.onAfterSwitch) === 'function') {
-            options.onAfterSwitch.call($tabContainer, oldIndex, newIndex);
+            options.onAfterSwitch.call($tabContainer, { index: oldIndex, name: oldName }, { index: newIndex, name: newName });
         }
+        return { index: newIndex, name: newName };
     };
     const switchTo = function (newPosition) {
-        switchToWithoutSave(newPosition);
-        fnSavePosition(newPosition);
+        const result = switchToWithoutSave(newPosition);
+        if (result) {
+            const { index, name } = result;
+            fnSavePosition(name || index);
+        }
     };
     return { switchToWithoutSave, switchTo };
 }

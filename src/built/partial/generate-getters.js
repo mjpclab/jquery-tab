@@ -7,6 +7,9 @@ function generateGetters(containers, context) {
     const getCurrentIndex = function () {
         return context.currentIndex;
     };
+    const getName = function (index) {
+        return $panelContainerLeaf.children().eq(index).attr('data-tab-item-name');
+    };
     const getIndexByName = function (name) {
         let tabItemIndex = -1;
         $panelContainer.children().each(function (index, panel) {
@@ -18,41 +21,68 @@ function generateGetters(containers, context) {
         });
         return tabItemIndex;
     };
-    const PositionToIndex = function (position) {
+    const positionToIndex = function (position) {
         if (typeof position === 'number') {
             return position;
         }
         else if (isFinite(position)) {
             return parseInt(position);
         }
-        else if (position) {
+        else if (position !== undefined) {
             return getIndexByName(position);
         }
         else {
             return -1;
         }
     };
+    const parsePosition = function (position) {
+        if (typeof position === 'number') {
+            return {
+                index: position,
+                name: getName(position)
+            };
+        }
+        else if (isFinite(position)) {
+            const index = parseInt(position);
+            return {
+                index,
+                name: getName(index)
+            };
+        }
+        else if (position) {
+            return {
+                index: getIndexByName(position),
+                name: position
+            };
+        }
+        else {
+            return {
+                index: -1,
+                name: undefined
+            };
+        }
+    };
     const getHeaderLabel = function (position) {
         if ($headerLabelContainerLeaf) {
-            const index = PositionToIndex(position);
-            return $headerLabelContainerLeaf.children(':eq(' + index + ')');
+            const index = positionToIndex(position);
+            return $headerLabelContainerLeaf.children().eq(index);
         }
         return $([]);
     };
     const getFooterLabel = function (position) {
         if ($footerLabelContainerLeaf) {
-            const index = PositionToIndex(position);
-            return $footerLabelContainerLeaf.children(':eq(' + index + ')');
+            const index = positionToIndex(position);
+            return $footerLabelContainerLeaf.children().eq(index);
         }
         return $([]);
     };
     const getHeaderFooterLabels = function (position) {
-        const index = PositionToIndex(position);
+        const index = positionToIndex(position);
         return getHeaderLabel(index).add(getFooterLabel(index));
     };
     const getPanel = function (position) {
-        const index = PositionToIndex(position);
-        return $panelContainerLeaf.children(':eq(' + index + ')');
+        const index = positionToIndex(position);
+        return $panelContainerLeaf.children().eq(index);
     };
     const getCurrentHeaderLabel = function () {
         return getHeaderLabel(context.currentIndex);
@@ -66,14 +96,12 @@ function generateGetters(containers, context) {
     const getCurrentPanel = function () {
         return getPanel(context.currentIndex);
     };
-    const getName = function (index) {
-        return getPanel(index).attr('data-tab-item-name');
-    };
     return {
         getCount,
         getCurrentIndex,
         getIndexByName,
-        PositionToIndex,
+        positionToIndex,
+        parsePosition,
         getHeaderLabel,
         getFooterLabel,
         getHeaderFooterLabels,

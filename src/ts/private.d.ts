@@ -18,6 +18,7 @@ declare namespace JQueryTab {
 		nextItemId: number;
 		itemCount: number;
 		currentIndex: number;
+		currentName?: string;
 	}
 
 	interface Containers {
@@ -32,6 +33,7 @@ declare namespace JQueryTab {
 	}
 
 	type fnPositionToIndex = (position: TabItemPosition) => number;
+	type fnParsePosition = (position: TabItemPosition) => { index: number, name?: string };
 	type fnParseHashPosition = () => TabItemPosition;
 	type fnSwitchTo = (position: TabItemPosition) => void;
 	type fnSavePosition = (position: TabItemPosition) => void;

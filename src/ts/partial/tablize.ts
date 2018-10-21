@@ -31,7 +31,8 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 		getCount,
 		getCurrentIndex,
 		getIndexByName,
-		PositionToIndex,
+		positionToIndex,
+		parsePosition,
 		getHeaderLabel,
 		getFooterLabel,
 		getHeaderFooterLabels,
@@ -47,7 +48,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	const {savePosition, loadPosition, parseHashPosition} = generateSaveLoadIndex(containers, context, options);
 
 	//methods
-	const {switchToWithoutSave, switchTo} = genrateSwitchTo(PositionToIndex, getHeaderFooterLabels, getPanel, savePosition, containers, context, options);
+	const {switchToWithoutSave, switchTo} = genrateSwitchTo(parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options);
 
 	const {
 		addTabItem,
@@ -56,7 +57,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 		addWithoutSwitch,
 		insert,
 		remove,
-	} = generateAddRemove(PositionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, containers, context, options);
+	} = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, containers, context, options);
 
 	addWithoutSwitch($region);
 

@@ -12,6 +12,10 @@ function generateGetters(
 	const getCurrentIndex = function () {
 		return context.currentIndex;
 	};
+
+	const getName = function (index: number) {
+		return $panelContainerLeaf.children().eq(index).attr('data-tab-item-name');
+	};
 	const getIndexByName = function (name: string) {
 		let tabItemIndex = -1;
 
@@ -25,40 +29,66 @@ function generateGetters(
 
 		return tabItemIndex;
 	};
-	const PositionToIndex = function (position: JQueryTab.TabItemPosition): number {
+	const positionToIndex = function (position: JQueryTab.TabItemPosition): number {
 		if (typeof position === 'number') {
 			return position;
 		} else if (isFinite(position)) {
 			return parseInt(position)
 		}
-		else if (position) {
+		else if (position !== undefined) {
 			return getIndexByName(position);
 		}
 		else {
 			return -1;
 		}
 	};
+	const parsePosition = function (position: JQueryTab.TabItemPosition) {
+		if (typeof position === 'number') {
+			return {
+				index: position,
+				name: getName(position)
+			};
+		} else if (isFinite(position)) {
+			const index = parseInt(position);
+			return {
+				index,
+				name: getName(index)
+			}
+		}
+		else if (position) {
+			return {
+				index: getIndexByName(position),
+				name: position
+			}
+		}
+		else {
+			return {
+				index: -1,
+				name: undefined
+			};
+		}
+	};
 	const getHeaderLabel = function (position: JQueryTab.TabItemPosition) {
 		if ($headerLabelContainerLeaf) {
-			const index = PositionToIndex(position);
-			return $headerLabelContainerLeaf.children(':eq(' + index + ')');
+			const index = positionToIndex(position);
+			return $headerLabelContainerLeaf.children().eq(index);
 		}
 		return $([]);
 	};
 	const getFooterLabel = function (position: JQueryTab.TabItemPosition) {
 		if ($footerLabelContainerLeaf) {
-			const index = PositionToIndex(position);
-			return $footerLabelContainerLeaf.children(':eq(' + index + ')');
+			const index = positionToIndex(position);
+			return $footerLabelContainerLeaf.children().eq(index);
 		}
 		return $([]);
 	};
 	const getHeaderFooterLabels = function (position: JQueryTab.TabItemPosition) {
-		const index = PositionToIndex(position);
+		const index = positionToIndex(position);
 		return getHeaderLabel(index).add(getFooterLabel(index));
 	};
 	const getPanel = function (position: JQueryTab.TabItemPosition) {
-		const index = PositionToIndex(position);
-		return $panelContainerLeaf.children(':eq(' + index + ')');
+		const index = positionToIndex(position);
+		return $panelContainerLeaf.children().eq(index);
 	};
 
 	const getCurrentHeaderLabel = function () {
@@ -77,16 +107,12 @@ function generateGetters(
 		return getPanel(context.currentIndex);
 	};
 
-	const getName = function (index: number) {
-		return getPanel(index).attr('data-tab-item-name');
-	};
-
-
 	return {
 		getCount,
 		getCurrentIndex,
 		getIndexByName,
-		PositionToIndex,
+		positionToIndex,
+		parsePosition,
 		getHeaderLabel,
 		getFooterLabel,
 		getHeaderFooterLabels,
