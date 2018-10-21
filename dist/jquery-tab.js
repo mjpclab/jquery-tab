@@ -662,7 +662,7 @@
         $(window).on('hashchange', function () {
           var hashIndex = parseHashIndex();
 
-          if (hashIndex > -1) {
+          if (hashIndex > -1 && hashIndex !== context.currentIndex) {
             switchTo(hashIndex);
           }
         });

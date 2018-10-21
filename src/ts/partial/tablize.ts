@@ -215,7 +215,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	if (options.statusHashTemplate && window) {
 		$(window).on('hashchange', function () {
 			const hashIndex = parseHashIndex();
-			if (hashIndex > -1) {
+			if (hashIndex > -1 && hashIndex !== context.currentIndex) {
 				switchTo(hashIndex);
 			}
 		});
