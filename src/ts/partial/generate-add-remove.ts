@@ -11,6 +11,12 @@ function generateAddRemove(
 	context: JQueryTab.Context,
 	options: JQueryTab.ExpandedOptions
 ) {
+	const _switchIfInitial = function () {
+		if (context.currentIndex === -1 && context.itemCount) {
+			fnSwitchTo(0);
+		}
+	};
+
 	const insertTabItemWithoutSwitch = function (
 		tabItem: JQueryTab.TabItem,
 		position: JQueryTab.TabItemPosition
@@ -57,18 +63,14 @@ function generateAddRemove(
 		position: JQueryTab.TabItemPosition
 	) {
 		insertTabItemWithoutSwitch(tabItem, position);
-		if (context.currentIndex === -1 && context.itemCount) {
-			fnSwitchTo(0);
-		}
+		_switchIfInitial();
 	};
 	const addTabItemWithoutSwitch = function (tabItem: JQueryTab.TabItem) {
 		insertTabItemWithoutSwitch(tabItem, context.itemCount);
 	};
 	const addTabItem = function (tabItem: JQueryTab.TabItem) {
 		addTabItemWithoutSwitch(tabItem);
-		if (context.currentIndex === -1 && context.itemCount) {
-			fnSwitchTo(0);
-		}
+		_switchIfInitial();
 	};
 
 	const insertWithoutSwitch = function (
@@ -114,18 +116,14 @@ function generateAddRemove(
 		position: JQueryTab.TabItemPosition
 	) {
 		insertWithoutSwitch(sourceRegion, position);
-		if (context.currentIndex === -1 && context.itemCount) {
-			fnSwitchTo(0);
-		}
+		_switchIfInitial();
 	};
 	const addWithoutSwitch = function (sourceRegion: JQueryTab.JQueriable) {
 		insertWithoutSwitch(sourceRegion, context.itemCount);
 	};
 	const add = function (sourceRegion: JQueryTab.JQueriable) {
 		addWithoutSwitch(sourceRegion);
-		if (context.currentIndex === -1 && context.itemCount) {
-			fnSwitchTo(0);
-		}
+		_switchIfInitial();
 	};
 	const remove = function (position: JQueryTab.TabItemPosition) {
 		const index = fnPositionToIndex(position);

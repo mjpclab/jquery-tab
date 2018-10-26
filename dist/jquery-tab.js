@@ -665,6 +665,12 @@
     }
 
     function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, fnSwitchTo, containers, context, options) {
+      var _switchIfInitial = function _switchIfInitial() {
+        if (context.currentIndex === -1 && context.itemCount) {
+          fnSwitchTo(0);
+        }
+      };
+
       var insertTabItemWithoutSwitch = function insertTabItemWithoutSwitch(tabItem, position) {
         var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf,
             $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf,
@@ -717,9 +723,7 @@
       var insertTabItem = function insertTabItem(tabItem, position) {
         insertTabItemWithoutSwitch(tabItem, position);
 
-        if (context.currentIndex === -1 && context.itemCount) {
-          fnSwitchTo(0);
-        }
+        _switchIfInitial();
       };
 
       var addTabItemWithoutSwitch = function addTabItemWithoutSwitch(tabItem) {
@@ -729,9 +733,7 @@
       var addTabItem = function addTabItem(tabItem) {
         addTabItemWithoutSwitch(tabItem);
 
-        if (context.currentIndex === -1 && context.itemCount) {
-          fnSwitchTo(0);
-        }
+        _switchIfInitial();
       };
 
       var insertWithoutSwitch = function insertWithoutSwitch(sourceRegion, position) {
@@ -772,9 +774,7 @@
       var insert = function insert(sourceRegion, position) {
         insertWithoutSwitch(sourceRegion, position);
 
-        if (context.currentIndex === -1 && context.itemCount) {
-          fnSwitchTo(0);
-        }
+        _switchIfInitial();
       };
 
       var addWithoutSwitch = function addWithoutSwitch(sourceRegion) {
@@ -784,9 +784,7 @@
       var add = function add(sourceRegion) {
         addWithoutSwitch(sourceRegion);
 
-        if (context.currentIndex === -1 && context.itemCount) {
-          fnSwitchTo(0);
-        }
+        _switchIfInitial();
       };
 
       var remove = function remove(position) {

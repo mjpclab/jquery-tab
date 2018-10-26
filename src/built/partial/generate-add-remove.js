@@ -1,6 +1,11 @@
 import createTabItem from "./create-tab-item";
 import $ from "jquery";
 function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, fnSwitchTo, containers, context, options) {
+    const _switchIfInitial = function () {
+        if (context.currentIndex === -1 && context.itemCount) {
+            fnSwitchTo(0);
+        }
+    };
     const insertTabItemWithoutSwitch = function (tabItem, position) {
         const { $headerLabelContainerLeaf, $footerLabelContainerLeaf, $panelContainerLeaf } = containers;
         const { $panelItem, cloneLabelItem } = createTabItem(tabItem, context, options);
@@ -37,18 +42,14 @@ function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPane
     };
     const insertTabItem = function (tabItem, position) {
         insertTabItemWithoutSwitch(tabItem, position);
-        if (context.currentIndex === -1 && context.itemCount) {
-            fnSwitchTo(0);
-        }
+        _switchIfInitial();
     };
     const addTabItemWithoutSwitch = function (tabItem) {
         insertTabItemWithoutSwitch(tabItem, context.itemCount);
     };
     const addTabItem = function (tabItem) {
         addTabItemWithoutSwitch(tabItem);
-        if (context.currentIndex === -1 && context.itemCount) {
-            fnSwitchTo(0);
-        }
+        _switchIfInitial();
     };
     const insertWithoutSwitch = function (sourceRegion, position) {
         const { titleSelector, fnGetTitleContent, keepTitleVisible, fnGetTabItemName, fnIsTabItemDisabled, fnIsTabItemHidden } = options;
@@ -77,18 +78,14 @@ function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPane
     };
     const insert = function (sourceRegion, position) {
         insertWithoutSwitch(sourceRegion, position);
-        if (context.currentIndex === -1 && context.itemCount) {
-            fnSwitchTo(0);
-        }
+        _switchIfInitial();
     };
     const addWithoutSwitch = function (sourceRegion) {
         insertWithoutSwitch(sourceRegion, context.itemCount);
     };
     const add = function (sourceRegion) {
         addWithoutSwitch(sourceRegion);
-        if (context.currentIndex === -1 && context.itemCount) {
-            fnSwitchTo(0);
-        }
+        _switchIfInitial();
     };
     const remove = function (position) {
         const index = fnPositionToIndex(position);
