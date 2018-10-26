@@ -2,19 +2,20 @@ import createLabelItem from "./create-label-item";
 import createPanelItem from "./create-panel-item";
 function createTabItem(tabItem, context, options) {
     const { name, disabled, hidden } = tabItem;
+    const { tabItemNameAttr, disabledLabelItemClass, disabledPanelItemClass, hiddenLabelItemClass, hiddenPanelItemClass } = options;
     const { $labelItem, $labelItemLeaf } = createLabelItem(tabItem, options);
     const { $panelItem, $panelItemLeaf } = createPanelItem(tabItem, options);
     if (name) {
-        $labelItem.attr('data-tab-item-name', name);
-        $panelItem.attr('data-tab-item-name', name);
+        $labelItem.attr(tabItemNameAttr, name);
+        $panelItem.attr(tabItemNameAttr, name);
     }
     if (disabled) {
-        $labelItem.addClass(options.disabledLabelItemClass);
-        $panelItem.addClass(options.disabledPanelItemClass);
+        $labelItem.addClass(disabledLabelItemClass);
+        $panelItem.addClass(disabledPanelItemClass);
     }
     if (hidden) {
-        $labelItem.addClass(options.hiddenLabelItemClass);
-        $panelItem.addClass(options.hiddenPanelItemClass);
+        $labelItem.addClass(hiddenLabelItemClass);
+        $panelItem.addClass(hiddenPanelItemClass);
     }
     const { containerId, nextItemId: itemId } = context;
     context.nextItemId++;

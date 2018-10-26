@@ -7,6 +7,7 @@ function getExpandedOptions(defaultOptions, dataOptions, customOptions) {
         verticalTabContainerClass: tabContainerClass + '-vertical',
         headerLabelContainerClass: labelContainerClass + '-header',
         footerLabelContainerClass: labelContainerClass + '-footer',
+        tabItemNameAttr: 'data-tab-item-name',
         activeLabelItemClass: labelItemClass + '-active',
         inactiveLabelItemClass: labelItemClass + '-inactive',
         disabledLabelItemClass: labelItemClass + '-disabled',
@@ -14,7 +15,7 @@ function getExpandedOptions(defaultOptions, dataOptions, customOptions) {
         activePanelItemClass: panelItemClass + '-active',
         inactivePanelItemClass: panelItemClass + '-inactive',
         disabledPanelItemClass: panelItemClass + '-disabled',
-        hiddenPanelItemClass: panelItemClass + '-hidden',
+        hiddenPanelItemClass: panelItemClass + '-hidden'
     });
     return expandedOptions;
 }

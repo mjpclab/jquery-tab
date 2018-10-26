@@ -6,6 +6,8 @@ declare namespace JQueryTab {
 		headerLabelContainerClass: string;
 		footerLabelContainerClass: string;
 
+		tabItemNameAttr: string;
+
 		activeLabelItemClass: string;
 		inactiveLabelItemClass: string;
 		disabledLabelItemClass: string;

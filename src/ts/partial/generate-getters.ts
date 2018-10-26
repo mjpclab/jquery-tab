@@ -12,7 +12,7 @@ function generateGetters(
 		$panelContainerLeaf
 	} = containers;
 
-	const {disabledPanelItemClass, hiddenPanelItemClass} = options;
+	const {tabItemNameAttr, disabledPanelItemClass, hiddenPanelItemClass} = options;
 
 	const getCount = function () {
 		return context.itemCount;
@@ -22,14 +22,14 @@ function generateGetters(
 	};
 
 	const getTabItemName = function (index: number) {
-		return $panelContainerLeaf.children().eq(index).attr('data-tab-item-name');
+		return $panelContainerLeaf.children().eq(index).attr(tabItemNameAttr);
 	};
 	const getTabItemIndexByName = function (name: string) {
 		let tabItemIndex = -1;
 
 		$panelContainer.children().each(function (index, panel) {
 			const $panel = $(panel);
-			if ($panel.attr('data-tab-item-name') === name) {
+			if ($panel.attr(tabItemNameAttr) === name) {
 				tabItemIndex = $panel.index();
 				return false;
 			}

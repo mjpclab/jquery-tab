@@ -69,6 +69,7 @@
         verticalTabContainerClass: tabContainerClass + '-vertical',
         headerLabelContainerClass: labelContainerClass + '-header',
         footerLabelContainerClass: labelContainerClass + '-footer',
+        tabItemNameAttr: 'data-tab-item-name',
         activeLabelItemClass: labelItemClass + '-active',
         inactiveLabelItemClass: labelItemClass + '-inactive',
         disabledLabelItemClass: labelItemClass + '-disabled',
@@ -205,7 +206,8 @@
           $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf,
           $panelContainer = containers.$panelContainer,
           $panelContainerLeaf = containers.$panelContainerLeaf;
-      var disabledPanelItemClass = options.disabledPanelItemClass,
+      var tabItemNameAttr = options.tabItemNameAttr,
+          disabledPanelItemClass = options.disabledPanelItemClass,
           hiddenPanelItemClass = options.hiddenPanelItemClass;
 
       var getCount = function getCount() {
@@ -217,7 +219,7 @@
       };
 
       var getTabItemName = function getTabItemName(index) {
-        return $panelContainerLeaf.children().eq(index).attr('data-tab-item-name');
+        return $panelContainerLeaf.children().eq(index).attr(tabItemNameAttr);
       };
 
       var getTabItemIndexByName = function getTabItemIndexByName(name) {
@@ -225,7 +227,7 @@
         $panelContainer.children().each(function (index, panel) {
           var $panel = $(panel);
 
-          if ($panel.attr('data-tab-item-name') === name) {
+          if ($panel.attr(tabItemNameAttr) === name) {
             tabItemIndex = $panel.index();
             return false;
           }
@@ -347,6 +349,35 @@
         getCurrentFooterLabel: getCurrentFooterLabel,
         getCurrentHeaderFooterLabels: getCurrentHeaderFooterLabels,
         getCurrentPanel: getCurrentPanel
+      };
+    }
+
+    function generateTabItemSetter(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, options) {
+      var tabItemNameAttr = options.tabItemNameAttr,
+          disabledLabelItemClass = options.disabledLabelItemClass,
+          disabledPanelItemClass = options.disabledPanelItemClass,
+          hiddenLabelItemClass = options.hiddenLabelItemClass,
+          hiddenPanelItemClass = options.hiddenPanelItemClass;
+
+      var setTabItemName = function setTabItemName(name, position) {
+        fnGetHeaderFooterLabels(position).attr(tabItemNameAttr, name);
+        fnGetPanel(position).attr(tabItemNameAttr, name);
+      };
+
+      var setTabItemDisabled = function setTabItemDisabled(disabled, position) {
+        fnGetHeaderFooterLabels(position).toggleClass(disabledLabelItemClass, disabled);
+        fnGetPanel(position).toggleClass(disabledPanelItemClass, disabled);
+      };
+
+      var setTabItemHidden = function setTabItemHidden(hidden, position) {
+        fnGetHeaderFooterLabels(position).toggleClass(hiddenLabelItemClass, hidden);
+        fnGetPanel(position).toggleClass(hiddenPanelItemClass, hidden);
+      };
+
+      return {
+        setTabItemName: setTabItemName,
+        setTabItemDisabled: setTabItemDisabled,
+        setTabItemHidden: setTabItemHidden
       };
     }
 
@@ -574,6 +605,11 @@
       var name = tabItem.name,
           disabled = tabItem.disabled,
           hidden = tabItem.hidden;
+      var tabItemNameAttr = options.tabItemNameAttr,
+          disabledLabelItemClass = options.disabledLabelItemClass,
+          disabledPanelItemClass = options.disabledPanelItemClass,
+          hiddenLabelItemClass = options.hiddenLabelItemClass,
+          hiddenPanelItemClass = options.hiddenPanelItemClass;
 
       var _createLabelItem = createLabelItem(tabItem, options),
           $labelItem = _createLabelItem.$labelItem,
@@ -584,18 +620,18 @@
           $panelItemLeaf = _createPanelItem.$panelItemLeaf;
 
       if (name) {
-        $labelItem.attr('data-tab-item-name', name);
-        $panelItem.attr('data-tab-item-name', name);
+        $labelItem.attr(tabItemNameAttr, name);
+        $panelItem.attr(tabItemNameAttr, name);
       }
 
       if (disabled) {
-        $labelItem.addClass(options.disabledLabelItemClass);
-        $panelItem.addClass(options.disabledPanelItemClass);
+        $labelItem.addClass(disabledLabelItemClass);
+        $panelItem.addClass(disabledPanelItemClass);
       }
 
       if (hidden) {
-        $labelItem.addClass(options.hiddenLabelItemClass);
-        $panelItem.addClass(options.hiddenPanelItemClass);
+        $labelItem.addClass(hiddenLabelItemClass);
+        $panelItem.addClass(hiddenPanelItemClass);
       }
 
       var containerId = context.containerId,
@@ -628,7 +664,7 @@
       };
     }
 
-    function generateAddRemove(fnTabItemPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, fnSwitchTo, containers, context, options) {
+    function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, fnSwitchTo, containers, context, options) {
       var insertTabItemWithoutSwitch = function insertTabItemWithoutSwitch(tabItem, position) {
         var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf,
             $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf,
@@ -642,7 +678,7 @@
           options.fnHidePanelItem.call($panelItem, $panelItem);
         }
 
-        var index = fnTabItemPositionToIndex(position);
+        var index = fnPositionToIndex(position);
 
         if (index < 0) {
           index = 0;
@@ -707,7 +743,7 @@
             fnIsTabItemHidden = options.fnIsTabItemHidden;
         var $sourceRegion = $(sourceRegion);
         var inserted = 0;
-        var index = fnTabItemPositionToIndex(position);
+        var index = fnPositionToIndex(position);
 
         while (true) {
           var $title = $sourceRegion.find(titleSelector).first();
@@ -754,7 +790,7 @@
       };
 
       var remove = function remove(position) {
-        var index = fnTabItemPositionToIndex(position);
+        var index = fnPositionToIndex(position);
 
         if (index < 0 || index >= context.itemCount) {
           return;
@@ -825,7 +861,8 @@
     }
 
     function hahdleClickEvent(fnSwitchTo, containers, context, options) {
-      var triggerEvents = options.triggerEvents,
+      var tabItemNameAttr = options.tabItemNameAttr,
+          triggerEvents = options.triggerEvents,
           delayTriggerEvents = options.delayTriggerEvents,
           delayTriggerCancelEvents = options.delayTriggerCancelEvents,
           delayTriggerLatency = options.delayTriggerLatency,
@@ -863,7 +900,7 @@
           return;
         }
 
-        var tabItemName = $label.attr('data-tab-item-name');
+        var tabItemName = $label.attr(tabItemNameAttr);
         startDelayTrigger(tabItemName || labelIndex);
       };
 
@@ -916,7 +953,7 @@
           return;
         }
 
-        var tabItemName = $label.attr('data-tab-item-name');
+        var tabItemName = $label.attr(tabItemNameAttr);
         fnSwitchTo(tabItemName || labelIndex);
       };
 
@@ -963,7 +1000,13 @@
           getCurrentHeaderLabel = _generateGetters.getCurrentHeaderLabel,
           getCurrentFooterLabel = _generateGetters.getCurrentFooterLabel,
           getCurrentHeaderFooterLabels = _generateGetters.getCurrentHeaderFooterLabels,
-          getCurrentPanel = _generateGetters.getCurrentPanel; //save/load
+          getCurrentPanel = _generateGetters.getCurrentPanel; //tab item setter
+
+
+      var _generateTabItemSette = generateTabItemSetter(positionToIndex, getHeaderFooterLabels, getPanel, options),
+          setTabItemName = _generateTabItemSette.setTabItemName,
+          setTabItemDisabled = _generateTabItemSette.setTabItemDisabled,
+          setTabItemHidden = _generateTabItemSette.setTabItemHidden; //save/load
 
 
       var _generateSaveLoadInde = generateSaveLoadIndex(containers, context, options),
@@ -1014,6 +1057,9 @@
         getCurrentFooterLabel: getCurrentFooterLabel,
         getCurrentHeaderFooterLabels: getCurrentHeaderFooterLabels,
         getCurrentPanel: getCurrentPanel,
+        setTabItemName: setTabItemName,
+        setTabItemDisabled: setTabItemDisabled,
+        setTabItemHidden: setTabItemHidden,
         updateFixedHeight: updateFixedHeight,
         switchTo: switchTo,
         addTabItem: addTabItem,

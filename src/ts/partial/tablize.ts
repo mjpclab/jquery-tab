@@ -3,6 +3,7 @@ import defaultOptions from "../utility/default-options";
 import getExpandedOptions from '../utility/get-expanded-options';
 import createTabContainer from './create-tab-container';
 import generateGetters from './generate-getters';
+import generateTabItemSetter from './generate-tab-item-setter';
 import generateSaveLoadIndex from './generate-save-load-index';
 import genrateSwitchTo from './generate-switch-to';
 import generateAddRemove from './generate-add-remove';
@@ -34,17 +35,15 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 		getTabItemIndexByName,
 		positionToIndex,
 		parsePosition,
-		isTabItemDisabled,
-		isTabItemHidden,
-		getHeaderLabel,
-		getFooterLabel,
-		getHeaderFooterLabels,
+		isTabItemDisabled, isTabItemHidden,
+		getHeaderLabel, getFooterLabel, getHeaderFooterLabels,
 		getPanel,
-		getCurrentHeaderLabel,
-		getCurrentFooterLabel,
-		getCurrentHeaderFooterLabels,
+		getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels,
 		getCurrentPanel
 	} = generateGetters(containers, context, options);
+
+	//tab item setter
+	const {setTabItemName, setTabItemDisabled, setTabItemHidden} = generateTabItemSetter(positionToIndex, getHeaderFooterLabels, getPanel, options)
 
 	//save/load
 	const {savePosition, loadPosition, parseHashPosition} = generateSaveLoadIndex(containers, context, options);
@@ -84,16 +83,12 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 		getCurrentIndex,
 		getTabItemName,
 		getTabItemIndexByName,
-		isTabItemDisabled,
-		isTabItemHidden,
-		getHeaderLabel,
-		getFooterLabel,
-		getHeaderFooterLabels,
+		isTabItemDisabled, isTabItemHidden,
+		getHeaderLabel, getFooterLabel, getHeaderFooterLabels,
 		getPanel,
-		getCurrentHeaderLabel,
-		getCurrentFooterLabel,
-		getCurrentHeaderFooterLabels,
+		getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels,
 		getCurrentPanel,
+		setTabItemName, setTabItemDisabled, setTabItemHidden,
 		updateFixedHeight,
 		switchTo,
 		addTabItem,

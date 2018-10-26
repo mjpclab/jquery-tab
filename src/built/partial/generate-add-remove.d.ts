@@ -1,5 +1,5 @@
 /// <reference types="jquery" />
-declare function generateAddRemove(fnTabItemPositionToIndex: JQueryTab.fnPositionToIndex, fnGetHeaderFooterLabels: JQueryTab.fnGetLabel, fnGetPanel: JQueryTab.fnGetPanel, fnSavePosition: JQueryTab.fnSavePosition, fnSwitchTo: JQueryTab.fnSwitchTo, containers: JQueryTab.Containers, context: JQueryTab.Context, options: JQueryTab.ExpandedOptions): {
+declare function generateAddRemove(fnPositionToIndex: JQueryTab.fnPositionToIndex, fnGetHeaderFooterLabels: JQueryTab.fnGetLabel, fnGetPanel: JQueryTab.fnGetPanel, fnSavePosition: JQueryTab.fnSavePosition, fnSwitchTo: JQueryTab.fnSwitchTo, containers: JQueryTab.Containers, context: JQueryTab.Context, options: JQueryTab.ExpandedOptions): {
     insertTabItemWithoutSwitch: (tabItem: JQueryTab.TabItem, position: string | number) => void;
     insertTabItem: (tabItem: JQueryTab.TabItem, position: string | number) => void;
     addTabItemWithoutSwitch: (tabItem: JQueryTab.TabItem) => void;

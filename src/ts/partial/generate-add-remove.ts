@@ -2,7 +2,7 @@ import createTabItem from "./create-tab-item";
 import $ from "jquery";
 
 function generateAddRemove(
-	fnTabItemPositionToIndex: JQueryTab.fnPositionToIndex,
+	fnPositionToIndex: JQueryTab.fnPositionToIndex,
 	fnGetHeaderFooterLabels: JQueryTab.fnGetLabel,
 	fnGetPanel: JQueryTab.fnGetPanel,
 	fnSavePosition: JQueryTab.fnSavePosition,
@@ -22,7 +22,7 @@ function generateAddRemove(
 			options.fnHidePanelItem.call($panelItem, $panelItem);
 		}
 
-		let index = fnTabItemPositionToIndex(position);
+		let index = fnPositionToIndex(position);
 		if (index < 0) {
 			index = 0;
 		}
@@ -86,7 +86,7 @@ function generateAddRemove(
 
 		const $sourceRegion = $(sourceRegion);
 		let inserted = 0;
-		const index = fnTabItemPositionToIndex(position);
+		const index = fnPositionToIndex(position);
 		while (true) {
 			const $title = $sourceRegion.find(titleSelector).first();
 			if ($title.length === 0) {
@@ -128,7 +128,7 @@ function generateAddRemove(
 		}
 	};
 	const remove = function (position: JQueryTab.TabItemPosition) {
-		const index = fnTabItemPositionToIndex(position);
+		const index = fnPositionToIndex(position);
 		if (index < 0 || index >= context.itemCount) {
 			return;
 		}
