@@ -93,8 +93,33 @@ That would be convenient if using this class name with attribute options. Then n
 </div>
 ```
 
+# Deal with individual tab item
+Tab item property can be specified on title element:
+```html
+<div class="region">
+	<h1 data-tab-item-name="first-item">title 1</h1>
+	<p>tab 1 content</p>
+	<p>another tab 1 content</p>
+
+	<h1 data-tab-item-disabled="true">title 2</h1>
+	<p>tab 2 content</p>
+	<p>another tab 2 content</p>
+</div>
+```
+Supported properties:  
+`tabItemName`  
+The name should be a non-numeric string, otherwise in controller method parameters, it will be treated as a index.
+The name can only contains letters, digits, dashes and underlines.
+If names are duplicated in the same tab container, only first item will be recognized.
+
+`tabItemDisabled`  
+Specify if this tab item is disabled. A non-`false` value will be treated as disabled, even for empty string.
+
+`tabItemHidden`  
+Specify if this tab item is hidden. A non-`false` value will be treated as hidden, even for empty string.
+
 # Options List
-## Behavior Options
+## Behavior
 `triggerEvents`  
 Determine the types of events triggered on label-item that will make the panel-item switched.
 Default value is `click`.
@@ -131,6 +156,16 @@ A callback before switching the tab. Returns `false` to cancel a switching attem
 
 `onAfterSwitch(oldIndex, newIndex)`  
 A callback after switching the tab.
+
+## Tab item
+`fnGetTabItemName($title, $content)`  
+Customize the logic of getting tab item name when initializing.
+
+`fnIsTabItemDisabled($title, $content)`  
+Customize the logic of determining if a tab item is disabled when initializing.
+
+`fnIsTabItemHidden($title, $content)`  
+Customize the logic of determining if a tab item is hidden when initializing.
 
 ## Save/Load active Index
 jquery-tab will load active index by priority of statusFieldSelector, statusHashTemplate, fnLoadIndex and activePosition.
@@ -198,7 +233,9 @@ Label item's template.
 `labelItemClass`  
 CSS class for label item. Default value is 'label-item'.  
 If it is current active label item, then also append class "`labelItemClass`-active",
-otherwise append class "`labelItemClass`-inactive".
+otherwise append class "`labelItemClass`-inactive".  
+If tab item of the label is disabled, then also append class "`labelItemClass`-disabled".
+If tab item of the label is hidden, then also append class "`labelItemClass`-hidden".
 
 ### Panel
 `panelContainerTemplate`  
@@ -214,28 +251,10 @@ Panel-item's template.
 CSS class for panel item. Default value is 'panel-item'.  
 If it is current active panel item, then also append class "`panelItemClass`-active",
 otherwise append class "`panelItemClass`-inactive".
+If tab item of the panel is disabled, then also append class "`panelItemClass`-disabled".
+If tab item of the panel is hidden, then also append class "`panelItemClass`-hidden".
 
-# the Controller
-## Specify tab item name
-Some controller methods allow you to specify tab item name instead of tab item index.
-This is more meaningful and readable for human.
-Adding `data-tab-item-name` to title element to specify tab item name:
-``` html
-<div class="region">
-	<h1 data-tab-item-name="first-item">title 1</h1>
-	<p>tab 1 content</p>
-	<p>another tab 1 content</p>
-
-	<h1 data-tab-item-name="second-item">title 2</h1>
-	<p>tab 2 content</p>
-	<p>another tab 2 content</p>
-</div>
-```
-The tab item name is optional.
-The name should be a non-numeric string, otherwise in controller method parameters, it will be treated as a index.
-The name can only contains letters, digits, dashes and underlines.
-If names are duplicated in the same tab container, only first item will be recognized.
-
+# The Controller
 ## Get Controller
 Get tab controller from tab container element or original content region container:
 ``` javascript
@@ -244,18 +263,38 @@ var controller = $('.tab-container').data('tab-controller');
 ```
 
 ## Controller Methods
+### States
 `getCount()`  
 Get the number of panels.
 
 `getCurrentIndex()`  
 Get current active panel Index.
 
+### Tab item
 `getTabItemIndexByName(name)`  
 Get tab item index by `name`.
 
 `getTabItemName(index)`  
 Get tab item name by `index`.
 
+`setTabItemName(newName, name | index)`  
+set a new name for a specific tab item which its name is `name` or its index is `index`.
+
+`isTabItemDisabled(name | index)`  
+Check if a tab item is disabled.
+Returns boolean type if tab item exists. Returns `undefined` otherwise.
+
+`setTabItemDisabled(isDisabled, name | index)`  
+Specify if a tab item is disabled.
+
+`isTabItemHidden(name | index)`  
+Check if a tab item is hidden.
+Returns boolean type if tab item exists. Returns `undefined` otherwise.
+
+`setTabItemHidden(isHidden, name | index)`  
+Specify if a tab item is hidden.
+
+### DOM access
 `getHeaderLabel(name | index)`    
 `getFooterLabel(name | index)`  
 `getHeaderFooterLabels(name | index)`    
@@ -276,15 +315,17 @@ Get current active panel item.
 When panel item's content is dynamically changed and becomes longer, use this method to update the height of the panel container.
 Only available in height fixed mode by setting option `fixedHeight`.
 
+### Switch
 `switchTo(name | index)`  
 Switch active(selected) panel item by index or tab item name.
 
-`addTabItem(title, content, name=undefined)`  
-Append a new tab item to existing tab container. Both `title` and `content` can be text, HTML or jquery object.
-
-`insertTabItem(title, content, name=undefined, before-name | before-index)`  
-Insert a new tab item to existing tab container, before the tab item which its name is `before-name` or its index is `before-index`.
-Both `title` and `content` can be text, HTML or jquery object.
+### Modify
+`addTabItem({title, content, name?, disabled?, hidden})`  
+`insertTabItem({title, content, name?, disabled?, hidden}, before-name | before-index)`  
+Append/insert a new tab item to existing tab container. Both `title` and `content` can be text, HTML or jquery object.  
+Optional `name` can be specified so that this item could be referenced later.  
+Set optional `disabled` to `true` to mark this tab item is disabled.  
+Set optional `hidden` to `true` to mark this tab item is hidden.
 
 `add($region)`  
 Parse and append another $region's structure to current tab. 
