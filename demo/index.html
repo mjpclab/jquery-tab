@@ -113,8 +113,8 @@
 		});
 		var tab2Controller = $('.tab2').data('tab-controller');
 		tab2Controller.switchTo(1);
-		tab2Controller.insertTabItem('inserted', '<p>inserted panel content</p>','', 1);
-		tab2Controller.addTabItem('<span>added</span>', '<h1>added panel content</h1>');
+		tab2Controller.insertTabItem({title: 'inserted', content: '<p>inserted panel content</p>'}, 1);
+		tab2Controller.addTabItem({title: '<span>added</span>', content: '<h1>added panel content</h1>'});
 		tab2Controller.insert($('.to-be-insert'), 0);
 		tab2Controller.remove(2);
 

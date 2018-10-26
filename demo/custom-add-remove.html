@@ -39,7 +39,7 @@
 
 	btnAppend.onclick = function () {
 		var nextIndex = controller.getCount();
-		controller.addTabItem('label-' + nextIndex, '<p>content-' + nextIndex + '</p>');
+		controller.addTabItem({title: 'label-' + nextIndex, content: '<p>content-' + nextIndex + '</p>'});
 	};
 
 	btnRemove.onclick = function () {

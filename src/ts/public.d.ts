@@ -11,6 +11,14 @@ declare namespace JQueryTab {
 
 	type TabItemPosition = number | string;
 
+	interface TabItem {
+		title: JQueryTab.JQueriable;
+		content: JQueryTab.JQueriable;
+		name?: string;
+		disabled?: boolean;
+		hidden?: boolean;
+	}
+
 	interface NecessaryOptions {
 		triggerEvents: string;
 		delayTriggerEvents: string;
@@ -32,9 +40,11 @@ declare namespace JQueryTab {
 		onAfterSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;
 
 		titleSelector: string;
-		fnGetTitleContent: (this: JQuery, $title: JQuery) => (JQuery<HTMLElement | Text | Comment> | string | number);
+		fnGetTitleContent: (this: JQuery, $title: JQuery) => JQueryTab.JQueriable;
 		keepTitleVisible: boolean;
 		fnGetTabItemName: (this: JQuery, $title: JQuery, $rest: JQuery) => string | undefined;
+		fnIsTabItemDisabled: (this: JQuery, $title: JQuery, $rest: JQuery) => boolean;
+		fnIsTabItemHidden: (this: JQuery, $title: JQuery, $rest: JQuery) => boolean;
 
 		tabContainerTemplate: Template;
 		tabContainerClass: string;

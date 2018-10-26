@@ -14,14 +14,14 @@
 	<pre>
 	$('.tab1').tab();
 	var controller = $('.tab1').data('tab-controller');
-	controller.insertTabItem('inserted 1', '&lt;p&gt;inserted content 1&lt;/p&gt;',  '', 1);
-	controller.addTabItem('added', '&lt;p&gt;added content&lt;/p&gt;');
+	controller.insertTabItem({title: 'inserted 1', content: '&lt;p&gt;inserted content 1&lt;/p&gt;'}, 1);
+	controller.addTabItem({title: 'added', content: '&lt;p&gt;added content&lt;/p&gt;'});
 	</pre>
 
 	<h1 data-tab-item-name="dependencies">Dependencies</h1>
 	<p>Depends on any version of jquery.</p>
 
-	<h1 data-tab-item-name="container">Container</h1>
+	<h1 data-tab-item-name="container" data-tab-item-hidden="">Container</h1>
 	<p>In the container, content should arrange like this way:</p>
 	<div>
 		<div>title...</div>
@@ -37,7 +37,7 @@
 		<div>...</div>
 	</div>
 
-	<h1 data-tab-item-name="lorem">Lorem ipsum</h1>
+	<h1 data-tab-item-name="lorem" data-tab-item-disabled="true">Lorem ipsum</h1>
 	<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet
 		dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
 		suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in
@@ -56,8 +56,8 @@
 <script type="text/javascript">
 	$('.tab1').tab();
 	var controller = $('.tab1').data('tab-controller');
-	controller.insertTabItem('inserted 1', '<p>inserted content 1</p>', '', 1);
-	controller.addTabItem('added', '<p>added content</p>');
+	controller.insertTabItem({title: 'inserted 1', content: '<p>inserted content 1</p>'}, 1);
+	controller.addTabItem({title: 'added', content: '<p>added content</p>'});
 </script>
 
 </body>

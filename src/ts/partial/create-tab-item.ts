@@ -2,17 +2,25 @@ import createLabelItem from "./create-label-item";
 import createPanelItem from "./create-panel-item";
 
 function createTabItem(
-	$labelContent: JQueryTab.JQueriable,
-	$panelContent: JQueryTab.JQueriable,
-	tabItemName: string,
+	tabItem: JQueryTab.TabItem,
 	context: JQueryTab.Context,
 	options: JQueryTab.ExpandedOptions
 ) {
-	const {$labelItem, $labelItemLeaf} = createLabelItem($labelContent, options);
-	const {$panelItem, $panelItemLeaf} = createPanelItem($panelContent, options);
-	if (tabItemName) {
-		$labelItem.attr('data-tab-item-name', tabItemName);
-		$panelItem.attr('data-tab-item-name', tabItemName);
+	const {name, disabled, hidden} = tabItem;
+
+	const {$labelItem, $labelItemLeaf} = createLabelItem(tabItem, options);
+	const {$panelItem, $panelItemLeaf} = createPanelItem(tabItem, options);
+	if (name) {
+		$labelItem.attr('data-tab-item-name', name);
+		$panelItem.attr('data-tab-item-name', name);
+	}
+	if (disabled) {
+		$labelItem.addClass(options.disabledLabelItemClass);
+		$panelItem.addClass(options.disabledPanelItemClass);
+	}
+	if (hidden) {
+		$labelItem.addClass(options.hiddenLabelItemClass);
+		$panelItem.addClass(options.hiddenPanelItemClass);
 	}
 
 	const {containerId, nextItemId: itemId} = context;

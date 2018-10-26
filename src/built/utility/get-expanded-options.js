@@ -9,8 +9,12 @@ function getExpandedOptions(defaultOptions, dataOptions, customOptions) {
         footerLabelContainerClass: labelContainerClass + '-footer',
         activeLabelItemClass: labelItemClass + '-active',
         inactiveLabelItemClass: labelItemClass + '-inactive',
+        disabledLabelItemClass: labelItemClass + '-disabled',
+        hiddenLabelItemClass: labelItemClass + '-hidden',
         activePanelItemClass: panelItemClass + '-active',
         inactivePanelItemClass: panelItemClass + '-inactive',
+        disabledPanelItemClass: panelItemClass + '-disabled',
+        hiddenPanelItemClass: panelItemClass + '-hidden',
     });
     return expandedOptions;
 }

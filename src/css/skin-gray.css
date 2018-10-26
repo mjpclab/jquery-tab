@@ -28,3 +28,12 @@
 .tab-container-vertical > .label-container-footer > .label-item-active {
 	border-left-color: #fff;
 }
+
+.tab-container .label-container .label-item-disabled {
+	color: #eee;
+	cursor: default;
+}
+
+.tab-container .label-container .label-item-hidden {
+	display: none;
+}

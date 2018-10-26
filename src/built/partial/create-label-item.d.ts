@@ -1,4 +1,4 @@
-declare function createLabelItem($labelContent: JQueryTab.JQueriable, options: JQueryTab.ExpandedOptions): {
+declare function createLabelItem(tabItem: JQueryTab.TabItem, options: JQueryTab.ExpandedOptions): {
     $labelItem: JQuery<HTMLElement>;
     $labelItemLeaf: JQuery<HTMLElement>;
 };

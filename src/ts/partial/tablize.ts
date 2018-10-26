@@ -33,6 +33,8 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 		getIndexByName,
 		positionToIndex,
 		parsePosition,
+		isTabItemDisabled,
+		isTabItemHidden,
 		getHeaderLabel,
 		getFooterLabel,
 		getHeaderFooterLabels,
@@ -41,8 +43,8 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 		getCurrentFooterLabel,
 		getCurrentHeaderFooterLabels,
 		getCurrentPanel,
-		getName
-	} = generateGetters(containers, context);
+		getTabItemName
+	} = generateGetters(containers, context, options);
 
 	//save/load
 	const {savePosition, loadPosition, parseHashPosition} = generateSaveLoadIndex(containers, context, options);
@@ -81,6 +83,8 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 		getCount,
 		getCurrentIndex,
 		getIndexByName,
+		isTabItemDisabled,
+		isTabItemHidden,
 		getHeaderLabel,
 		getFooterLabel,
 		getHeaderFooterLabels,
@@ -89,7 +93,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 		getCurrentFooterLabel,
 		getCurrentHeaderFooterLabels,
 		getCurrentPanel,
-		getName,
+		getTabItemName,
 		updateFixedHeight,
 		switchTo,
 		addTabItem,

@@ -2,9 +2,17 @@ import $ from "jquery";
 
 function generateGetters(
 	containers: JQueryTab.Containers,
-	context: JQueryTab.Context
+	context: JQueryTab.Context,
+	options: JQueryTab.ExpandedOptions
 ) {
-	const {$headerLabelContainerLeaf, $footerLabelContainerLeaf, $panelContainer, $panelContainerLeaf} = containers;
+	const {
+		$headerLabelContainerLeaf,
+		$footerLabelContainerLeaf,
+		$panelContainer,
+		$panelContainerLeaf
+	} = containers;
+
+	const {disabledPanelItemClass, hiddenPanelItemClass} = options;
 
 	const getCount = function () {
 		return context.itemCount;
@@ -13,7 +21,7 @@ function generateGetters(
 		return context.currentIndex;
 	};
 
-	const getName = function (index: number) {
+	const getTabItemName = function (index: number) {
 		return $panelContainerLeaf.children().eq(index).attr('data-tab-item-name');
 	};
 	const getIndexByName = function (name: string) {
@@ -46,13 +54,13 @@ function generateGetters(
 		if (typeof position === 'number') {
 			return {
 				index: position,
-				name: getName(position)
+				name: getTabItemName(position)
 			};
 		} else if (isFinite(position)) {
 			const index = parseInt(position);
 			return {
 				index,
-				name: getName(index)
+				name: getTabItemName(index)
 			}
 		}
 		else if (position) {
@@ -66,6 +74,18 @@ function generateGetters(
 				index: -1,
 				name: undefined
 			};
+		}
+	};
+	const isTabItemDisabled = function (position: JQueryTab.TabItemPosition) {
+		const index = positionToIndex(position);
+		if (index > -1) {
+			return $panelContainerLeaf.children().eq(index).hasClass(disabledPanelItemClass);
+		}
+	};
+	const isTabItemHidden = function (position: JQueryTab.TabItemPosition) {
+		const index = positionToIndex(position);
+		if (index > -1) {
+			return $panelContainerLeaf.children().eq(index).hasClass(hiddenPanelItemClass);
 		}
 	};
 	const getHeaderLabel = function (position: JQueryTab.TabItemPosition) {
@@ -113,6 +133,8 @@ function generateGetters(
 		getIndexByName,
 		positionToIndex,
 		parsePosition,
+		isTabItemDisabled,
+		isTabItemHidden,
 		getHeaderLabel,
 		getFooterLabel,
 		getHeaderFooterLabels,
@@ -121,7 +143,7 @@ function generateGetters(
 		getCurrentFooterLabel,
 		getCurrentHeaderFooterLabels,
 		getCurrentPanel,
-		getName
+		getTabItemName
 	};
 }
 

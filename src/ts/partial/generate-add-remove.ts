@@ -12,14 +12,12 @@ function generateAddRemove(
 	options: JQueryTab.ExpandedOptions
 ) {
 	const insertTabItemWithoutSwitch = function (
-		$labelContent: JQueryTab.JQueriable,
-		$panelContent: JQueryTab.JQueriable,
-		tabItemName: string,
+		tabItem: JQueryTab.TabItem,
 		position: JQueryTab.TabItemPosition
 	) {
 		const {$headerLabelContainerLeaf, $footerLabelContainerLeaf, $panelContainerLeaf} = containers;
 
-		const {$panelItem, cloneLabelItem} = createTabItem($labelContent, $panelContent, tabItemName, context, options);
+		const {$panelItem, cloneLabelItem} = createTabItem(tabItem, context, options);
 		if (context.currentIndex > -1 && typeof options.fnHidePanelItem === 'function') {
 			options.fnHidePanelItem.call($panelItem, $panelItem);
 		}
@@ -39,7 +37,7 @@ function generateAddRemove(
 
 			if (index <= context.currentIndex) {
 				context.currentIndex++;
-				fnSavePosition(tabItemName || context.currentIndex);
+				fnSavePosition(tabItem.name || context.currentIndex);
 			}
 		}
 		else {
@@ -55,29 +53,19 @@ function generateAddRemove(
 		context.itemCount++;
 	};
 	const insertTabItem = function (
-		title: JQueryTab.JQueriable,
-		content: JQueryTab.JQueriable,
-		tabItemName: string,
+		tabItem: JQueryTab.TabItem,
 		position: JQueryTab.TabItemPosition
 	) {
-		insertTabItemWithoutSwitch(title, content, tabItemName, position);
+		insertTabItemWithoutSwitch(tabItem, position);
 		if (context.currentIndex === -1 && context.itemCount) {
 			fnSwitchTo(0);
 		}
 	};
-	const addTabItemWithoutSwitch = function (
-		title: JQueryTab.JQueriable,
-		content: JQueryTab.JQueriable,
-		tabItemName: string,
-	) {
-		insertTabItemWithoutSwitch(title, content, tabItemName, context.itemCount);
+	const addTabItemWithoutSwitch = function (tabItem: JQueryTab.TabItem) {
+		insertTabItemWithoutSwitch(tabItem, context.itemCount);
 	};
-	const addTabItem = function (
-		title: JQueryTab.JQueriable,
-		content: JQueryTab.JQueriable,
-		tabItemName: string,
-	) {
-		addTabItemWithoutSwitch(title, content, tabItemName);
+	const addTabItem = function (tabItem: JQueryTab.TabItem) {
+		addTabItemWithoutSwitch(tabItem);
 		if (context.currentIndex === -1 && context.itemCount) {
 			fnSwitchTo(0);
 		}
@@ -87,7 +75,14 @@ function generateAddRemove(
 		sourceRegion: JQueryTab.JQueriable,
 		position: JQueryTab.TabItemPosition
 	) {
-		const {titleSelector, fnGetTitleContent, keepTitleVisible, fnGetTabItemName} = options;
+		const {
+			titleSelector,
+			fnGetTitleContent,
+			keepTitleVisible,
+			fnGetTabItemName,
+			fnIsTabItemDisabled,
+			fnIsTabItemHidden
+		} = options;
 
 		const $sourceRegion = $(sourceRegion);
 		let inserted = 0;
@@ -103,10 +98,14 @@ function generateAddRemove(
 
 			const $rest = $title.nextUntil(titleSelector);
 
-			const $labelContent = fnGetTitleContent.call($title, $title);
-			const $panelContent = $([]).add($title).add($rest);
-			const tabItemName = fnGetTabItemName.call($sourceRegion, $title, $rest);
-			insertTabItemWithoutSwitch($labelContent, $panelContent, tabItemName, index + inserted);
+			const tabItem = {
+				title: fnGetTitleContent.call($sourceRegion, $title, $rest),
+				content: $([]).add($title).add($rest),
+				name: fnGetTabItemName.call($sourceRegion, $title, $rest),
+				disabled: fnIsTabItemDisabled.call($sourceRegion, $title, $rest),
+				hidden: fnIsTabItemHidden.call($sourceRegion, $title, $rest)
+			};
+			insertTabItemWithoutSwitch(tabItem, index + inserted);
 			inserted++;
 		}
 	};

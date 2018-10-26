@@ -36,6 +36,14 @@
       fnGetTabItemName: function fnGetTabItemName($title) {
         return $title.attr('data-tab-item-name');
       },
+      fnIsTabItemDisabled: function fnIsTabItemDisabled($title) {
+        var attrDisabled = $title.attr('data-tab-item-disabled');
+        return attrDisabled !== undefined && attrDisabled !== 'false';
+      },
+      fnIsTabItemHidden: function fnIsTabItemHidden($title) {
+        var attrHidden = $title.attr('data-tab-item-hidden');
+        return attrHidden !== undefined && attrHidden !== 'false';
+      },
       tabContainerTemplate: '<div></div>',
       tabContainerClass: 'tab-container',
       labelContainerTemplate: '<div></div>',
@@ -63,8 +71,12 @@
         footerLabelContainerClass: labelContainerClass + '-footer',
         activeLabelItemClass: labelItemClass + '-active',
         inactiveLabelItemClass: labelItemClass + '-inactive',
+        disabledLabelItemClass: labelItemClass + '-disabled',
+        hiddenLabelItemClass: labelItemClass + '-hidden',
         activePanelItemClass: panelItemClass + '-active',
-        inactivePanelItemClass: panelItemClass + '-inactive'
+        inactivePanelItemClass: panelItemClass + '-inactive',
+        disabledPanelItemClass: panelItemClass + '-disabled',
+        hiddenPanelItemClass: panelItemClass + '-hidden'
       });
       return expandedOptions;
     }
@@ -188,11 +200,13 @@
       };
     }
 
-    function generateGetters(containers, context) {
+    function generateGetters(containers, context, options) {
       var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf,
           $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf,
           $panelContainer = containers.$panelContainer,
           $panelContainerLeaf = containers.$panelContainerLeaf;
+      var disabledPanelItemClass = options.disabledPanelItemClass,
+          hiddenPanelItemClass = options.hiddenPanelItemClass;
 
       var getCount = function getCount() {
         return context.itemCount;
@@ -202,7 +216,7 @@
         return context.currentIndex;
       };
 
-      var getName = function getName(index) {
+      var getTabItemName = function getTabItemName(index) {
         return $panelContainerLeaf.children().eq(index).attr('data-tab-item-name');
       };
 
@@ -235,13 +249,13 @@
         if (typeof position === 'number') {
           return {
             index: position,
-            name: getName(position)
+            name: getTabItemName(position)
           };
         } else if (isFinite(position)) {
           var index = parseInt(position);
           return {
             index: index,
-            name: getName(index)
+            name: getTabItemName(index)
           };
         } else if (position) {
           return {
@@ -253,6 +267,22 @@
             index: -1,
             name: undefined
           };
+        }
+      };
+
+      var isTabItemDisabled = function isTabItemDisabled(position) {
+        var index = positionToIndex(position);
+
+        if (index > -1) {
+          return $panelContainerLeaf.children().eq(index).hasClass(disabledPanelItemClass);
+        }
+      };
+
+      var isTabItemHidden = function isTabItemHidden(position) {
+        var index = positionToIndex(position);
+
+        if (index > -1) {
+          return $panelContainerLeaf.children().eq(index).hasClass(hiddenPanelItemClass);
         }
       };
 
@@ -306,6 +336,8 @@
         getIndexByName: getIndexByName,
         positionToIndex: positionToIndex,
         parsePosition: parsePosition,
+        isTabItemDisabled: isTabItemDisabled,
+        isTabItemHidden: isTabItemHidden,
         getHeaderLabel: getHeaderLabel,
         getFooterLabel: getFooterLabel,
         getHeaderFooterLabels: getHeaderFooterLabels,
@@ -314,7 +346,7 @@
         getCurrentFooterLabel: getCurrentFooterLabel,
         getCurrentHeaderFooterLabels: getCurrentHeaderFooterLabels,
         getCurrentPanel: getCurrentPanel,
-        getName: getName
+        getTabItemName: getTabItemName
       };
     }
 
@@ -518,38 +550,52 @@
       };
     }
 
-    function createLabelItem($labelContent, options) {
+    function createLabelItem(tabItem, options) {
       var $labelItem = $(options.labelItemTemplate).addClass(options.labelItemClass).addClass(options.inactiveLabelItemClass).attr('role', 'tab');
       var $labelItemLeaf = getLeafElement($labelItem);
-      $labelItemLeaf.empty().append($labelContent);
+      $labelItemLeaf.append(tabItem.title);
       return {
         $labelItem: $labelItem,
         $labelItemLeaf: $labelItemLeaf
       };
     }
 
-    function createPanelItem($panelContent, options) {
+    function createPanelItem(tabItem, options) {
       var $panelItem = $(options.panelItemTemplate).addClass(options.panelItemClass).addClass(options.inactivePanelItemClass).attr('role', 'tabpanel');
       var $panelItemLeaf = getLeafElement($panelItem);
-      $panelItemLeaf.append($panelContent);
+      $panelItemLeaf.append(tabItem.content);
       return {
         $panelItem: $panelItem,
         $panelItemLeaf: $panelItemLeaf
       };
     }
 
-    function createTabItem($labelContent, $panelContent, tabItemName, context, options) {
-      var _createLabelItem = createLabelItem($labelContent, options),
+    function createTabItem(tabItem, context, options) {
+      var name = tabItem.name,
+          disabled = tabItem.disabled,
+          hidden = tabItem.hidden;
+
+      var _createLabelItem = createLabelItem(tabItem, options),
           $labelItem = _createLabelItem.$labelItem,
           $labelItemLeaf = _createLabelItem.$labelItemLeaf;
 
-      var _createPanelItem = createPanelItem($panelContent, options),
+      var _createPanelItem = createPanelItem(tabItem, options),
           $panelItem = _createPanelItem.$panelItem,
           $panelItemLeaf = _createPanelItem.$panelItemLeaf;
 
-      if (tabItemName) {
-        $labelItem.attr('data-tab-item-name', tabItemName);
-        $panelItem.attr('data-tab-item-name', tabItemName);
+      if (name) {
+        $labelItem.attr('data-tab-item-name', name);
+        $panelItem.attr('data-tab-item-name', name);
+      }
+
+      if (disabled) {
+        $labelItem.addClass(options.disabledLabelItemClass);
+        $panelItem.addClass(options.disabledPanelItemClass);
+      }
+
+      if (hidden) {
+        $labelItem.addClass(options.hiddenLabelItemClass);
+        $panelItem.addClass(options.hiddenPanelItemClass);
       }
 
       var containerId = context.containerId,
@@ -583,12 +629,12 @@
     }
 
     function generateAddRemove(fnTabItemPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, fnSwitchTo, containers, context, options) {
-      var insertTabItemWithoutSwitch = function insertTabItemWithoutSwitch($labelContent, $panelContent, tabItemName, position) {
+      var insertTabItemWithoutSwitch = function insertTabItemWithoutSwitch(tabItem, position) {
         var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf,
             $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf,
             $panelContainerLeaf = containers.$panelContainerLeaf;
 
-        var _createTabItem = createTabItem($labelContent, $panelContent, tabItemName, context, options),
+        var _createTabItem = createTabItem(tabItem, context, options),
             $panelItem = _createTabItem.$panelItem,
             cloneLabelItem = _createTabItem.cloneLabelItem;
 
@@ -615,7 +661,7 @@
 
           if (index <= context.currentIndex) {
             context.currentIndex++;
-            fnSavePosition(tabItemName || context.currentIndex);
+            fnSavePosition(tabItem.name || context.currentIndex);
           }
         } else {
           if ($headerLabelContainerLeaf) {
@@ -632,20 +678,20 @@
         context.itemCount++;
       };
 
-      var insertTabItem = function insertTabItem(title, content, tabItemName, position) {
-        insertTabItemWithoutSwitch(title, content, tabItemName, position);
+      var insertTabItem = function insertTabItem(tabItem, position) {
+        insertTabItemWithoutSwitch(tabItem, position);
 
         if (context.currentIndex === -1 && context.itemCount) {
           fnSwitchTo(0);
         }
       };
 
-      var addTabItemWithoutSwitch = function addTabItemWithoutSwitch(title, content, tabItemName) {
-        insertTabItemWithoutSwitch(title, content, tabItemName, context.itemCount);
+      var addTabItemWithoutSwitch = function addTabItemWithoutSwitch(tabItem) {
+        insertTabItemWithoutSwitch(tabItem, context.itemCount);
       };
 
-      var addTabItem = function addTabItem(title, content, tabItemName) {
-        addTabItemWithoutSwitch(title, content, tabItemName);
+      var addTabItem = function addTabItem(tabItem) {
+        addTabItemWithoutSwitch(tabItem);
 
         if (context.currentIndex === -1 && context.itemCount) {
           fnSwitchTo(0);
@@ -656,7 +702,9 @@
         var titleSelector = options.titleSelector,
             fnGetTitleContent = options.fnGetTitleContent,
             keepTitleVisible = options.keepTitleVisible,
-            fnGetTabItemName = options.fnGetTabItemName;
+            fnGetTabItemName = options.fnGetTabItemName,
+            fnIsTabItemDisabled = options.fnIsTabItemDisabled,
+            fnIsTabItemHidden = options.fnIsTabItemHidden;
         var $sourceRegion = $(sourceRegion);
         var inserted = 0;
         var index = fnTabItemPositionToIndex(position);
@@ -673,10 +721,14 @@
           }
 
           var $rest = $title.nextUntil(titleSelector);
-          var $labelContent = fnGetTitleContent.call($title, $title);
-          var $panelContent = $([]).add($title).add($rest);
-          var tabItemName = fnGetTabItemName.call($sourceRegion, $title, $rest);
-          insertTabItemWithoutSwitch($labelContent, $panelContent, tabItemName, index + inserted);
+          var tabItem = {
+            title: fnGetTitleContent.call($sourceRegion, $title, $rest),
+            content: $([]).add($title).add($rest),
+            name: fnGetTabItemName.call($sourceRegion, $title, $rest),
+            disabled: fnIsTabItemDisabled.call($sourceRegion, $title, $rest),
+            hidden: fnIsTabItemHidden.call($sourceRegion, $title, $rest)
+          };
+          insertTabItemWithoutSwitch(tabItem, index + inserted);
           inserted++;
         }
       };
@@ -776,7 +828,9 @@
       var triggerEvents = options.triggerEvents,
           delayTriggerEvents = options.delayTriggerEvents,
           delayTriggerCancelEvents = options.delayTriggerCancelEvents,
-          delayTriggerLatency = options.delayTriggerLatency;
+          delayTriggerLatency = options.delayTriggerLatency,
+          disabledLabelItemClass = options.disabledLabelItemClass,
+          hiddenLabelItemClass = options.hiddenLabelItemClass;
       var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf,
           $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf; //handle delay trigger event
 
@@ -805,7 +859,7 @@
         var $label = $(e.currentTarget);
         var labelIndex = $label.index();
 
-        if (labelIndex === context.currentIndex) {
+        if (labelIndex === context.currentIndex || $label.hasClass(disabledLabelItemClass) || $label.hasClass(hiddenLabelItemClass)) {
           return;
         }
 
@@ -858,7 +912,7 @@
         var $label = $(e.currentTarget);
         var labelIndex = $label.index();
 
-        if (labelIndex === context.currentIndex) {
+        if (labelIndex === context.currentIndex || $label.hasClass(disabledLabelItemClass) || $label.hasClass(hiddenLabelItemClass)) {
           return;
         }
 
@@ -893,12 +947,14 @@
       }, createTabContainer(options));
       var $tabContainer = containers.$tabContainer; //getters
 
-      var _generateGetters = generateGetters(containers, context),
+      var _generateGetters = generateGetters(containers, context, options),
           getCount = _generateGetters.getCount,
           getCurrentIndex = _generateGetters.getCurrentIndex,
           getIndexByName = _generateGetters.getIndexByName,
           positionToIndex = _generateGetters.positionToIndex,
           parsePosition = _generateGetters.parsePosition,
+          isTabItemDisabled = _generateGetters.isTabItemDisabled,
+          isTabItemHidden = _generateGetters.isTabItemHidden,
           getHeaderLabel = _generateGetters.getHeaderLabel,
           getFooterLabel = _generateGetters.getFooterLabel,
           getHeaderFooterLabels = _generateGetters.getHeaderFooterLabels,
@@ -907,7 +963,7 @@
           getCurrentFooterLabel = _generateGetters.getCurrentFooterLabel,
           getCurrentHeaderFooterLabels = _generateGetters.getCurrentHeaderFooterLabels,
           getCurrentPanel = _generateGetters.getCurrentPanel,
-          getName = _generateGetters.getName; //save/load
+          getTabItemName = _generateGetters.getTabItemName; //save/load
 
 
       var _generateSaveLoadInde = generateSaveLoadIndex(containers, context, options),
@@ -947,6 +1003,8 @@
         getCount: getCount,
         getCurrentIndex: getCurrentIndex,
         getIndexByName: getIndexByName,
+        isTabItemDisabled: isTabItemDisabled,
+        isTabItemHidden: isTabItemHidden,
         getHeaderLabel: getHeaderLabel,
         getFooterLabel: getFooterLabel,
         getHeaderFooterLabels: getHeaderFooterLabels,
@@ -955,7 +1013,7 @@
         getCurrentFooterLabel: getCurrentFooterLabel,
         getCurrentHeaderFooterLabels: getCurrentHeaderFooterLabels,
         getCurrentPanel: getCurrentPanel,
-        getName: getName,
+        getTabItemName: getTabItemName,
         updateFixedHeight: updateFixedHeight,
         switchTo: switchTo,
         addTabItem: addTabItem,

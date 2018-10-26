@@ -18,9 +18,13 @@ function getExpandedOptions(
 
 		activeLabelItemClass: labelItemClass + '-active',
 		inactiveLabelItemClass: labelItemClass + '-inactive',
+		disabledLabelItemClass: labelItemClass + '-disabled',
+		hiddenLabelItemClass: labelItemClass + '-hidden',
 
 		activePanelItemClass: panelItemClass + '-active',
 		inactivePanelItemClass: panelItemClass + '-inactive',
+		disabledPanelItemClass: panelItemClass + '-disabled',
+		hiddenPanelItemClass: panelItemClass + '-hidden',
 	});
 
 	return expandedOptions;

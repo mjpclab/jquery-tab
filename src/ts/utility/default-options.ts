@@ -28,6 +28,14 @@ const defaultOptions: JQueryTab.NecessaryOptions = {
 	fnGetTabItemName: function ($title: JQuery) {
 		return $title.attr('data-tab-item-name');
 	},
+	fnIsTabItemDisabled: function ($title: JQuery) {
+		const attrDisabled = $title.attr('data-tab-item-disabled');
+		return attrDisabled !== undefined && attrDisabled !== 'false';
+	},
+	fnIsTabItemHidden: function ($title: JQuery) {
+		const attrHidden = $title.attr('data-tab-item-hidden');
+		return attrHidden !== undefined && attrHidden !== 'false';
+	},
 
 	tabContainerTemplate: '<div></div>',
 	tabContainerClass: 'tab-container',

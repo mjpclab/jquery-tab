@@ -10,7 +10,9 @@ function hahdleClickEvent(
 		triggerEvents,
 		delayTriggerEvents,
 		delayTriggerCancelEvents,
-		delayTriggerLatency
+		delayTriggerLatency,
+		disabledLabelItemClass,
+		hiddenLabelItemClass
 	} = options;
 	const {
 		$headerLabelContainerLeaf,
@@ -40,11 +42,14 @@ function hahdleClickEvent(
 		cancelDelayTrigger();
 		const $label = $(e.currentTarget);
 		const labelIndex = $label.index();
-		if (labelIndex === context.currentIndex) {
+		if (
+			labelIndex === context.currentIndex ||
+			$label.hasClass(disabledLabelItemClass) ||
+			$label.hasClass(hiddenLabelItemClass)
+		) {
 			return;
 		}
 		const tabItemName = $label.attr('data-tab-item-name');
-
 		startDelayTrigger(tabItemName || labelIndex);
 	};
 	const labelItemCancelDelayClick = function (e: any) {
@@ -86,12 +91,15 @@ function hahdleClickEvent(
 		cancelDelayTrigger();
 		const $label = $(e.currentTarget);
 		const labelIndex = $label.index();
-		if (labelIndex === context.currentIndex) {
+		if (
+			labelIndex === context.currentIndex ||
+			$label.hasClass(disabledLabelItemClass) ||
+			$label.hasClass(hiddenLabelItemClass)
+		) {
 			return;
 		}
 
 		const tabItemName = $label.attr('data-tab-item-name');
-
 		fnSwitchTo(tabItemName || labelIndex);
 	};
 

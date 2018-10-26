@@ -22,7 +22,7 @@ function tablize($region, customOptions) {
     const containers = $.extend({ $region }, createTabContainer(options));
     const { $tabContainer } = containers;
     //getters
-    const { getCount, getCurrentIndex, getIndexByName, positionToIndex, parsePosition, getHeaderLabel, getFooterLabel, getHeaderFooterLabels, getPanel, getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels, getCurrentPanel, getName } = generateGetters(containers, context);
+    const { getCount, getCurrentIndex, getIndexByName, positionToIndex, parsePosition, isTabItemDisabled, isTabItemHidden, getHeaderLabel, getFooterLabel, getHeaderFooterLabels, getPanel, getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels, getCurrentPanel, getTabItemName } = generateGetters(containers, context, options);
     //save/load
     const { savePosition, loadPosition, parseHashPosition } = generateSaveLoadIndex(containers, context, options);
     //methods
@@ -46,6 +46,8 @@ function tablize($region, customOptions) {
         getCount,
         getCurrentIndex,
         getIndexByName,
+        isTabItemDisabled,
+        isTabItemHidden,
         getHeaderLabel,
         getFooterLabel,
         getHeaderFooterLabels,
@@ -54,7 +56,7 @@ function tablize($region, customOptions) {
         getCurrentFooterLabel,
         getCurrentHeaderFooterLabels,
         getCurrentPanel,
-        getName,
+        getTabItemName,
         updateFixedHeight,
         switchTo,
         addTabItem,

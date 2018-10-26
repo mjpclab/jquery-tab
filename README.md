@@ -253,7 +253,7 @@ Get current active panel Index.
 `getIndexByName(name)`  
 Get tab item index by `name`.
 
-`getName(index)`  
+`getTabItemName(index)`  
 Get tab item name by `index`.
 
 `getHeaderLabel(name | index)`    

@@ -106,6 +106,14 @@
 	border-left-color: #fff;
 }
 
+.tab-container .label-container .label-item-disabled {
+	color: #eee;
+	cursor: default;
+}
+
+.tab-container .label-container .label-item-hidden {
+	display: none;
+}
 
 *html .tab-container .label-container-header {
 	bottom: -1px;
