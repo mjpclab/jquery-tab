@@ -20,12 +20,6 @@
       ,
       activePosition: 0,
       createEmptyTab: false,
-      fnShowPanelItem: function fnShowPanelItem($panelItem) {
-        return $panelItem && $panelItem.show && $panelItem.show();
-      },
-      fnHidePanelItem: function fnHidePanelItem($panelItem) {
-        return $panelItem && $panelItem.hide && $panelItem.hide();
-      },
       onBeforeSwitch: undefined,
       onAfterSwitch: undefined,
       titleSelector: 'h1,h2,h3,h4,h5,h6',
@@ -533,23 +527,12 @@
             index: newIndex,
             name: newName
           });
-        } //labels & panels
+        } //update state
 
 
         var $newLabel = fnGetHeaderFooterLabels(newIndex);
         var $newPanel = fnGetPanel(newIndex);
-        var $otherPanels = $newPanel.siblings();
-        updateActiveState($newLabel, $newPanel, options); //function to hide panels
-
-        if (typeof options.fnHidePanelItem === 'function') {
-          options.fnHidePanelItem.call($otherPanels, $otherPanels);
-        } //function to show panel
-
-
-        if (typeof options.fnShowPanelItem === 'function') {
-          options.fnShowPanelItem.call($newPanel, $newPanel);
-        } //finalize
-
+        updateActiveState($newLabel, $newPanel, options); //finalize
 
         context.currentIndex = newIndex;
         context.currentName = newName; //after switching callback
@@ -684,10 +667,6 @@
         var _createTabItem = createTabItem(tabItem, context, options),
             $panelItem = _createTabItem.$panelItem,
             cloneLabelItem = _createTabItem.cloneLabelItem;
-
-        if (context.currentIndex > -1 && typeof options.fnHidePanelItem === 'function') {
-          options.fnHidePanelItem.call($panelItem, $panelItem);
-        }
 
         var index = fnPositionToIndex(position);
 

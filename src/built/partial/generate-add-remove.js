@@ -9,9 +9,6 @@ function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPane
     const insertTabItemWithoutSwitch = function (position, tabItem) {
         const { $headerLabelContainerLeaf, $footerLabelContainerLeaf, $panelContainerLeaf } = containers;
         const { $panelItem, cloneLabelItem } = createTabItem(tabItem, context, options);
-        if (context.currentIndex > -1 && typeof options.fnHidePanelItem === 'function') {
-            options.fnHidePanelItem.call($panelItem, $panelItem);
-        }
         let index = fnPositionToIndex(position);
         if (index < 0) {
             index = 0;

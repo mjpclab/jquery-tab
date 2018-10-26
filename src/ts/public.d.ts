@@ -34,8 +34,6 @@ declare namespace JQueryTab {
 		mode: Mode;
 		activePosition: TabItemPosition;
 		createEmptyTab: boolean;
-		fnShowPanelItem: (this: JQuery, $panelItem: JQuery) => JQuery;
-		fnHidePanelItem: (this: JQuery, $panelItem: JQuery) => JQuery;
 		onBeforeSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;
 		onAfterSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;
 

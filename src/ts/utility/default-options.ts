@@ -11,12 +11,6 @@ const defaultOptions: JQueryTab.NecessaryOptions = {
 	mode: JQueryTab.Mode.Horizontal,
 	activePosition: 0,
 	createEmptyTab: false,
-	fnShowPanelItem: function ($panelItem: JQuery) {
-		return $panelItem && $panelItem.show && $panelItem.show();
-	},
-	fnHidePanelItem: function ($panelItem: JQuery) {
-		return $panelItem && $panelItem.hide && $panelItem.hide();
-	},
 	onBeforeSwitch: undefined,
 	onAfterSwitch: undefined,
 

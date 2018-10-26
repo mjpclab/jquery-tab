@@ -10,12 +10,6 @@ const defaultOptions = {
     mode: "horizontal" /* Horizontal */,
     activePosition: 0,
     createEmptyTab: false,
-    fnShowPanelItem: function ($panelItem) {
-        return $panelItem && $panelItem.show && $panelItem.show();
-    },
-    fnHidePanelItem: function ($panelItem) {
-        return $panelItem && $panelItem.hide && $panelItem.hide();
-    },
     onBeforeSwitch: undefined,
     onAfterSwitch: undefined,
     titleSelector: 'h1,h2,h3,h4,h5,h6',

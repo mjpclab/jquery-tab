@@ -24,9 +24,6 @@ function generateAddRemove(
 		const {$headerLabelContainerLeaf, $footerLabelContainerLeaf, $panelContainerLeaf} = containers;
 
 		const {$panelItem, cloneLabelItem} = createTabItem(tabItem, context, options);
-		if (context.currentIndex > -1 && typeof options.fnHidePanelItem === 'function') {
-			options.fnHidePanelItem.call($panelItem, $panelItem);
-		}
 
 		let index = fnPositionToIndex(position);
 		if (index < 0) {

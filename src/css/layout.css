@@ -75,3 +75,8 @@
 	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
 }
+
+/* panel item */
+.tab-container .panel-container .panel-item-inactive {
+	display: none;
+}

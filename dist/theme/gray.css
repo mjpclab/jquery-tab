@@ -75,7 +75,11 @@
 	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
 }
-.tab-container .panel-container {
+
+/* panel item */
+.tab-container .panel-container .panel-item-inactive {
+	display: none;
+}.tab-container .panel-container {
 	border-color: #ccc;
 	background: #fff;
 }

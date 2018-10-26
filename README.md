@@ -141,16 +141,6 @@ Tab-container's height will be fixed to fit the longest panel and will not chang
 Determine if still create tab container when there is no tab item found.
 Would be useful if you want to create empty tab container first, and add tab items dynamically.
 
-`fnShowPanelItem`  
-Define the behavior of showing an panel-item when switched to it.
-Must be a function like `func($panelItem) {}`. Parameter `$panelItem` will be the current panel-item's jQuery object.
-The default behavior is calling the jQuery object's `show()`.
-
-`fnHidePanelItem`  
-Define the behavior of hiding an panel-item when switched to other panel.
-Must be a function like `func($panelItem) {}`. Parameter `$panelItem` will be the current panel-item's jQuery object.
-The default behavior is calling the jQuery object's `hide()`.
-
 `onBeforeSwitch(oldIndex, newIndex)`  
 A callback before switching the tab. Returns `false` to cancel a switching attempt.
 

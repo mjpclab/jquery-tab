@@ -26,22 +26,10 @@ function generateSwitchTo(
 			);
 		}
 
-		//labels & panels
+		//update state
 		const $newLabel = fnGetHeaderFooterLabels(newIndex);
 		const $newPanel = fnGetPanel(newIndex);
-		const $otherPanels = $newPanel.siblings();
-
 		updateActiveState($newLabel, $newPanel, options);
-
-		//function to hide panels
-		if (typeof options.fnHidePanelItem === 'function') {
-			options.fnHidePanelItem.call($otherPanels, $otherPanels);
-		}
-
-		//function to show panel
-		if (typeof options.fnShowPanelItem === 'function') {
-			options.fnShowPanelItem.call($newPanel, $newPanel);
-		}
 
 		//finalize
 		context.currentIndex = newIndex;
