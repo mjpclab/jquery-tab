@@ -157,7 +157,7 @@ The default initial active index of the tab.
 `titleSelector`  
 A jQuery selector string or object to pick up "title" element to be a label-item in label-container.
 
-`titleContentFilter`  
+`fnGetTitleContent($title)`  
 A callback to have an opportunity to change the html structure of label-item.
 
 `keepTitleVisible`  
