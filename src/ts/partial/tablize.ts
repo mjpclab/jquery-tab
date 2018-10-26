@@ -30,7 +30,8 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	const {
 		getCount,
 		getCurrentIndex,
-		getIndexByName,
+		getTabItemName,
+		getTabItemIndexByName,
 		positionToIndex,
 		parsePosition,
 		isTabItemDisabled,
@@ -42,8 +43,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 		getCurrentHeaderLabel,
 		getCurrentFooterLabel,
 		getCurrentHeaderFooterLabels,
-		getCurrentPanel,
-		getTabItemName
+		getCurrentPanel
 	} = generateGetters(containers, context, options);
 
 	//save/load
@@ -82,7 +82,8 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	const controller = {
 		getCount,
 		getCurrentIndex,
-		getIndexByName,
+		getTabItemName,
+		getTabItemIndexByName,
 		isTabItemDisabled,
 		isTabItemHidden,
 		getHeaderLabel,
@@ -93,7 +94,6 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 		getCurrentFooterLabel,
 		getCurrentHeaderFooterLabels,
 		getCurrentPanel,
-		getTabItemName,
 		updateFixedHeight,
 		switchTo,
 		addTabItem,

@@ -250,7 +250,7 @@ Get the number of panels.
 `getCurrentIndex()`  
 Get current active panel Index.
 
-`getIndexByName(name)`  
+`getTabItemIndexByName(name)`  
 Get tab item index by `name`.
 
 `getTabItemName(index)`  

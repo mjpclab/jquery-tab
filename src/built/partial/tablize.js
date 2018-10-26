@@ -22,7 +22,7 @@ function tablize($region, customOptions) {
     const containers = $.extend({ $region }, createTabContainer(options));
     const { $tabContainer } = containers;
     //getters
-    const { getCount, getCurrentIndex, getIndexByName, positionToIndex, parsePosition, isTabItemDisabled, isTabItemHidden, getHeaderLabel, getFooterLabel, getHeaderFooterLabels, getPanel, getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels, getCurrentPanel, getTabItemName } = generateGetters(containers, context, options);
+    const { getCount, getCurrentIndex, getTabItemName, getTabItemIndexByName, positionToIndex, parsePosition, isTabItemDisabled, isTabItemHidden, getHeaderLabel, getFooterLabel, getHeaderFooterLabels, getPanel, getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels, getCurrentPanel } = generateGetters(containers, context, options);
     //save/load
     const { savePosition, loadPosition, parseHashPosition } = generateSaveLoadIndex(containers, context, options);
     //methods
@@ -45,7 +45,8 @@ function tablize($region, customOptions) {
     const controller = {
         getCount,
         getCurrentIndex,
-        getIndexByName,
+        getTabItemName,
+        getTabItemIndexByName,
         isTabItemDisabled,
         isTabItemHidden,
         getHeaderLabel,
@@ -56,7 +57,6 @@ function tablize($region, customOptions) {
         getCurrentFooterLabel,
         getCurrentHeaderFooterLabels,
         getCurrentPanel,
-        getTabItemName,
         updateFixedHeight,
         switchTo,
         addTabItem,

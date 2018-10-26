@@ -220,7 +220,7 @@
         return $panelContainerLeaf.children().eq(index).attr('data-tab-item-name');
       };
 
-      var getIndexByName = function getIndexByName(name) {
+      var getTabItemIndexByName = function getTabItemIndexByName(name) {
         var tabItemIndex = -1;
         $panelContainer.children().each(function (index, panel) {
           var $panel = $(panel);
@@ -239,7 +239,7 @@
         } else if (isFinite(position)) {
           return parseInt(position);
         } else if (position !== undefined) {
-          return getIndexByName(position);
+          return getTabItemIndexByName(position);
         } else {
           return -1;
         }
@@ -259,7 +259,7 @@
           };
         } else if (position) {
           return {
-            index: getIndexByName(position),
+            index: getTabItemIndexByName(position),
             name: position
           };
         } else {
@@ -333,7 +333,8 @@
       return {
         getCount: getCount,
         getCurrentIndex: getCurrentIndex,
-        getIndexByName: getIndexByName,
+        getTabItemName: getTabItemName,
+        getTabItemIndexByName: getTabItemIndexByName,
         positionToIndex: positionToIndex,
         parsePosition: parsePosition,
         isTabItemDisabled: isTabItemDisabled,
@@ -345,8 +346,7 @@
         getCurrentHeaderLabel: getCurrentHeaderLabel,
         getCurrentFooterLabel: getCurrentFooterLabel,
         getCurrentHeaderFooterLabels: getCurrentHeaderFooterLabels,
-        getCurrentPanel: getCurrentPanel,
-        getTabItemName: getTabItemName
+        getCurrentPanel: getCurrentPanel
       };
     }
 
@@ -950,7 +950,8 @@
       var _generateGetters = generateGetters(containers, context, options),
           getCount = _generateGetters.getCount,
           getCurrentIndex = _generateGetters.getCurrentIndex,
-          getIndexByName = _generateGetters.getIndexByName,
+          getTabItemName = _generateGetters.getTabItemName,
+          getTabItemIndexByName = _generateGetters.getTabItemIndexByName,
           positionToIndex = _generateGetters.positionToIndex,
           parsePosition = _generateGetters.parsePosition,
           isTabItemDisabled = _generateGetters.isTabItemDisabled,
@@ -962,8 +963,7 @@
           getCurrentHeaderLabel = _generateGetters.getCurrentHeaderLabel,
           getCurrentFooterLabel = _generateGetters.getCurrentFooterLabel,
           getCurrentHeaderFooterLabels = _generateGetters.getCurrentHeaderFooterLabels,
-          getCurrentPanel = _generateGetters.getCurrentPanel,
-          getTabItemName = _generateGetters.getTabItemName; //save/load
+          getCurrentPanel = _generateGetters.getCurrentPanel; //save/load
 
 
       var _generateSaveLoadInde = generateSaveLoadIndex(containers, context, options),
@@ -1002,7 +1002,8 @@
       var controller = {
         getCount: getCount,
         getCurrentIndex: getCurrentIndex,
-        getIndexByName: getIndexByName,
+        getTabItemName: getTabItemName,
+        getTabItemIndexByName: getTabItemIndexByName,
         isTabItemDisabled: isTabItemDisabled,
         isTabItemHidden: isTabItemHidden,
         getHeaderLabel: getHeaderLabel,
@@ -1013,7 +1014,6 @@
         getCurrentFooterLabel: getCurrentFooterLabel,
         getCurrentHeaderFooterLabels: getCurrentHeaderFooterLabels,
         getCurrentPanel: getCurrentPanel,
-        getTabItemName: getTabItemName,
         updateFixedHeight: updateFixedHeight,
         switchTo: switchTo,
         addTabItem: addTabItem,

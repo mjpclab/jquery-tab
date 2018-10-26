@@ -11,7 +11,7 @@ function generateGetters(containers, context, options) {
     const getTabItemName = function (index) {
         return $panelContainerLeaf.children().eq(index).attr('data-tab-item-name');
     };
-    const getIndexByName = function (name) {
+    const getTabItemIndexByName = function (name) {
         let tabItemIndex = -1;
         $panelContainer.children().each(function (index, panel) {
             const $panel = $(panel);
@@ -30,7 +30,7 @@ function generateGetters(containers, context, options) {
             return parseInt(position);
         }
         else if (position !== undefined) {
-            return getIndexByName(position);
+            return getTabItemIndexByName(position);
         }
         else {
             return -1;
@@ -52,7 +52,7 @@ function generateGetters(containers, context, options) {
         }
         else if (position) {
             return {
-                index: getIndexByName(position),
+                index: getTabItemIndexByName(position),
                 name: position
             };
         }
@@ -112,7 +112,8 @@ function generateGetters(containers, context, options) {
     return {
         getCount,
         getCurrentIndex,
-        getIndexByName,
+        getTabItemName,
+        getTabItemIndexByName,
         positionToIndex,
         parsePosition,
         isTabItemDisabled,
@@ -124,8 +125,7 @@ function generateGetters(containers, context, options) {
         getCurrentHeaderLabel,
         getCurrentFooterLabel,
         getCurrentHeaderFooterLabels,
-        getCurrentPanel,
-        getTabItemName
+        getCurrentPanel
     };
 }
 export default generateGetters;
