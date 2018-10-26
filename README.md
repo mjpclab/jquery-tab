@@ -271,27 +271,27 @@ Get the number of panels.
 Get current active panel Index.
 
 ### Tab item
-`getTabItemIndexByName(name)`  
+`getIndexByName(name)`  
 Get tab item index by `name`.
 
-`getTabItemName(index)`  
+`getName(index)`  
 Get tab item name by `index`.
 
 `setTabItemName(newName, name | index)`  
 set a new name for a specific tab item which its name is `name` or its index is `index`.
 
-`isTabItemDisabled(name | index)`  
+`isDisabled(name | index)`  
 Check if a tab item is disabled.
 Returns boolean type if tab item exists. Returns `undefined` otherwise.
 
-`setTabItemDisabled(isDisabled, name | index)`  
+`setDisabled(name | index, isDisabled)`  
 Specify if a tab item is disabled.
 
-`isTabItemHidden(name | index)`  
+`isHidden(name | index)`  
 Check if a tab item is hidden.
 Returns boolean type if tab item exists. Returns `undefined` otherwise.
 
-`setTabItemHidden(isHidden, name | index)`  
+`setHidden(name | index, isHidden)`  
 Specify if a tab item is hidden.
 
 ### DOM access
@@ -321,7 +321,7 @@ Switch active(selected) panel item by index or tab item name.
 
 ### Modify
 `addTabItem({title, content, name?, disabled?, hidden})`  
-`insertTabItem({title, content, name?, disabled?, hidden}, before-name | before-index)`  
+`insertTabItem(before-name | before-index, {title, content, name?, disabled?, hidden})`  
 Append/insert a new tab item to existing tab container. Both `title` and `content` can be text, HTML or jquery object.  
 Optional `name` can be specified so that this item could be referenced later.  
 Set optional `disabled` to `true` to mark this tab item is disabled.  
@@ -330,7 +330,7 @@ Set optional `hidden` to `true` to mark this tab item is hidden.
 `add($region)`  
 Parse and append another $region's structure to current tab. 
 
-`insert($region, before-name | before-index)`  
+`insert(before-name | before-index, $region)`  
 Parse and insert another $region's structure before tab item which its name is `before-name` or its index is `before-index`.
 
 `remove(name | index)`  

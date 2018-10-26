@@ -20,11 +20,14 @@ function generateGetters(
 	const getCurrentIndex = function () {
 		return context.currentIndex;
 	};
+	const getCurrentName = function () {
+		return context.currentName;
+	};
 
-	const getTabItemName = function (index: number) {
+	const getName = function (index: number) {
 		return $panelContainerLeaf.children().eq(index).attr(tabItemNameAttr);
 	};
-	const getTabItemIndexByName = function (name: string) {
+	const getIndexByName = function (name: string) {
 		let tabItemIndex = -1;
 
 		$panelContainer.children().each(function (index, panel) {
@@ -44,7 +47,7 @@ function generateGetters(
 			return parseInt(position)
 		}
 		else if (position !== undefined) {
-			return getTabItemIndexByName(position);
+			return getIndexByName(position);
 		}
 		else {
 			return -1;
@@ -54,18 +57,18 @@ function generateGetters(
 		if (typeof position === 'number') {
 			return {
 				index: position,
-				name: getTabItemName(position)
+				name: getName(position)
 			};
 		} else if (isFinite(position)) {
 			const index = parseInt(position);
 			return {
 				index,
-				name: getTabItemName(index)
+				name: getName(index)
 			}
 		}
 		else if (position) {
 			return {
-				index: getTabItemIndexByName(position),
+				index: getIndexByName(position),
 				name: position
 			}
 		}
@@ -76,13 +79,13 @@ function generateGetters(
 			};
 		}
 	};
-	const isTabItemDisabled = function (position: JQueryTab.TabItemPosition) {
+	const isDisabled = function (position: JQueryTab.TabItemPosition) {
 		const index = positionToIndex(position);
 		if (index > -1) {
 			return $panelContainerLeaf.children().eq(index).hasClass(disabledPanelItemClass);
 		}
 	};
-	const isTabItemHidden = function (position: JQueryTab.TabItemPosition) {
+	const isHidden = function (position: JQueryTab.TabItemPosition) {
 		const index = positionToIndex(position);
 		if (index > -1) {
 			return $panelContainerLeaf.children().eq(index).hasClass(hiddenPanelItemClass);
@@ -130,19 +133,15 @@ function generateGetters(
 	return {
 		getCount,
 		getCurrentIndex,
-		getTabItemName,
-		getTabItemIndexByName,
+		getCurrentName,
+		getName,
+		getIndexByName,
 		positionToIndex,
 		parsePosition,
-		isTabItemDisabled,
-		isTabItemHidden,
-		getHeaderLabel,
-		getFooterLabel,
-		getHeaderFooterLabels,
+		isDisabled, isHidden,
+		getHeaderLabel, getFooterLabel, getHeaderFooterLabels,
 		getPanel,
-		getCurrentHeaderLabel,
-		getCurrentFooterLabel,
-		getCurrentHeaderFooterLabels,
+		getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels,
 		getCurrentPanel
 	};
 }

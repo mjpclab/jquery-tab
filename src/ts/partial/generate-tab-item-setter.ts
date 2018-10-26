@@ -12,22 +12,22 @@ function generateTabItemSetter(
 		hiddenPanelItemClass
 	} = options;
 
-	const setTabItemName = function (name: string, position: JQueryTab.TabItemPosition) {
+	const setName = function (position: JQueryTab.TabItemPosition, name: string) {
 		fnGetHeaderFooterLabels(position).attr(tabItemNameAttr, name);
 		fnGetPanel(position).attr(tabItemNameAttr, name);
 	};
 
-	const setTabItemDisabled = function (disabled: boolean, position: JQueryTab.TabItemPosition) {
+	const setDisabled = function (position: JQueryTab.TabItemPosition, disabled: boolean) {
 		fnGetHeaderFooterLabels(position).toggleClass(disabledLabelItemClass, disabled);
 		fnGetPanel(position).toggleClass(disabledPanelItemClass, disabled);
 	};
 
-	const setTabItemHidden = function (hidden: boolean, position: JQueryTab.TabItemPosition) {
+	const setHidden = function (position: JQueryTab.TabItemPosition, hidden: boolean) {
 		fnGetHeaderFooterLabels(position).toggleClass(hiddenLabelItemClass, hidden);
 		fnGetPanel(position).toggleClass(hiddenPanelItemClass, hidden);
 	};
 
-	return {setTabItemName, setTabItemDisabled, setTabItemHidden};
+	return {setName, setDisabled, setHidden};
 }
 
 export default generateTabItemSetter;

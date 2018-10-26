@@ -23,9 +23,9 @@ function tablize($region, customOptions) {
     const containers = $.extend({ $region }, createTabContainer(options));
     const { $tabContainer } = containers;
     //getters
-    const { getCount, getCurrentIndex, getTabItemName, getTabItemIndexByName, positionToIndex, parsePosition, isTabItemDisabled, isTabItemHidden, getHeaderLabel, getFooterLabel, getHeaderFooterLabels, getPanel, getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels, getCurrentPanel } = generateGetters(containers, context, options);
+    const { getCount, getCurrentIndex, getCurrentName, getName, getIndexByName, positionToIndex, parsePosition, isDisabled, isHidden, getHeaderLabel, getFooterLabel, getHeaderFooterLabels, getPanel, getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels, getCurrentPanel } = generateGetters(containers, context, options);
     //tab item setter
-    const { setTabItemName, setTabItemDisabled, setTabItemHidden } = generateTabItemSetter(positionToIndex, getHeaderFooterLabels, getPanel, options);
+    const { setName, setDisabled, setHidden } = generateTabItemSetter(positionToIndex, getHeaderFooterLabels, getPanel, options);
     //save/load
     const { savePosition, loadPosition, parseHashPosition } = generateSaveLoadIndex(containers, context, options);
     //methods
@@ -48,14 +48,15 @@ function tablize($region, customOptions) {
     const controller = {
         getCount,
         getCurrentIndex,
-        getTabItemName,
-        getTabItemIndexByName,
-        isTabItemDisabled, isTabItemHidden,
+        getCurrentName,
+        getName,
+        getIndexByName,
+        isDisabled, isHidden,
         getHeaderLabel, getFooterLabel, getHeaderFooterLabels,
         getPanel,
         getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels,
         getCurrentPanel,
-        setTabItemName, setTabItemDisabled, setTabItemHidden,
+        setName, setDisabled, setHidden,
         updateFixedHeight,
         switchTo,
         addTabItem,

@@ -14,7 +14,7 @@
 	<pre>
 	$('.tab1').tab();
 	var controller = $('.tab1').data('tab-controller');
-	controller.insertTabItem({title: 'inserted 1', content: '&lt;p&gt;inserted content 1&lt;/p&gt;'}, 1);
+	controller.insertTabItem(1, {title: 'inserted 1', content: '&lt;p&gt;inserted content 1&lt;/p&gt;'});
 	controller.addTabItem({title: 'added', content: '&lt;p&gt;added content&lt;/p&gt;'});
 	</pre>
 
@@ -56,7 +56,7 @@
 <script type="text/javascript">
 	$('.tab1').tab();
 	var controller = $('.tab1').data('tab-controller');
-	controller.insertTabItem({title: 'inserted 1', content: '<p>inserted content 1</p>'}, 1);
+	controller.insertTabItem(1, {title: 'inserted 1', content: '<p>inserted content 1</p>'});
 	controller.addTabItem({title: 'added', content: '<p>added content</p>'});
 </script>
 

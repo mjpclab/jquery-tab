@@ -8,10 +8,13 @@ function generateGetters(containers, context, options) {
     const getCurrentIndex = function () {
         return context.currentIndex;
     };
-    const getTabItemName = function (index) {
+    const getCurrentName = function () {
+        return context.currentName;
+    };
+    const getName = function (index) {
         return $panelContainerLeaf.children().eq(index).attr(tabItemNameAttr);
     };
-    const getTabItemIndexByName = function (name) {
+    const getIndexByName = function (name) {
         let tabItemIndex = -1;
         $panelContainer.children().each(function (index, panel) {
             const $panel = $(panel);
@@ -30,7 +33,7 @@ function generateGetters(containers, context, options) {
             return parseInt(position);
         }
         else if (position !== undefined) {
-            return getTabItemIndexByName(position);
+            return getIndexByName(position);
         }
         else {
             return -1;
@@ -40,19 +43,19 @@ function generateGetters(containers, context, options) {
         if (typeof position === 'number') {
             return {
                 index: position,
-                name: getTabItemName(position)
+                name: getName(position)
             };
         }
         else if (isFinite(position)) {
             const index = parseInt(position);
             return {
                 index,
-                name: getTabItemName(index)
+                name: getName(index)
             };
         }
         else if (position) {
             return {
-                index: getTabItemIndexByName(position),
+                index: getIndexByName(position),
                 name: position
             };
         }
@@ -63,13 +66,13 @@ function generateGetters(containers, context, options) {
             };
         }
     };
-    const isTabItemDisabled = function (position) {
+    const isDisabled = function (position) {
         const index = positionToIndex(position);
         if (index > -1) {
             return $panelContainerLeaf.children().eq(index).hasClass(disabledPanelItemClass);
         }
     };
-    const isTabItemHidden = function (position) {
+    const isHidden = function (position) {
         const index = positionToIndex(position);
         if (index > -1) {
             return $panelContainerLeaf.children().eq(index).hasClass(hiddenPanelItemClass);
@@ -112,19 +115,15 @@ function generateGetters(containers, context, options) {
     return {
         getCount,
         getCurrentIndex,
-        getTabItemName,
-        getTabItemIndexByName,
+        getCurrentName,
+        getName,
+        getIndexByName,
         positionToIndex,
         parsePosition,
-        isTabItemDisabled,
-        isTabItemHidden,
-        getHeaderLabel,
-        getFooterLabel,
-        getHeaderFooterLabels,
+        isDisabled, isHidden,
+        getHeaderLabel, getFooterLabel, getHeaderFooterLabels,
         getPanel,
-        getCurrentHeaderLabel,
-        getCurrentFooterLabel,
-        getCurrentHeaderFooterLabels,
+        getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels,
         getCurrentPanel
     };
 }

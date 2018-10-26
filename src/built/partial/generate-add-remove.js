@@ -6,7 +6,7 @@ function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPane
             fnSwitchTo(0);
         }
     };
-    const insertTabItemWithoutSwitch = function (tabItem, position) {
+    const insertTabItemWithoutSwitch = function (position, tabItem) {
         const { $headerLabelContainerLeaf, $footerLabelContainerLeaf, $panelContainerLeaf } = containers;
         const { $panelItem, cloneLabelItem } = createTabItem(tabItem, context, options);
         if (context.currentIndex > -1 && typeof options.fnHidePanelItem === 'function') {
@@ -40,18 +40,18 @@ function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPane
         }
         context.itemCount++;
     };
-    const insertTabItem = function (tabItem, position) {
-        insertTabItemWithoutSwitch(tabItem, position);
+    const insertTabItem = function (position, tabItem) {
+        insertTabItemWithoutSwitch(position, tabItem);
         _switchIfInitial();
     };
     const addTabItemWithoutSwitch = function (tabItem) {
-        insertTabItemWithoutSwitch(tabItem, context.itemCount);
+        insertTabItemWithoutSwitch(context.itemCount, tabItem);
     };
     const addTabItem = function (tabItem) {
         addTabItemWithoutSwitch(tabItem);
         _switchIfInitial();
     };
-    const insertWithoutSwitch = function (sourceRegion, position) {
+    const insertWithoutSwitch = function (position, sourceRegion) {
         const { titleSelector, fnGetTitleContent, keepTitleVisible, fnGetTabItemName, fnIsTabItemDisabled, fnIsTabItemHidden } = options;
         const $sourceRegion = $(sourceRegion);
         let inserted = 0;
@@ -72,16 +72,16 @@ function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPane
                 disabled: fnIsTabItemDisabled.call($sourceRegion, $title, $rest),
                 hidden: fnIsTabItemHidden.call($sourceRegion, $title, $rest)
             };
-            insertTabItemWithoutSwitch(tabItem, index + inserted);
+            insertTabItemWithoutSwitch(index + inserted, tabItem);
             inserted++;
         }
     };
     const insert = function (sourceRegion, position) {
-        insertWithoutSwitch(sourceRegion, position);
+        insertWithoutSwitch(position, sourceRegion);
         _switchIfInitial();
     };
     const addWithoutSwitch = function (sourceRegion) {
-        insertWithoutSwitch(sourceRegion, context.itemCount);
+        insertWithoutSwitch(context.itemCount, sourceRegion);
     };
     const add = function (sourceRegion) {
         addWithoutSwitch(sourceRegion);

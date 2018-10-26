@@ -18,8 +18,8 @@ function generateAddRemove(
 	};
 
 	const insertTabItemWithoutSwitch = function (
-		tabItem: JQueryTab.TabItem,
-		position: JQueryTab.TabItemPosition
+		position: JQueryTab.TabItemPosition,
+		tabItem: JQueryTab.TabItem
 	) {
 		const {$headerLabelContainerLeaf, $footerLabelContainerLeaf, $panelContainerLeaf} = containers;
 
@@ -59,14 +59,14 @@ function generateAddRemove(
 		context.itemCount++;
 	};
 	const insertTabItem = function (
-		tabItem: JQueryTab.TabItem,
-		position: JQueryTab.TabItemPosition
+		position: JQueryTab.TabItemPosition,
+		tabItem: JQueryTab.TabItem
 	) {
-		insertTabItemWithoutSwitch(tabItem, position);
+		insertTabItemWithoutSwitch(position, tabItem);
 		_switchIfInitial();
 	};
 	const addTabItemWithoutSwitch = function (tabItem: JQueryTab.TabItem) {
-		insertTabItemWithoutSwitch(tabItem, context.itemCount);
+		insertTabItemWithoutSwitch(context.itemCount, tabItem);
 	};
 	const addTabItem = function (tabItem: JQueryTab.TabItem) {
 		addTabItemWithoutSwitch(tabItem);
@@ -74,8 +74,8 @@ function generateAddRemove(
 	};
 
 	const insertWithoutSwitch = function (
-		sourceRegion: JQueryTab.JQueriable,
-		position: JQueryTab.TabItemPosition
+		position: JQueryTab.TabItemPosition,
+		sourceRegion: JQueryTab.JQueriable
 	) {
 		const {
 			titleSelector,
@@ -107,7 +107,7 @@ function generateAddRemove(
 				disabled: fnIsTabItemDisabled.call($sourceRegion, $title, $rest),
 				hidden: fnIsTabItemHidden.call($sourceRegion, $title, $rest)
 			};
-			insertTabItemWithoutSwitch(tabItem, index + inserted);
+			insertTabItemWithoutSwitch(index + inserted, tabItem);
 			inserted++;
 		}
 	};
@@ -115,11 +115,11 @@ function generateAddRemove(
 		sourceRegion: JQueryTab.JQueriable,
 		position: JQueryTab.TabItemPosition
 	) {
-		insertWithoutSwitch(sourceRegion, position);
+		insertWithoutSwitch(position, sourceRegion);
 		_switchIfInitial();
 	};
 	const addWithoutSwitch = function (sourceRegion: JQueryTab.JQueriable) {
-		insertWithoutSwitch(sourceRegion, context.itemCount);
+		insertWithoutSwitch(context.itemCount, sourceRegion);
 	};
 	const add = function (sourceRegion: JQueryTab.JQueriable) {
 		addWithoutSwitch(sourceRegion);

@@ -218,11 +218,15 @@
         return context.currentIndex;
       };
 
-      var getTabItemName = function getTabItemName(index) {
+      var getCurrentName = function getCurrentName() {
+        return context.currentName;
+      };
+
+      var getName = function getName(index) {
         return $panelContainerLeaf.children().eq(index).attr(tabItemNameAttr);
       };
 
-      var getTabItemIndexByName = function getTabItemIndexByName(name) {
+      var getIndexByName = function getIndexByName(name) {
         var tabItemIndex = -1;
         $panelContainer.children().each(function (index, panel) {
           var $panel = $(panel);
@@ -241,7 +245,7 @@
         } else if (isFinite(position)) {
           return parseInt(position);
         } else if (position !== undefined) {
-          return getTabItemIndexByName(position);
+          return getIndexByName(position);
         } else {
           return -1;
         }
@@ -251,17 +255,17 @@
         if (typeof position === 'number') {
           return {
             index: position,
-            name: getTabItemName(position)
+            name: getName(position)
           };
         } else if (isFinite(position)) {
           var index = parseInt(position);
           return {
             index: index,
-            name: getTabItemName(index)
+            name: getName(index)
           };
         } else if (position) {
           return {
-            index: getTabItemIndexByName(position),
+            index: getIndexByName(position),
             name: position
           };
         } else {
@@ -272,7 +276,7 @@
         }
       };
 
-      var isTabItemDisabled = function isTabItemDisabled(position) {
+      var isDisabled = function isDisabled(position) {
         var index = positionToIndex(position);
 
         if (index > -1) {
@@ -280,7 +284,7 @@
         }
       };
 
-      var isTabItemHidden = function isTabItemHidden(position) {
+      var isHidden = function isHidden(position) {
         var index = positionToIndex(position);
 
         if (index > -1) {
@@ -335,12 +339,13 @@
       return {
         getCount: getCount,
         getCurrentIndex: getCurrentIndex,
-        getTabItemName: getTabItemName,
-        getTabItemIndexByName: getTabItemIndexByName,
+        getCurrentName: getCurrentName,
+        getName: getName,
+        getIndexByName: getIndexByName,
         positionToIndex: positionToIndex,
         parsePosition: parsePosition,
-        isTabItemDisabled: isTabItemDisabled,
-        isTabItemHidden: isTabItemHidden,
+        isDisabled: isDisabled,
+        isHidden: isHidden,
         getHeaderLabel: getHeaderLabel,
         getFooterLabel: getFooterLabel,
         getHeaderFooterLabels: getHeaderFooterLabels,
@@ -359,25 +364,25 @@
           hiddenLabelItemClass = options.hiddenLabelItemClass,
           hiddenPanelItemClass = options.hiddenPanelItemClass;
 
-      var setTabItemName = function setTabItemName(name, position) {
+      var setName = function setName(position, name) {
         fnGetHeaderFooterLabels(position).attr(tabItemNameAttr, name);
         fnGetPanel(position).attr(tabItemNameAttr, name);
       };
 
-      var setTabItemDisabled = function setTabItemDisabled(disabled, position) {
+      var setDisabled = function setDisabled(position, disabled) {
         fnGetHeaderFooterLabels(position).toggleClass(disabledLabelItemClass, disabled);
         fnGetPanel(position).toggleClass(disabledPanelItemClass, disabled);
       };
 
-      var setTabItemHidden = function setTabItemHidden(hidden, position) {
+      var setHidden = function setHidden(position, hidden) {
         fnGetHeaderFooterLabels(position).toggleClass(hiddenLabelItemClass, hidden);
         fnGetPanel(position).toggleClass(hiddenPanelItemClass, hidden);
       };
 
       return {
-        setTabItemName: setTabItemName,
-        setTabItemDisabled: setTabItemDisabled,
-        setTabItemHidden: setTabItemHidden
+        setName: setName,
+        setDisabled: setDisabled,
+        setHidden: setHidden
       };
     }
 
@@ -671,7 +676,7 @@
         }
       };
 
-      var insertTabItemWithoutSwitch = function insertTabItemWithoutSwitch(tabItem, position) {
+      var insertTabItemWithoutSwitch = function insertTabItemWithoutSwitch(position, tabItem) {
         var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf,
             $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf,
             $panelContainerLeaf = containers.$panelContainerLeaf;
@@ -720,14 +725,14 @@
         context.itemCount++;
       };
 
-      var insertTabItem = function insertTabItem(tabItem, position) {
-        insertTabItemWithoutSwitch(tabItem, position);
+      var insertTabItem = function insertTabItem(position, tabItem) {
+        insertTabItemWithoutSwitch(position, tabItem);
 
         _switchIfInitial();
       };
 
       var addTabItemWithoutSwitch = function addTabItemWithoutSwitch(tabItem) {
-        insertTabItemWithoutSwitch(tabItem, context.itemCount);
+        insertTabItemWithoutSwitch(context.itemCount, tabItem);
       };
 
       var addTabItem = function addTabItem(tabItem) {
@@ -736,7 +741,7 @@
         _switchIfInitial();
       };
 
-      var insertWithoutSwitch = function insertWithoutSwitch(sourceRegion, position) {
+      var insertWithoutSwitch = function insertWithoutSwitch(position, sourceRegion) {
         var titleSelector = options.titleSelector,
             fnGetTitleContent = options.fnGetTitleContent,
             keepTitleVisible = options.keepTitleVisible,
@@ -766,19 +771,19 @@
             disabled: fnIsTabItemDisabled.call($sourceRegion, $title, $rest),
             hidden: fnIsTabItemHidden.call($sourceRegion, $title, $rest)
           };
-          insertTabItemWithoutSwitch(tabItem, index + inserted);
+          insertTabItemWithoutSwitch(index + inserted, tabItem);
           inserted++;
         }
       };
 
       var insert = function insert(sourceRegion, position) {
-        insertWithoutSwitch(sourceRegion, position);
+        insertWithoutSwitch(position, sourceRegion);
 
         _switchIfInitial();
       };
 
       var addWithoutSwitch = function addWithoutSwitch(sourceRegion) {
-        insertWithoutSwitch(sourceRegion, context.itemCount);
+        insertWithoutSwitch(context.itemCount, sourceRegion);
       };
 
       var add = function add(sourceRegion) {
@@ -985,12 +990,13 @@
       var _generateGetters = generateGetters(containers, context, options),
           getCount = _generateGetters.getCount,
           getCurrentIndex = _generateGetters.getCurrentIndex,
-          getTabItemName = _generateGetters.getTabItemName,
-          getTabItemIndexByName = _generateGetters.getTabItemIndexByName,
+          getCurrentName = _generateGetters.getCurrentName,
+          getName = _generateGetters.getName,
+          getIndexByName = _generateGetters.getIndexByName,
           positionToIndex = _generateGetters.positionToIndex,
           parsePosition = _generateGetters.parsePosition,
-          isTabItemDisabled = _generateGetters.isTabItemDisabled,
-          isTabItemHidden = _generateGetters.isTabItemHidden,
+          isDisabled = _generateGetters.isDisabled,
+          isHidden = _generateGetters.isHidden,
           getHeaderLabel = _generateGetters.getHeaderLabel,
           getFooterLabel = _generateGetters.getFooterLabel,
           getHeaderFooterLabels = _generateGetters.getHeaderFooterLabels,
@@ -1002,9 +1008,9 @@
 
 
       var _generateTabItemSette = generateTabItemSetter(positionToIndex, getHeaderFooterLabels, getPanel, options),
-          setTabItemName = _generateTabItemSette.setTabItemName,
-          setTabItemDisabled = _generateTabItemSette.setTabItemDisabled,
-          setTabItemHidden = _generateTabItemSette.setTabItemHidden; //save/load
+          setName = _generateTabItemSette.setName,
+          setDisabled = _generateTabItemSette.setDisabled,
+          setHidden = _generateTabItemSette.setHidden; //save/load
 
 
       var _generateSaveLoadInde = generateSaveLoadIndex(containers, context, options),
@@ -1043,10 +1049,11 @@
       var controller = {
         getCount: getCount,
         getCurrentIndex: getCurrentIndex,
-        getTabItemName: getTabItemName,
-        getTabItemIndexByName: getTabItemIndexByName,
-        isTabItemDisabled: isTabItemDisabled,
-        isTabItemHidden: isTabItemHidden,
+        getCurrentName: getCurrentName,
+        getName: getName,
+        getIndexByName: getIndexByName,
+        isDisabled: isDisabled,
+        isHidden: isHidden,
         getHeaderLabel: getHeaderLabel,
         getFooterLabel: getFooterLabel,
         getHeaderFooterLabels: getHeaderFooterLabels,
@@ -1055,9 +1062,9 @@
         getCurrentFooterLabel: getCurrentFooterLabel,
         getCurrentHeaderFooterLabels: getCurrentHeaderFooterLabels,
         getCurrentPanel: getCurrentPanel,
-        setTabItemName: setTabItemName,
-        setTabItemDisabled: setTabItemDisabled,
-        setTabItemHidden: setTabItemHidden,
+        setName: setName,
+        setDisabled: setDisabled,
+        setHidden: setHidden,
         updateFixedHeight: updateFixedHeight,
         switchTo: switchTo,
         addTabItem: addTabItem,
