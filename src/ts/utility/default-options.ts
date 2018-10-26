@@ -25,7 +25,7 @@ const defaultOptions: JQueryTab.NecessaryOptions = {
 		return $title.contents();
 	},
 	keepTitleVisible: false,
-	fnGetName: function ($title: JQuery) {
+	fnGetTabItemName: function ($title: JQuery) {
 		return $title.attr('data-tab-item-name');
 	},
 

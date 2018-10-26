@@ -23,7 +23,7 @@ const defaultOptions = {
         return $title.contents();
     },
     keepTitleVisible: false,
-    fnGetName: function ($title) {
+    fnGetTabItemName: function ($title) {
         return $title.attr('data-tab-item-name');
     },
     tabContainerTemplate: '<div></div>',

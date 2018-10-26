@@ -51,7 +51,7 @@ function generateAddRemove(fnTabItemPositionToIndex, fnGetHeaderFooterLabels, fn
         }
     };
     const insertWithoutSwitch = function (sourceRegion, position) {
-        const { titleSelector, fnGetTitleContent, keepTitleVisible, fnGetName } = options;
+        const { titleSelector, fnGetTitleContent, keepTitleVisible, fnGetTabItemName } = options;
         const $sourceRegion = $(sourceRegion);
         let inserted = 0;
         const index = fnTabItemPositionToIndex(position);
@@ -66,7 +66,7 @@ function generateAddRemove(fnTabItemPositionToIndex, fnGetHeaderFooterLabels, fn
             const $rest = $title.nextUntil(titleSelector);
             const $labelContent = fnGetTitleContent.call($title, $title);
             const $panelContent = $([]).add($title).add($rest);
-            const tabItemName = fnGetName.call($sourceRegion, $title, $rest);
+            const tabItemName = fnGetTabItemName.call($sourceRegion, $title, $rest);
             insertTabItemWithoutSwitch($labelContent, $panelContent, tabItemName, index + inserted);
             inserted++;
         }

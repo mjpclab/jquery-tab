@@ -34,7 +34,7 @@ declare namespace JQueryTab {
 		titleSelector: string;
 		fnGetTitleContent: (this: JQuery, $title: JQuery) => (JQuery<HTMLElement | Text | Comment> | string | number);
 		keepTitleVisible: boolean;
-		fnGetName: (this: JQuery, $title: JQuery, $rest: JQuery) => string | undefined;
+		fnGetTabItemName: (this: JQuery, $title: JQuery, $rest: JQuery) => string | undefined;
 
 		tabContainerTemplate: Template;
 		tabContainerClass: string;

@@ -87,7 +87,7 @@ function generateAddRemove(
 		sourceRegion: JQueryTab.JQueriable,
 		position: JQueryTab.TabItemPosition
 	) {
-		const {titleSelector, fnGetTitleContent, keepTitleVisible, fnGetName} = options;
+		const {titleSelector, fnGetTitleContent, keepTitleVisible, fnGetTabItemName} = options;
 
 		const $sourceRegion = $(sourceRegion);
 		let inserted = 0;
@@ -105,7 +105,7 @@ function generateAddRemove(
 
 			const $labelContent = fnGetTitleContent.call($title, $title);
 			const $panelContent = $([]).add($title).add($rest);
-			const tabItemName = fnGetName.call($sourceRegion, $title, $rest);
+			const tabItemName = fnGetTabItemName.call($sourceRegion, $title, $rest);
 			insertTabItemWithoutSwitch($labelContent, $panelContent, tabItemName, index + inserted);
 			inserted++;
 		}

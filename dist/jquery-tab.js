@@ -33,7 +33,7 @@
         return $title.contents();
       },
       keepTitleVisible: false,
-      fnGetName: function fnGetName($title) {
+      fnGetTabItemName: function fnGetTabItemName($title) {
         return $title.attr('data-tab-item-name');
       },
       tabContainerTemplate: '<div></div>',
@@ -656,7 +656,7 @@
         var titleSelector = options.titleSelector,
             fnGetTitleContent = options.fnGetTitleContent,
             keepTitleVisible = options.keepTitleVisible,
-            fnGetName = options.fnGetName;
+            fnGetTabItemName = options.fnGetTabItemName;
         var $sourceRegion = $(sourceRegion);
         var inserted = 0;
         var index = fnTabItemPositionToIndex(position);
@@ -675,7 +675,7 @@
           var $rest = $title.nextUntil(titleSelector);
           var $labelContent = fnGetTitleContent.call($title, $title);
           var $panelContent = $([]).add($title).add($rest);
-          var tabItemName = fnGetName.call($sourceRegion, $title, $rest);
+          var tabItemName = fnGetTabItemName.call($sourceRegion, $title, $rest);
           insertTabItemWithoutSwitch($labelContent, $panelContent, tabItemName, index + inserted);
           inserted++;
         }
