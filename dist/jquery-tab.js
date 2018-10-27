@@ -521,12 +521,14 @@
           return;
         }
 
+        var $tabContainer = containers.$tabContainer;
         var oldIndex = context.currentIndex,
             oldName = context.currentName;
-        var $tabContainer = containers.$tabContainer; //before switching callback
+        var onBeforeSwitch = options.onBeforeSwitch,
+            onAfterSwitch = options.onAfterSwitch; //before switching callback
 
-        if (typeof options.onBeforeSwitch === 'function') {
-          options.onBeforeSwitch.call($tabContainer, {
+        if (typeof onBeforeSwitch === 'function') {
+          onBeforeSwitch.call($tabContainer, {
             index: oldIndex,
             name: oldName
           }, {
@@ -543,8 +545,8 @@
         context.currentIndex = newIndex;
         context.currentName = newName; //after switching callback
 
-        if (typeof options.onAfterSwitch === 'function') {
-          options.onAfterSwitch.call($tabContainer, {
+        if (typeof onAfterSwitch === 'function') {
+          onAfterSwitch.call($tabContainer, {
             index: oldIndex,
             name: oldName
           }, {
@@ -1076,7 +1078,14 @@
       var updateFixedHeight = generateUpdateFixedHeight(containers, options);
       updateFixedHeight(); //show active panel
 
-      switchToWithoutSave(loadPosition());
+      if (context.itemCount > 0) {
+        switchToWithoutSave(loadPosition());
+
+        if (context.currentIndex === -1) {
+          switchToWithoutSave(0);
+        }
+      }
+
       handleHashChangeEvent(parseHashPosition, switchTo, options);
       hahdleClickEvent(switchTo, containers, context, options); //controller
 

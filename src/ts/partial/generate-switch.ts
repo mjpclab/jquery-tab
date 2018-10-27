@@ -16,12 +16,13 @@ function generateSwitch(
 		if (newIndex < 0 || newIndex >= context.itemCount || newIndex === context.currentIndex) {
 			return;
 		}
-		const {currentIndex: oldIndex, currentName: oldName} = context;
 		const {$tabContainer} = containers;
+		const {currentIndex: oldIndex, currentName: oldName} = context;
+		const {onBeforeSwitch, onAfterSwitch} = options;
 
 		//before switching callback
-		if (typeof (options.onBeforeSwitch) === 'function') {
-			options.onBeforeSwitch.call(
+		if (typeof (onBeforeSwitch) === 'function') {
+			onBeforeSwitch.call(
 				$tabContainer,
 				{index: oldIndex, name: oldName},
 				{index: newIndex, name: newName}
@@ -38,8 +39,8 @@ function generateSwitch(
 		context.currentName = newName;
 
 		//after switching callback
-		if (typeof (options.onAfterSwitch) === 'function') {
-			options.onAfterSwitch.call(
+		if (typeof (onAfterSwitch) === 'function') {
+			onAfterSwitch.call(
 				$tabContainer,
 				{index: oldIndex, name: oldName},
 				{index: newIndex, name: newName}

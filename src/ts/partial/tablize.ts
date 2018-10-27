@@ -74,7 +74,12 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	updateFixedHeight();
 
 	//show active panel
-	switchToWithoutSave(loadPosition());
+	if (context.itemCount > 0) {
+		switchToWithoutSave(loadPosition());
+		if (context.currentIndex === -1) {
+			switchToWithoutSave(0);
+		}
+	}
 	handleHashChangeEvent(parseHashPosition, switchTo, options);
 	handleClickEvent(switchTo, containers, context, options);
 
