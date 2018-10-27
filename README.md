@@ -1,7 +1,15 @@
 # jquery-tab
-make flat html document that contains title and normal content turns into tab style.
+Make flat html document that contains title and normal content turns into tab style.
 
-# Usage:
+# Features
+- no link element needed, still search engine friendly for original content
+- options to keep active tab item after page refresh or post back
+- *name* could be used instead of *index* for individual tab item in some APIs
+- vertical label mode
+- nested tab
+- ARIA attributes integrated
+
+# Usage
 
 html document:
 ``` html
@@ -66,7 +74,7 @@ $('.region').tab({
 # Specify options
 There are two ways to specify options. By `data-` attribute and by `tab()` method.
 ## Specify options by `data-` attribute
-Option names become html attribute prefixed with `data-`. Words are always in lower case and separated by `-`. Only available for primitive option value.
+Option names become html attribute prefixed with `data-` on region element. Words are always in lower case and separated by `-`. Only available for primitive option value.
 ```html
 <div class="region" data-fixed-height="true">
 	......
@@ -108,8 +116,8 @@ Tab item property can be specified on title element:
 ```
 Supported properties:  
 `tabItemName`  
-The name should be a non-numeric string, otherwise in controller method parameters, it will be treated as a index.
-The name can only contains letters, digits, dashes and underlines.
+The name should be a non-numeric string, otherwise in controller method parameters, it will be treated as a index.  
+The name can only contains letters, digits, dashes and underlines.  
 If names are duplicated in the same tab container, only first item will be recognized.
 
 `tabItemDisabled`  
@@ -122,7 +130,7 @@ Specify if this tab item is hidden. A non-`false` value will be treated as hidde
 ## Behavior
 `triggerEvents`  
 Determine the types of events triggered on label-item that will make the panel-item switched.
-Default value is `click`.
+Multiple events can be specified separated by space. Default value is `click`.
 
 `delayTriggerEvents`  
 Specify events on label-item that will trigger panel switch after delay a small piece of time.
@@ -169,7 +177,7 @@ A key-value pair template to store active tab index in URL hash, e.g. `"tab="`.
 `statusHashSeparator`  
 Determine a separator between multiple hash items if there are more than 1 tab-container on the same page.
 
-`fnSavePosition(name | index)`  
+`fnSavePosition(name|index)`  
 A callback function to customize how active index is saved, so that this index can be restored in the future, for example when refreshing the page.
 
 `fnLoadPosition`  
@@ -224,7 +232,7 @@ Label item's template.
 CSS class for label item. Default value is 'label-item'.  
 If it is current active label item, then also append class "`labelItemClass`-active",
 otherwise append class "`labelItemClass`-inactive".  
-If tab item of the label is disabled, then also append class "`labelItemClass`-disabled".
+If tab item of the label is disabled, then also append class "`labelItemClass`-disabled".  
 If tab item of the label is hidden, then also append class "`labelItemClass`-hidden".
 
 ### Panel
@@ -255,10 +263,10 @@ var controller = $('.tab-container').data('tab-controller');
 ## Controller Methods
 ### States
 `getCount()`  
-Get the number of panels.
+Get the number of tab item.
 
 `getCurrentIndex()`  
-Get current active panel Index.
+Get current active tab item index.
 
 ### Tab item
 `getIndexByName(name)`  
@@ -267,36 +275,36 @@ Get tab item index by `name`.
 `getName(index)`  
 Get tab item name by `index`.
 
-`setTabItemName(newName, name | index)`  
+`setName(name|index, newName)`  
 set a new name for a specific tab item which its name is `name` or its index is `index`.
 
-`isDisabled(name | index)`  
+`isDisabled(name|index)`  
 Check if a tab item is disabled.
 Returns boolean type if tab item exists. Returns `undefined` otherwise.
 
-`setDisabled(name | index, isDisabled)`  
+`setDisabled(name|index, isDisabled)`  
 Specify if a tab item is disabled.
 
-`isHidden(name | index)`  
+`isHidden(name|index)`  
 Check if a tab item is hidden.
 Returns boolean type if tab item exists. Returns `undefined` otherwise.
 
-`setHidden(name | index, isHidden)`  
+`setHidden(name|index, isHidden)`  
 Specify if a tab item is hidden.
 
 ### DOM access
-`getHeaderLabel(name | index)`    
-`getFooterLabel(name | index)`  
-`getHeaderFooterLabels(name | index)`    
-Get the header/footer side label items by index or tab item name.
+`getHeaderLabel(name|index)`    
+`getFooterLabel(name|index)`  
+`getHeaderFooterLabels(name|index)`    
+Get the header/footer side label items by tab item `name` or `index`.
 
 `getCurrentHeaderLabel()`  
 `getCurrentFooterLabel()`  
 `getCurrentHeaderFooterLabels()`  
 Get current active header/footer label items.
 
-`getPanel(index)`  
-Get panel item by `index`.
+`getPanel(name|index)`  
+Get panel item by tab item `name` or `index`.
 
 `getCurrentPanel()`  
 Get current active panel item.
@@ -306,11 +314,11 @@ When panel item's content is dynamically changed and becomes longer, use this me
 Only available in height fixed mode by setting option `fixedHeight`.
 
 ### Switch
-`switchTo(name | index)`  
-Switch active(selected) panel item by index or tab item name.
+`switchTo(name|index)`  
+Switch active(selected) tab item to the one which its name is `name` or its index is `index`.
 
-`switchPrevious({includeDisabled=false, includeHidden=false, loop=false})`  
-`switchNext({includeDisabled=false, includeHidden=false, loop=false})`  
+`switchPrevious({includeDisabled?, includeHidden?, loop?}?)`  
+`switchNext({includeDisabled?, includeHidden?, loop?}?)`  
 Switch to previous/next tab item.
 If `includeDisabled` is `true`, disabled tab item will not be skipped.  
 If `includeHidden` is `true`, hidden tab item will not be skipped.  
@@ -318,18 +326,18 @@ if `loop` is `true`, once current active tab item is the last item on the direct
 
 
 ### Modify
-`addTabItem({title, content, name=undefined, disabled=false, hidden=false})`  
-`insertTabItem(before-name | before-index, {title, content, name?, disabled?, hidden})`  
+`addTabItem({title, content, name?, disabled?, hidden?})`  
+`insertTabItem(before-name|before-index, {title, content, name?, disabled?, hidden?})`  
 Append/insert a new tab item to existing tab container. Both `title` and `content` can be text, HTML or jquery object.  
-Optional `name` can be specified so that this item could be referenced later.  
+Optional `name` can be specified so that this item could be referenced by name besides by index later.  
 Set optional `disabled` to `true` to mark this tab item is disabled.  
 Set optional `hidden` to `true` to mark this tab item is hidden.
 
 `add($region)`  
 Parse and append another $region's structure to current tab. 
 
-`insert(before-name | before-index, $region)`  
+`insert(before-name|before-index, $region)`  
 Parse and insert another $region's structure before tab item which its name is `before-name` or its index is `before-index`.
 
-`remove(name | index)`  
+`remove(name|index)`  
 Remove a tab item by `name` or `index` and return it's panel item.
