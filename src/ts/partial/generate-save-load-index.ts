@@ -56,7 +56,7 @@ function generateSaveLoadIndex(
 	const parseHashPosition = function () {
 		const searchResult = location.hash.match(RE_STATUS_HASH);
 		if (searchResult && searchResult[1]) {
-			return parseInt(searchResult[1]);
+			return searchResult[1];
 		}
 		return -1;
 	};

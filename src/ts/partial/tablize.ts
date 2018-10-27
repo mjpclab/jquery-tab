@@ -75,7 +75,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 
 	//show active panel
 	switchToWithoutSave(loadPosition());
-	handleHashChangeEvent(parseHashPosition, switchTo, context, options);
+	handleHashChangeEvent(parseHashPosition, switchTo, options);
 	handleClickEvent(switchTo, containers, context, options);
 
 	//controller

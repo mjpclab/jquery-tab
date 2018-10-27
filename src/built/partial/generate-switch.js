@@ -7,7 +7,7 @@ var SwitchDirection;
 function generateSwitch(fnParsePosition, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, containers, context, options) {
     const switchToWithoutSave = function (newPosition) {
         const { index: newIndex, name: newName } = fnParsePosition(newPosition);
-        if (newIndex < 0 || newIndex >= context.itemCount) {
+        if (newIndex < 0 || newIndex >= context.itemCount || newIndex === context.currentIndex) {
             return;
         }
         const { currentIndex: oldIndex, currentName: oldName } = context;

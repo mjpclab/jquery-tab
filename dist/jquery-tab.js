@@ -440,7 +440,7 @@
         var searchResult = location.hash.match(RE_STATUS_HASH);
 
         if (searchResult && searchResult[1]) {
-          return parseInt(searchResult[1]);
+          return searchResult[1];
         }
 
         return -1;
@@ -517,7 +517,7 @@
             newIndex = _fnParsePosition.index,
             newName = _fnParsePosition.name;
 
-        if (newIndex < 0 || newIndex >= context.itemCount) {
+        if (newIndex < 0 || newIndex >= context.itemCount || newIndex === context.currentIndex) {
           return;
         }
 
@@ -886,14 +886,11 @@
       };
     }
 
-    function handleHashChangeEvent(fnParseHashPosition, fnSwitchTo, context, options) {
+    function handleHashChangeEvent(fnParseHashPosition, fnSwitchTo, options) {
       if (options.statusHashTemplate && window) {
         $(window).on('hashchange', function () {
-          var hashIndex = fnParseHashPosition();
-
-          if (hashIndex >= 0 && hashIndex < context.itemCount && hashIndex !== context.currentIndex) {
-            fnSwitchTo(hashIndex);
-          }
+          var position = fnParseHashPosition();
+          fnSwitchTo(position);
         });
       }
     }
@@ -1080,7 +1077,7 @@
       updateFixedHeight(); //show active panel
 
       switchToWithoutSave(loadPosition());
-      handleHashChangeEvent(parseHashPosition, switchTo, context, options);
+      handleHashChangeEvent(parseHashPosition, switchTo, options);
       hahdleClickEvent(switchTo, containers, context, options); //controller
 
       var controller = {

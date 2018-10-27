@@ -13,7 +13,7 @@ function generateSwitch(
 ) {
 	const switchToWithoutSave = function (newPosition: JQueryTab.TabItemPosition) {
 		const {index: newIndex, name: newName} = fnParsePosition(newPosition);
-		if (newIndex < 0 || newIndex >= context.itemCount) {
+		if (newIndex < 0 || newIndex >= context.itemCount || newIndex === context.currentIndex) {
 			return;
 		}
 		const {currentIndex: oldIndex, currentName: oldName} = context;
