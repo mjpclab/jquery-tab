@@ -12,7 +12,9 @@ function generateGetters(containers, context, options) {
         return context.currentName;
     };
     const getName = function (index) {
-        return $panelContainerLeaf.children().eq(index).attr(tabItemNameAttr);
+        if (index >= 0 && index < context.itemCount) {
+            return $panelContainerLeaf.children().eq(index).attr(tabItemNameAttr);
+        }
     };
     const getIndexByName = function (name) {
         let tabItemIndex = -1;
@@ -68,37 +70,47 @@ function generateGetters(containers, context, options) {
     };
     const isDisabled = function (position) {
         const index = positionToIndex(position);
-        if (index > -1 && index < context.itemCount) {
+        if (index >= 0 && index < context.itemCount) {
             return $panelContainerLeaf.children().eq(index).hasClass(disabledPanelItemClass);
         }
     };
     const isHidden = function (position) {
         const index = positionToIndex(position);
-        if (index > -1 && index < context.itemCount) {
+        if (index >= 0 && index < context.itemCount) {
             return $panelContainerLeaf.children().eq(index).hasClass(hiddenPanelItemClass);
         }
     };
     const getHeaderLabel = function (position) {
         if ($headerLabelContainerLeaf) {
             const index = positionToIndex(position);
-            return $headerLabelContainerLeaf.children().eq(index);
+            if (index >= 0 && index < context.itemCount) {
+                return $headerLabelContainerLeaf.children().eq(index);
+            }
         }
         return $([]);
     };
     const getFooterLabel = function (position) {
         if ($footerLabelContainerLeaf) {
             const index = positionToIndex(position);
-            return $footerLabelContainerLeaf.children().eq(index);
+            if (index >= 0 && index < context.itemCount) {
+                return $footerLabelContainerLeaf.children().eq(index);
+            }
         }
         return $([]);
     };
     const getHeaderFooterLabels = function (position) {
         const index = positionToIndex(position);
-        return getHeaderLabel(index).add(getFooterLabel(index));
+        if (index >= 0 && index < context.itemCount) {
+            return getHeaderLabel(index).add(getFooterLabel(index));
+        }
+        return $([]);
     };
     const getPanel = function (position) {
         const index = positionToIndex(position);
-        return $panelContainerLeaf.children().eq(index);
+        if (index >= 0 && index < context.itemCount) {
+            return $panelContainerLeaf.children().eq(index);
+        }
+        return $([]);
     };
     const getCurrentHeaderLabel = function () {
         return getHeaderLabel(context.currentIndex);

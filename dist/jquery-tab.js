@@ -216,7 +216,9 @@
       };
 
       var getName = function getName(index) {
-        return $panelContainerLeaf.children().eq(index).attr(tabItemNameAttr);
+        if (index >= 0 && index < context.itemCount) {
+          return $panelContainerLeaf.children().eq(index).attr(tabItemNameAttr);
+        }
       };
 
       var getIndexByName = function getIndexByName(name) {
@@ -272,7 +274,7 @@
       var isDisabled = function isDisabled(position) {
         var index = positionToIndex(position);
 
-        if (index > -1 && index < context.itemCount) {
+        if (index >= 0 && index < context.itemCount) {
           return $panelContainerLeaf.children().eq(index).hasClass(disabledPanelItemClass);
         }
       };
@@ -280,7 +282,7 @@
       var isHidden = function isHidden(position) {
         var index = positionToIndex(position);
 
-        if (index > -1 && index < context.itemCount) {
+        if (index >= 0 && index < context.itemCount) {
           return $panelContainerLeaf.children().eq(index).hasClass(hiddenPanelItemClass);
         }
       };
@@ -288,7 +290,10 @@
       var getHeaderLabel = function getHeaderLabel(position) {
         if ($headerLabelContainerLeaf) {
           var index = positionToIndex(position);
-          return $headerLabelContainerLeaf.children().eq(index);
+
+          if (index >= 0 && index < context.itemCount) {
+            return $headerLabelContainerLeaf.children().eq(index);
+          }
         }
 
         return $([]);
@@ -297,7 +302,10 @@
       var getFooterLabel = function getFooterLabel(position) {
         if ($footerLabelContainerLeaf) {
           var index = positionToIndex(position);
-          return $footerLabelContainerLeaf.children().eq(index);
+
+          if (index >= 0 && index < context.itemCount) {
+            return $footerLabelContainerLeaf.children().eq(index);
+          }
         }
 
         return $([]);
@@ -305,12 +313,22 @@
 
       var getHeaderFooterLabels = function getHeaderFooterLabels(position) {
         var index = positionToIndex(position);
-        return getHeaderLabel(index).add(getFooterLabel(index));
+
+        if (index >= 0 && index < context.itemCount) {
+          return getHeaderLabel(index).add(getFooterLabel(index));
+        }
+
+        return $([]);
       };
 
       var getPanel = function getPanel(position) {
         var index = positionToIndex(position);
-        return $panelContainerLeaf.children().eq(index);
+
+        if (index >= 0 && index < context.itemCount) {
+          return $panelContainerLeaf.children().eq(index);
+        }
+
+        return $([]);
       };
 
       var getCurrentHeaderLabel = function getCurrentHeaderLabel() {

@@ -24,7 +24,9 @@ function generateGetters(
 	};
 
 	const getName = function (index: number) {
-		return $panelContainerLeaf.children().eq(index).attr(tabItemNameAttr);
+		if (index >= 0 && index < context.itemCount) {
+			return $panelContainerLeaf.children().eq(index).attr(tabItemNameAttr);
+		}
 	};
 	const getIndexByName = function (name: string) {
 		let tabItemIndex = -1;
@@ -80,37 +82,47 @@ function generateGetters(
 	};
 	const isDisabled = function (position: JQueryTab.TabItemPosition) {
 		const index = positionToIndex(position);
-		if (index > -1 && index < context.itemCount) {
+		if (index >= 0 && index < context.itemCount) {
 			return $panelContainerLeaf.children().eq(index).hasClass(disabledPanelItemClass);
 		}
 	};
 	const isHidden = function (position: JQueryTab.TabItemPosition) {
 		const index = positionToIndex(position);
-		if (index > -1 && index < context.itemCount) {
+		if (index >= 0 && index < context.itemCount) {
 			return $panelContainerLeaf.children().eq(index).hasClass(hiddenPanelItemClass);
 		}
 	};
 	const getHeaderLabel = function (position: JQueryTab.TabItemPosition) {
 		if ($headerLabelContainerLeaf) {
 			const index = positionToIndex(position);
-			return $headerLabelContainerLeaf.children().eq(index);
+			if (index >= 0 && index < context.itemCount) {
+				return $headerLabelContainerLeaf.children().eq(index);
+			}
 		}
 		return $([]);
 	};
 	const getFooterLabel = function (position: JQueryTab.TabItemPosition) {
 		if ($footerLabelContainerLeaf) {
 			const index = positionToIndex(position);
-			return $footerLabelContainerLeaf.children().eq(index);
+			if (index >= 0 && index < context.itemCount) {
+				return $footerLabelContainerLeaf.children().eq(index);
+			}
 		}
 		return $([]);
 	};
 	const getHeaderFooterLabels = function (position: JQueryTab.TabItemPosition) {
 		const index = positionToIndex(position);
-		return getHeaderLabel(index).add(getFooterLabel(index));
+		if (index >= 0 && index < context.itemCount) {
+			return getHeaderLabel(index).add(getFooterLabel(index));
+		}
+		return $([]);
 	};
 	const getPanel = function (position: JQueryTab.TabItemPosition) {
 		const index = positionToIndex(position);
-		return $panelContainerLeaf.children().eq(index);
+		if (index >= 0 && index < context.itemCount) {
+			return $panelContainerLeaf.children().eq(index);
+		}
+		return $([]);
 	};
 
 	const getCurrentHeaderLabel = function () {
