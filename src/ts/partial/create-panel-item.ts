@@ -7,7 +7,6 @@ function createPanelItem(
 ) {
 	const $panelItem = $(options.panelItemTemplate)
 		.addClass(options.panelItemClass)
-		.addClass(options.inactivePanelItemClass)
 		.attr('role', 'tabpanel');
 
 	const $panelItemLeaf = getLeafElement($panelItem);

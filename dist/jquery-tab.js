@@ -623,7 +623,7 @@
     }
 
     function createLabelItem(tabItem, options) {
-      var $labelItem = $(options.labelItemTemplate).addClass(options.labelItemClass).addClass(options.inactiveLabelItemClass).attr('role', 'tab');
+      var $labelItem = $(options.labelItemTemplate).addClass(options.labelItemClass).attr('role', 'tab');
       var $labelItemLeaf = getLeafElement($labelItem);
       $labelItemLeaf.append(tabItem.title);
       return {
@@ -633,7 +633,7 @@
     }
 
     function createPanelItem(tabItem, options) {
-      var $panelItem = $(options.panelItemTemplate).addClass(options.panelItemClass).addClass(options.inactivePanelItemClass).attr('role', 'tabpanel');
+      var $panelItem = $(options.panelItemTemplate).addClass(options.panelItemClass).attr('role', 'tabpanel');
       var $panelItemLeaf = getLeafElement($panelItem);
       $panelItemLeaf.append(tabItem.content);
       return {
