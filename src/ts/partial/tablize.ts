@@ -47,7 +47,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	const {setName, setDisabled, setHidden} = generateTabItemSetter(positionToIndex, getHeaderFooterLabels, getPanel, options);
 
 	//save/load
-	const {savePosition, loadPosition, parseHashPosition} = generateSaveLoadIndex(containers, context, options);
+	const {savePosition, loadPosition, parseHashPosition} = generateSaveLoadIndex(containers, options);
 
 	//methods
 	const {switchToWithoutSave, switchTo, switchPrevious, switchNext} = genrateSwitch(parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options);

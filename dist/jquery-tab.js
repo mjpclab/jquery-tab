@@ -272,7 +272,7 @@
       var isDisabled = function isDisabled(position) {
         var index = positionToIndex(position);
 
-        if (index > -1) {
+        if (index > -1 && index < context.itemCount) {
           return $panelContainerLeaf.children().eq(index).hasClass(disabledPanelItemClass);
         }
       };
@@ -280,7 +280,7 @@
       var isHidden = function isHidden(position) {
         var index = positionToIndex(position);
 
-        if (index > -1) {
+        if (index > -1 && index < context.itemCount) {
           return $panelContainerLeaf.children().eq(index).hasClass(hiddenPanelItemClass);
         }
       };
@@ -386,7 +386,7 @@
       return position !== -1 && position !== undefined && position !== null && position !== '';
     }
 
-    function generateSaveLoadIndex(containers, context, options) {
+    function generateSaveLoadIndex(containers, options) {
       var $region = containers.$region,
           $tabContainer = containers.$tabContainer;
       var statusFieldSelector = options.statusFieldSelector,
@@ -891,7 +891,7 @@
         $(window).on('hashchange', function () {
           var hashIndex = fnParseHashPosition();
 
-          if (hashIndex > -1 && hashIndex !== context.currentIndex) {
+          if (hashIndex >= 0 && hashIndex < context.itemCount && hashIndex !== context.currentIndex) {
             fnSwitchTo(hashIndex);
           }
         });
@@ -1048,7 +1048,7 @@
           setHidden = _generateTabItemSette.setHidden; //save/load
 
 
-      var _generateSaveLoadInde = generateSaveLoadIndex(containers, context, options),
+      var _generateSaveLoadInde = generateSaveLoadIndex(containers, options),
           savePosition = _generateSaveLoadInde.savePosition,
           loadPosition = _generateSaveLoadInde.loadPosition,
           parseHashPosition = _generateSaveLoadInde.parseHashPosition; //methods

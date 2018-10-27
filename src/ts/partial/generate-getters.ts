@@ -80,13 +80,13 @@ function generateGetters(
 	};
 	const isDisabled = function (position: JQueryTab.TabItemPosition) {
 		const index = positionToIndex(position);
-		if (index > -1) {
+		if (index > -1 && index < context.itemCount) {
 			return $panelContainerLeaf.children().eq(index).hasClass(disabledPanelItemClass);
 		}
 	};
 	const isHidden = function (position: JQueryTab.TabItemPosition) {
 		const index = positionToIndex(position);
-		if (index > -1) {
+		if (index > -1 && index < context.itemCount) {
 			return $panelContainerLeaf.children().eq(index).hasClass(hiddenPanelItemClass);
 		}
 	};

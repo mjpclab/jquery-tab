@@ -27,7 +27,7 @@ function tablize($region, customOptions) {
     //tab item setter
     const { setName, setDisabled, setHidden } = generateTabItemSetter(positionToIndex, getHeaderFooterLabels, getPanel, options);
     //save/load
-    const { savePosition, loadPosition, parseHashPosition } = generateSaveLoadIndex(containers, context, options);
+    const { savePosition, loadPosition, parseHashPosition } = generateSaveLoadIndex(containers, options);
     //methods
     const { switchToWithoutSave, switchTo, switchPrevious, switchNext } = genrateSwitch(parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options);
     const { addTabItem, insertTabItem, add, addWithoutSwitch, insert, remove, } = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, containers, context, options);

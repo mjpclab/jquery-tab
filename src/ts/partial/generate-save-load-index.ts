@@ -9,7 +9,6 @@ function isValidPosition(position: JQueryTab.TabItemPosition) {
 
 function generateSaveLoadIndex(
 	containers: JQueryTab.Containers,
-	context: JQueryTab.Context,
 	options: JQueryTab.ExpandedOptions
 ) {
 	const {$region, $tabContainer} = containers;

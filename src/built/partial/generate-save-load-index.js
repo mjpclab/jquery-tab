@@ -4,7 +4,7 @@ const RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
 function isValidPosition(position) {
     return position !== -1 && position !== undefined && position !== null && position !== '';
 }
-function generateSaveLoadIndex(containers, context, options) {
+function generateSaveLoadIndex(containers, options) {
     const { $region, $tabContainer } = containers;
     const { statusFieldSelector, statusHashTemplate, statusHashSeparator, fnSavePosition, fnLoadPosition, activePosition } = options;
     let $statusFields = $region.find(statusFieldSelector);
