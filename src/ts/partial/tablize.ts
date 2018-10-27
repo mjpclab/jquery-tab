@@ -59,7 +59,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 		addWithoutSwitch,
 		insert,
 		remove,
-	} = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, containers, context, options);
+	} = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, switchPrevious, switchNext, containers, context, options);
 
 	addWithoutSwitch($region);
 

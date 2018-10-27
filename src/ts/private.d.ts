@@ -38,10 +38,16 @@ declare namespace JQueryTab {
 		$footerLabelContainerLeaf?: JQuery;
 	}
 
+	interface SwitchResult {
+		index: number;
+		name?: string;
+	}
+
 	type fnPositionToIndex = (position: TabItemPosition) => number;
 	type fnParsePosition = (position: TabItemPosition) => { index: number, name?: string };
 	type fnParseHashPosition = () => TabItemPosition;
-	type fnSwitchTo = (position: TabItemPosition) => void;
+	type fnSwitchTo = (position: TabItemPosition) => SwitchResult | undefined;
+	type fnSwitchNeighbor = (switchOptions?: SwitchOptions) => SwitchResult | undefined;
 	type fnSavePosition = (position: TabItemPosition) => void;
 	type fnGetLabel = (position: TabItemPosition) => JQuery;
 	type fnGetPanel = (position: TabItemPosition) => JQuery;

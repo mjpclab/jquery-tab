@@ -73,7 +73,12 @@ function generateSwitch(
 
 		let maxIterationCount = -1;
 		if (loop) {
-			maxIterationCount = itemCount - 1;
+			if (currentIndex >= 0 && currentIndex < itemCount) {
+				maxIterationCount = itemCount - 1;
+			}
+			else {
+				maxIterationCount = itemCount;
+			}
 		}
 		else if (direction === SwitchDirection.Backward) {
 			maxIterationCount = currentIndex;

@@ -1,6 +1,6 @@
 import createTabItem from "./create-tab-item";
 import $ from "jquery";
-function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, fnSwitchTo, containers, context, options) {
+function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, fnSwitchTo, fnSwitchPrevious, fnSwitchNext, containers, context, options) {
     const _switchIfInitial = function () {
         if (context.currentIndex === -1 && context.itemCount) {
             fnSwitchTo(0);
@@ -87,12 +87,23 @@ function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPane
         _switchIfInitial();
     };
     const remove = function (position) {
-        const index = fnPositionToIndex(position);
-        if (index < 0 || index >= context.itemCount) {
+        const removeIndex = fnPositionToIndex(position);
+        if (removeIndex < 0 || removeIndex >= context.itemCount) {
             return;
         }
-        const $labelItems = fnGetHeaderFooterLabels(index);
-        const $panelItem = fnGetPanel(index);
+        const $labelItems = fnGetHeaderFooterLabels(removeIndex);
+        const $panelItem = fnGetPanel(removeIndex);
+        let switchResult;
+        if (context.itemCount > 1 && removeIndex === context.currentIndex) {
+            switchResult = fnSwitchNext() ||
+                fnSwitchPrevious() ||
+                fnSwitchNext({ includeDisabled: true }) ||
+                fnSwitchPrevious({ includeDisabled: true }) ||
+                fnSwitchNext({ includeHidden: true }) ||
+                fnSwitchPrevious({ includeHidden: true }) ||
+                fnSwitchNext({ includeDisabled: true, includeHidden: true }) ||
+                fnSwitchPrevious({ includeDisabled: true, includeHidden: true });
+        }
         $labelItems.remove();
         $panelItem.remove();
         context.itemCount--;
@@ -100,15 +111,16 @@ function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPane
             context.currentIndex = -1;
             context.currentName = undefined;
         }
-        else if (index < context.currentIndex) {
-            fnSwitchTo(context.currentIndex - 1);
-        }
-        else if (index === context.currentIndex) {
-            if (index === context.itemCount) {
-                fnSwitchTo(context.currentIndex - 1);
+        else if (switchResult && switchResult.index > removeIndex) {
+            context.currentIndex = switchResult.index - 1;
+            if (!context.currentName) {
+                fnSavePosition(context.currentIndex);
             }
-            else {
-                fnSwitchTo(context.currentIndex);
+        }
+        else if (removeIndex < context.currentIndex) {
+            context.currentIndex--;
+            if (!context.currentName) {
+                fnSavePosition(context.currentIndex);
             }
         }
         return $panelItem;

@@ -30,7 +30,7 @@ function tablize($region, customOptions) {
     const { savePosition, loadPosition, parseHashPosition } = generateSaveLoadIndex(containers, options);
     //methods
     const { switchToWithoutSave, switchTo, switchPrevious, switchNext } = genrateSwitch(parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options);
-    const { addTabItem, insertTabItem, add, addWithoutSwitch, insert, remove, } = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, containers, context, options);
+    const { addTabItem, insertTabItem, add, addWithoutSwitch, insert, remove, } = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, switchPrevious, switchNext, containers, context, options);
     addWithoutSwitch($region);
     //replace original content
     if (!context.itemCount && !options.createEmptyTab) {

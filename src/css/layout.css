@@ -65,6 +65,18 @@
 	margin-bottom: 0.3em;
 }
 
+.tab-container .label-container .label-item-hidden {
+	display: none;
+}
+
+.tab-container .label-container .label-item-hidden {
+	display: none;
+}
+
+.tab-container .label-container .label-item-hidden.label-item-active {
+	display: inline-block;
+}
+
 /* panel container */
 .tab-container .panel-container {
 	border: 1px solid;

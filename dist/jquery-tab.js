@@ -587,7 +587,11 @@
         var maxIterationCount = -1;
 
         if (loop) {
-          maxIterationCount = itemCount - 1;
+          if (currentIndex >= 0 && currentIndex < itemCount) {
+            maxIterationCount = itemCount - 1;
+          } else {
+            maxIterationCount = itemCount;
+          }
         } else if (direction === SwitchDirection.Backward) {
           maxIterationCount = currentIndex;
         } else if (direction === SwitchDirection.Forward) {
@@ -707,7 +711,7 @@
       };
     }
 
-    function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, fnSwitchTo, containers, context, options) {
+    function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, fnSwitchTo, fnSwitchPrevious, fnSwitchNext, containers, context, options) {
       var _switchIfInitial = function _switchIfInitial() {
         if (context.currentIndex === -1 && context.itemCount) {
           fnSwitchTo(0);
@@ -830,14 +834,34 @@
       };
 
       var remove = function remove(position) {
-        var index = fnPositionToIndex(position);
+        var removeIndex = fnPositionToIndex(position);
 
-        if (index < 0 || index >= context.itemCount) {
+        if (removeIndex < 0 || removeIndex >= context.itemCount) {
           return;
         }
 
-        var $labelItems = fnGetHeaderFooterLabels(index);
-        var $panelItem = fnGetPanel(index);
+        var $labelItems = fnGetHeaderFooterLabels(removeIndex);
+        var $panelItem = fnGetPanel(removeIndex);
+        var switchResult;
+
+        if (context.itemCount > 1 && removeIndex === context.currentIndex) {
+          switchResult = fnSwitchNext() || fnSwitchPrevious() || fnSwitchNext({
+            includeDisabled: true
+          }) || fnSwitchPrevious({
+            includeDisabled: true
+          }) || fnSwitchNext({
+            includeHidden: true
+          }) || fnSwitchPrevious({
+            includeHidden: true
+          }) || fnSwitchNext({
+            includeDisabled: true,
+            includeHidden: true
+          }) || fnSwitchPrevious({
+            includeDisabled: true,
+            includeHidden: true
+          });
+        }
+
         $labelItems.remove();
         $panelItem.remove();
         context.itemCount--;
@@ -845,13 +869,17 @@
         if (context.itemCount === 0) {
           context.currentIndex = -1;
           context.currentName = undefined;
-        } else if (index < context.currentIndex) {
-          fnSwitchTo(context.currentIndex - 1);
-        } else if (index === context.currentIndex) {
-          if (index === context.itemCount) {
-            fnSwitchTo(context.currentIndex - 1);
-          } else {
-            fnSwitchTo(context.currentIndex);
+        } else if (switchResult && switchResult.index > removeIndex) {
+          context.currentIndex = switchResult.index - 1;
+
+          if (!context.currentName) {
+            fnSavePosition(context.currentIndex);
+          }
+        } else if (removeIndex < context.currentIndex) {
+          context.currentIndex--;
+
+          if (!context.currentName) {
+            fnSavePosition(context.currentIndex);
           }
         }
 
@@ -1059,7 +1087,7 @@
           switchPrevious = _genrateSwitch.switchPrevious,
           switchNext = _genrateSwitch.switchNext;
 
-      var _generateAddRemove = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, containers, context, options),
+      var _generateAddRemove = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, switchPrevious, switchNext, containers, context, options),
           addTabItem = _generateAddRemove.addTabItem,
           insertTabItem = _generateAddRemove.insertTabItem,
           add = _generateAddRemove.add,

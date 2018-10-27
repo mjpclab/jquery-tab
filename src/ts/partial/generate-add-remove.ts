@@ -7,6 +7,8 @@ function generateAddRemove(
 	fnGetPanel: JQueryTab.fnGetPanel,
 	fnSavePosition: JQueryTab.fnSavePosition,
 	fnSwitchTo: JQueryTab.fnSwitchTo,
+	fnSwitchPrevious: JQueryTab.fnSwitchNeighbor,
+	fnSwitchNext: JQueryTab.fnSwitchNeighbor,
 	containers: JQueryTab.Containers,
 	context: JQueryTab.Context,
 	options: JQueryTab.ExpandedOptions
@@ -40,7 +42,7 @@ function generateAddRemove(
 
 			if (index <= context.currentIndex) {
 				context.currentIndex++;
-				if(!context.currentName) {
+				if (!context.currentName) {
 					fnSavePosition(context.currentIndex);
 				}
 			}
@@ -125,13 +127,25 @@ function generateAddRemove(
 		_switchIfInitial();
 	};
 	const remove = function (position: JQueryTab.TabItemPosition) {
-		const index = fnPositionToIndex(position);
-		if (index < 0 || index >= context.itemCount) {
+		const removeIndex = fnPositionToIndex(position);
+		if (removeIndex < 0 || removeIndex >= context.itemCount) {
 			return;
 		}
 
-		const $labelItems = fnGetHeaderFooterLabels(index);
-		const $panelItem = fnGetPanel(index);
+		const $labelItems = fnGetHeaderFooterLabels(removeIndex);
+		const $panelItem = fnGetPanel(removeIndex);
+
+		let switchResult: JQueryTab.SwitchResult | undefined;
+		if (context.itemCount > 1 && removeIndex === context.currentIndex) {
+			switchResult = fnSwitchNext() ||
+				fnSwitchPrevious() ||
+				fnSwitchNext({includeDisabled: true}) ||
+				fnSwitchPrevious({includeDisabled: true}) ||
+				fnSwitchNext({includeHidden: true}) ||
+				fnSwitchPrevious({includeHidden: true}) ||
+				fnSwitchNext({includeDisabled: true, includeHidden: true}) ||
+				fnSwitchPrevious({includeDisabled: true, includeHidden: true});
+		}
 
 		$labelItems.remove();
 		$panelItem.remove();
@@ -141,15 +155,16 @@ function generateAddRemove(
 			context.currentIndex = -1;
 			context.currentName = undefined;
 		}
-		else if (index < context.currentIndex) {
-			fnSwitchTo(context.currentIndex - 1);
-		}
-		else if (index === context.currentIndex) {
-			if (index === context.itemCount) {
-				fnSwitchTo(context.currentIndex - 1);
+		else if (switchResult && switchResult.index > removeIndex) {
+			context.currentIndex = switchResult.index - 1;
+			if (!context.currentName) {
+				fnSavePosition(context.currentIndex);
 			}
-			else {
-				fnSwitchTo(context.currentIndex);
+		}
+		else if (removeIndex < context.currentIndex) {
+			context.currentIndex--;
+			if (!context.currentName) {
+				fnSavePosition(context.currentIndex);
 			}
 		}
 

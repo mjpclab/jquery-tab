@@ -65,6 +65,18 @@
 	margin-bottom: 0.3em;
 }
 
+.tab-container .label-container .label-item-hidden {
+	display: none;
+}
+
+.tab-container .label-container .label-item-hidden {
+	display: none;
+}
+
+.tab-container .label-container .label-item-hidden.label-item-active {
+	display: inline-block;
+}
+
 /* panel container */
 .tab-container .panel-container {
 	border: 1px solid;
@@ -79,7 +91,8 @@
 /* panel item */
 .tab-container .panel-container .panel-item-inactive {
 	display: none;
-}.tab-container .panel-container {
+}
+.tab-container .panel-container {
 	border-color: #ccc;
 	background: #fff;
 }
@@ -116,9 +129,6 @@
 	opacity: 0.7;
 }
 
-.tab-container .label-container .label-item-hidden {
-	display: none;
-}
 
 *html .tab-container .label-container-header {
 	bottom: -1px;
