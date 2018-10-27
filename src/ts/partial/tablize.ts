@@ -5,7 +5,7 @@ import createTabContainer from './create-tab-container';
 import generateGetters from './generate-getters';
 import generateTabItemSetter from './generate-tab-item-setter';
 import generateSaveLoadIndex from './generate-save-load-index';
-import genrateSwitchTo from './generate-switch-to';
+import genrateSwitch from './generate-switch';
 import generateAddRemove from './generate-add-remove';
 import generateUpdateFixedHeight from './update-fixed-height';
 import handleHashChangeEvent from './handle-hash-change-event';
@@ -50,7 +50,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	const {savePosition, loadPosition, parseHashPosition} = generateSaveLoadIndex(containers, context, options);
 
 	//methods
-	const {switchToWithoutSave, switchTo} = genrateSwitchTo(parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options);
+	const {switchToWithoutSave, switchTo, switchPrevious, switchNext} = genrateSwitch(parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options);
 
 	const {
 		addTabItem,
@@ -92,7 +92,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 		getCurrentPanel,
 		setName, setDisabled, setHidden,
 		updateFixedHeight,
-		switchTo,
+		switchTo, switchPrevious, switchNext,
 		addTabItem,
 		insertTabItem,
 		add,

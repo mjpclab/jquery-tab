@@ -23,7 +23,9 @@ function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPane
             $panelContainerLeaf.children().eq(index).before($panelItem);
             if (index <= context.currentIndex) {
                 context.currentIndex++;
-                fnSavePosition(tabItem.name || context.currentIndex);
+                if (!context.currentName) {
+                    fnSavePosition(context.currentIndex);
+                }
             }
         }
         else {

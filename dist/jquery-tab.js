@@ -198,7 +198,6 @@
     function generateGetters(containers, context, options) {
       var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf,
           $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf,
-          $panelContainer = containers.$panelContainer,
           $panelContainerLeaf = containers.$panelContainerLeaf;
       var tabItemNameAttr = options.tabItemNameAttr,
           disabledPanelItemClass = options.disabledPanelItemClass,
@@ -222,7 +221,7 @@
 
       var getIndexByName = function getIndexByName(name) {
         var tabItemIndex = -1;
-        $panelContainer.children().each(function (index, panel) {
+        $panelContainerLeaf.children().each(function (index, panel) {
           var $panel = $(panel);
 
           if ($panel.attr(tabItemNameAttr) === name) {
@@ -505,7 +504,14 @@
       $activePanelItem.siblings().removeClass(activePanelItemClass).addClass(inactivePanelItemClass).attr('aria-hidden', 'true');
     }
 
-    function generateSwitchTo(fnParsePosition, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, containers, context, options) {
+    var SwitchDirection;
+
+    (function (SwitchDirection) {
+      SwitchDirection[SwitchDirection["Backward"] = 0] = "Backward";
+      SwitchDirection[SwitchDirection["Forward"] = 1] = "Forward";
+    })(SwitchDirection || (SwitchDirection = {}));
+
+    function generateSwitch(fnParsePosition, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, containers, context, options) {
       var switchToWithoutSave = function switchToWithoutSave(newPosition) {
         var _fnParsePosition = fnParsePosition(newPosition),
             newIndex = _fnParsePosition.index,
@@ -561,11 +567,58 @@
               name = result.name;
           fnSavePosition(name || index);
         }
+
+        return result;
+      };
+
+      var _switchNeighbor = function _switchNeighbor(direction, switchOptions) {
+        var opts = switchOptions || {};
+        var includeDisabled = opts.includeDisabled,
+            includeHidden = opts.includeHidden,
+            loop = opts.loop;
+        var $panelContainer = containers.$panelContainer;
+        var $panelItems = $panelContainer.children();
+        var itemCount = context.itemCount,
+            currentIndex = context.currentIndex;
+        var disabledPanelItemClass = options.disabledPanelItemClass,
+            hiddenPanelItemClass = options.hiddenPanelItemClass;
+        var maxIterationCount = -1;
+
+        if (loop) {
+          maxIterationCount = itemCount - 1;
+        } else if (direction === SwitchDirection.Backward) {
+          maxIterationCount = currentIndex;
+        } else if (direction === SwitchDirection.Forward) {
+          maxIterationCount = itemCount - currentIndex - 1;
+        }
+
+        var iterationStep = direction === SwitchDirection.Backward ? -1 : 1;
+
+        for (var i = 1; i <= maxIterationCount; i++) {
+          var panelIndex = (currentIndex + i * iterationStep + itemCount) % itemCount;
+          var $panel = $panelItems.eq(panelIndex);
+          var panelIsDisabled = $panel.hasClass(disabledPanelItemClass);
+          var panelIsHidden = $panel.hasClass(hiddenPanelItemClass);
+
+          if (!panelIsDisabled && !panelIsHidden || includeDisabled && !panelIsHidden || !panelIsDisabled && includeHidden || includeDisabled && includeHidden) {
+            return switchTo(panelIndex);
+          }
+        }
+      };
+
+      var switchPrevious = function switchPrevious(switchOptions) {
+        return _switchNeighbor(SwitchDirection.Backward, switchOptions);
+      };
+
+      var switchNext = function switchNext(switchOptions) {
+        return _switchNeighbor(SwitchDirection.Forward, switchOptions);
       };
 
       return {
         switchToWithoutSave: switchToWithoutSave,
-        switchTo: switchTo
+        switchTo: switchTo,
+        switchPrevious: switchPrevious,
+        switchNext: switchNext
       };
     }
 
@@ -687,7 +740,10 @@
 
           if (index <= context.currentIndex) {
             context.currentIndex++;
-            fnSavePosition(tabItem.name || context.currentIndex);
+
+            if (!context.currentName) {
+              fnSavePosition(context.currentIndex);
+            }
           }
         } else {
           if ($headerLabelContainerLeaf) {
@@ -998,9 +1054,11 @@
           parseHashPosition = _generateSaveLoadInde.parseHashPosition; //methods
 
 
-      var _genrateSwitchTo = generateSwitchTo(parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options),
-          switchToWithoutSave = _genrateSwitchTo.switchToWithoutSave,
-          switchTo = _genrateSwitchTo.switchTo;
+      var _genrateSwitch = generateSwitch(parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options),
+          switchToWithoutSave = _genrateSwitch.switchToWithoutSave,
+          switchTo = _genrateSwitch.switchTo,
+          switchPrevious = _genrateSwitch.switchPrevious,
+          switchNext = _genrateSwitch.switchNext;
 
       var _generateAddRemove = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, containers, context, options),
           addTabItem = _generateAddRemove.addTabItem,
@@ -1046,6 +1104,8 @@
         setHidden: setHidden,
         updateFixedHeight: updateFixedHeight,
         switchTo: switchTo,
+        switchPrevious: switchPrevious,
+        switchNext: switchNext,
         addTabItem: addTabItem,
         insertTabItem: insertTabItem,
         add: add,

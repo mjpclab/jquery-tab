@@ -30,8 +30,9 @@
 }
 
 .tab-container .label-container .label-item-disabled {
-	color: #eee;
+	color: #ddd;
 	cursor: default;
+	opacity: 0.7;
 }
 
 .tab-container .label-container .label-item-hidden {

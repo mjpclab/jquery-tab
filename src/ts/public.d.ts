@@ -61,6 +61,12 @@ declare namespace JQueryTab {
 	}
 
 	type Options = Partial<NecessaryOptions>;
+
+	interface SwitchOptions {
+		includeDisabled?: boolean;
+		includeHidden?: boolean;
+		loop?: boolean;
+	}
 }
 
 interface JQueryStatic {

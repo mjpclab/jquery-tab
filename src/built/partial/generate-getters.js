@@ -1,6 +1,6 @@
 import $ from "jquery";
 function generateGetters(containers, context, options) {
-    const { $headerLabelContainerLeaf, $footerLabelContainerLeaf, $panelContainer, $panelContainerLeaf } = containers;
+    const { $headerLabelContainerLeaf, $footerLabelContainerLeaf, $panelContainerLeaf } = containers;
     const { tabItemNameAttr, disabledPanelItemClass, hiddenPanelItemClass } = options;
     const getCount = function () {
         return context.itemCount;
@@ -16,7 +16,7 @@ function generateGetters(containers, context, options) {
     };
     const getIndexByName = function (name) {
         let tabItemIndex = -1;
-        $panelContainer.children().each(function (index, panel) {
+        $panelContainerLeaf.children().each(function (index, panel) {
             const $panel = $(panel);
             if ($panel.attr(tabItemNameAttr) === name) {
                 tabItemIndex = $panel.index();

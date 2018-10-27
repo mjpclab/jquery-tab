@@ -309,8 +309,16 @@ Only available in height fixed mode by setting option `fixedHeight`.
 `switchTo(name | index)`  
 Switch active(selected) panel item by index or tab item name.
 
+`switchPrevious({includeDisabled=false, includeHidden=false, loop=false})`  
+`switchNext({includeDisabled=false, includeHidden=false, loop=false})`  
+Switch to previous/next tab item.
+If `includeDisabled` is `true`, disabled tab item will not be skipped.  
+If `includeHidden` is `true`, hidden tab item will not be skipped.  
+if `loop` is `true`, once current active tab item is the last item on the direction, will loop to the first item.
+
+
 ### Modify
-`addTabItem({title, content, name?, disabled?, hidden})`  
+`addTabItem({title, content, name=undefined, disabled=false, hidden=false})`  
 `insertTabItem(before-name | before-index, {title, content, name?, disabled?, hidden})`  
 Append/insert a new tab item to existing tab container. Both `title` and `content` can be text, HTML or jquery object.  
 Optional `name` can be specified so that this item could be referenced later.  

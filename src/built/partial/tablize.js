@@ -5,7 +5,7 @@ import createTabContainer from './create-tab-container';
 import generateGetters from './generate-getters';
 import generateTabItemSetter from './generate-tab-item-setter';
 import generateSaveLoadIndex from './generate-save-load-index';
-import genrateSwitchTo from './generate-switch-to';
+import genrateSwitch from './generate-switch';
 import generateAddRemove from './generate-add-remove';
 import generateUpdateFixedHeight from './update-fixed-height';
 import handleHashChangeEvent from './handle-hash-change-event';
@@ -29,7 +29,7 @@ function tablize($region, customOptions) {
     //save/load
     const { savePosition, loadPosition, parseHashPosition } = generateSaveLoadIndex(containers, context, options);
     //methods
-    const { switchToWithoutSave, switchTo } = genrateSwitchTo(parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options);
+    const { switchToWithoutSave, switchTo, switchPrevious, switchNext } = genrateSwitch(parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options);
     const { addTabItem, insertTabItem, add, addWithoutSwitch, insert, remove, } = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, containers, context, options);
     addWithoutSwitch($region);
     //replace original content
@@ -58,7 +58,7 @@ function tablize($region, customOptions) {
         getCurrentPanel,
         setName, setDisabled, setHidden,
         updateFixedHeight,
-        switchTo,
+        switchTo, switchPrevious, switchNext,
         addTabItem,
         insertTabItem,
         add,

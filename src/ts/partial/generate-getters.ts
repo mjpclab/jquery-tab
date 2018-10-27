@@ -8,7 +8,6 @@ function generateGetters(
 	const {
 		$headerLabelContainerLeaf,
 		$footerLabelContainerLeaf,
-		$panelContainer,
 		$panelContainerLeaf
 	} = containers;
 
@@ -30,7 +29,7 @@ function generateGetters(
 	const getIndexByName = function (name: string) {
 		let tabItemIndex = -1;
 
-		$panelContainer.children().each(function (index, panel) {
+		$panelContainerLeaf.children().each(function (index, panel) {
 			const $panel = $(panel);
 			if ($panel.attr(tabItemNameAttr) === name) {
 				tabItemIndex = $panel.index();
