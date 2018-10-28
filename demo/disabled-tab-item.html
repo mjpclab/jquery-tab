@@ -5,7 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 	<link rel="stylesheet" type="text/css" href="../dist/theme/gray.css"/>
 	<link rel="stylesheet" type="text/css" href="css/main.css"/>
-	<title>jquery-tab demo - switch on hover delay</title>
+	<title>jquery-tab demo - disabled tab item</title>
 </head>
 <body>
 <div class="region">
@@ -13,30 +13,28 @@
 	<p>Title elements become tab labels.</p>
 	<p>Any rest contents until next title element become tab panel contents.</p>
 
-	<h1>Delay Trigger Rule</h1>
-	<p>Wait a small piece of time before switching.</p>
-
 	<h1>JavaScript</h1>
 	<code>
-		<pre>
-		$('.region').tab({
-			triggerEvents: '',
-			delayTriggerEvents: 'mouseenter',
-			delayTriggerCancelEvents: 'mouseout',
-			delayTriggerLatency: 1000
-		});
-		</pre>
+		$('.region').tab();
 	</code>
+
+	<h1 data-tab-item-disabled="true">Disabled tab</h1>
+	<p>This tab item could not be activated by end user.</p>
+	<p>However, it is possible to be switched by controller API.</p>
+
+	<h1>Switch to disabled</h1>
+	<div>
+		<button id="btn-switch">Click to switch to disabled tab item</button>
+	</div>
 </div>
 
 <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="../dist/jquery-tab.js"></script>
 <script type="text/javascript">
-	$('.region').tab({
-		triggerEvents: '',
-		delayTriggerEvents: 'mouseenter',
-		delayTriggerCancelEvents: 'mouseout',
-		delayTriggerLatency: 1000
+	var controller = $('.region').tab().data('tab-controller');
+
+	$('#btn-switch').on('click', function () {
+		controller.switchTo(2);
 	});
 </script>
 </body>

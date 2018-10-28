@@ -1,33 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 	<link rel="stylesheet" type="text/css" href="../dist/theme/gray.css"/>
 	<link rel="stylesheet" type="text/css" href="css/main.css"/>
-	<title>jQuery tab example</title>
+	<title>jquery-tab demo - auto enable</title>
 </head>
-
 <body>
-<div class="tab-region">
-	<h1>jquery-tab</h1>
-	<p>Usage: </p>
-	<pre>
-	$container.tab();
-	</pre>
-	<ul>
-		<li>no link element needed</li>
-		<li>search engine friendly for original content</li>
-	</ul>
+<div class="tab-region" data-active-position="1">
+	<h1>Structural Rules</h1>
+	<p>Title elements become tab labels.</p>
+	<p>Any rest contents until next title element become tab panel contents.</p>
 
-	<h1>auto parse</h1>
-	<p>Elements that has class <strong>tab-region</strong> will be parsed automatically by jquery-tab.</p>
+	<h1>Auto Enable Rule</h1>
+	<p>Region(wrapper) element which has class <b>tab-region</b> will apply jquery-tab plugin automatically.</p>
 
-	<h1>Dependencies</h1>
-	<p>Depends on any version of jquery.</p>
+	<h1>Specify Options</h1>
+	<p>Options can be specified by "data-" attribute on region element.</p>
 </div>
 
 <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="../dist/jquery-tab.js"></script>
-
 </body>
 </html>

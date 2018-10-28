@@ -1,131 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-	<link rel="stylesheet" type="text/css" href="../dist/theme/gray.css"/>
-	<link rel="stylesheet" type="text/css" href="css/main.css"/>
-	<title>jQuery tab example</title>
+	<meta charset="UTF-8">
+	<title>jquery-tab demo</title>
 </head>
-
 <body>
-<div class="tab1">
-	<h1>title 1</h1>
-	<p>content 1111111 ...........</p>
-	<ul>
-		<li>aaa</li>
-		<li>bbb</li>
-	</ul>
-
-	<h1>title2</h1>
-	<p>content 2222222 ......... </p>
-
-	<h1>title3</h1>
-	<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet
-		dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
-		suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in
-		vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et
-		iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
-		Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer
-		possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem.
-		Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus
-		dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc
-		putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima.
-		Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
-</div>
-
-<div class="tab2">
-	<h1>title 1</h1>
-	<p>content 1111111 ...........</p>
-	<ul>
-		<li>aaa</li>
-		<li>bbb</li>
-	</ul>
-
-	<h1>title2</h1>
-	<p>content 2222222 ......... </p>
-
-	<h1>title3</h1>
-	<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet
-		dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
-		suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in
-		vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et
-		iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
-		Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer
-		possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem.
-		Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus
-		dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc
-		putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima.
-		Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
-</div>
-
-<div class="tab3">
-	<h1>title 1</h1>
-	<p>content 1111111 ...........</p>
-	<ul>
-		<li>aaa</li>
-		<li>bbb</li>
-	</ul>
-
-	<h1>title2</h1>
-	<p>content 2222222 ......... </p>
-
-	<h1>title3</h1>
-	<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet
-		dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
-		suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in
-		vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et
-		iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
-		Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer
-		possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem.
-		Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus
-		dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc
-		putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima.
-		Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
-</div>
-<input type="hidden" value="2" name="active-tab" class="active-tab"/>
-
-<div class="to-be-insert">
-	<h1>another title 1</h1>
-	<p>another content 1 ... </p>
-
-	<h1>another title 2</h1>
-	<p>another content 2 ... </p>
-</div>
-
-<div class="tab4"></div>
-
-<!--<script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>-->
-<script type="text/javascript" src="js/es5-shim.js"></script>
-<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
-<script type="text/javascript" src="../dist/jquery-tab.js"></script>
-<script type="text/javascript">
-	jQuery(function ($) {
-		$('.tab1').tab({
-			'fixedHeight': true,
-			'statusHashTemplate': 'tab1=',
-			'triggerEvents': 'click mouseover',
-			'activeIndex': 1
-		});
-
-		$('.tab2').tab({
-			'fixedHeight': true,
-			'statusHashTemplate': 'tab2='
-		});
-		var tab2Controller = $('.tab2').data('tab-controller');
-		tab2Controller.switchTo(1);
-		tab2Controller.insertTabItem(1, {title: 'inserted', content: '<p>inserted panel content</p>'});
-		tab2Controller.addTabItem({title: '<span>added</span>', content: '<h1>added panel content</h1>'});
-		tab2Controller.insert(0, $('.to-be-insert'));
-		tab2Controller.remove(2);
-
-		$('.tab3').tab({
-			'fixedHeight': true,
-			'statusFieldSelector': '.active-tab'
-		});
-
-		$('.tab4').tab();
-	});
-</script>
-
+<p><a href="simple.html">Simple</a></p>
+<p><a href="auto-enable.html">Auto Enable</a></p>
+<p><a href="disabled-tab-item.html">Disabled Tab Item</a></p>
+<p><a href="switch-on-hover.html">Switch On Hover</a></p>
+<p><a href="switch-on-hover-delay.html">Switch On Hover Delay</a></p>
+<p><a href="save-to-hash.html">Save to Hash</a></p>
+<p><a href="customized-title-elements.html">Customized Title Element</a></p>
+<p><a href="controller.html">Controller</a></p>
 </body>
 </html>

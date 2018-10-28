@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<link rel="stylesheet" type="text/css" href="../dist/theme/gray.css"/>
+	<link rel="stylesheet" type="text/css" href="css/main.css"/>
+	<title>jquery-tab demo - controller</title>
+</head>
+<body>
+<div class="region" data-fixed-height="true">
+	<h1 data-tab-item-name="structural-rules">Structural Rules</h1>
+	<p>Title elements become tab labels.</p>
+	<p>Any rest contents until next title element become tab panel contents.</p>
+
+	<h1 data-tab-item-name="javascript">JavaScript</h1>
+	<code>
+		<pre>
+		$('.region').tab();
+		var controller = $('.region').data('tab-controller');
+		</pre>
+	</code>
+
+	<h1 data-tab-item-name="third-section">Third Section</h1>
+	<p>This is third section of tab.</p>
+</div>
+
+
+<h1>Switching</h1>
+<p>
+	Switch to(name/index):
+	<input type="text" value="third-section" id="txt-switch-to"/>
+	<button id="btn-switch-to">Go</button>
+</p>
+<p>
+	<button id="btn-switch-prev">Switch Previous</button>
+	<button id="btn-switch-next">Switch Next</button>
+</p>
+
+<h1>Enable/Disable</h1>
+<p>
+	Item(name/index):
+	<input type="text" id="txt-enable-disable"/>
+	<button id="btn-enable">Enable</button>
+	<button id="btn-disable">Disable</button>
+</p>
+
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../dist/jquery-tab.js"></script>
+<script type="text/javascript">
+	var controller = $('.region').tab().data('tab-controller');
+
+	$('#btn-switch-to').click(function () {
+		var target = $('#txt-switch-to').val();
+		controller.switchTo(target);
+	});
+
+	$('#btn-switch-prev').click(function () {
+		controller.switchPrevious();
+	});
+
+	$('#btn-switch-next').click(function () {
+		controller.switchNext();
+	});
+
+	$('#btn-enable').click(function () {
+		var target = $('#txt-enable-disable').val();
+		controller.setDisabled(target, false);
+	});
+
+	$('#btn-disable').click(function () {
+		var target = $('#txt-enable-disable').val();
+		controller.setDisabled(target, true);
+	});
+</script>
+</body>
+</html>

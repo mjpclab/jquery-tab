@@ -5,32 +5,39 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 	<link rel="stylesheet" type="text/css" href="../dist/theme/gray.css"/>
 	<link rel="stylesheet" type="text/css" href="css/main.css"/>
-	<title>jquery-tab demo - save to hash</title>
+	<title>jquery-tab demo - customized title element</title>
 </head>
 <body>
-<div class="region">
-	<h1>Structural Rules</h1>
-	<p>Title elements become tab labels.</p>
-	<p>Any rest contents until next title element become tab panel contents.</p>
+<dl class="region">
+	<dt>Structural Rules</dt>
+	<dd>
+		<p>Title elements become tab labels.</p>
+		<p>Any rest contents until next title element become tab panel contents.</p>
+	</dd>
 
-	<h1>Save to Hash</h1>
-	<p>Save current active tab item information into URL hash, so that it could be kept after refresh.</p>
+	<dt>Customized Title Elements</dt>
+	<dd>
+		Title elements does not have to be `h1` to `h6`.
+		Use `titleSelector` option to customize title element.
+	</dd>
 
-	<h1>JavaScript</h1>
-	<code>
+	<dt>JavaScript</dt>
+	<dd>
+		<code>
 		<pre>
 		$('.region').tab({
-			statusHashTemplate: 'tab='
+			titleSelector: 'dt'
 		});
 		</pre>
-	</code>
-</div>
+		</code>
+	</dd>
+</dl>
 
 <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="../dist/jquery-tab.js"></script>
 <script type="text/javascript">
 	$('.region').tab({
-		statusHashTemplate: 'tab='
+		titleSelector: 'dt'
 	});
 </script>
 </body>
