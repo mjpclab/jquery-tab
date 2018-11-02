@@ -29,7 +29,7 @@
     "sheet"
   ],
   "scripts": {
-    "build": "sh build.sh"
+    "build": "bash build.sh"
   },
   "author": "MJ PC Lab",
   "license": "ISC"

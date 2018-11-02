@@ -1,2 +1,2 @@
-import '../../css/layout.css';
-import '../../css/skin-gray.css';
+import '../../css/layout/index.css';
+import '../../css/skin/gray.css';

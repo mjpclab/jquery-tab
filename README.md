@@ -57,10 +57,11 @@ jquery-tab provides default CSS styles if you don't want to make it yourself. Ma
 Importing default theme which contains layout style and skin style:
 ```javascript
 import 'jquery-tab/src/built/theme/gray'
+import 'jquery-tab/src/built/theme/effect/fade' // optional fade effect when switching, must load after theme
 ```
 
 ## Use standalone CSS file
-Copying or referencing CSS files from `dist/theeme/` directory.
+Copying or referencing CSS files from `dist/theme/` directory.
 
 ## Vertical labels
 To use vertical labels, specify option `mode` to "vertical".  
