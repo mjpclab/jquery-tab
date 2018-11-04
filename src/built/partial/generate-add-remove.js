@@ -1,5 +1,5 @@
-import createTabItem from "./create-tab-item";
 import $ from "jquery";
+import createTabItem from "./create-tab-item";
 function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, fnSwitchTo, fnSwitchPrevious, fnSwitchNext, containers, context, options) {
     const _switchIfInitial = function () {
         if (context.currentIndex === -1 && context.itemCount) {
@@ -86,44 +86,54 @@ function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPane
         addWithoutSwitch(sourceRegion);
         _switchIfInitial();
     };
-    const remove = function (position) {
-        const removeIndex = fnPositionToIndex(position);
-        if (removeIndex < 0 || removeIndex >= context.itemCount) {
+    const remove = function (...positions) {
+        if (!positions.length) {
             return;
         }
-        const $labelItems = fnGetHeaderFooterLabels(removeIndex);
-        const $panelItem = fnGetPanel(removeIndex);
-        let switchResult;
-        if (context.itemCount > 1 && removeIndex === context.currentIndex) {
-            switchResult = fnSwitchNext() ||
-                fnSwitchPrevious() ||
-                fnSwitchNext({ includeDisabled: true }) ||
-                fnSwitchPrevious({ includeDisabled: true }) ||
-                fnSwitchNext({ includeHidden: true }) ||
-                fnSwitchPrevious({ includeHidden: true }) ||
-                fnSwitchNext({ includeDisabled: true, includeHidden: true }) ||
-                fnSwitchPrevious({ includeDisabled: true, includeHidden: true });
+        const removeIndecies = [];
+        for (let i = 0, len = positions.length; i < len; i++) {
+            const removeIndex = fnPositionToIndex(positions[i]);
+            if (removeIndex >= 0 && removeIndex < context.itemCount && $.inArray(removeIndex, removeIndecies) === -1) {
+                removeIndecies.push(removeIndex);
+            }
         }
-        $labelItems.remove();
-        $panelItem.remove();
-        context.itemCount--;
+        if (!removeIndecies.length) {
+            return;
+        }
+        removeIndecies.sort(function (prev, next) {
+            return next - prev;
+        });
+        if (context.itemCount > 1 && $.inArray(context.currentIndex, removeIndecies) >= 0) {
+            fnSwitchNext({ exclude: removeIndecies }) ||
+                fnSwitchPrevious({ exclude: removeIndecies }) ||
+                fnSwitchNext({ includeDisabled: true, exclude: removeIndecies }) ||
+                fnSwitchPrevious({ includeDisabled: true, exclude: removeIndecies }) ||
+                fnSwitchNext({ includeHidden: true, exclude: removeIndecies }) ||
+                fnSwitchPrevious({ includeHidden: true, exclude: removeIndecies }) ||
+                fnSwitchNext({ includeDisabled: true, includeHidden: true, exclude: removeIndecies }) ||
+                fnSwitchPrevious({ includeDisabled: true, includeHidden: true, exclude: removeIndecies });
+        }
+        let currentIndexChanged = false;
+        for (let i = 0, len = removeIndecies.length; i < len; i++) {
+            const removeIndex = removeIndecies[i];
+            const $labelItems = fnGetHeaderFooterLabels(removeIndex);
+            const $panelItem = fnGetPanel(removeIndex);
+            $labelItems.remove();
+            $panelItem.remove();
+            if (removeIndex < context.currentIndex) {
+                context.currentIndex--;
+                currentIndexChanged = true;
+            }
+            context.itemCount--;
+        }
         if (context.itemCount === 0) {
             context.currentIndex = -1;
             context.currentName = undefined;
         }
-        else if (switchResult && switchResult.index > removeIndex) {
-            context.currentIndex = switchResult.index - 1;
-            if (!context.currentName) {
-                fnSavePosition(context.currentIndex);
-            }
+        else if (currentIndexChanged && !context.currentName) {
+            fnSavePosition(context.currentIndex);
         }
-        else if (removeIndex < context.currentIndex) {
-            context.currentIndex--;
-            if (!context.currentName) {
-                fnSavePosition(context.currentIndex);
-            }
-        }
-        return $panelItem;
+        return removeIndecies.length;
     };
     return {
         insertTabItemWithoutSwitch,

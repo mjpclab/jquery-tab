@@ -66,6 +66,12 @@ declare namespace JQueryTab {
 		includeDisabled?: boolean;
 		includeHidden?: boolean;
 		loop?: boolean;
+		exclude?: TabItemPosition[]
+	}
+
+	interface SwitchResult {
+		index: number;
+		name?: string;
 	}
 }
 

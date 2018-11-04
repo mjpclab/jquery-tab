@@ -1,4 +1,4 @@
-declare function generateSwitch(fnParsePosition: JQueryTab.fnParsePosition, fnGetHeaderFooterLabels: JQueryTab.fnGetLabel, fnGetPanel: JQueryTab.fnGetPanel, fnSavePosition: JQueryTab.fnSavePosition, containers: JQueryTab.Containers, context: JQueryTab.Context, options: JQueryTab.ExpandedOptions): {
+declare function generateSwitch(fnPositionToIndex: JQueryTab.fnPositionToIndex, fnParsePosition: JQueryTab.fnParsePosition, fnGetHeaderFooterLabels: JQueryTab.fnGetLabel, fnGetPanel: JQueryTab.fnGetPanel, fnSavePosition: JQueryTab.fnSavePosition, containers: JQueryTab.Containers, context: JQueryTab.Context, options: JQueryTab.ExpandedOptions): {
     switchToWithoutSave: (newPosition: string | number) => {
         index: number;
         name: string | undefined;

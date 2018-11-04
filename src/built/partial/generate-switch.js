@@ -1,10 +1,11 @@
+import $ from 'jquery';
 import updateActiveState from "./update-active-state";
 var SwitchDirection;
 (function (SwitchDirection) {
     SwitchDirection[SwitchDirection["Backward"] = 0] = "Backward";
     SwitchDirection[SwitchDirection["Forward"] = 1] = "Forward";
 })(SwitchDirection || (SwitchDirection = {}));
-function generateSwitch(fnParsePosition, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, containers, context, options) {
+function generateSwitch(fnPositionToIndex, fnParsePosition, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, containers, context, options) {
     const switchToWithoutSave = function (newPosition) {
         const { index: newIndex, name: newName } = fnParsePosition(newPosition);
         if (newIndex < 0 || newIndex >= context.itemCount || newIndex === context.currentIndex) {
@@ -40,7 +41,10 @@ function generateSwitch(fnParsePosition, fnGetHeaderFooterLabels, fnGetPanel, fn
     };
     const _switchNeighbor = function (direction, switchOptions) {
         const opts = switchOptions || {};
-        const { includeDisabled, includeHidden, loop } = opts;
+        const { includeDisabled, includeHidden, loop, exclude } = opts;
+        const excludeIndecies = exclude && exclude.length ? $.map(exclude, function (position) {
+            return fnPositionToIndex(position);
+        }) : [];
         const { $panelContainer } = containers;
         const $panelItems = $panelContainer.children();
         const { itemCount, currentIndex } = context;
@@ -63,6 +67,9 @@ function generateSwitch(fnParsePosition, fnGetHeaderFooterLabels, fnGetPanel, fn
         const iterationStep = direction === SwitchDirection.Backward ? -1 : 1;
         for (let i = 1; i <= maxIterationCount; i++) {
             const panelIndex = (currentIndex + i * iterationStep + itemCount) % itemCount;
+            if ($.inArray(panelIndex, excludeIndecies) >= 0) {
+                continue;
+            }
             const $panel = $panelItems.eq(panelIndex);
             const panelIsDisabled = $panel.hasClass(disabledPanelItemClass);
             const panelIsHidden = $panel.hasClass(hiddenPanelItemClass);

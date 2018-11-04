@@ -8,6 +8,6 @@ declare function generateAddRemove(fnPositionToIndex: JQueryTab.fnPositionToInde
     insertWithoutSwitch: (position: string | number, sourceRegion: string | Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node> | (Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node>)[]) => void;
     add: (sourceRegion: string | Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node> | (Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node>)[]) => void;
     addWithoutSwitch: (sourceRegion: string | Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node> | (Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node>)[]) => void;
-    remove: (position: string | number) => JQuery<HTMLElement> | undefined;
+    remove: (...positions: (string | number)[]) => number | undefined;
 };
 export default generateAddRemove;

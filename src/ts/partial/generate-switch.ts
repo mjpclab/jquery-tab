@@ -1,8 +1,10 @@
+import $ from 'jquery';
 import updateActiveState from "./update-active-state";
 
 enum SwitchDirection { Backward, Forward}
 
 function generateSwitch(
+	fnPositionToIndex: JQueryTab.fnPositionToIndex,
 	fnParsePosition: JQueryTab.fnParsePosition,
 	fnGetHeaderFooterLabels: JQueryTab.fnGetLabel,
 	fnGetPanel: JQueryTab.fnGetPanel,
@@ -63,7 +65,10 @@ function generateSwitch(
 		switchOptions?: JQueryTab.SwitchOptions
 	) {
 		const opts = switchOptions || {};
-		const {includeDisabled, includeHidden, loop} = opts;
+		const {includeDisabled, includeHidden, loop, exclude} = opts;
+		const excludeIndecies = exclude && exclude.length ? $.map(exclude, function (position) {
+			return fnPositionToIndex(position);
+		}) : [];
 
 		const {$panelContainer} = containers;
 		const $panelItems = $panelContainer.children();
@@ -91,6 +96,9 @@ function generateSwitch(
 
 		for (let i = 1; i <= maxIterationCount; i++) {
 			const panelIndex = (currentIndex + i * iterationStep + itemCount) % itemCount;
+			if ($.inArray(panelIndex, excludeIndecies) >= 0) {
+				continue;
+			}
 			const $panel = $panelItems.eq(panelIndex);
 			const panelIsDisabled = $panel.hasClass(disabledPanelItemClass);
 			const panelIsHidden = $panel.hasClass(hiddenPanelItemClass);

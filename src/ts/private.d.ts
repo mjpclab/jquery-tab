@@ -38,11 +38,6 @@ declare namespace JQueryTab {
 		$footerLabelContainerLeaf?: JQuery;
 	}
 
-	interface SwitchResult {
-		index: number;
-		name?: string;
-	}
-
 	type fnPositionToIndex = (position: TabItemPosition) => number;
 	type fnParsePosition = (position: TabItemPosition) => { index: number, name?: string };
 	type fnParseHashPosition = () => TabItemPosition;

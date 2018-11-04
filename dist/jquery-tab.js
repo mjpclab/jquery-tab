@@ -529,7 +529,7 @@
       SwitchDirection[SwitchDirection["Forward"] = 1] = "Forward";
     })(SwitchDirection || (SwitchDirection = {}));
 
-    function generateSwitch(fnParsePosition, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, containers, context, options) {
+    function generateSwitch(fnPositionToIndex, fnParsePosition, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, containers, context, options) {
       var switchToWithoutSave = function switchToWithoutSave(newPosition) {
         var _fnParsePosition = fnParsePosition(newPosition),
             newIndex = _fnParsePosition.index,
@@ -595,7 +595,11 @@
         var opts = switchOptions || {};
         var includeDisabled = opts.includeDisabled,
             includeHidden = opts.includeHidden,
-            loop = opts.loop;
+            loop = opts.loop,
+            exclude = opts.exclude;
+        var excludeIndecies = exclude && exclude.length ? $.map(exclude, function (position) {
+          return fnPositionToIndex(position);
+        }) : [];
         var $panelContainer = containers.$panelContainer;
         var $panelItems = $panelContainer.children();
         var itemCount = context.itemCount,
@@ -620,6 +624,11 @@
 
         for (var i = 1; i <= maxIterationCount; i++) {
           var panelIndex = (currentIndex + i * iterationStep + itemCount) % itemCount;
+
+          if ($.inArray(panelIndex, excludeIndecies) >= 0) {
+            continue;
+          }
+
           var $panel = $panelItems.eq(panelIndex);
           var panelIsDisabled = $panel.hasClass(disabledPanelItemClass);
           var panelIsHidden = $panel.hasClass(hiddenPanelItemClass);
@@ -851,57 +860,82 @@
         _switchIfInitial();
       };
 
-      var remove = function remove(position) {
-        var removeIndex = fnPositionToIndex(position);
-
-        if (removeIndex < 0 || removeIndex >= context.itemCount) {
+      var remove = function remove() {
+        if (!arguments.length) {
           return;
         }
 
-        var $labelItems = fnGetHeaderFooterLabels(removeIndex);
-        var $panelItem = fnGetPanel(removeIndex);
-        var switchResult;
+        var removeIndecies = [];
 
-        if (context.itemCount > 1 && removeIndex === context.currentIndex) {
-          switchResult = fnSwitchNext() || fnSwitchPrevious() || fnSwitchNext({
-            includeDisabled: true
+        for (var i = 0, len = arguments.length; i < len; i++) {
+          var removeIndex = fnPositionToIndex(i < 0 || arguments.length <= i ? undefined : arguments[i]);
+
+          if (removeIndex >= 0 && removeIndex < context.itemCount && $.inArray(removeIndex, removeIndecies) === -1) {
+            removeIndecies.push(removeIndex);
+          }
+        }
+
+        if (!removeIndecies.length) {
+          return;
+        }
+
+        removeIndecies.sort(function (prev, next) {
+          return next - prev;
+        });
+
+        if (context.itemCount > 1 && $.inArray(context.currentIndex, removeIndecies) >= 0) {
+          fnSwitchNext({
+            exclude: removeIndecies
           }) || fnSwitchPrevious({
-            includeDisabled: true
-          }) || fnSwitchNext({
-            includeHidden: true
-          }) || fnSwitchPrevious({
-            includeHidden: true
+            exclude: removeIndecies
           }) || fnSwitchNext({
             includeDisabled: true,
-            includeHidden: true
+            exclude: removeIndecies
           }) || fnSwitchPrevious({
             includeDisabled: true,
-            includeHidden: true
+            exclude: removeIndecies
+          }) || fnSwitchNext({
+            includeHidden: true,
+            exclude: removeIndecies
+          }) || fnSwitchPrevious({
+            includeHidden: true,
+            exclude: removeIndecies
+          }) || fnSwitchNext({
+            includeDisabled: true,
+            includeHidden: true,
+            exclude: removeIndecies
+          }) || fnSwitchPrevious({
+            includeDisabled: true,
+            includeHidden: true,
+            exclude: removeIndecies
           });
         }
 
-        $labelItems.remove();
-        $panelItem.remove();
-        context.itemCount--;
+        var currentIndexChanged = false;
+
+        for (var _i = 0, _len = removeIndecies.length; _i < _len; _i++) {
+          var _removeIndex = removeIndecies[_i];
+          var $labelItems = fnGetHeaderFooterLabels(_removeIndex);
+          var $panelItem = fnGetPanel(_removeIndex);
+          $labelItems.remove();
+          $panelItem.remove();
+
+          if (_removeIndex < context.currentIndex) {
+            context.currentIndex--;
+            currentIndexChanged = true;
+          }
+
+          context.itemCount--;
+        }
 
         if (context.itemCount === 0) {
           context.currentIndex = -1;
           context.currentName = undefined;
-        } else if (switchResult && switchResult.index > removeIndex) {
-          context.currentIndex = switchResult.index - 1;
-
-          if (!context.currentName) {
-            fnSavePosition(context.currentIndex);
-          }
-        } else if (removeIndex < context.currentIndex) {
-          context.currentIndex--;
-
-          if (!context.currentName) {
-            fnSavePosition(context.currentIndex);
-          }
+        } else if (currentIndexChanged && !context.currentName) {
+          fnSavePosition(context.currentIndex);
         }
 
-        return $panelItem;
+        return removeIndecies.length;
       };
 
       return {
@@ -1099,11 +1133,11 @@
           parseHashPosition = _generateSaveLoadInde.parseHashPosition; //methods
 
 
-      var _genrateSwitch = generateSwitch(parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options),
-          switchToWithoutSave = _genrateSwitch.switchToWithoutSave,
-          switchTo = _genrateSwitch.switchTo,
-          switchPrevious = _genrateSwitch.switchPrevious,
-          switchNext = _genrateSwitch.switchNext;
+      var _genetateSwitch = generateSwitch(positionToIndex, parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options),
+          switchToWithoutSave = _genetateSwitch.switchToWithoutSave,
+          switchTo = _genetateSwitch.switchTo,
+          switchPrevious = _genetateSwitch.switchPrevious,
+          switchNext = _genetateSwitch.switchNext;
 
       var _generateAddRemove = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, switchPrevious, switchNext, containers, context, options),
           addTabItem = _generateAddRemove.addTabItem,
