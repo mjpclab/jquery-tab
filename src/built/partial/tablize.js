@@ -23,9 +23,9 @@ function tablize($region, customOptions) {
     const containers = $.extend({ $region }, createTabContainer(options));
     const { $tabContainer } = containers;
     //getters
-    const { getCount, getCurrentIndex, getCurrentName, getName, getIndexByName, positionToIndex, parsePosition, isDisabled, isHidden, getHeaderLabel, getFooterLabel, getHeaderFooterLabels, getPanel, getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels, getCurrentPanel } = generateGetters(containers, context, options);
+    const { getCount, getCurrentIndex, getCurrentName, getName, getIndexByName, positionToIndex, parsePosition, isDisabled, isEnabled, isHidden, isVisible, getHeaderLabel, getFooterLabel, getHeaderFooterLabels, getPanel, getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels, getCurrentPanel } = generateGetters(containers, context, options);
     //tab item setter
-    const { setName, setDisabled, setHidden } = generateTabItemSetter(positionToIndex, getHeaderFooterLabels, getPanel, options);
+    const { setName, setDisabled, setEnabled, setHidden, setVisible } = generateTabItemSetter(positionToIndex, getHeaderFooterLabels, getPanel, options);
     //save/load
     const { savePosition, loadPosition, parseHashPosition } = generateSaveLoadIndex(containers, options);
     //methods
@@ -56,12 +56,12 @@ function tablize($region, customOptions) {
         getCurrentName,
         getName,
         getIndexByName,
-        isDisabled, isHidden,
+        isDisabled, isEnabled, isHidden, isVisible,
         getHeaderLabel, getFooterLabel, getHeaderFooterLabels,
         getPanel,
         getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels,
         getCurrentPanel,
-        setName, setDisabled, setHidden,
+        setName, setDisabled, setEnabled, setHidden, setVisible,
         updateFixedHeight,
         switchTo, switchPrevious, switchNext,
         addTabItem,

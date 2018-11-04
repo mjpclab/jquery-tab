@@ -10,7 +10,9 @@ declare function generateGetters(containers: JQueryTab.Containers, context: JQue
         name: string | undefined;
     };
     isDisabled: (position: string | number) => boolean | undefined;
+    isEnabled: (position: string | number) => boolean;
     isHidden: (position: string | number) => boolean | undefined;
+    isVisible: (position: string | number) => boolean;
     getHeaderLabel: (position: string | number) => JQuery<HTMLElement>;
     getFooterLabel: (position: string | number) => JQuery<HTMLElement>;
     getHeaderFooterLabels: (position: string | number) => JQuery<HTMLElement>;

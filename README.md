@@ -280,17 +280,21 @@ Get tab item name by `index`.
 set a new name for a specific tab item which its name is `name` or its index is `index`.
 
 `isDisabled(name|index)`  
+`isEnabled(name|index)`  
 Check if a tab item is disabled.
 Returns boolean type if tab item exists. Returns `undefined` otherwise.
 
-`setDisabled(name|index, isDisabled)`  
+`setDisabled(name|index, isDisabled=true)`  
+`setEnabled(name|index, isEnabled=true)`  
 Specify if a tab item is disabled.
 
 `isHidden(name|index)`  
+`isVisible(name|index)`  
 Check if a tab item is hidden.
 Returns boolean type if tab item exists. Returns `undefined` otherwise.
 
-`setHidden(name|index, isHidden)`  
+`setHidden(name|index, isHidden=true)`  
+`setVisible(name|index, isVisible=true)`  
 Specify if a tab item is hidden.
 
 ### DOM access

@@ -74,11 +74,17 @@ function generateGetters(containers, context, options) {
             return $panelContainerLeaf.children().eq(index).hasClass(disabledPanelItemClass);
         }
     };
+    const isEnabled = function (position) {
+        return !isDisabled(position);
+    };
     const isHidden = function (position) {
         const index = positionToIndex(position);
         if (index >= 0 && index < context.itemCount) {
             return $panelContainerLeaf.children().eq(index).hasClass(hiddenPanelItemClass);
         }
+    };
+    const isVisible = function (position) {
+        return !isHidden(position);
     };
     const getHeaderLabel = function (position) {
         if ($headerLabelContainerLeaf) {
@@ -132,7 +138,7 @@ function generateGetters(containers, context, options) {
         getIndexByName,
         positionToIndex,
         parsePosition,
-        isDisabled, isHidden,
+        isDisabled, isEnabled, isHidden, isVisible,
         getHeaderLabel, getFooterLabel, getHeaderFooterLabels,
         getPanel,
         getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels,

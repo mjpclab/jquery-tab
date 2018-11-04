@@ -4,14 +4,20 @@ function generateTabItemSetter(fnPositionToIndex, fnGetHeaderFooterLabels, fnGet
         fnGetHeaderFooterLabels(position).attr(tabItemNameAttr, name);
         fnGetPanel(position).attr(tabItemNameAttr, name);
     };
-    const setDisabled = function (position, disabled) {
+    const setDisabled = function (position, disabled = true) {
         fnGetHeaderFooterLabels(position).toggleClass(disabledLabelItemClass, disabled);
         fnGetPanel(position).toggleClass(disabledPanelItemClass, disabled);
     };
-    const setHidden = function (position, hidden) {
+    const setEnabled = function (position, enabled = true) {
+        setDisabled(position, !enabled);
+    };
+    const setHidden = function (position, hidden = true) {
         fnGetHeaderFooterLabels(position).toggleClass(hiddenLabelItemClass, hidden);
         fnGetPanel(position).toggleClass(hiddenPanelItemClass, hidden);
     };
-    return { setName, setDisabled, setHidden };
+    const setVisible = function (position, visible = true) {
+        setHidden(position, !visible);
+    };
+    return { setName, setDisabled, setEnabled, setHidden, setVisible };
 }
 export default generateTabItemSetter;

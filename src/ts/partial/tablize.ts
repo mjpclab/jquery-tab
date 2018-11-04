@@ -36,7 +36,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 		getIndexByName,
 		positionToIndex,
 		parsePosition,
-		isDisabled, isHidden,
+		isDisabled, isEnabled, isHidden, isVisible,
 		getHeaderLabel, getFooterLabel, getHeaderFooterLabels,
 		getPanel,
 		getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels,
@@ -44,7 +44,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	} = generateGetters(containers, context, options);
 
 	//tab item setter
-	const {setName, setDisabled, setHidden} = generateTabItemSetter(positionToIndex, getHeaderFooterLabels, getPanel, options);
+	const {setName, setDisabled, setEnabled, setHidden, setVisible} = generateTabItemSetter(positionToIndex, getHeaderFooterLabels, getPanel, options);
 
 	//save/load
 	const {savePosition, loadPosition, parseHashPosition} = generateSaveLoadIndex(containers, options);
@@ -90,12 +90,12 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 		getCurrentName,
 		getName,
 		getIndexByName,
-		isDisabled, isHidden,
+		isDisabled, isEnabled, isHidden, isVisible,
 		getHeaderLabel, getFooterLabel, getHeaderFooterLabels,
 		getPanel,
 		getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels,
 		getCurrentPanel,
-		setName, setDisabled, setHidden,
+		setName, setDisabled, setEnabled, setHidden, setVisible,
 		updateFixedHeight,
 		switchTo, switchPrevious, switchNext,
 		addTabItem,

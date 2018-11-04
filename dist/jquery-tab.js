@@ -279,12 +279,20 @@
         }
       };
 
+      var isEnabled = function isEnabled(position) {
+        return !isDisabled(position);
+      };
+
       var isHidden = function isHidden(position) {
         var index = positionToIndex(position);
 
         if (index >= 0 && index < context.itemCount) {
           return $panelContainerLeaf.children().eq(index).hasClass(hiddenPanelItemClass);
         }
+      };
+
+      var isVisible = function isVisible(position) {
+        return !isHidden(position);
       };
 
       var getHeaderLabel = function getHeaderLabel(position) {
@@ -356,7 +364,9 @@
         positionToIndex: positionToIndex,
         parsePosition: parsePosition,
         isDisabled: isDisabled,
+        isEnabled: isEnabled,
         isHidden: isHidden,
+        isVisible: isVisible,
         getHeaderLabel: getHeaderLabel,
         getFooterLabel: getFooterLabel,
         getHeaderFooterLabels: getHeaderFooterLabels,
@@ -380,20 +390,34 @@
         fnGetPanel(position).attr(tabItemNameAttr, name);
       };
 
-      var setDisabled = function setDisabled(position, disabled) {
+      var setDisabled = function setDisabled(position) {
+        var disabled = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
         fnGetHeaderFooterLabels(position).toggleClass(disabledLabelItemClass, disabled);
         fnGetPanel(position).toggleClass(disabledPanelItemClass, disabled);
       };
 
-      var setHidden = function setHidden(position, hidden) {
+      var setEnabled = function setEnabled(position) {
+        var enabled = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+        setDisabled(position, !enabled);
+      };
+
+      var setHidden = function setHidden(position) {
+        var hidden = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
         fnGetHeaderFooterLabels(position).toggleClass(hiddenLabelItemClass, hidden);
         fnGetPanel(position).toggleClass(hiddenPanelItemClass, hidden);
+      };
+
+      var setVisible = function setVisible(position) {
+        var visible = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+        setHidden(position, !visible);
       };
 
       return {
         setName: setName,
         setDisabled: setDisabled,
-        setHidden: setHidden
+        setEnabled: setEnabled,
+        setHidden: setHidden,
+        setVisible: setVisible
       };
     }
 
@@ -1110,7 +1134,9 @@
           positionToIndex = _generateGetters.positionToIndex,
           parsePosition = _generateGetters.parsePosition,
           isDisabled = _generateGetters.isDisabled,
+          isEnabled = _generateGetters.isEnabled,
           isHidden = _generateGetters.isHidden,
+          isVisible = _generateGetters.isVisible,
           getHeaderLabel = _generateGetters.getHeaderLabel,
           getFooterLabel = _generateGetters.getFooterLabel,
           getHeaderFooterLabels = _generateGetters.getHeaderFooterLabels,
@@ -1124,7 +1150,9 @@
       var _generateTabItemSette = generateTabItemSetter(positionToIndex, getHeaderFooterLabels, getPanel, options),
           setName = _generateTabItemSette.setName,
           setDisabled = _generateTabItemSette.setDisabled,
-          setHidden = _generateTabItemSette.setHidden; //save/load
+          setEnabled = _generateTabItemSette.setEnabled,
+          setHidden = _generateTabItemSette.setHidden,
+          setVisible = _generateTabItemSette.setVisible; //save/load
 
 
       var _generateSaveLoadInde = generateSaveLoadIndex(containers, options),
@@ -1176,7 +1204,9 @@
         getName: getName,
         getIndexByName: getIndexByName,
         isDisabled: isDisabled,
+        isEnabled: isEnabled,
         isHidden: isHidden,
+        isVisible: isVisible,
         getHeaderLabel: getHeaderLabel,
         getFooterLabel: getFooterLabel,
         getHeaderFooterLabels: getHeaderFooterLabels,
@@ -1187,7 +1217,9 @@
         getCurrentPanel: getCurrentPanel,
         setName: setName,
         setDisabled: setDisabled,
+        setEnabled: setEnabled,
         setHidden: setHidden,
+        setVisible: setVisible,
         updateFixedHeight: updateFixedHeight,
         switchTo: switchTo,
         switchPrevious: switchPrevious,
