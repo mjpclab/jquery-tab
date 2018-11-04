@@ -45,6 +45,14 @@
 	<button id="btn-disable">Disable</button>
 </p>
 
+<h1>Visible/Hidden</h1>
+<p>
+	Item(name/index):
+	<input type="text" id="txt-visible-hidden"/>
+	<button id="btn-visible">Visible</button>
+	<button id="btn-hidden">Hidden</button>
+</p>
+
 <h1>Remove</h1>
 <p>
 	Item(name/index):
@@ -72,12 +80,23 @@
 
 	$('#btn-enable').click(function () {
 		var target = $('#txt-enable-disable').val();
-		controller.setDisabled(target, false);
+		controller.setEnabled(target);
 	});
 
 	$('#btn-disable').click(function () {
 		var target = $('#txt-enable-disable').val();
-		controller.setDisabled(target, true);
+		controller.setDisabled(target);
+	});
+
+
+	$('#btn-visible').click(function () {
+		var target = $('#txt-visible-hidden').val();
+		controller.setVisible(target);
+	});
+
+	$('#btn-hidden').click(function () {
+		var target = $('#txt-visible-hidden').val();
+		controller.setHidden(target);
 	});
 
 	$('#btn-remove').click(function () {

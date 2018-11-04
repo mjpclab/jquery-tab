@@ -38,7 +38,3 @@
 .tab-container .label-container .label-item-hidden {
 	display: none;
 }
-
-.tab-container .label-container .label-item-hidden.label-item-active {
-	display: inline-block;
-}

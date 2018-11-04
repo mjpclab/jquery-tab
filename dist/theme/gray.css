@@ -47,20 +47,20 @@
 	border: 1px solid;
 }
 
-.tab-container-horizontal > .label-container .label-item {
+.tab-container-horizontal > .label-container > .label-item {
 	display: inline-block;
 	margin-right: 1em;
 }
 
-.tab-container-horizontal > .label-container-header .label-item {
+.tab-container-horizontal > .label-container-header > .label-item {
 	vertical-align: bottom;
 }
 
-.tab-container-horizontal > .label-container-footer .label-item {
+.tab-container-horizontal > .label-container-footer > .label-item {
 	vertical-align: top;
 }
 
-.tab-container-vertical > .label-container .label-item {
+.tab-container-vertical > .label-container > .label-item {
 	display: block;
 	margin-bottom: 0.3em;
 }
@@ -119,10 +119,6 @@
 
 .tab-container .label-container .label-item-hidden {
 	display: none;
-}
-
-.tab-container .label-container .label-item-hidden.label-item-active {
-	display: inline-block;
 }
 
 
