@@ -11,16 +11,31 @@ rollup --config
 mkdir -p dist/theme/effect/
 
 # generate css
-cat src/css/layout/index.css src/css/skin/gray.css > dist/theme/gray.css
-# append IE6 compatible css
-echo >> dist/theme/gray.css
-echo >> dist/theme/gray.css
 cat src/css/layout/index.css src/css/skin/gray.css | \
-	sed -n -e '/\.tab-container-horizontal/,/}/p' | \
-	sed -e 's/\.tab-container-horizontal/*html .tab-container/g' -e 's/\s*>\s*/ /g' >> \
-	dist/theme/gray.css
-# compress css
-uglify -c -s dist/theme/gray.css -o dist/theme/gray.min.css
+	awk '
+		{print;}
+
+		/* .label-item-hidden is added for CSS priority */
+		/\.tab-container-horizontal|\.label-item-hidden/,/}/ {
+			if (length(hold) > 0) {
+				hold=hold"\n";
+			}
+			hold=hold$0;
+		}
+
+		/}/ {
+			if (length(hold) > 0) {
+				gsub(/\.tab-container-horizontal/, ".tab-container", hold);
+				gsub(/\.tab-container/, "*html .tab-container", hold);
+				gsub(/\s*>\s*/, " ", hold);
+				print hold;
+				hold="";
+			}
+		}
+	' > dist/theme/gray.css
+for file in dist/theme/*.css; do
+	uglify -c -s "$file" -o "${file/\.css/.min.css}"
+done;
 
 cp src/css/effect/* dist/theme/effect/
 for file in dist/theme/effect/*.css; do
