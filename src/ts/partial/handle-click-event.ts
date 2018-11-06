@@ -7,7 +7,6 @@ function hahdleClickEvent(
 	options: JQueryTab.ExpandedOptions
 ) {
 	const {
-		tabItemNameAttr,
 		triggerEvents,
 		delayTriggerEvents,
 		delayTriggerCancelEvents,
@@ -50,8 +49,7 @@ function hahdleClickEvent(
 		) {
 			return;
 		}
-		const tabItemName = $label.data(tabItemNameAttr);
-		startDelayTrigger(tabItemName || labelIndex);
+		startDelayTrigger(labelIndex);
 	};
 	const labelItemCancelDelayClick = function (e: any) {
 		if (e.currentTarget.parentNode !== e.delegateTarget) {
@@ -100,8 +98,7 @@ function hahdleClickEvent(
 			return;
 		}
 
-		const tabItemName = $label.data(tabItemNameAttr);
-		fnSwitchTo(tabItemName || labelIndex);
+		fnSwitchTo(labelIndex);
 	};
 
 	if (triggerEvents) {

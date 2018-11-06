@@ -1002,8 +1002,7 @@
     }
 
     function hahdleClickEvent(fnSwitchTo, containers, context, options) {
-      var tabItemNameAttr = options.tabItemNameAttr,
-          triggerEvents = options.triggerEvents,
+      var triggerEvents = options.triggerEvents,
           delayTriggerEvents = options.delayTriggerEvents,
           delayTriggerCancelEvents = options.delayTriggerCancelEvents,
           delayTriggerLatency = options.delayTriggerLatency,
@@ -1041,8 +1040,7 @@
           return;
         }
 
-        var tabItemName = $label.data(tabItemNameAttr);
-        startDelayTrigger(tabItemName || labelIndex);
+        startDelayTrigger(labelIndex);
       };
 
       var labelItemCancelDelayClick = function labelItemCancelDelayClick(e) {
@@ -1094,8 +1092,7 @@
           return;
         }
 
-        var tabItemName = $label.data(tabItemNameAttr);
-        fnSwitchTo(tabItemName || labelIndex);
+        fnSwitchTo(labelIndex);
       };
 
       if (triggerEvents) {

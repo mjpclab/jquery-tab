@@ -1,6 +1,6 @@
 import $ from "jquery";
 function hahdleClickEvent(fnSwitchTo, containers, context, options) {
-    const { tabItemNameAttr, triggerEvents, delayTriggerEvents, delayTriggerCancelEvents, delayTriggerLatency, disabledLabelItemClass, hiddenLabelItemClass } = options;
+    const { triggerEvents, delayTriggerEvents, delayTriggerCancelEvents, delayTriggerLatency, disabledLabelItemClass, hiddenLabelItemClass } = options;
     const { $headerLabelContainerLeaf, $footerLabelContainerLeaf } = containers;
     //handle delay trigger event
     let delayTriggerTimeoutHandler;
@@ -28,8 +28,7 @@ function hahdleClickEvent(fnSwitchTo, containers, context, options) {
             $label.hasClass(hiddenLabelItemClass)) {
             return;
         }
-        const tabItemName = $label.data(tabItemNameAttr);
-        startDelayTrigger(tabItemName || labelIndex);
+        startDelayTrigger(labelIndex);
     };
     const labelItemCancelDelayClick = function (e) {
         if (e.currentTarget.parentNode !== e.delegateTarget) {
@@ -71,8 +70,7 @@ function hahdleClickEvent(fnSwitchTo, containers, context, options) {
             $label.hasClass(hiddenLabelItemClass)) {
             return;
         }
-        const tabItemName = $label.data(tabItemNameAttr);
-        fnSwitchTo(tabItemName || labelIndex);
+        fnSwitchTo(labelIndex);
     };
     if (triggerEvents) {
         if ($headerLabelContainerLeaf) {
