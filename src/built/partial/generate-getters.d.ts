@@ -2,12 +2,12 @@ declare function generateGetters(containers: JQueryTab.Containers, context: JQue
     getCount: () => number;
     getCurrentIndex: () => number;
     getCurrentName: () => string | undefined;
-    getName: (index: number) => string | undefined;
+    getName: (index: number) => any;
     getIndexByName: (name: string) => number;
     positionToIndex: (position: string | number) => number;
     parsePosition: (position: string | number) => {
         index: number;
-        name: string | undefined;
+        name: any;
     };
     isDisabled: (position: string | number) => boolean | undefined;
     isEnabled: (position: string | number) => boolean;

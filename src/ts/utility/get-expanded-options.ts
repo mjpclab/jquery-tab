@@ -16,7 +16,7 @@ function getExpandedOptions(
 		headerLabelContainerClass: labelContainerClass + '-header',
 		footerLabelContainerClass: labelContainerClass + '-footer',
 
-		tabItemNameAttr: 'data-tab-item-name',
+		tabItemNameAttr: 'tabItemName',
 
 		activeLabelItemClass: labelItemClass + '-active',
 		inactiveLabelItemClass: labelItemClass + '-inactive',

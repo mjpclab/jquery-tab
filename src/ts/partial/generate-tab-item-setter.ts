@@ -13,8 +13,8 @@ function generateTabItemSetter(
 	} = options;
 
 	const setName = function (position: JQueryTab.TabItemPosition, name: string) {
-		fnGetHeaderFooterLabels(position).attr(tabItemNameAttr, name);
-		fnGetPanel(position).attr(tabItemNameAttr, name);
+		fnGetHeaderFooterLabels(position).data(tabItemNameAttr, name);
+		fnGetPanel(position).data(tabItemNameAttr, name);
 	};
 
 	const setDisabled = function (position: JQueryTab.TabItemPosition, disabled = true) {

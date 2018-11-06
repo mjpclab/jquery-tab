@@ -13,14 +13,14 @@ function generateGetters(containers, context, options) {
     };
     const getName = function (index) {
         if (index >= 0 && index < context.itemCount) {
-            return $panelContainerLeaf.children().eq(index).attr(tabItemNameAttr);
+            return $panelContainerLeaf.children().eq(index).data(tabItemNameAttr);
         }
     };
     const getIndexByName = function (name) {
         let tabItemIndex = -1;
         $panelContainerLeaf.children().each(function (index, panel) {
             const $panel = $(panel);
-            if ($panel.attr(tabItemNameAttr) === name) {
+            if ($panel.data(tabItemNameAttr) === name) {
                 tabItemIndex = $panel.index();
                 return false;
             }

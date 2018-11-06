@@ -63,7 +63,7 @@
         verticalTabContainerClass: tabContainerClass + '-vertical',
         headerLabelContainerClass: labelContainerClass + '-header',
         footerLabelContainerClass: labelContainerClass + '-footer',
-        tabItemNameAttr: 'data-tab-item-name',
+        tabItemNameAttr: 'tabItemName',
         activeLabelItemClass: labelItemClass + '-active',
         inactiveLabelItemClass: labelItemClass + '-inactive',
         disabledLabelItemClass: labelItemClass + '-disabled',
@@ -217,7 +217,7 @@
 
       var getName = function getName(index) {
         if (index >= 0 && index < context.itemCount) {
-          return $panelContainerLeaf.children().eq(index).attr(tabItemNameAttr);
+          return $panelContainerLeaf.children().eq(index).data(tabItemNameAttr);
         }
       };
 
@@ -226,7 +226,7 @@
         $panelContainerLeaf.children().each(function (index, panel) {
           var $panel = $(panel);
 
-          if ($panel.attr(tabItemNameAttr) === name) {
+          if ($panel.data(tabItemNameAttr) === name) {
             tabItemIndex = $panel.index();
             return false;
           }
@@ -386,8 +386,8 @@
           hiddenPanelItemClass = options.hiddenPanelItemClass;
 
       var setName = function setName(position, name) {
-        fnGetHeaderFooterLabels(position).attr(tabItemNameAttr, name);
-        fnGetPanel(position).attr(tabItemNameAttr, name);
+        fnGetHeaderFooterLabels(position).data(tabItemNameAttr, name);
+        fnGetPanel(position).data(tabItemNameAttr, name);
       };
 
       var setDisabled = function setDisabled(position) {
@@ -718,8 +718,8 @@
           $panelItemLeaf = _createPanelItem.$panelItemLeaf;
 
       if (name) {
-        $labelItem.attr(tabItemNameAttr, name);
-        $panelItem.attr(tabItemNameAttr, name);
+        $labelItem.data(tabItemNameAttr, name);
+        $panelItem.data(tabItemNameAttr, name);
       }
 
       if (disabled) {
@@ -1041,7 +1041,7 @@
           return;
         }
 
-        var tabItemName = $label.attr(tabItemNameAttr);
+        var tabItemName = $label.data(tabItemNameAttr);
         startDelayTrigger(tabItemName || labelIndex);
       };
 
@@ -1094,7 +1094,7 @@
           return;
         }
 
-        var tabItemName = $label.attr(tabItemNameAttr);
+        var tabItemName = $label.data(tabItemNameAttr);
         fnSwitchTo(tabItemName || labelIndex);
       };
 

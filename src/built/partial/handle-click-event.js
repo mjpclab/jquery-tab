@@ -28,7 +28,7 @@ function hahdleClickEvent(fnSwitchTo, containers, context, options) {
             $label.hasClass(hiddenLabelItemClass)) {
             return;
         }
-        const tabItemName = $label.attr(tabItemNameAttr);
+        const tabItemName = $label.data(tabItemNameAttr);
         startDelayTrigger(tabItemName || labelIndex);
     };
     const labelItemCancelDelayClick = function (e) {
@@ -71,7 +71,7 @@ function hahdleClickEvent(fnSwitchTo, containers, context, options) {
             $label.hasClass(hiddenLabelItemClass)) {
             return;
         }
-        const tabItemName = $label.attr(tabItemNameAttr);
+        const tabItemName = $label.data(tabItemNameAttr);
         fnSwitchTo(tabItemName || labelIndex);
     };
     if (triggerEvents) {

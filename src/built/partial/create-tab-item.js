@@ -6,8 +6,8 @@ function createTabItem(tabItem, context, options) {
     const { $labelItem, $labelItemLeaf } = createLabelItem(tabItem, options);
     const { $panelItem, $panelItemLeaf } = createPanelItem(tabItem, options);
     if (name) {
-        $labelItem.attr(tabItemNameAttr, name);
-        $panelItem.attr(tabItemNameAttr, name);
+        $labelItem.data(tabItemNameAttr, name);
+        $panelItem.data(tabItemNameAttr, name);
     }
     if (disabled) {
         $labelItem.addClass(disabledLabelItemClass);

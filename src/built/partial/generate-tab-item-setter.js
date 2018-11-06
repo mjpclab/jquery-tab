@@ -1,8 +1,8 @@
 function generateTabItemSetter(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, options) {
     const { tabItemNameAttr, disabledLabelItemClass, disabledPanelItemClass, hiddenLabelItemClass, hiddenPanelItemClass } = options;
     const setName = function (position, name) {
-        fnGetHeaderFooterLabels(position).attr(tabItemNameAttr, name);
-        fnGetPanel(position).attr(tabItemNameAttr, name);
+        fnGetHeaderFooterLabels(position).data(tabItemNameAttr, name);
+        fnGetPanel(position).data(tabItemNameAttr, name);
     };
     const setDisabled = function (position, disabled = true) {
         fnGetHeaderFooterLabels(position).toggleClass(disabledLabelItemClass, disabled);

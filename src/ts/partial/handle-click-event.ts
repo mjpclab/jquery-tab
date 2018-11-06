@@ -50,7 +50,7 @@ function hahdleClickEvent(
 		) {
 			return;
 		}
-		const tabItemName = $label.attr(tabItemNameAttr);
+		const tabItemName = $label.data(tabItemNameAttr);
 		startDelayTrigger(tabItemName || labelIndex);
 	};
 	const labelItemCancelDelayClick = function (e: any) {
@@ -100,7 +100,7 @@ function hahdleClickEvent(
 			return;
 		}
 
-		const tabItemName = $label.attr(tabItemNameAttr);
+		const tabItemName = $label.data(tabItemNameAttr);
 		fnSwitchTo(tabItemName || labelIndex);
 	};
 

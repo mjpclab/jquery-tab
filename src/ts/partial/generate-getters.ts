@@ -25,7 +25,7 @@ function generateGetters(
 
 	const getName = function (index: number) {
 		if (index >= 0 && index < context.itemCount) {
-			return $panelContainerLeaf.children().eq(index).attr(tabItemNameAttr);
+			return $panelContainerLeaf.children().eq(index).data(tabItemNameAttr);
 		}
 	};
 	const getIndexByName = function (name: string) {
@@ -33,7 +33,7 @@ function generateGetters(
 
 		$panelContainerLeaf.children().each(function (index, panel) {
 			const $panel = $(panel);
-			if ($panel.attr(tabItemNameAttr) === name) {
+			if ($panel.data(tabItemNameAttr) === name) {
 				tabItemIndex = $panel.index();
 				return false;
 			}
