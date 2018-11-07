@@ -327,7 +327,7 @@ Switch active(selected) tab item to the one which its name is `name` or its inde
 Switch to previous/next tab item.
 If `includeDisabled` is `true`, disabled tab item will not be skipped.  
 If `includeHidden` is `true`, hidden tab item will not be skipped.  
-if `loop` is `true`, once current active tab item is the last item on the direction, will loop to the first item.
+If `loop` is `true`, once current active tab item is the last item on the direction, will loop to the first item.  
 Optional `exclude` is an array of tab item name or tab item index, which will be skipped when switching. Prior than `includeDisabled` and `includeHidden`.
 
 ### Modify
@@ -346,3 +346,13 @@ Parse and insert another $region's structure before tab item which its name is `
 
 `remove(name|index, ...)`  
 Remove one or more tab items by `name` or `index` and returns removed tab item count.
+
+# Browser Compatibility
+Feature | IE | Edge | Firefox | Chrome | Safari | Opera
+--------|----|------|---------|--------|--------|------
+basic | 6+ | 12+ | 1+ | 1+ | 1+ | 9+
+vertical tab labels | 11+ | 12+ | 21+ | 28+ | 6.1+ | 12.10+
+CSS fade effect | 10+ | 12+ | 4+ | 2+ | 4+ | 12.10+
+
+As different jQuery version has different browser compatibility,
+final compatibility are also affected by the jQuery version you are using.
