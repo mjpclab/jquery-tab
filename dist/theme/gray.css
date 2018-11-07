@@ -54,10 +54,12 @@
 }
 
 .tab-container-horizontal > .label-container > .label-item {
+	display: -moz-inline-stack;
 	display: inline-block;
 	margin-right: 1em;
 }
 *html .tab-container .label-container .label-item {
+	display: -moz-inline-stack;
 	display: inline-block;
 	margin-right: 1em;
 }
