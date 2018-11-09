@@ -1,11 +1,11 @@
 import $ from "jquery";
 import getLeafElement from "../utility/get-leaf-element";
 function createLabelItem(tabItem, options) {
-    const $labelItem = $(options.labelItemTemplate)
+    var $labelItem = $(options.labelItemTemplate)
         .addClass(options.labelItemClass)
         .attr('role', 'tab');
-    const $labelItemLeaf = getLeafElement($labelItem);
+    var $labelItemLeaf = getLeafElement($labelItem);
     $labelItemLeaf.append(tabItem.title);
-    return { $labelItem, $labelItemLeaf };
+    return { $labelItem: $labelItem, $labelItemLeaf: $labelItemLeaf };
 }
 export default createLabelItem;

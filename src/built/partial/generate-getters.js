@@ -1,25 +1,25 @@
 import $ from "jquery";
 function generateGetters(containers, context, options) {
-    const { $headerLabelContainerLeaf, $footerLabelContainerLeaf, $panelContainerLeaf } = containers;
-    const { tabItemNameAttr, disabledPanelItemClass, hiddenPanelItemClass } = options;
-    const getCount = function () {
+    var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf, $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf, $panelContainerLeaf = containers.$panelContainerLeaf;
+    var tabItemNameAttr = options.tabItemNameAttr, disabledPanelItemClass = options.disabledPanelItemClass, hiddenPanelItemClass = options.hiddenPanelItemClass;
+    var getCount = function () {
         return context.itemCount;
     };
-    const getCurrentIndex = function () {
+    var getCurrentIndex = function () {
         return context.currentIndex;
     };
-    const getCurrentName = function () {
+    var getCurrentName = function () {
         return context.currentName;
     };
-    const getName = function (index) {
+    var getName = function (index) {
         if (index >= 0 && index < context.itemCount) {
             return $panelContainerLeaf.children().eq(index).data(tabItemNameAttr);
         }
     };
-    const getIndexByName = function (name) {
-        let tabItemIndex = -1;
+    var getIndexByName = function (name) {
+        var tabItemIndex = -1;
         $panelContainerLeaf.children().each(function (index, panel) {
-            const $panel = $(panel);
+            var $panel = $(panel);
             if ($panel.data(tabItemNameAttr) === name) {
                 tabItemIndex = $panel.index();
                 return false;
@@ -27,7 +27,7 @@ function generateGetters(containers, context, options) {
         });
         return tabItemIndex;
     };
-    const positionToIndex = function (position) {
+    var positionToIndex = function (position) {
         if (typeof position === 'number') {
             return position;
         }
@@ -41,7 +41,7 @@ function generateGetters(containers, context, options) {
             return -1;
         }
     };
-    const parsePosition = function (position) {
+    var parsePosition = function (position) {
         if (typeof position === 'number') {
             return {
                 index: position,
@@ -49,9 +49,9 @@ function generateGetters(containers, context, options) {
             };
         }
         else if (isFinite(position)) {
-            const index = parseInt(position);
+            var index = parseInt(position);
             return {
-                index,
+                index: index,
                 name: getName(index)
             };
         }
@@ -68,81 +68,81 @@ function generateGetters(containers, context, options) {
             };
         }
     };
-    const isDisabled = function (position) {
-        const index = positionToIndex(position);
+    var isDisabled = function (position) {
+        var index = positionToIndex(position);
         if (index >= 0 && index < context.itemCount) {
             return $panelContainerLeaf.children().eq(index).hasClass(disabledPanelItemClass);
         }
     };
-    const isEnabled = function (position) {
+    var isEnabled = function (position) {
         return !isDisabled(position);
     };
-    const isHidden = function (position) {
-        const index = positionToIndex(position);
+    var isHidden = function (position) {
+        var index = positionToIndex(position);
         if (index >= 0 && index < context.itemCount) {
             return $panelContainerLeaf.children().eq(index).hasClass(hiddenPanelItemClass);
         }
     };
-    const isVisible = function (position) {
+    var isVisible = function (position) {
         return !isHidden(position);
     };
-    const getHeaderLabel = function (position) {
+    var getHeaderLabel = function (position) {
         if ($headerLabelContainerLeaf) {
-            const index = positionToIndex(position);
+            var index = positionToIndex(position);
             if (index >= 0 && index < context.itemCount) {
                 return $headerLabelContainerLeaf.children().eq(index);
             }
         }
         return $([]);
     };
-    const getFooterLabel = function (position) {
+    var getFooterLabel = function (position) {
         if ($footerLabelContainerLeaf) {
-            const index = positionToIndex(position);
+            var index = positionToIndex(position);
             if (index >= 0 && index < context.itemCount) {
                 return $footerLabelContainerLeaf.children().eq(index);
             }
         }
         return $([]);
     };
-    const getHeaderFooterLabels = function (position) {
-        const index = positionToIndex(position);
+    var getHeaderFooterLabels = function (position) {
+        var index = positionToIndex(position);
         if (index >= 0 && index < context.itemCount) {
             return getHeaderLabel(index).add(getFooterLabel(index));
         }
         return $([]);
     };
-    const getPanel = function (position) {
-        const index = positionToIndex(position);
+    var getPanel = function (position) {
+        var index = positionToIndex(position);
         if (index >= 0 && index < context.itemCount) {
             return $panelContainerLeaf.children().eq(index);
         }
         return $([]);
     };
-    const getCurrentHeaderLabel = function () {
+    var getCurrentHeaderLabel = function () {
         return getHeaderLabel(context.currentIndex);
     };
-    const getCurrentFooterLabel = function () {
+    var getCurrentFooterLabel = function () {
         return getFooterLabel(context.currentIndex);
     };
-    const getCurrentHeaderFooterLabels = function () {
+    var getCurrentHeaderFooterLabels = function () {
         return getHeaderFooterLabels(context.currentIndex);
     };
-    const getCurrentPanel = function () {
+    var getCurrentPanel = function () {
         return getPanel(context.currentIndex);
     };
     return {
-        getCount,
-        getCurrentIndex,
-        getCurrentName,
-        getName,
-        getIndexByName,
-        positionToIndex,
-        parsePosition,
-        isDisabled, isEnabled, isHidden, isVisible,
-        getHeaderLabel, getFooterLabel, getHeaderFooterLabels,
-        getPanel,
-        getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels,
-        getCurrentPanel
+        getCount: getCount,
+        getCurrentIndex: getCurrentIndex,
+        getCurrentName: getCurrentName,
+        getName: getName,
+        getIndexByName: getIndexByName,
+        positionToIndex: positionToIndex,
+        parsePosition: parsePosition,
+        isDisabled: isDisabled, isEnabled: isEnabled, isHidden: isHidden, isVisible: isVisible,
+        getHeaderLabel: getHeaderLabel, getFooterLabel: getFooterLabel, getHeaderFooterLabels: getHeaderFooterLabels,
+        getPanel: getPanel,
+        getCurrentHeaderLabel: getCurrentHeaderLabel, getCurrentFooterLabel: getCurrentFooterLabel, getCurrentHeaderFooterLabels: getCurrentHeaderFooterLabels,
+        getCurrentPanel: getCurrentPanel
     };
 }
 export default generateGetters;

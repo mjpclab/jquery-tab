@@ -1,4 +1,4 @@
-const defaultOptions = {
+var defaultOptions = {
     triggerEvents: 'click',
     delayTriggerEvents: '',
     delayTriggerCancelEvents: '',
@@ -21,11 +21,11 @@ const defaultOptions = {
         return $title.attr('data-tab-item-name');
     },
     fnIsTabItemDisabled: function ($title) {
-        const attrDisabled = $title.attr('data-tab-item-disabled');
+        var attrDisabled = $title.attr('data-tab-item-disabled');
         return attrDisabled !== undefined && attrDisabled !== 'false';
     },
     fnIsTabItemHidden: function ($title) {
-        const attrHidden = $title.attr('data-tab-item-hidden');
+        var attrHidden = $title.attr('data-tab-item-hidden');
         return attrHidden !== undefined && attrHidden !== 'false';
     },
     tabContainerTemplate: '<div></div>',
@@ -39,6 +39,6 @@ const defaultOptions = {
     panelContainerTemplate: '<div></div>',
     panelContainerClass: 'panel-container',
     panelItemTemplate: '<div></div>',
-    panelItemClass: 'panel-item',
+    panelItemClass: 'panel-item'
 };
 export default defaultOptions;

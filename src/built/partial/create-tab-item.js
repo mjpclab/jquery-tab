@@ -1,10 +1,10 @@
 import createLabelItem from "./create-label-item";
 import createPanelItem from "./create-panel-item";
 function createTabItem(tabItem, context, options) {
-    const { name, disabled, hidden } = tabItem;
-    const { tabItemNameAttr, disabledLabelItemClass, disabledPanelItemClass, hiddenLabelItemClass, hiddenPanelItemClass } = options;
-    const { $labelItem, $labelItemLeaf } = createLabelItem(tabItem, options);
-    const { $panelItem, $panelItemLeaf } = createPanelItem(tabItem, options);
+    var name = tabItem.name, disabled = tabItem.disabled, hidden = tabItem.hidden;
+    var tabItemNameAttr = options.tabItemNameAttr, disabledLabelItemClass = options.disabledLabelItemClass, disabledPanelItemClass = options.disabledPanelItemClass, hiddenLabelItemClass = options.hiddenLabelItemClass, hiddenPanelItemClass = options.hiddenPanelItemClass;
+    var _a = createLabelItem(tabItem, options), $labelItem = _a.$labelItem, $labelItemLeaf = _a.$labelItemLeaf;
+    var _b = createPanelItem(tabItem, options), $panelItem = _b.$panelItem, $panelItemLeaf = _b.$panelItemLeaf;
     if (name) {
         $labelItem.data(tabItemNameAttr, name);
         $panelItem.data(tabItemNameAttr, name);
@@ -17,15 +17,15 @@ function createTabItem(tabItem, context, options) {
         $labelItem.addClass(hiddenLabelItemClass);
         $panelItem.addClass(hiddenPanelItemClass);
     }
-    const { containerId, nextItemId: itemId } = context;
+    var containerId = context.containerId, itemId = context.nextItemId;
     context.nextItemId++;
-    let nextCloneId = 0;
-    const labelItemIdPrefix = `__jquery-tab-label__${containerId}__${itemId}`;
-    const panelItemIdPrefix = `__jquery-tab-panel__${containerId}__${itemId}`;
-    const labelItemId = `${labelItemIdPrefix}__${nextCloneId}`;
-    const panelItemId = panelItemIdPrefix;
-    const cloneLabelItem = function () {
-        const clonedLabelItemId = `${labelItemIdPrefix}__${nextCloneId++}`;
+    var nextCloneId = 0;
+    var labelItemIdPrefix = "__jquery-tab-label__" + containerId + "__" + itemId;
+    var panelItemIdPrefix = "__jquery-tab-panel__" + containerId + "__" + itemId;
+    var labelItemId = labelItemIdPrefix + "__" + nextCloneId;
+    var panelItemId = panelItemIdPrefix;
+    var cloneLabelItem = function () {
+        var clonedLabelItemId = labelItemIdPrefix + "__" + nextCloneId++;
         if (clonedLabelItemId === labelItemId) {
             return $labelItem;
         }
@@ -33,6 +33,6 @@ function createTabItem(tabItem, context, options) {
     };
     $labelItem.attr('id', labelItemId).attr('aria-controls', panelItemIdPrefix);
     $panelItem.attr('id', panelItemId).attr('aria-labelledby', labelItemId);
-    return { $labelItem, $labelItemLeaf, $panelItem: $panelItem, $panelItemLeaf: $panelItemLeaf, cloneLabelItem };
+    return { $labelItem: $labelItem, $labelItemLeaf: $labelItemLeaf, $panelItem: $panelItem, $panelItemLeaf: $panelItemLeaf, cloneLabelItem: cloneLabelItem };
 }
 export default createTabItem;

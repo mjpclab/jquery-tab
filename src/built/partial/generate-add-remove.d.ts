@@ -1,4 +1,3 @@
-/// <reference types="jquery" />
 declare function generateAddRemove(fnPositionToIndex: JQueryTab.fnPositionToIndex, fnGetHeaderFooterLabels: JQueryTab.fnGetLabel, fnGetPanel: JQueryTab.fnGetPanel, fnSavePosition: JQueryTab.fnSavePosition, fnSwitchTo: JQueryTab.fnSwitchTo, fnSwitchPrevious: JQueryTab.fnSwitchNeighbor, fnSwitchNext: JQueryTab.fnSwitchNeighbor, containers: JQueryTab.Containers, context: JQueryTab.Context, options: JQueryTab.ExpandedOptions): {
     insertTabItemWithoutSwitch: (position: string | number, tabItem: JQueryTab.TabItem) => void;
     insertTabItem: (position: string | number, tabItem: JQueryTab.TabItem) => void;

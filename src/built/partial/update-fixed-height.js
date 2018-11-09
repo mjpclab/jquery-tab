@@ -3,9 +3,9 @@ function generateUpdateFixedHeight(containers, options) {
         if (!options.fixedHeight) {
             return;
         }
-        let maxHeight = 0;
+        var maxHeight = 0;
         containers.$panelContainerLeaf.children().each(function (index, panelItem) {
-            const panelHeight = panelItem.scrollHeight;
+            var panelHeight = panelItem.scrollHeight;
             if (panelHeight > maxHeight) {
                 maxHeight = panelHeight;
             }

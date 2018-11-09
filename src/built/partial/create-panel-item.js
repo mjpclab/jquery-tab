@@ -1,11 +1,11 @@
 import $ from "jquery";
 import getLeafElement from "../utility/get-leaf-element";
 function createPanelItem(tabItem, options) {
-    const $panelItem = $(options.panelItemTemplate)
+    var $panelItem = $(options.panelItemTemplate)
         .addClass(options.panelItemClass)
         .attr('role', 'tabpanel');
-    const $panelItemLeaf = getLeafElement($panelItem);
+    var $panelItemLeaf = getLeafElement($panelItem);
     $panelItemLeaf.append(tabItem.content);
-    return { $panelItem, $panelItemLeaf };
+    return { $panelItem: $panelItem, $panelItemLeaf: $panelItemLeaf };
 }
 export default createPanelItem;

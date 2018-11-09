@@ -4,7 +4,7 @@ import createPanelContainer from './create-panel-container';
 import createFooterLabelContainer from './create-footer-label-container';
 function createTabContainer(options) {
     //container
-    const $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass);
+    var $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass);
     if (options.mode === "horizontal" /* Horizontal */) {
         $tabContainer.addClass(options.horizontalTabContainerClass);
     }
@@ -12,22 +12,22 @@ function createTabContainer(options) {
         $tabContainer.addClass(options.verticalTabContainerClass);
     }
     //header labels
-    const { $headerLabelContainer, $headerLabelContainerLeaf } = createHeaderLabelContainer(options);
+    var _a = createHeaderLabelContainer(options), $headerLabelContainer = _a.$headerLabelContainer, $headerLabelContainerLeaf = _a.$headerLabelContainerLeaf;
     $headerLabelContainer && $tabContainer.append($headerLabelContainer);
     //panel
-    const { $panelContainer, $panelContainerLeaf } = createPanelContainer(options);
+    var _b = createPanelContainer(options), $panelContainer = _b.$panelContainer, $panelContainerLeaf = _b.$panelContainerLeaf;
     $tabContainer.append($panelContainer);
     //footer labels
-    const { $footerLabelContainer, $footerLabelContainerLeaf } = createFooterLabelContainer(options);
+    var _c = createFooterLabelContainer(options), $footerLabelContainer = _c.$footerLabelContainer, $footerLabelContainerLeaf = _c.$footerLabelContainerLeaf;
     $footerLabelContainer && $tabContainer.append($footerLabelContainer);
     return {
-        $tabContainer,
-        $headerLabelContainer,
-        $headerLabelContainerLeaf,
-        $panelContainer,
-        $panelContainerLeaf,
-        $footerLabelContainer,
-        $footerLabelContainerLeaf
+        $tabContainer: $tabContainer,
+        $headerLabelContainer: $headerLabelContainer,
+        $headerLabelContainerLeaf: $headerLabelContainerLeaf,
+        $panelContainer: $panelContainer,
+        $panelContainerLeaf: $panelContainerLeaf,
+        $footerLabelContainer: $footerLabelContainer,
+        $footerLabelContainerLeaf: $footerLabelContainerLeaf
     };
 }
 export default createTabContainer;

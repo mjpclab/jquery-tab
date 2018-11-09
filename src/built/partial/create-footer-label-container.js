@@ -1,13 +1,13 @@
 import createLabelContainer from "./create-label-container";
 function createFooterLabelContainer(options) {
-    let $footerLabelContainer;
-    let $footerLabelContainerLeaf;
+    var $footerLabelContainer;
+    var $footerLabelContainerLeaf;
     if (options.showFooterLabelContainer) {
-        const { $labelContainer, $labelContainerLeaf } = createLabelContainer(options);
+        var _a = createLabelContainer(options), $labelContainer = _a.$labelContainer, $labelContainerLeaf = _a.$labelContainerLeaf;
         $labelContainer.addClass(options.footerLabelContainerClass);
         $footerLabelContainer = $labelContainer;
         $footerLabelContainerLeaf = $labelContainerLeaf;
     }
-    return { $footerLabelContainer, $footerLabelContainerLeaf };
+    return { $footerLabelContainer: $footerLabelContainer, $footerLabelContainerLeaf: $footerLabelContainerLeaf };
 }
 export default createFooterLabelContainer;

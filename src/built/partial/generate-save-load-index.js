@@ -1,25 +1,25 @@
 import $ from "jquery";
-const HASH_PREFIX = '#';
-const RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
+var HASH_PREFIX = '#';
+var RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
 function isValidPosition(position) {
     return position !== -1 && position !== undefined && position !== null && position !== '';
 }
 function generateSaveLoadIndex(containers, options) {
-    const { $region, $tabContainer } = containers;
-    const { statusFieldSelector, statusHashTemplate, statusHashSeparator, fnSavePosition, fnLoadPosition, activePosition } = options;
-    let $statusFields = $region.find(statusFieldSelector);
+    var $region = containers.$region, $tabContainer = containers.$tabContainer;
+    var statusFieldSelector = options.statusFieldSelector, statusHashTemplate = options.statusHashTemplate, statusHashSeparator = options.statusHashSeparator, fnSavePosition = options.fnSavePosition, fnLoadPosition = options.fnLoadPosition, activePosition = options.activePosition;
+    var $statusFields = $region.find(statusFieldSelector);
     if (!$statusFields.length) {
         $statusFields = $(statusFieldSelector);
     }
-    let RE_STATUS_HASH;
+    var RE_STATUS_HASH;
     if (statusHashTemplate) {
         RE_STATUS_HASH = new RegExp(statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '([-\\w]+)');
     }
-    const savePosition = function saveIndex(position) {
+    var savePosition = function saveIndex(position) {
         $statusFields.val(position);
         if (statusHashTemplate) {
-            let hash = location.hash;
-            const statusHash = statusHashTemplate + position;
+            var hash = location.hash;
+            var statusHash = statusHashTemplate + position;
             if (hash.indexOf(statusHashTemplate) > -1) {
                 hash = hash.replace(RE_STATUS_HASH, statusHash);
             }
@@ -40,17 +40,17 @@ function generateSaveLoadIndex(containers, options) {
             fnSavePosition.call($tabContainer, position);
         }
     };
-    const parseHashPosition = function () {
-        const searchResult = location.hash.match(RE_STATUS_HASH);
+    var parseHashPosition = function () {
+        var searchResult = location.hash.match(RE_STATUS_HASH);
         if (searchResult && searchResult[1]) {
             return searchResult[1];
         }
         return -1;
     };
-    const loadPosition = function () {
-        let position = -1;
+    var loadPosition = function () {
+        var position = -1;
         $statusFields.each(function () {
-            const status = $(this).val();
+            var status = $(this).val();
             if (typeof status === 'number' || status.length) {
                 position = status;
                 return false;
@@ -76,6 +76,6 @@ function generateSaveLoadIndex(containers, options) {
         }
         return 0;
     };
-    return { savePosition, loadPosition, parseHashPosition };
+    return { savePosition: savePosition, loadPosition: loadPosition, parseHashPosition: parseHashPosition };
 }
 export default generateSaveLoadIndex;

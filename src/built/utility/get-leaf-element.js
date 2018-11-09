@@ -1,6 +1,6 @@
 function getLeafElement($node) {
-    let $result = $node;
-    let $deeper;
+    var $result = $node;
+    var $deeper;
     while ($deeper = $result.children(), $deeper.length) {
         $result = $deeper;
     }

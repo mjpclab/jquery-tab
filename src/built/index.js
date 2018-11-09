@@ -4,7 +4,7 @@ import tablize from './partial/tablize';
 import autoEnableTabs from './partial/auto-enable-tabs';
 $.fn.tab = function (customOptions) {
     this.each(function (index, region) {
-        const $region = $(region);
+        var $region = $(region);
         tablize($region, customOptions);
     });
     return this;

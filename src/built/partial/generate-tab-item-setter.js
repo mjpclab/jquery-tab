@@ -1,23 +1,27 @@
 function generateTabItemSetter(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, options) {
-    const { tabItemNameAttr, disabledLabelItemClass, disabledPanelItemClass, hiddenLabelItemClass, hiddenPanelItemClass } = options;
-    const setName = function (position, name) {
+    var tabItemNameAttr = options.tabItemNameAttr, disabledLabelItemClass = options.disabledLabelItemClass, disabledPanelItemClass = options.disabledPanelItemClass, hiddenLabelItemClass = options.hiddenLabelItemClass, hiddenPanelItemClass = options.hiddenPanelItemClass;
+    var setName = function (position, name) {
         fnGetHeaderFooterLabels(position).data(tabItemNameAttr, name);
         fnGetPanel(position).data(tabItemNameAttr, name);
     };
-    const setDisabled = function (position, disabled = true) {
+    var setDisabled = function (position, disabled) {
+        if (disabled === void 0) { disabled = true; }
         fnGetHeaderFooterLabels(position).toggleClass(disabledLabelItemClass, disabled);
         fnGetPanel(position).toggleClass(disabledPanelItemClass, disabled);
     };
-    const setEnabled = function (position, enabled = true) {
+    var setEnabled = function (position, enabled) {
+        if (enabled === void 0) { enabled = true; }
         setDisabled(position, !enabled);
     };
-    const setHidden = function (position, hidden = true) {
+    var setHidden = function (position, hidden) {
+        if (hidden === void 0) { hidden = true; }
         fnGetHeaderFooterLabels(position).toggleClass(hiddenLabelItemClass, hidden);
         fnGetPanel(position).toggleClass(hiddenPanelItemClass, hidden);
     };
-    const setVisible = function (position, visible = true) {
+    var setVisible = function (position, visible) {
+        if (visible === void 0) { visible = true; }
         setHidden(position, !visible);
     };
-    return { setName, setDisabled, setEnabled, setHidden, setVisible };
+    return { setName: setName, setDisabled: setDisabled, setEnabled: setEnabled, setHidden: setHidden, setVisible: setVisible };
 }
 export default generateTabItemSetter;

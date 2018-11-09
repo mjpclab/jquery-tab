@@ -1,28 +1,28 @@
 import $ from "jquery";
 function hahdleClickEvent(fnSwitchTo, containers, context, options) {
-    const { triggerEvents, delayTriggerEvents, delayTriggerCancelEvents, delayTriggerLatency, disabledLabelItemClass, hiddenLabelItemClass } = options;
-    const { $headerLabelContainerLeaf, $footerLabelContainerLeaf } = containers;
+    var triggerEvents = options.triggerEvents, delayTriggerEvents = options.delayTriggerEvents, delayTriggerCancelEvents = options.delayTriggerCancelEvents, delayTriggerLatency = options.delayTriggerLatency, disabledLabelItemClass = options.disabledLabelItemClass, hiddenLabelItemClass = options.hiddenLabelItemClass;
+    var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf, $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf;
     //handle delay trigger event
-    let delayTriggerTimeoutHandler;
-    const startDelayTrigger = function (position) {
+    var delayTriggerTimeoutHandler;
+    var startDelayTrigger = function (position) {
         delayTriggerTimeoutHandler = setTimeout(function () {
             fnSwitchTo(position);
             delayTriggerTimeoutHandler = undefined;
         }, delayTriggerLatency);
     };
-    const cancelDelayTrigger = function () {
+    var cancelDelayTrigger = function () {
         if (delayTriggerTimeoutHandler) {
             clearTimeout(delayTriggerTimeoutHandler);
             delayTriggerTimeoutHandler = undefined;
         }
     };
-    const labelItemDelayClick = function (e) {
+    var labelItemDelayClick = function (e) {
         if (e.currentTarget.parentNode !== e.delegateTarget) {
             return;
         }
         cancelDelayTrigger();
-        const $label = $(e.currentTarget);
-        const labelIndex = $label.index();
+        var $label = $(e.currentTarget);
+        var labelIndex = $label.index();
         if (labelIndex === context.currentIndex ||
             $label.hasClass(disabledLabelItemClass) ||
             $label.hasClass(hiddenLabelItemClass)) {
@@ -30,12 +30,12 @@ function hahdleClickEvent(fnSwitchTo, containers, context, options) {
         }
         startDelayTrigger(labelIndex);
     };
-    const labelItemCancelDelayClick = function (e) {
+    var labelItemCancelDelayClick = function (e) {
         if (e.currentTarget.parentNode !== e.delegateTarget) {
             return;
         }
-        const $label = $(e.currentTarget);
-        const labelIndex = $label.index();
+        var $label = $(e.currentTarget);
+        var labelIndex = $label.index();
         if (labelIndex === context.currentIndex) {
             return;
         }
@@ -58,13 +58,13 @@ function hahdleClickEvent(fnSwitchTo, containers, context, options) {
         }
     }
     //handle trigger event
-    const labelItemClick = function (e) {
+    var labelItemClick = function (e) {
         if (e.currentTarget.parentNode !== e.delegateTarget) {
             return;
         }
         cancelDelayTrigger();
-        const $label = $(e.currentTarget);
-        const labelIndex = $label.index();
+        var $label = $(e.currentTarget);
+        var labelIndex = $label.index();
         if (labelIndex === context.currentIndex ||
             $label.hasClass(disabledLabelItemClass) ||
             $label.hasClass(hiddenLabelItemClass)) {

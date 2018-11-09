@@ -1,13 +1,13 @@
 import $ from "jquery";
 import getLeafElement from "../utility/get-leaf-element";
 function createLabelContainer(options) {
-    const $labelContainer = $(options.labelContainerTemplate)
+    var $labelContainer = $(options.labelContainerTemplate)
         .addClass(options.labelContainerClass)
         .attr('role', 'tablist');
     if (options.mode === "vertical" /* Vertical */) {
         $labelContainer.attr('aria-orientation', 'vertical');
     }
-    const $labelContainerLeaf = getLeafElement($labelContainer);
-    return { $labelContainer, $labelContainerLeaf };
+    var $labelContainerLeaf = getLeafElement($labelContainer);
+    return { $labelContainer: $labelContainer, $labelContainerLeaf: $labelContainerLeaf };
 }
 export default createLabelContainer;

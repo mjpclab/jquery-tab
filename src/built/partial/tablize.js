@@ -10,27 +10,27 @@ import generateAddRemove from './generate-add-remove';
 import generateUpdateFixedHeight from './update-fixed-height';
 import handleHashChangeEvent from './handle-hash-change-event';
 import handleClickEvent from './handle-click-event';
-let nextContainerId = 0;
+var nextContainerId = 0;
 function tablize($region, customOptions) {
-    const dataOptions = $region.data();
-    const options = getExpandedOptions(defaultOptions, dataOptions, customOptions);
-    const context = {
+    var dataOptions = $region.data();
+    var options = getExpandedOptions(defaultOptions, dataOptions, customOptions);
+    var context = {
         containerId: nextContainerId++,
         nextItemId: 0,
         itemCount: 0,
         currentIndex: -1
     };
-    const containers = $.extend({ $region }, createTabContainer(options));
-    const { $tabContainer } = containers;
+    var containers = $.extend({ $region: $region }, createTabContainer(options));
+    var $tabContainer = containers.$tabContainer;
     //getters
-    const { getCount, getCurrentIndex, getCurrentName, getName, getIndexByName, positionToIndex, parsePosition, isDisabled, isEnabled, isHidden, isVisible, getHeaderLabel, getFooterLabel, getHeaderFooterLabels, getPanel, getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels, getCurrentPanel } = generateGetters(containers, context, options);
+    var _a = generateGetters(containers, context, options), getCount = _a.getCount, getCurrentIndex = _a.getCurrentIndex, getCurrentName = _a.getCurrentName, getName = _a.getName, getIndexByName = _a.getIndexByName, positionToIndex = _a.positionToIndex, parsePosition = _a.parsePosition, isDisabled = _a.isDisabled, isEnabled = _a.isEnabled, isHidden = _a.isHidden, isVisible = _a.isVisible, getHeaderLabel = _a.getHeaderLabel, getFooterLabel = _a.getFooterLabel, getHeaderFooterLabels = _a.getHeaderFooterLabels, getPanel = _a.getPanel, getCurrentHeaderLabel = _a.getCurrentHeaderLabel, getCurrentFooterLabel = _a.getCurrentFooterLabel, getCurrentHeaderFooterLabels = _a.getCurrentHeaderFooterLabels, getCurrentPanel = _a.getCurrentPanel;
     //tab item setter
-    const { setName, setDisabled, setEnabled, setHidden, setVisible } = generateTabItemSetter(positionToIndex, getHeaderFooterLabels, getPanel, options);
+    var _b = generateTabItemSetter(positionToIndex, getHeaderFooterLabels, getPanel, options), setName = _b.setName, setDisabled = _b.setDisabled, setEnabled = _b.setEnabled, setHidden = _b.setHidden, setVisible = _b.setVisible;
     //save/load
-    const { savePosition, loadPosition, parseHashPosition } = generateSaveLoadIndex(containers, options);
+    var _c = generateSaveLoadIndex(containers, options), savePosition = _c.savePosition, loadPosition = _c.loadPosition, parseHashPosition = _c.parseHashPosition;
     //methods
-    const { switchToWithoutSave, switchTo, switchPrevious, switchNext } = genetateSwitch(positionToIndex, parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options);
-    const { addTabItem, insertTabItem, add, addWithoutSwitch, insert, remove, } = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, switchPrevious, switchNext, containers, context, options);
+    var _d = genetateSwitch(positionToIndex, parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options), switchToWithoutSave = _d.switchToWithoutSave, switchTo = _d.switchTo, switchPrevious = _d.switchPrevious, switchNext = _d.switchNext;
+    var _e = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, switchPrevious, switchNext, containers, context, options), addTabItem = _e.addTabItem, insertTabItem = _e.insertTabItem, add = _e.add, addWithoutSwitch = _e.addWithoutSwitch, insert = _e.insert, remove = _e.remove;
     addWithoutSwitch($region);
     //replace original content
     if (!context.itemCount && !options.createEmptyTab) {
@@ -38,7 +38,7 @@ function tablize($region, customOptions) {
     }
     $region.append($tabContainer);
     //check if param:fixed height
-    const updateFixedHeight = generateUpdateFixedHeight(containers, options);
+    var updateFixedHeight = generateUpdateFixedHeight(containers, options);
     updateFixedHeight();
     //show active panel
     if (context.itemCount > 0) {
@@ -50,25 +50,25 @@ function tablize($region, customOptions) {
     handleHashChangeEvent(parseHashPosition, switchTo, options);
     handleClickEvent(switchTo, containers, context, options);
     //controller
-    const controller = {
-        getCount,
-        getCurrentIndex,
-        getCurrentName,
-        getName,
-        getIndexByName,
-        isDisabled, isEnabled, isHidden, isVisible,
-        getHeaderLabel, getFooterLabel, getHeaderFooterLabels,
-        getPanel,
-        getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels,
-        getCurrentPanel,
-        setName, setDisabled, setEnabled, setHidden, setVisible,
-        updateFixedHeight,
-        switchTo, switchPrevious, switchNext,
-        addTabItem,
-        insertTabItem,
-        add,
-        insert,
-        remove
+    var controller = {
+        getCount: getCount,
+        getCurrentIndex: getCurrentIndex,
+        getCurrentName: getCurrentName,
+        getName: getName,
+        getIndexByName: getIndexByName,
+        isDisabled: isDisabled, isEnabled: isEnabled, isHidden: isHidden, isVisible: isVisible,
+        getHeaderLabel: getHeaderLabel, getFooterLabel: getFooterLabel, getHeaderFooterLabels: getHeaderFooterLabels,
+        getPanel: getPanel,
+        getCurrentHeaderLabel: getCurrentHeaderLabel, getCurrentFooterLabel: getCurrentFooterLabel, getCurrentHeaderFooterLabels: getCurrentHeaderFooterLabels,
+        getCurrentPanel: getCurrentPanel,
+        setName: setName, setDisabled: setDisabled, setEnabled: setEnabled, setHidden: setHidden, setVisible: setVisible,
+        updateFixedHeight: updateFixedHeight,
+        switchTo: switchTo, switchPrevious: switchPrevious, switchNext: switchNext,
+        addTabItem: addTabItem,
+        insertTabItem: insertTabItem,
+        add: add,
+        insert: insert,
+        remove: remove
     };
     $region.data('tab-controller', controller);
     $tabContainer.data('tab-controller', controller);

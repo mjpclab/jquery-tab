@@ -2,7 +2,7 @@ import $ from "jquery";
 function handleHashChangeEvent(fnParseHashPosition, fnSwitchTo, options) {
     if (options.statusHashTemplate && window) {
         $(window).on('hashchange', function () {
-            const position = fnParseHashPosition();
+            var position = fnParseHashPosition();
             fnSwitchTo(position);
         });
     }

@@ -1,8 +1,8 @@
 import $ from 'jquery';
 function getExpandedOptions(defaultOptions, dataOptions, customOptions) {
-    const options = $.extend({}, defaultOptions, dataOptions, customOptions);
-    const { tabContainerClass, labelContainerClass, labelItemClass, panelItemClass } = options;
-    const expandedOptions = $.extend(options, {
+    var options = $.extend({}, defaultOptions, dataOptions, customOptions);
+    var tabContainerClass = options.tabContainerClass, labelContainerClass = options.labelContainerClass, labelItemClass = options.labelItemClass, panelItemClass = options.panelItemClass;
+    var expandedOptions = $.extend(options, {
         horizontalTabContainerClass: tabContainerClass + '-horizontal',
         verticalTabContainerClass: tabContainerClass + '-vertical',
         headerLabelContainerClass: labelContainerClass + '-header',

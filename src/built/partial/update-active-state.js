@@ -1,5 +1,5 @@
 function updateActiveState($activeLabelItem, $activePanelItem, options) {
-    const { activeLabelItemClass, inactiveLabelItemClass, activePanelItemClass, inactivePanelItemClass } = options;
+    var activeLabelItemClass = options.activeLabelItemClass, inactiveLabelItemClass = options.inactiveLabelItemClass, activePanelItemClass = options.activePanelItemClass, inactivePanelItemClass = options.inactivePanelItemClass;
     //label items
     $activeLabelItem
         .removeClass(inactiveLabelItemClass)
