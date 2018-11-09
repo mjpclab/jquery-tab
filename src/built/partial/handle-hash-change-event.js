@@ -1,9 +1,10 @@
 import $ from "jquery";
-function handleHashChangeEvent(fnParseHashPosition, fnSwitchTo, options) {
+var EVENT_HASH_CHANGE = 'hashchange';
+function handleHashChangeEvent(saveLoad, switcher, options) {
     if (options.statusHashTemplate && window) {
-        $(window).on('hashchange', function () {
-            var position = fnParseHashPosition();
-            fnSwitchTo(position);
+        $(window).on(EVENT_HASH_CHANGE, function () {
+            var position = saveLoad.parseHashPosition();
+            switcher.switchTo(position);
         });
     }
 }

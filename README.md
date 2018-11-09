@@ -352,7 +352,7 @@ Feature | IE | Edge | Firefox | Chrome | Safari | Opera
 --------|----|------|---------|--------|--------|------
 basic | 6+ | 12+ | 1+ | 1+ | 1+ | 9+
 vertical tab labels | 11+ | 12+ | 21+ | 28+ | 6.1+ | 12.10+
-CSS fade effect | 10+ | 12+ | 4+ | 2+ | 4+ | 12.10+
+fade effect on switch | 10+ | 12+ | 4+ | 2+ | 4+ | 12.10+
 
 As different jQuery version has different browser compatibility,
 final compatibility are also affected by the jQuery version you are using.

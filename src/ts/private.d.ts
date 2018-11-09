@@ -37,15 +37,6 @@ declare namespace JQueryTab {
 		$footerLabelContainer?: JQuery;
 		$footerLabelContainerLeaf?: JQuery;
 	}
-
-	type fnPositionToIndex = (position: TabItemPosition) => number;
-	type fnParsePosition = (position: TabItemPosition) => { index: number, name?: string };
-	type fnParseHashPosition = () => TabItemPosition;
-	type fnSwitchTo = (position: TabItemPosition) => SwitchResult | undefined;
-	type fnSwitchNeighbor = (switchOptions?: SwitchOptions) => SwitchResult | undefined;
-	type fnSavePosition = (position: TabItemPosition) => void;
-	type fnGetLabel = (position: TabItemPosition) => JQuery;
-	type fnGetPanel = (position: TabItemPosition) => JQuery;
 }
 
 declare function isFinite(number: string): boolean;

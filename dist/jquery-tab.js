@@ -150,25 +150,33 @@
         };
     }
 
-    function generateGetters(containers, context, options) {
-        var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf, $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf, $panelContainerLeaf = containers.$panelContainerLeaf;
-        var tabItemNameAttr = options.tabItemNameAttr, disabledPanelItemClass = options.disabledPanelItemClass, hiddenPanelItemClass = options.hiddenPanelItemClass;
-        var getCount = function () {
-            return context.itemCount;
+    var Getter = /** @class */ (function () {
+        function Getter(containers, context, options) {
+            this.containers = containers;
+            this.context = context;
+            this.options = options;
+        }
+        Getter.prototype.getCount = function () {
+            return this.context.itemCount;
         };
-        var getCurrentIndex = function () {
-            return context.currentIndex;
+        Getter.prototype.getCurrentIndex = function () {
+            return this.context.currentIndex;
         };
-        var getCurrentName = function () {
-            return context.currentName;
+        Getter.prototype.getCurrentName = function () {
+            return this.context.currentName;
         };
-        var getName = function (index) {
-            if (index >= 0 && index < context.itemCount) {
+        Getter.prototype.getName = function (index) {
+            var itemCount = this.context.itemCount;
+            if (index >= 0 && index < itemCount) {
+                var $panelContainerLeaf = this.containers.$panelContainerLeaf;
+                var tabItemNameAttr = this.options.tabItemNameAttr;
                 return $panelContainerLeaf.children().eq(index).data(tabItemNameAttr);
             }
         };
-        var getIndexByName = function (name) {
+        Getter.prototype.getIndexByName = function (name) {
             var tabItemIndex = -1;
+            var $panelContainerLeaf = this.containers.$panelContainerLeaf;
+            var tabItemNameAttr = this.options.tabItemNameAttr;
             $panelContainerLeaf.children().each(function (index, panel) {
                 var $panel = $(panel);
                 if ($panel.data(tabItemNameAttr) === name) {
@@ -178,7 +186,7 @@
             });
             return tabItemIndex;
         };
-        var positionToIndex = function (position) {
+        Getter.prototype.positionToIndex = function (position) {
             if (typeof position === 'number') {
                 return position;
             }
@@ -186,29 +194,29 @@
                 return parseInt(position);
             }
             else if (position !== undefined) {
-                return getIndexByName(position);
+                return this.getIndexByName(position);
             }
             else {
                 return -1;
             }
         };
-        var parsePosition = function (position) {
+        Getter.prototype.normalizePosition = function (position) {
             if (typeof position === 'number') {
                 return {
                     index: position,
-                    name: getName(position)
+                    name: this.getName(position)
                 };
             }
             else if (isFinite(position)) {
                 var index = parseInt(position);
                 return {
                     index: index,
-                    name: getName(index)
+                    name: this.getName(index)
                 };
             }
             else if (position) {
                 return {
-                    index: getIndexByName(position),
+                    index: this.getIndexByName(position),
                     name: position
                 };
             }
@@ -219,134 +227,193 @@
                 };
             }
         };
-        var isDisabled = function (position) {
-            var index = positionToIndex(position);
-            if (index >= 0 && index < context.itemCount) {
+        Getter.prototype.isDisabled = function (position) {
+            var itemCount = this.context.itemCount;
+            var index = this.positionToIndex(position);
+            if (index >= 0 && index < itemCount) {
+                var $panelContainerLeaf = this.containers.$panelContainerLeaf;
+                var disabledPanelItemClass = this.options.disabledPanelItemClass;
                 return $panelContainerLeaf.children().eq(index).hasClass(disabledPanelItemClass);
             }
         };
-        var isEnabled = function (position) {
-            return !isDisabled(position);
+        Getter.prototype.isEnabled = function (position) {
+            return !this.isDisabled(position);
         };
-        var isHidden = function (position) {
-            var index = positionToIndex(position);
-            if (index >= 0 && index < context.itemCount) {
+        Getter.prototype.isHidden = function (position) {
+            var itemCount = this.context.itemCount;
+            var index = this.positionToIndex(position);
+            if (index >= 0 && index < itemCount) {
+                var $panelContainerLeaf = this.containers.$panelContainerLeaf;
+                var hiddenPanelItemClass = this.options.hiddenPanelItemClass;
                 return $panelContainerLeaf.children().eq(index).hasClass(hiddenPanelItemClass);
             }
         };
-        var isVisible = function (position) {
-            return !isHidden(position);
+        Getter.prototype.isVisible = function (position) {
+            return !this.isHidden(position);
         };
-        var getHeaderLabel = function (position) {
+        Getter.prototype.getHeaderLabel = function (position) {
+            var $headerLabelContainerLeaf = this.containers.$headerLabelContainerLeaf;
             if ($headerLabelContainerLeaf) {
-                var index = positionToIndex(position);
-                if (index >= 0 && index < context.itemCount) {
+                var itemCount = this.context.itemCount;
+                var index = this.positionToIndex(position);
+                if (index >= 0 && index < itemCount) {
                     return $headerLabelContainerLeaf.children().eq(index);
                 }
             }
             return $([]);
         };
-        var getFooterLabel = function (position) {
+        Getter.prototype.getFooterLabel = function (position) {
+            var $footerLabelContainerLeaf = this.containers.$footerLabelContainerLeaf;
             if ($footerLabelContainerLeaf) {
-                var index = positionToIndex(position);
-                if (index >= 0 && index < context.itemCount) {
+                var itemCount = this.context.itemCount;
+                var index = this.positionToIndex(position);
+                if (index >= 0 && index < itemCount) {
                     return $footerLabelContainerLeaf.children().eq(index);
                 }
             }
             return $([]);
         };
-        var getHeaderFooterLabels = function (position) {
-            var index = positionToIndex(position);
-            if (index >= 0 && index < context.itemCount) {
-                return getHeaderLabel(index).add(getFooterLabel(index));
+        Getter.prototype.getHeaderFooterLabels = function (position) {
+            var itemCount = this.context.itemCount;
+            var index = this.positionToIndex(position);
+            if (index >= 0 && index < itemCount) {
+                return this.getHeaderLabel(index).add(this.getFooterLabel(index));
             }
             return $([]);
         };
-        var getPanel = function (position) {
-            var index = positionToIndex(position);
-            if (index >= 0 && index < context.itemCount) {
+        Getter.prototype.getPanel = function (position) {
+            var itemCount = this.context.itemCount;
+            var index = this.positionToIndex(position);
+            if (index >= 0 && index < itemCount) {
+                var $panelContainerLeaf = this.containers.$panelContainerLeaf;
                 return $panelContainerLeaf.children().eq(index);
             }
             return $([]);
         };
-        var getCurrentHeaderLabel = function () {
-            return getHeaderLabel(context.currentIndex);
+        Getter.prototype.getCurrentHeaderLabel = function () {
+            return this.getHeaderLabel(this.context.currentIndex);
         };
-        var getCurrentFooterLabel = function () {
-            return getFooterLabel(context.currentIndex);
+        Getter.prototype.getCurrentFooterLabel = function () {
+            return this.getFooterLabel(this.context.currentIndex);
         };
-        var getCurrentHeaderFooterLabels = function () {
-            return getHeaderFooterLabels(context.currentIndex);
+        Getter.prototype.getCurrentHeaderFooterLabels = function () {
+            return this.getHeaderFooterLabels(this.context.currentIndex);
         };
-        var getCurrentPanel = function () {
-            return getPanel(context.currentIndex);
+        Getter.prototype.getCurrentPanel = function () {
+            return this.getPanel(this.context.currentIndex);
         };
-        return {
-            getCount: getCount,
-            getCurrentIndex: getCurrentIndex,
-            getCurrentName: getCurrentName,
-            getName: getName,
-            getIndexByName: getIndexByName,
-            positionToIndex: positionToIndex,
-            parsePosition: parsePosition,
-            isDisabled: isDisabled, isEnabled: isEnabled, isHidden: isHidden, isVisible: isVisible,
-            getHeaderLabel: getHeaderLabel, getFooterLabel: getFooterLabel, getHeaderFooterLabels: getHeaderFooterLabels,
-            getPanel: getPanel,
-            getCurrentHeaderLabel: getCurrentHeaderLabel, getCurrentFooterLabel: getCurrentFooterLabel, getCurrentHeaderFooterLabels: getCurrentHeaderFooterLabels,
-            getCurrentPanel: getCurrentPanel
-        };
-    }
+        return Getter;
+    }());
 
-    function generateTabItemSetter(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, options) {
-        var tabItemNameAttr = options.tabItemNameAttr, disabledLabelItemClass = options.disabledLabelItemClass, disabledPanelItemClass = options.disabledPanelItemClass, hiddenLabelItemClass = options.hiddenLabelItemClass, hiddenPanelItemClass = options.hiddenPanelItemClass;
-        var setName = function (position, name) {
-            fnGetHeaderFooterLabels(position).data(tabItemNameAttr, name);
-            fnGetPanel(position).data(tabItemNameAttr, name);
+    var DomUpdater = /** @class */ (function () {
+        function DomUpdater(getter, containers, options) {
+            this.getter = getter;
+            this.containers = containers;
+            this.options = options;
+        }
+        DomUpdater.prototype.updateActiveState = function (activeIndex) {
+            var getter = this.getter;
+            var _a = this.options, activeLabelItemClass = _a.activeLabelItemClass, inactiveLabelItemClass = _a.inactiveLabelItemClass, activePanelItemClass = _a.activePanelItemClass, inactivePanelItemClass = _a.inactivePanelItemClass;
+            var $activeLabelItem = getter.getHeaderFooterLabels(activeIndex);
+            var $activePanelItem = getter.getPanel(activeIndex);
+            //label items
+            $activeLabelItem
+                .removeClass(inactiveLabelItemClass)
+                .addClass(activeLabelItemClass)
+                .attr('aria-selected', 'true')
+                .attr('aria-expanded', 'true');
+            $activeLabelItem.siblings()
+                .removeClass(activeLabelItemClass)
+                .addClass(inactiveLabelItemClass)
+                .attr('aria-selected', 'false')
+                .attr('aria-expanded', 'false');
+            //panel items
+            $activePanelItem
+                .removeClass(inactivePanelItemClass)
+                .addClass(activePanelItemClass)
+                .attr('aria-hidden', 'false');
+            $activePanelItem.siblings()
+                .removeClass(activePanelItemClass)
+                .addClass(inactivePanelItemClass)
+                .attr('aria-hidden', 'true');
         };
-        var setDisabled = function (position, disabled) {
-            if (disabled === void 0) { disabled = true; }
-            fnGetHeaderFooterLabels(position).toggleClass(disabledLabelItemClass, disabled);
-            fnGetPanel(position).toggleClass(disabledPanelItemClass, disabled);
+        DomUpdater.prototype.updateFixedHeight = function () {
+            if (!this.options.fixedHeight) {
+                return;
+            }
+            var maxHeight = 0;
+            this.containers.$panelContainerLeaf.children().each(function (index, panelItem) {
+                var panelHeight = panelItem.scrollHeight;
+                if (panelHeight > maxHeight) {
+                    maxHeight = panelHeight;
+                }
+            }).height(maxHeight);
         };
-        var setEnabled = function (position, enabled) {
-            if (enabled === void 0) { enabled = true; }
-            setDisabled(position, !enabled);
+        return DomUpdater;
+    }());
+
+    var TabItemSetter = /** @class */ (function () {
+        function TabItemSetter(getter, options) {
+            this.getter = getter;
+            this.options = options;
+        }
+        TabItemSetter.prototype.setName = function (position, name) {
+            var getter = this.getter;
+            var tabItemNameAttr = this.options.tabItemNameAttr;
+            getter.getHeaderFooterLabels(position).data(tabItemNameAttr, name);
+            getter.getPanel(position).data(tabItemNameAttr, name);
         };
-        var setHidden = function (position, hidden) {
-            if (hidden === void 0) { hidden = true; }
-            fnGetHeaderFooterLabels(position).toggleClass(hiddenLabelItemClass, hidden);
-            fnGetPanel(position).toggleClass(hiddenPanelItemClass, hidden);
+        TabItemSetter.prototype.setDisabled = function (position, disabled) {
+            var getter = this.getter;
+            var _a = this.options, disabledLabelItemClass = _a.disabledLabelItemClass, disabledPanelItemClass = _a.disabledPanelItemClass;
+            getter.getHeaderFooterLabels(position).toggleClass(disabledLabelItemClass, disabled);
+            getter.getPanel(position).toggleClass(disabledPanelItemClass, disabled);
         };
-        var setVisible = function (position, visible) {
-            if (visible === void 0) { visible = true; }
-            setHidden(position, !visible);
+        TabItemSetter.prototype.setEnabled = function (position, enabled) {
+            this.setDisabled(position, !enabled);
         };
-        return { setName: setName, setDisabled: setDisabled, setEnabled: setEnabled, setHidden: setHidden, setVisible: setVisible };
-    }
+        TabItemSetter.prototype.setHidden = function (position, hidden) {
+            var getter = this.getter;
+            var _a = this.options, hiddenLabelItemClass = _a.hiddenLabelItemClass, hiddenPanelItemClass = _a.hiddenPanelItemClass;
+            getter.getHeaderFooterLabels(position).toggleClass(hiddenLabelItemClass, hidden);
+            getter.getPanel(position).toggleClass(hiddenPanelItemClass, hidden);
+        };
+        TabItemSetter.prototype.setVisible = function (position, visible) {
+            this.setHidden(position, !visible);
+        };
+        return TabItemSetter;
+    }());
 
     var HASH_PREFIX = '#';
     var RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
     function isValidPosition(position) {
         return position !== -1 && position !== undefined && position !== null && position !== '';
     }
-    function generateSaveLoadIndex(containers, options) {
-        var $region = containers.$region, $tabContainer = containers.$tabContainer;
-        var statusFieldSelector = options.statusFieldSelector, statusHashTemplate = options.statusHashTemplate, statusHashSeparator = options.statusHashSeparator, fnSavePosition = options.fnSavePosition, fnLoadPosition = options.fnLoadPosition, activePosition = options.activePosition;
-        var $statusFields = $region.find(statusFieldSelector);
-        if (!$statusFields.length) {
-            $statusFields = $(statusFieldSelector);
+    var SaveLoad = /** @class */ (function () {
+        function SaveLoad(containers, options) {
+            this.containers = containers;
+            this.options = options;
+            var $region = containers.$region;
+            var statusFieldSelector = options.statusFieldSelector, statusHashTemplate = options.statusHashTemplate;
+            var $statusFields = $region.find(statusFieldSelector);
+            if (!$statusFields.length) {
+                $statusFields = $(statusFieldSelector);
+            }
+            this.$statusFields = $statusFields;
+            if (statusHashTemplate) {
+                this.reStatusHash = new RegExp(statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '([-\\w]+)');
+            }
         }
-        var RE_STATUS_HASH;
-        if (statusHashTemplate) {
-            RE_STATUS_HASH = new RegExp(statusHashTemplate.replace(RE_ESCAPE_CHARS, '\\$&') + '([-\\w]+)');
-        }
-        var savePosition = function saveIndex(position) {
-            $statusFields.val(position);
+        SaveLoad.prototype.savePosition = function (position) {
+            var reStatusHash = this.reStatusHash;
+            var $tabContainer = this.containers.$tabContainer;
+            var _a = this.options, statusHashTemplate = _a.statusHashTemplate, statusHashSeparator = _a.statusHashSeparator, fnSavePosition = _a.fnSavePosition;
+            this.$statusFields.val(position);
             if (statusHashTemplate) {
                 var hash = location.hash;
                 var statusHash = statusHashTemplate + position;
-                if (hash.indexOf(statusHashTemplate) > -1) {
-                    hash = hash.replace(RE_STATUS_HASH, statusHash);
+                if (hash.indexOf(statusHashTemplate) >= 0 && reStatusHash) {
+                    hash = hash.replace(reStatusHash, statusHash);
                 }
                 else {
                     if (hash !== HASH_PREFIX) {
@@ -365,17 +432,23 @@
                 fnSavePosition.call($tabContainer, position);
             }
         };
-        var parseHashPosition = function () {
-            var searchResult = location.hash.match(RE_STATUS_HASH);
-            if (searchResult && searchResult[1]) {
-                return searchResult[1];
+        SaveLoad.prototype.parseHashPosition = function () {
+            var reStatusHash = this.reStatusHash;
+            if (reStatusHash) {
+                var searchResult = location.hash.match(reStatusHash);
+                if (searchResult && searchResult[1]) {
+                    return searchResult[1];
+                }
             }
             return -1;
         };
-        var loadPosition = function () {
+        SaveLoad.prototype.loadPosition = function () {
+            var $statusFields = this.$statusFields;
+            var $tabContainer = this.containers.$tabContainer;
+            var _a = this.options, statusHashTemplate = _a.statusHashTemplate, fnLoadPosition = _a.fnLoadPosition, activePosition = _a.activePosition;
             var position = -1;
-            $statusFields.each(function () {
-                var status = $(this).val();
+            $statusFields.each(function (i, statusField) {
+                var status = $(statusField).val();
                 if (typeof status === 'number' || status.length) {
                     position = status;
                     return false;
@@ -385,7 +458,7 @@
                 return position;
             }
             if (statusHashTemplate) {
-                position = parseHashPosition();
+                position = this.parseHashPosition();
                 if (isValidPosition(position)) {
                     return position;
                 }
@@ -401,55 +474,39 @@
             }
             return 0;
         };
-        return { savePosition: savePosition, loadPosition: loadPosition, parseHashPosition: parseHashPosition };
-    }
-
-    function updateActiveState($activeLabelItem, $activePanelItem, options) {
-        var activeLabelItemClass = options.activeLabelItemClass, inactiveLabelItemClass = options.inactiveLabelItemClass, activePanelItemClass = options.activePanelItemClass, inactivePanelItemClass = options.inactivePanelItemClass;
-        //label items
-        $activeLabelItem
-            .removeClass(inactiveLabelItemClass)
-            .addClass(activeLabelItemClass)
-            .attr('aria-selected', 'true')
-            .attr('aria-expanded', 'true');
-        $activeLabelItem.siblings()
-            .removeClass(activeLabelItemClass)
-            .addClass(inactiveLabelItemClass)
-            .attr('aria-selected', 'false')
-            .attr('aria-expanded', 'false');
-        //panel items
-        $activePanelItem
-            .removeClass(inactivePanelItemClass)
-            .addClass(activePanelItemClass)
-            .attr('aria-hidden', 'false');
-        $activePanelItem.siblings()
-            .removeClass(activePanelItemClass)
-            .addClass(inactivePanelItemClass)
-            .attr('aria-hidden', 'true');
-    }
+        return SaveLoad;
+    }());
 
     var SwitchDirection;
     (function (SwitchDirection) {
         SwitchDirection[SwitchDirection["Backward"] = 0] = "Backward";
         SwitchDirection[SwitchDirection["Forward"] = 1] = "Forward";
     })(SwitchDirection || (SwitchDirection = {}));
-    function generateSwitch(fnPositionToIndex, fnParsePosition, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, containers, context, options) {
-        var switchToWithoutSave = function (newPosition) {
-            var _a = fnParsePosition(newPosition), newIndex = _a.index, newName = _a.name;
+    var Switcher = /** @class */ (function () {
+        function Switcher(getter, domUpdater, saveLoad, containers, context, options) {
+            this.getter = getter;
+            this.domUpdater = domUpdater;
+            this.saveLoad = saveLoad;
+            this.containers = containers;
+            this.context = context;
+            this.options = options;
+        }
+        Switcher.prototype.switchToWithoutSave = function (newPosition) {
+            var _a = this, context = _a.context, getter = _a.getter;
+            var _b = getter.normalizePosition(newPosition), newIndex = _b.index, newName = _b.name;
             if (newIndex < 0 || newIndex >= context.itemCount || newIndex === context.currentIndex) {
                 return;
             }
-            var $tabContainer = containers.$tabContainer;
+            var _c = this, domUpdater = _c.domUpdater, options = _c.options;
+            var $tabContainer = this.containers.$tabContainer;
             var oldIndex = context.currentIndex, oldName = context.currentName;
-            var onBeforeSwitch = options.onBeforeSwitch, onAfterSwitch = options.onAfterSwitch;
+            var _d = this.options, onBeforeSwitch = _d.onBeforeSwitch, onAfterSwitch = _d.onAfterSwitch;
             //before switching callback
             if (typeof (onBeforeSwitch) === 'function') {
                 onBeforeSwitch.call($tabContainer, { index: oldIndex, name: oldName }, { index: newIndex, name: newName });
             }
             //update state
-            var $newLabel = fnGetHeaderFooterLabels(newIndex);
-            var $newPanel = fnGetPanel(newIndex);
-            updateActiveState($newLabel, $newPanel, options);
+            domUpdater.updateActiveState(newIndex);
             //finalize
             context.currentIndex = newIndex;
             context.currentName = newName;
@@ -459,24 +516,26 @@
             }
             return { index: newIndex, name: newName };
         };
-        var switchTo = function (newPosition) {
-            var result = switchToWithoutSave(newPosition);
+        Switcher.prototype.switchTo = function (newPosition) {
+            var result = this.switchToWithoutSave(newPosition);
             if (result) {
+                var saveLoad = this.saveLoad;
                 var index = result.index, name_1 = result.name;
-                fnSavePosition(name_1 || index);
+                saveLoad.savePosition(name_1 || index);
             }
             return result;
         };
-        var _switchNeighbor = function (direction, switchOptions) {
+        Switcher.prototype._switchNeighbor = function (direction, switchOptions) {
+            var getter = this.getter;
             var opts = switchOptions || {};
             var includeDisabled = opts.includeDisabled, includeHidden = opts.includeHidden, loop = opts.loop, exclude = opts.exclude;
             var excludeIndecies = exclude && exclude.length ? $.map(exclude, function (position) {
-                return fnPositionToIndex(position);
+                return getter.positionToIndex(position);
             }) : [];
-            var $panelContainer = containers.$panelContainer;
+            var $panelContainer = this.containers.$panelContainer;
             var $panelItems = $panelContainer.children();
-            var itemCount = context.itemCount, currentIndex = context.currentIndex;
-            var disabledPanelItemClass = options.disabledPanelItemClass, hiddenPanelItemClass = options.hiddenPanelItemClass;
+            var _a = this.context, itemCount = _a.itemCount, currentIndex = _a.currentIndex;
+            var _b = this.options, disabledPanelItemClass = _b.disabledPanelItemClass, hiddenPanelItemClass = _b.hiddenPanelItemClass;
             var maxIterationCount = -1;
             if (loop) {
                 if (currentIndex >= 0 && currentIndex < itemCount) {
@@ -505,18 +564,18 @@
                     (includeDisabled && !panelIsHidden) ||
                     (!panelIsDisabled && includeHidden) ||
                     (includeDisabled && includeHidden)) {
-                    return switchTo(panelIndex);
+                    return this.switchTo(panelIndex);
                 }
             }
         };
-        var switchPrevious = function (switchOptions) {
-            return _switchNeighbor(SwitchDirection.Backward, switchOptions);
+        Switcher.prototype.switchPrevious = function (switchOptions) {
+            return this._switchNeighbor(SwitchDirection.Backward, switchOptions);
         };
-        var switchNext = function (switchOptions) {
-            return _switchNeighbor(SwitchDirection.Forward, switchOptions);
+        Switcher.prototype.switchNext = function (switchOptions) {
+            return this._switchNeighbor(SwitchDirection.Forward, switchOptions);
         };
-        return { switchToWithoutSave: switchToWithoutSave, switchTo: switchTo, switchPrevious: switchPrevious, switchNext: switchNext };
-    }
+        return Switcher;
+    }());
 
     function createLabelItem(tabItem, options) {
         var $labelItem = $(options.labelItemTemplate)
@@ -572,16 +631,26 @@
         return { $labelItem: $labelItem, $labelItemLeaf: $labelItemLeaf, $panelItem: $panelItem, $panelItemLeaf: $panelItemLeaf, cloneLabelItem: cloneLabelItem };
     }
 
-    function generateAddRemove(fnPositionToIndex, fnGetHeaderFooterLabels, fnGetPanel, fnSavePosition, fnSwitchTo, fnSwitchPrevious, fnSwitchNext, containers, context, options) {
-        var _switchIfInitial = function () {
+    var AddRemove = /** @class */ (function () {
+        function AddRemove(getter, saveLoad, switcher, containers, context, options) {
+            this.getter = getter;
+            this.saveLoad = saveLoad;
+            this.switcher = switcher;
+            this.containers = containers;
+            this.context = context;
+            this.options = options;
+        }
+        AddRemove.prototype._switchIfInitial = function () {
+            var _a = this, switcher = _a.switcher, context = _a.context;
             if (context.currentIndex === -1 && context.itemCount) {
-                fnSwitchTo(0);
+                switcher.switchTo(0);
             }
         };
-        var insertTabItemWithoutSwitch = function (position, tabItem) {
+        AddRemove.prototype.insertTabItemWithoutSwitch = function (position, tabItem) {
+            var _a = this, getter = _a.getter, saveLoad = _a.saveLoad, containers = _a.containers, context = _a.context, options = _a.options;
             var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf, $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf, $panelContainerLeaf = containers.$panelContainerLeaf;
-            var _a = createTabItem(tabItem, context, options), $panelItem = _a.$panelItem, cloneLabelItem = _a.cloneLabelItem;
-            var index = fnPositionToIndex(position);
+            var _b = createTabItem(tabItem, context, options), $panelItem = _b.$panelItem, cloneLabelItem = _b.cloneLabelItem;
+            var index = getter.positionToIndex(position);
             if (index < 0) {
                 index = 0;
             }
@@ -596,7 +665,7 @@
                 if (index <= context.currentIndex) {
                     context.currentIndex++;
                     if (!context.currentName) {
-                        fnSavePosition(context.currentIndex);
+                        saveLoad.savePosition(context.currentIndex);
                     }
                 }
             }
@@ -611,22 +680,23 @@
             }
             context.itemCount++;
         };
-        var insertTabItem = function (position, tabItem) {
-            insertTabItemWithoutSwitch(position, tabItem);
-            _switchIfInitial();
+        AddRemove.prototype.insertTabItem = function (position, tabItem) {
+            this.insertTabItemWithoutSwitch(position, tabItem);
+            this._switchIfInitial();
         };
-        var addTabItemWithoutSwitch = function (tabItem) {
-            insertTabItemWithoutSwitch(context.itemCount, tabItem);
+        AddRemove.prototype.addTabItemWithoutSwitch = function (tabItem) {
+            this.insertTabItemWithoutSwitch(this.context.itemCount, tabItem);
         };
-        var addTabItem = function (tabItem) {
-            addTabItemWithoutSwitch(tabItem);
-            _switchIfInitial();
+        AddRemove.prototype.addTabItem = function (tabItem) {
+            this.addTabItemWithoutSwitch(tabItem);
+            this._switchIfInitial();
         };
-        var insertWithoutSwitch = function (position, sourceRegion) {
-            var titleSelector = options.titleSelector, fnGetTitleContent = options.fnGetTitleContent, keepTitleVisible = options.keepTitleVisible, fnGetTabItemName = options.fnGetTabItemName, fnIsTabItemDisabled = options.fnIsTabItemDisabled, fnIsTabItemHidden = options.fnIsTabItemHidden;
+        AddRemove.prototype.insertWithoutSwitch = function (position, sourceRegion) {
+            var getter = this.getter;
+            var _a = this.options, titleSelector = _a.titleSelector, fnGetTitleContent = _a.fnGetTitleContent, keepTitleVisible = _a.keepTitleVisible, fnGetTabItemName = _a.fnGetTabItemName, fnIsTabItemDisabled = _a.fnIsTabItemDisabled, fnIsTabItemHidden = _a.fnIsTabItemHidden;
             var $sourceRegion = $(sourceRegion);
             var inserted = 0;
-            var index = fnPositionToIndex(position);
+            var index = getter.positionToIndex(position);
             while (true) {
                 var $title = $sourceRegion.find(titleSelector).first();
                 if ($title.length === 0) {
@@ -643,32 +713,29 @@
                     disabled: fnIsTabItemDisabled.call($sourceRegion, $title, $rest),
                     hidden: fnIsTabItemHidden.call($sourceRegion, $title, $rest)
                 };
-                insertTabItemWithoutSwitch(index + inserted, tabItem);
+                this.insertTabItemWithoutSwitch(index + inserted, tabItem);
                 inserted++;
             }
         };
-        var insert = function (sourceRegion, position) {
-            insertWithoutSwitch(position, sourceRegion);
-            _switchIfInitial();
+        AddRemove.prototype.insert = function (sourceRegion, position) {
+            this.insertWithoutSwitch(position, sourceRegion);
+            this._switchIfInitial();
         };
-        var addWithoutSwitch = function (sourceRegion) {
-            insertWithoutSwitch(context.itemCount, sourceRegion);
+        AddRemove.prototype.addWithoutSwitch = function (sourceRegion) {
+            this.insertWithoutSwitch(this.context.itemCount, sourceRegion);
         };
-        var add = function (sourceRegion) {
-            addWithoutSwitch(sourceRegion);
-            _switchIfInitial();
+        AddRemove.prototype.add = function (sourceRegion) {
+            this.addWithoutSwitch(sourceRegion);
+            this._switchIfInitial();
         };
-        var remove = function () {
-            var positions = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                positions[_i] = arguments[_i];
-            }
+        AddRemove.prototype.remove = function (positions) {
             if (!positions.length) {
                 return;
             }
+            var _a = this, getter = _a.getter, saveLoad = _a.saveLoad, switcher = _a.switcher, context = _a.context;
             var removeIndecies = [];
             for (var i = 0, len = positions.length; i < len; i++) {
-                var removeIndex = fnPositionToIndex(positions[i]);
+                var removeIndex = getter.positionToIndex(positions[i]);
                 if (removeIndex >= 0 && removeIndex < context.itemCount && $.inArray(removeIndex, removeIndecies) === -1) {
                     removeIndecies.push(removeIndex);
                 }
@@ -680,20 +747,20 @@
                 return next - prev;
             });
             if (context.itemCount > 1 && $.inArray(context.currentIndex, removeIndecies) >= 0) {
-                fnSwitchNext({ exclude: removeIndecies }) ||
-                    fnSwitchPrevious({ exclude: removeIndecies }) ||
-                    fnSwitchNext({ includeDisabled: true, exclude: removeIndecies }) ||
-                    fnSwitchPrevious({ includeDisabled: true, exclude: removeIndecies }) ||
-                    fnSwitchNext({ includeHidden: true, exclude: removeIndecies }) ||
-                    fnSwitchPrevious({ includeHidden: true, exclude: removeIndecies }) ||
-                    fnSwitchNext({ includeDisabled: true, includeHidden: true, exclude: removeIndecies }) ||
-                    fnSwitchPrevious({ includeDisabled: true, includeHidden: true, exclude: removeIndecies });
+                switcher.switchNext({ exclude: removeIndecies }) ||
+                    switcher.switchPrevious({ exclude: removeIndecies }) ||
+                    switcher.switchNext({ includeDisabled: true, exclude: removeIndecies }) ||
+                    switcher.switchPrevious({ includeDisabled: true, exclude: removeIndecies }) ||
+                    switcher.switchNext({ includeHidden: true, exclude: removeIndecies }) ||
+                    switcher.switchPrevious({ includeHidden: true, exclude: removeIndecies }) ||
+                    switcher.switchNext({ includeDisabled: true, includeHidden: true, exclude: removeIndecies }) ||
+                    switcher.switchPrevious({ includeDisabled: true, includeHidden: true, exclude: removeIndecies });
             }
             var currentIndexChanged = false;
             for (var i = 0, len = removeIndecies.length; i < len; i++) {
                 var removeIndex = removeIndecies[i];
-                var $labelItems = fnGetHeaderFooterLabels(removeIndex);
-                var $panelItem = fnGetPanel(removeIndex);
+                var $labelItems = getter.getHeaderFooterLabels(removeIndex);
+                var $panelItem = getter.getPanel(removeIndex);
                 $labelItems.remove();
                 $panelItem.remove();
                 if (removeIndex < context.currentIndex) {
@@ -707,55 +774,160 @@
                 context.currentName = undefined;
             }
             else if (currentIndexChanged && !context.currentName) {
-                fnSavePosition(context.currentIndex);
+                saveLoad.savePosition(context.currentIndex);
             }
             return removeIndecies.length;
         };
-        return {
-            insertTabItemWithoutSwitch: insertTabItemWithoutSwitch,
-            insertTabItem: insertTabItem,
-            addTabItemWithoutSwitch: addTabItemWithoutSwitch,
+        return AddRemove;
+    }());
+
+    function generateController(getter, domUpdater, tabItemSetter, switcher, addRemove) {
+        //getter
+        var getCount = function () {
+            return getter.getCount();
+        };
+        var getCurrentIndex = function () {
+            return getter.getCurrentIndex();
+        };
+        var getCurrentName = function () {
+            return getter.getCurrentName();
+        };
+        var getName = function (index) {
+            return getter.getName(index);
+        };
+        var getIndexByName = function (name) {
+            return getter.getIndexByName(name);
+        };
+        var isDisabled = function (position) {
+            return getter.isDisabled(position);
+        };
+        var isEnabled = function (position) {
+            return getter.isEnabled(position);
+        };
+        var isHidden = function (position) {
+            return getter.isHidden(position);
+        };
+        var isVisible = function (position) {
+            return getter.isVisible(position);
+        };
+        var getHeaderLabel = function (position) {
+            return getter.getHeaderLabel(position);
+        };
+        var getFooterLabel = function (position) {
+            return getter.getFooterLabel(position);
+        };
+        var getHeaderFooterLabels = function (position) {
+            return getter.getHeaderFooterLabels(position);
+        };
+        var getPanel = function (position) {
+            return getter.getPanel(position);
+        };
+        var getCurrentHeaderLabel = function () {
+            return getter.getCurrentHeaderLabel();
+        };
+        var getCurrentFooterLabel = function () {
+            return getter.getCurrentFooterLabel();
+        };
+        var getCurrentHeaderFooterLabels = function () {
+            return getter.getCurrentHeaderFooterLabels();
+        };
+        var getCurrentPanel = function () {
+            return getter.getCurrentPanel();
+        };
+        var setName = function (position, name) {
+            return tabItemSetter.setName(position, name);
+        };
+        var setDisabled = function (position, disabled) {
+            if (disabled === void 0) { disabled = true; }
+            return tabItemSetter.setDisabled(position, disabled);
+        };
+        var setEnabled = function (position, enabled) {
+            if (enabled === void 0) { enabled = true; }
+            return tabItemSetter.setEnabled(position, enabled);
+        };
+        var setHidden = function (position, hidden) {
+            if (hidden === void 0) { hidden = true; }
+            return tabItemSetter.setHidden(position, hidden);
+        };
+        var setVisible = function (position, visible) {
+            if (visible === void 0) { visible = true; }
+            return tabItemSetter.setVisible(position, visible);
+        };
+        //dom updater
+        var updateFixedHeight = function () {
+            return domUpdater.updateFixedHeight();
+        };
+        //switcher
+        var switchTo = function (newPosition) {
+            return switcher.switchTo(newPosition);
+        };
+        var switchPrevious = function (switchOptions) {
+            return switcher.switchPrevious(switchOptions);
+        };
+        var switchNext = function (switchOptions) {
+            return switcher.switchNext(switchOptions);
+        };
+        //add remove
+        var insertTabItem = function (position, tabItem) {
+            return addRemove.insertTabItem(position, tabItem);
+        };
+        var addTabItem = function (tabItem) {
+            return addRemove.addTabItem(tabItem);
+        };
+        var insert = function (sourceRegion, position) {
+            return addRemove.insert(sourceRegion, position);
+        };
+        var add = function (sourceRegion) {
+            return addRemove.add(sourceRegion);
+        };
+        var remove = function () {
+            var positions = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                positions[_i] = arguments[_i];
+            }
+            return addRemove.remove(positions);
+        };
+        var controller = {
+            getCount: getCount,
+            getCurrentIndex: getCurrentIndex,
+            getCurrentName: getCurrentName,
+            getName: getName,
+            getIndexByName: getIndexByName,
+            isDisabled: isDisabled, isEnabled: isEnabled, isHidden: isHidden, isVisible: isVisible,
+            getHeaderLabel: getHeaderLabel, getFooterLabel: getFooterLabel, getHeaderFooterLabels: getHeaderFooterLabels,
+            getPanel: getPanel,
+            getCurrentHeaderLabel: getCurrentHeaderLabel, getCurrentFooterLabel: getCurrentFooterLabel, getCurrentHeaderFooterLabels: getCurrentHeaderFooterLabels,
+            getCurrentPanel: getCurrentPanel,
+            setName: setName, setDisabled: setDisabled, setEnabled: setEnabled, setHidden: setHidden, setVisible: setVisible,
+            updateFixedHeight: updateFixedHeight,
+            switchTo: switchTo, switchPrevious: switchPrevious, switchNext: switchNext,
             addTabItem: addTabItem,
-            insert: insert,
-            insertWithoutSwitch: insertWithoutSwitch,
+            insertTabItem: insertTabItem,
             add: add,
-            addWithoutSwitch: addWithoutSwitch,
+            insert: insert,
             remove: remove
         };
+        return controller;
     }
 
-    function generateUpdateFixedHeight(containers, options) {
-        return function updateFixedHeader() {
-            if (!options.fixedHeight) {
-                return;
-            }
-            var maxHeight = 0;
-            containers.$panelContainerLeaf.children().each(function (index, panelItem) {
-                var panelHeight = panelItem.scrollHeight;
-                if (panelHeight > maxHeight) {
-                    maxHeight = panelHeight;
-                }
-            }).height(maxHeight);
-        };
-    }
-
-    function handleHashChangeEvent(fnParseHashPosition, fnSwitchTo, options) {
+    var EVENT_HASH_CHANGE = 'hashchange';
+    function handleHashChangeEvent(saveLoad, switcher, options) {
         if (options.statusHashTemplate && window) {
-            $(window).on('hashchange', function () {
-                var position = fnParseHashPosition();
-                fnSwitchTo(position);
+            $(window).on(EVENT_HASH_CHANGE, function () {
+                var position = saveLoad.parseHashPosition();
+                switcher.switchTo(position);
             });
         }
     }
 
-    function hahdleClickEvent(fnSwitchTo, containers, context, options) {
+    function hahdleClickEvent(switcher, containers, context, options) {
         var triggerEvents = options.triggerEvents, delayTriggerEvents = options.delayTriggerEvents, delayTriggerCancelEvents = options.delayTriggerCancelEvents, delayTriggerLatency = options.delayTriggerLatency, disabledLabelItemClass = options.disabledLabelItemClass, hiddenLabelItemClass = options.hiddenLabelItemClass;
         var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf, $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf;
         //handle delay trigger event
         var delayTriggerTimeoutHandler;
         var startDelayTrigger = function (position) {
             delayTriggerTimeoutHandler = setTimeout(function () {
-                fnSwitchTo(position);
+                switcher.switchTo(position);
                 delayTriggerTimeoutHandler = undefined;
             }, delayTriggerLatency);
         };
@@ -819,7 +991,7 @@
                 $label.hasClass(hiddenLabelItemClass)) {
                 return;
             }
-            fnSwitchTo(labelIndex);
+            switcher.switchTo(labelIndex);
         };
         if (triggerEvents) {
             if ($headerLabelContainerLeaf) {
@@ -844,53 +1016,36 @@
         var containers = $.extend({ $region: $region }, createTabContainer(options));
         var $tabContainer = containers.$tabContainer;
         //getters
-        var _a = generateGetters(containers, context, options), getCount = _a.getCount, getCurrentIndex = _a.getCurrentIndex, getCurrentName = _a.getCurrentName, getName = _a.getName, getIndexByName = _a.getIndexByName, positionToIndex = _a.positionToIndex, parsePosition = _a.parsePosition, isDisabled = _a.isDisabled, isEnabled = _a.isEnabled, isHidden = _a.isHidden, isVisible = _a.isVisible, getHeaderLabel = _a.getHeaderLabel, getFooterLabel = _a.getFooterLabel, getHeaderFooterLabels = _a.getHeaderFooterLabels, getPanel = _a.getPanel, getCurrentHeaderLabel = _a.getCurrentHeaderLabel, getCurrentFooterLabel = _a.getCurrentFooterLabel, getCurrentHeaderFooterLabels = _a.getCurrentHeaderFooterLabels, getCurrentPanel = _a.getCurrentPanel;
+        var getter = new Getter(containers, context, options);
+        //dom updater
+        var domUpdater = new DomUpdater(getter, containers, options);
         //tab item setter
-        var _b = generateTabItemSetter(positionToIndex, getHeaderFooterLabels, getPanel, options), setName = _b.setName, setDisabled = _b.setDisabled, setEnabled = _b.setEnabled, setHidden = _b.setHidden, setVisible = _b.setVisible;
+        var tabItemSetter = new TabItemSetter(getter, options);
         //save/load
-        var _c = generateSaveLoadIndex(containers, options), savePosition = _c.savePosition, loadPosition = _c.loadPosition, parseHashPosition = _c.parseHashPosition;
-        //methods
-        var _d = generateSwitch(positionToIndex, parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options), switchToWithoutSave = _d.switchToWithoutSave, switchTo = _d.switchTo, switchPrevious = _d.switchPrevious, switchNext = _d.switchNext;
-        var _e = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, switchPrevious, switchNext, containers, context, options), addTabItem = _e.addTabItem, insertTabItem = _e.insertTabItem, add = _e.add, addWithoutSwitch = _e.addWithoutSwitch, insert = _e.insert, remove = _e.remove;
-        addWithoutSwitch($region);
+        var saveLoad = new SaveLoad(containers, options);
+        //switcher
+        var switcher = new Switcher(getter, domUpdater, saveLoad, containers, context, options);
+        //add remove
+        var addRemove = new AddRemove(getter, saveLoad, switcher, containers, context, options);
+        //controller
+        var controller = generateController(getter, domUpdater, tabItemSetter, switcher, addRemove);
+        //init
+        addRemove.addWithoutSwitch($region);
         //replace original content
         if (!context.itemCount && !options.createEmptyTab) {
             return;
         }
         $region.append($tabContainer);
-        //check if param:fixed height
-        var updateFixedHeight = generateUpdateFixedHeight(containers, options);
-        updateFixedHeight();
+        domUpdater.updateFixedHeight();
         //show active panel
         if (context.itemCount > 0) {
-            switchToWithoutSave(loadPosition());
+            switcher.switchToWithoutSave(saveLoad.loadPosition());
             if (context.currentIndex === -1) {
-                switchToWithoutSave(0);
+                switcher.switchToWithoutSave(0);
             }
         }
-        handleHashChangeEvent(parseHashPosition, switchTo, options);
-        hahdleClickEvent(switchTo, containers, context, options);
-        //controller
-        var controller = {
-            getCount: getCount,
-            getCurrentIndex: getCurrentIndex,
-            getCurrentName: getCurrentName,
-            getName: getName,
-            getIndexByName: getIndexByName,
-            isDisabled: isDisabled, isEnabled: isEnabled, isHidden: isHidden, isVisible: isVisible,
-            getHeaderLabel: getHeaderLabel, getFooterLabel: getFooterLabel, getHeaderFooterLabels: getHeaderFooterLabels,
-            getPanel: getPanel,
-            getCurrentHeaderLabel: getCurrentHeaderLabel, getCurrentFooterLabel: getCurrentFooterLabel, getCurrentHeaderFooterLabels: getCurrentHeaderFooterLabels,
-            getCurrentPanel: getCurrentPanel,
-            setName: setName, setDisabled: setDisabled, setEnabled: setEnabled, setHidden: setHidden, setVisible: setVisible,
-            updateFixedHeight: updateFixedHeight,
-            switchTo: switchTo, switchPrevious: switchPrevious, switchNext: switchNext,
-            addTabItem: addTabItem,
-            insertTabItem: insertTabItem,
-            add: add,
-            insert: insert,
-            remove: remove
-        };
+        handleHashChangeEvent(saveLoad, switcher, options);
+        hahdleClickEvent(switcher, containers, context, options);
         $region.data('tab-controller', controller);
         $tabContainer.data('tab-controller', controller);
     }

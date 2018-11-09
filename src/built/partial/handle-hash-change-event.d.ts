@@ -1,2 +1,4 @@
-declare function handleHashChangeEvent(fnParseHashPosition: JQueryTab.fnParseHashPosition, fnSwitchTo: JQueryTab.fnSwitchTo, options: JQueryTab.ExpandedOptions): void;
+import SaveLoad from "./save-load";
+import Switcher from "./switcher";
+declare function handleHashChangeEvent(saveLoad: SaveLoad, switcher: Switcher, options: JQueryTab.ExpandedOptions): void;
 export default handleHashChangeEvent;

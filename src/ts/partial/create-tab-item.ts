@@ -53,7 +53,7 @@ function createTabItem(
 	$panelItem.attr('id', panelItemId).attr('aria-labelledby', labelItemId);
 
 
-	return {$labelItem, $labelItemLeaf, $panelItem: $panelItem, $panelItemLeaf: $panelItemLeaf, cloneLabelItem};
+	return {$labelItem, $labelItemLeaf, $panelItem, $panelItemLeaf, cloneLabelItem};
 }
 
 export default createTabItem;

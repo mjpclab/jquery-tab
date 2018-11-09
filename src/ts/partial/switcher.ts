@@ -1,26 +1,48 @@
-import $ from 'jquery';
-import updateActiveState from "./update-active-state";
+import $ from "jquery";
+import Getter from './getter';
+import DomUpdater from './dom-updater';
+import SaveLoad from './save-load';
 
 enum SwitchDirection { Backward, Forward}
 
-function generateSwitch(
-	fnPositionToIndex: JQueryTab.fnPositionToIndex,
-	fnParsePosition: JQueryTab.fnParsePosition,
-	fnGetHeaderFooterLabels: JQueryTab.fnGetLabel,
-	fnGetPanel: JQueryTab.fnGetPanel,
-	fnSavePosition: JQueryTab.fnSavePosition,
-	containers: JQueryTab.Containers,
-	context: JQueryTab.Context,
-	options: JQueryTab.ExpandedOptions
-) {
-	const switchToWithoutSave = function (newPosition: JQueryTab.TabItemPosition) {
-		const {index: newIndex, name: newName} = fnParsePosition(newPosition);
+class Switcher {
+	private readonly getter: Getter;
+	private readonly domUpdater: DomUpdater;
+	private readonly saveLoad: SaveLoad;
+
+	private readonly containers: JQueryTab.Containers;
+	private readonly context: JQueryTab.Context;
+	private readonly options: JQueryTab.ExpandedOptions;
+
+	constructor(
+		getter: Getter,
+		domUpdater: DomUpdater,
+		saveLoad: SaveLoad,
+		containers: JQueryTab.Containers,
+		context: JQueryTab.Context,
+		options: JQueryTab.ExpandedOptions
+	) {
+		this.getter = getter;
+		this.domUpdater = domUpdater;
+		this.saveLoad = saveLoad;
+
+		this.containers = containers;
+		this.context = context;
+		this.options = options;
+	}
+
+	switchToWithoutSave(newPosition: JQueryTab.TabItemPosition) {
+		const {context, getter} = this;
+
+		const {index: newIndex, name: newName} = getter.normalizePosition(newPosition);
 		if (newIndex < 0 || newIndex >= context.itemCount || newIndex === context.currentIndex) {
 			return;
 		}
-		const {$tabContainer} = containers;
+
+		const {domUpdater, options} = this;
+		const {$tabContainer} = this.containers;
 		const {currentIndex: oldIndex, currentName: oldName} = context;
-		const {onBeforeSwitch, onAfterSwitch} = options;
+		const {onBeforeSwitch, onAfterSwitch} = this.options;
 
 		//before switching callback
 		if (typeof (onBeforeSwitch) === 'function') {
@@ -32,9 +54,7 @@ function generateSwitch(
 		}
 
 		//update state
-		const $newLabel = fnGetHeaderFooterLabels(newIndex);
-		const $newPanel = fnGetPanel(newIndex);
-		updateActiveState($newLabel, $newPanel, options);
+		domUpdater.updateActiveState(newIndex);
 
 		//finalize
 		context.currentIndex = newIndex;
@@ -50,31 +70,34 @@ function generateSwitch(
 		}
 
 		return {index: newIndex, name: newName};
-	};
-	const switchTo = function (newPosition: JQueryTab.TabItemPosition) {
-		const result = switchToWithoutSave(newPosition);
+	}
+
+	switchTo(newPosition: JQueryTab.TabItemPosition) {
+		const result = this.switchToWithoutSave(newPosition);
 		if (result) {
+			const {saveLoad} = this;
 			const {index, name} = result;
-			fnSavePosition(name || index);
+			saveLoad.savePosition(name || index);
 		}
 		return result;
-	};
+	}
 
-	const _switchNeighbor = function (
+	private _switchNeighbor(
 		direction: SwitchDirection,
 		switchOptions?: JQueryTab.SwitchOptions
 	) {
+		const {getter} = this;
 		const opts = switchOptions || {};
 		const {includeDisabled, includeHidden, loop, exclude} = opts;
 		const excludeIndecies = exclude && exclude.length ? $.map(exclude, function (position) {
-			return fnPositionToIndex(position);
+			return getter.positionToIndex(position);
 		}) : [];
 
-		const {$panelContainer} = containers;
+		const {$panelContainer} = this.containers;
 		const $panelItems = $panelContainer.children();
 
-		const {itemCount, currentIndex} = context;
-		const {disabledPanelItemClass, hiddenPanelItemClass} = options;
+		const {itemCount, currentIndex} = this.context;
+		const {disabledPanelItemClass, hiddenPanelItemClass} = this.options;
 
 		let maxIterationCount = -1;
 		if (loop) {
@@ -108,20 +131,19 @@ function generateSwitch(
 				(!panelIsDisabled && includeHidden) ||
 				(includeDisabled && includeHidden)
 			) {
-				return switchTo(panelIndex);
+				return this.switchTo(panelIndex);
 			}
 		}
-	};
+	}
 
-	const switchPrevious = function (switchOptions?: JQueryTab.SwitchOptions) {
-		return _switchNeighbor(SwitchDirection.Backward, switchOptions);
-	};
+	switchPrevious(switchOptions?: JQueryTab.SwitchOptions) {
+		return this._switchNeighbor(SwitchDirection.Backward, switchOptions);
+	}
 
-	const switchNext = function (switchOptions?: JQueryTab.SwitchOptions) {
-		return _switchNeighbor(SwitchDirection.Forward, switchOptions);
-	};
+	switchNext(switchOptions?: JQueryTab.SwitchOptions) {
+		return this._switchNeighbor(SwitchDirection.Forward, switchOptions);
+	}
 
-	return {switchToWithoutSave, switchTo, switchPrevious, switchNext};
 }
 
-export default generateSwitch;
+export default Switcher;

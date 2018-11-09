@@ -2,12 +2,13 @@ import $ from "jquery";
 import defaultOptions from "../utility/default-options";
 import getExpandedOptions from '../utility/get-expanded-options';
 import createTabContainer from './create-tab-container';
-import generateGetters from './generate-getters';
-import generateTabItemSetter from './generate-tab-item-setter';
-import generateSaveLoadIndex from './generate-save-load-index';
-import genetateSwitch from './generate-switch';
-import generateAddRemove from './generate-add-remove';
-import generateUpdateFixedHeight from './update-fixed-height';
+import Getter from './getter';
+import DomUpdater from './dom-updater';
+import TabItemSetter from './tab-item-setter';
+import SaveLoad from './save-load';
+import Switcher from './switcher';
+import AddRemove from './add-remove';
+import generateController from './generate-controller';
 import handleHashChangeEvent from './handle-hash-change-event';
 import handleClickEvent from './handle-click-event';
 
@@ -28,82 +29,46 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	const {$tabContainer} = containers;
 
 	//getters
-	const {
-		getCount,
-		getCurrentIndex,
-		getCurrentName,
-		getName,
-		getIndexByName,
-		positionToIndex,
-		parsePosition,
-		isDisabled, isEnabled, isHidden, isVisible,
-		getHeaderLabel, getFooterLabel, getHeaderFooterLabels,
-		getPanel,
-		getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels,
-		getCurrentPanel
-	} = generateGetters(containers, context, options);
+	const getter = new Getter(containers, context, options);
+
+	//dom updater
+	const domUpdater = new DomUpdater(getter, containers, options);
 
 	//tab item setter
-	const {setName, setDisabled, setEnabled, setHidden, setVisible} = generateTabItemSetter(positionToIndex, getHeaderFooterLabels, getPanel, options);
+	const tabItemSetter = new TabItemSetter(getter, options);
 
 	//save/load
-	const {savePosition, loadPosition, parseHashPosition} = generateSaveLoadIndex(containers, options);
+	const saveLoad = new SaveLoad(containers, options);
 
-	//methods
-	const {switchToWithoutSave, switchTo, switchPrevious, switchNext} = genetateSwitch(positionToIndex, parsePosition, getHeaderFooterLabels, getPanel, savePosition, containers, context, options);
+	//switcher
+	const switcher = new Switcher(getter, domUpdater, saveLoad, containers, context, options);
 
-	const {
-		addTabItem,
-		insertTabItem,
-		add,
-		addWithoutSwitch,
-		insert,
-		remove,
-	} = generateAddRemove(positionToIndex, getHeaderFooterLabels, getPanel, savePosition, switchTo, switchPrevious, switchNext, containers, context, options);
+	//add remove
+	const addRemove = new AddRemove(getter, saveLoad, switcher, containers, context, options);
 
-	addWithoutSwitch($region);
+	//controller
+	const controller = generateController(getter, domUpdater, tabItemSetter, switcher, addRemove);
+
+	//init
+	addRemove.addWithoutSwitch($region);
 
 	//replace original content
 	if (!context.itemCount && !options.createEmptyTab) {
 		return;
 	}
 	$region.append($tabContainer);
-
-	//check if param:fixed height
-	const updateFixedHeight = generateUpdateFixedHeight(containers, options);
-	updateFixedHeight();
+	domUpdater.updateFixedHeight();
 
 	//show active panel
 	if (context.itemCount > 0) {
-		switchToWithoutSave(loadPosition());
+		switcher.switchToWithoutSave(saveLoad.loadPosition());
 		if (context.currentIndex === -1) {
-			switchToWithoutSave(0);
+			switcher.switchToWithoutSave(0);
 		}
 	}
-	handleHashChangeEvent(parseHashPosition, switchTo, options);
-	handleClickEvent(switchTo, containers, context, options);
+	handleHashChangeEvent(saveLoad, switcher, options);
+	handleClickEvent(switcher, containers, context, options);
 
-	//controller
-	const controller = {
-		getCount,
-		getCurrentIndex,
-		getCurrentName,
-		getName,
-		getIndexByName,
-		isDisabled, isEnabled, isHidden, isVisible,
-		getHeaderLabel, getFooterLabel, getHeaderFooterLabels,
-		getPanel,
-		getCurrentHeaderLabel, getCurrentFooterLabel, getCurrentHeaderFooterLabels,
-		getCurrentPanel,
-		setName, setDisabled, setEnabled, setHidden, setVisible,
-		updateFixedHeight,
-		switchTo, switchPrevious, switchNext,
-		addTabItem,
-		insertTabItem,
-		add,
-		insert,
-		remove
-	};
 	$region.data('tab-controller', controller);
 	$tabContainer.data('tab-controller', controller);
 }

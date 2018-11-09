@@ -1,12 +1,12 @@
 import $ from "jquery";
-function hahdleClickEvent(fnSwitchTo, containers, context, options) {
+function hahdleClickEvent(switcher, containers, context, options) {
     var triggerEvents = options.triggerEvents, delayTriggerEvents = options.delayTriggerEvents, delayTriggerCancelEvents = options.delayTriggerCancelEvents, delayTriggerLatency = options.delayTriggerLatency, disabledLabelItemClass = options.disabledLabelItemClass, hiddenLabelItemClass = options.hiddenLabelItemClass;
     var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf, $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf;
     //handle delay trigger event
     var delayTriggerTimeoutHandler;
     var startDelayTrigger = function (position) {
         delayTriggerTimeoutHandler = setTimeout(function () {
-            fnSwitchTo(position);
+            switcher.switchTo(position);
             delayTriggerTimeoutHandler = undefined;
         }, delayTriggerLatency);
     };
@@ -70,7 +70,7 @@ function hahdleClickEvent(fnSwitchTo, containers, context, options) {
             $label.hasClass(hiddenLabelItemClass)) {
             return;
         }
-        fnSwitchTo(labelIndex);
+        switcher.switchTo(labelIndex);
     };
     if (triggerEvents) {
         if ($headerLabelContainerLeaf) {

@@ -1,33 +1,52 @@
 import $ from "jquery";
+import Getter from "./getter";
+import SaveLoad from "./save-load";
+import Switcher from './switcher';
 import createTabItem from "./create-tab-item";
 
-function generateAddRemove(
-	fnPositionToIndex: JQueryTab.fnPositionToIndex,
-	fnGetHeaderFooterLabels: JQueryTab.fnGetLabel,
-	fnGetPanel: JQueryTab.fnGetPanel,
-	fnSavePosition: JQueryTab.fnSavePosition,
-	fnSwitchTo: JQueryTab.fnSwitchTo,
-	fnSwitchPrevious: JQueryTab.fnSwitchNeighbor,
-	fnSwitchNext: JQueryTab.fnSwitchNeighbor,
-	containers: JQueryTab.Containers,
-	context: JQueryTab.Context,
-	options: JQueryTab.ExpandedOptions
-) {
-	const _switchIfInitial = function () {
+class AddRemove {
+	private readonly getter: Getter;
+	private readonly saveLoad: SaveLoad;
+	private readonly switcher: Switcher;
+
+	private readonly containers: JQueryTab.Containers;
+	private readonly context: JQueryTab.Context;
+	private readonly options: JQueryTab.ExpandedOptions;
+
+	constructor(
+		getter: Getter,
+		saveLoad: SaveLoad,
+		switcher: Switcher,
+		containers: JQueryTab.Containers,
+		context: JQueryTab.Context,
+		options: JQueryTab.ExpandedOptions
+	) {
+		this.getter = getter;
+		this.saveLoad = saveLoad;
+		this.switcher = switcher;
+
+		this.containers = containers;
+		this.context = context;
+		this.options = options;
+	}
+
+	private _switchIfInitial() {
+		const {switcher, context} = this;
 		if (context.currentIndex === -1 && context.itemCount) {
-			fnSwitchTo(0);
+			switcher.switchTo(0);
 		}
 	};
 
-	const insertTabItemWithoutSwitch = function (
+	insertTabItemWithoutSwitch(
 		position: JQueryTab.TabItemPosition,
 		tabItem: JQueryTab.TabItem
 	) {
+		const {getter, saveLoad, containers, context, options} = this;
 		const {$headerLabelContainerLeaf, $footerLabelContainerLeaf, $panelContainerLeaf} = containers;
 
 		const {$panelItem, cloneLabelItem} = createTabItem(tabItem, context, options);
 
-		let index = fnPositionToIndex(position);
+		let index = getter.positionToIndex(position);
 		if (index < 0) {
 			index = 0;
 		}
@@ -43,7 +62,7 @@ function generateAddRemove(
 			if (index <= context.currentIndex) {
 				context.currentIndex++;
 				if (!context.currentName) {
-					fnSavePosition(context.currentIndex);
+					saveLoad.savePosition(context.currentIndex);
 				}
 			}
 		}
@@ -59,25 +78,30 @@ function generateAddRemove(
 
 		context.itemCount++;
 	};
-	const insertTabItem = function (
+
+	insertTabItem(
 		position: JQueryTab.TabItemPosition,
 		tabItem: JQueryTab.TabItem
 	) {
-		insertTabItemWithoutSwitch(position, tabItem);
-		_switchIfInitial();
-	};
-	const addTabItemWithoutSwitch = function (tabItem: JQueryTab.TabItem) {
-		insertTabItemWithoutSwitch(context.itemCount, tabItem);
-	};
-	const addTabItem = function (tabItem: JQueryTab.TabItem) {
-		addTabItemWithoutSwitch(tabItem);
-		_switchIfInitial();
+		this.insertTabItemWithoutSwitch(position, tabItem);
+		this._switchIfInitial();
 	};
 
-	const insertWithoutSwitch = function (
+	addTabItemWithoutSwitch(tabItem: JQueryTab.TabItem) {
+		this.insertTabItemWithoutSwitch(this.context.itemCount, tabItem);
+	};
+
+	addTabItem(tabItem: JQueryTab.TabItem) {
+		this.addTabItemWithoutSwitch(tabItem);
+		this._switchIfInitial();
+	};
+
+	insertWithoutSwitch(
 		position: JQueryTab.TabItemPosition,
 		sourceRegion: JQueryTab.JQueriable
 	) {
+		const {getter} = this;
+
 		const {
 			titleSelector,
 			fnGetTitleContent,
@@ -85,11 +109,11 @@ function generateAddRemove(
 			fnGetTabItemName,
 			fnIsTabItemDisabled,
 			fnIsTabItemHidden
-		} = options;
+		} = this.options;
 
 		const $sourceRegion = $(sourceRegion);
 		let inserted = 0;
-		const index = fnPositionToIndex(position);
+		const index = getter.positionToIndex(position);
 		while (true) {
 			const $title = $sourceRegion.find(titleSelector).first();
 			if ($title.length === 0) {
@@ -108,32 +132,37 @@ function generateAddRemove(
 				disabled: fnIsTabItemDisabled.call($sourceRegion, $title, $rest),
 				hidden: fnIsTabItemHidden.call($sourceRegion, $title, $rest)
 			};
-			insertTabItemWithoutSwitch(index + inserted, tabItem);
+			this.insertTabItemWithoutSwitch(index + inserted, tabItem);
 			inserted++;
 		}
 	};
-	const insert = function (
+
+	insert(
 		sourceRegion: JQueryTab.JQueriable,
 		position: JQueryTab.TabItemPosition
 	) {
-		insertWithoutSwitch(position, sourceRegion);
-		_switchIfInitial();
+		this.insertWithoutSwitch(position, sourceRegion);
+		this._switchIfInitial();
 	};
-	const addWithoutSwitch = function (sourceRegion: JQueryTab.JQueriable) {
-		insertWithoutSwitch(context.itemCount, sourceRegion);
+
+	addWithoutSwitch(sourceRegion: JQueryTab.JQueriable) {
+		this.insertWithoutSwitch(this.context.itemCount, sourceRegion);
 	};
-	const add = function (sourceRegion: JQueryTab.JQueriable) {
-		addWithoutSwitch(sourceRegion);
-		_switchIfInitial();
+
+	add(sourceRegion: JQueryTab.JQueriable) {
+		this.addWithoutSwitch(sourceRegion);
+		this._switchIfInitial();
 	};
-	const remove = function (...positions: JQueryTab.TabItemPosition[]) {
+
+	remove(positions: JQueryTab.TabItemPosition[]) {
 		if (!positions.length) {
 			return;
 		}
 
+		const {getter, saveLoad, switcher, context} = this;
 		const removeIndecies = [];
 		for (let i = 0, len = positions.length; i < len; i++) {
-			const removeIndex = fnPositionToIndex(positions[i]);
+			const removeIndex = getter.positionToIndex(positions[i]);
 			if (removeIndex >= 0 && removeIndex < context.itemCount && $.inArray(removeIndex, removeIndecies) === -1) {
 				removeIndecies.push(removeIndex);
 			}
@@ -146,25 +175,24 @@ function generateAddRemove(
 		});
 
 		if (context.itemCount > 1 && $.inArray(context.currentIndex, removeIndecies) >= 0) {
-			fnSwitchNext({exclude: removeIndecies}) ||
-			fnSwitchPrevious({exclude: removeIndecies}) ||
-			fnSwitchNext({includeDisabled: true, exclude: removeIndecies}) ||
-			fnSwitchPrevious({includeDisabled: true, exclude: removeIndecies}) ||
-			fnSwitchNext({includeHidden: true, exclude: removeIndecies}) ||
-			fnSwitchPrevious({includeHidden: true, exclude: removeIndecies}) ||
-			fnSwitchNext({includeDisabled: true, includeHidden: true, exclude: removeIndecies}) ||
-			fnSwitchPrevious({includeDisabled: true, includeHidden: true, exclude: removeIndecies});
+			switcher.switchNext({exclude: removeIndecies}) ||
+			switcher.switchPrevious({exclude: removeIndecies}) ||
+			switcher.switchNext({includeDisabled: true, exclude: removeIndecies}) ||
+			switcher.switchPrevious({includeDisabled: true, exclude: removeIndecies}) ||
+			switcher.switchNext({includeHidden: true, exclude: removeIndecies}) ||
+			switcher.switchPrevious({includeHidden: true, exclude: removeIndecies}) ||
+			switcher.switchNext({includeDisabled: true, includeHidden: true, exclude: removeIndecies}) ||
+			switcher.switchPrevious({includeDisabled: true, includeHidden: true, exclude: removeIndecies});
 		}
 
 		let currentIndexChanged = false;
 		for (let i = 0, len = removeIndecies.length; i < len; i++) {
 			const removeIndex = removeIndecies[i];
-			const $labelItems = fnGetHeaderFooterLabels(removeIndex);
-			const $panelItem = fnGetPanel(removeIndex);
+			const $labelItems = getter.getHeaderFooterLabels(removeIndex);
+			const $panelItem = getter.getPanel(removeIndex);
 
 			$labelItems.remove();
 			$panelItem.remove();
-
 
 			if (removeIndex < context.currentIndex) {
 				context.currentIndex--;
@@ -178,23 +206,11 @@ function generateAddRemove(
 			context.currentName = undefined;
 		}
 		else if (currentIndexChanged && !context.currentName) {
-			fnSavePosition(context.currentIndex);
+			saveLoad.savePosition(context.currentIndex);
 		}
 
 		return removeIndecies.length;
 	};
-
-	return {
-		insertTabItemWithoutSwitch,
-		insertTabItem,
-		addTabItemWithoutSwitch,
-		addTabItem,
-		insert,
-		insertWithoutSwitch,
-		add,
-		addWithoutSwitch,
-		remove
-	};
 }
 
-export default generateAddRemove;
+export default AddRemove;

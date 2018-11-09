@@ -1,7 +1,8 @@
 import $ from "jquery";
+import Switcher from "./switcher";
 
 function hahdleClickEvent(
-	fnSwitchTo: JQueryTab.fnSwitchTo,
+	switcher: Switcher,
 	containers: JQueryTab.Containers,
 	context: JQueryTab.Context,
 	options: JQueryTab.ExpandedOptions
@@ -23,7 +24,7 @@ function hahdleClickEvent(
 	let delayTriggerTimeoutHandler: any;
 	const startDelayTrigger = function (position: JQueryTab.TabItemPosition) {
 		delayTriggerTimeoutHandler = setTimeout(function () {
-			fnSwitchTo(position);
+			switcher.switchTo(position);
 			delayTriggerTimeoutHandler = undefined;
 		}, delayTriggerLatency);
 	};
@@ -98,7 +99,7 @@ function hahdleClickEvent(
 			return;
 		}
 
-		fnSwitchTo(labelIndex);
+		switcher.switchTo(labelIndex);
 	};
 
 	if (triggerEvents) {
