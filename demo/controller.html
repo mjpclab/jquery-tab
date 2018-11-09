@@ -60,6 +60,21 @@
 	<button id="btn-remove">Remove</button>
 </p>
 
+<h1>Add/Insert Tab Item</h1>
+<p>
+	Title: <input type="text" id="txt-add-tab-item-title"/><br/>
+	Content: <textarea id="txt-add-tab-item-content"></textarea><br/>
+	name: <input type="text" id="txt-add-tab-item-name"/><br/>
+	disabled: <input type="checkbox" id="chk-add-tab-item-disabled"/><br/>
+	hidden: <input type="checkbox" id="chk-add-tab-item-hidden"/><br/>
+	<button id="btn-add-tab-item">Add tab item</button>
+</p>
+<p>
+	Item(name/index):
+	<input type="text" id="txt-insert-tab-item-pos"/>
+	<button id="btn-insert-tab-item">Insert tab item</button>
+</p>
+
 <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="../dist/jquery-tab.js"></script>
 <script type="text/javascript">
@@ -102,6 +117,40 @@
 	$('#btn-remove').click(function () {
 		var pos = $('#txt-remove').val().split(',');
 		controller.remove.apply(null, pos);
+	});
+
+	$('#btn-add-tab-item').click(function () {
+		var title = $('#txt-add-tab-item-title').val();
+		var content = $('#txt-add-tab-item-content').val();
+		var name = $('#txt-add-tab-item-name').val();
+		var disabled = $('#chk-add-tab-item-disabled').prop('checked');
+		var hidden = $('#chk-add-tab-item-hidden').prop('checked');
+
+		controller.addTabItem({
+			title: title,
+			content: content,
+			name: name,
+			disabled: disabled,
+			hidden: hidden
+		});
+	});
+
+	$('#btn-insert-tab-item').click(function () {
+		var pos = $('#txt-insert-tab-item-pos').val();
+
+		var title = $('#txt-add-tab-item-title').val();
+		var content = $('#txt-add-tab-item-content').val();
+		var name = $('#txt-add-tab-item-name').val();
+		var disabled = $('#chk-add-tab-item-disabled').prop('checked');
+		var hidden = $('#chk-add-tab-item-hidden').prop('checked');
+
+		controller.insertTabItem(pos, {
+			title: title,
+			content: content,
+			name: name,
+			disabled: disabled,
+			hidden: hidden
+		});
 	});
 </script>
 </body>
