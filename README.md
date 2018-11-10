@@ -51,7 +51,7 @@ $('.region').tab({
 `label-item` and `page-item` pair is a "tab item".
 
 # Including CSS
-jquery-tab provides default CSS styles if you don't want to make it yourself. Make sure CSS class name related options are not customized.
+jquery-tab provides default CSS styles if you don't want to make from scratch. Make sure CSS class name related options are not customized.
 
 ## Importing by module
 ```javascript
@@ -102,7 +102,7 @@ That would be convenient if using this class name with attribute options. Then n
 ```
 
 # Deal with individual tab item
-Tab item property can be specified on title element:
+Tab item property can be specified as attribute on title element, in lower case, separate words by "-", with `data-` prefixed,
 ```html
 <div class="region">
 	<h1 data-tab-item-name="first-item">title 1</h1>
@@ -115,15 +115,15 @@ Tab item property can be specified on title element:
 </div>
 ```
 Supported properties:  
-`tabItemName`  
+`tabItemName` (`data-tab-item-name`)  
 The name should be a non-numeric string, otherwise in controller method parameters, it will be treated as a index.  
 The name can only contains letters, digits, dashes and underlines.  
 If names are duplicated in the same tab container, only first item will be recognized.
 
-`tabItemDisabled`  
+`tabItemDisabled` (`data-tab-item-disabled`)  
 Specify if this tab item is disabled. A non-`false` value will be treated as disabled, even for empty string.
 
-`tabItemHidden`  
+`tabItemHidden` (`data-tab-item-hidden`)  
 Specify if this tab item is hidden. A non-`false` value will be treated as hidden, even for empty string.
 
 # Options List
@@ -355,3 +355,7 @@ fade effect on switch | 10+ | 12+ | 4+ | 2+ | 4+ | 12.10+
 
 As different jQuery version has different browser compatibility,
 final compatibility are also affected by the jQuery version you are using.
+
+# Upgrade Guide
+- [Upgrade from 1.x to 2.x](./doc/upgrade-from-1.x-to-2.x.md)
+- [Upgrade from 2.x to 3.x](./doc/upgrade-from-2.x-to-3.x.md)
