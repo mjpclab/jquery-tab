@@ -131,8 +131,8 @@ function generateController(
 		return addRemove.addTabItem(tabItem);
 	};
 
-	const insert = function (sourceRegion: JQueryTab.JQueriable, position: JQueryTab.TabItemPosition) {
-		return addRemove.insert(sourceRegion, position);
+	const insert = function (position: JQueryTab.TabItemPosition, sourceRegion: JQueryTab.JQueriable) {
+		return addRemove.insert(position, sourceRegion);
 	};
 
 	const add = function (sourceRegion: JQueryTab.JQueriable) {

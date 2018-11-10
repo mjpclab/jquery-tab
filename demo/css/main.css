@@ -11,6 +11,11 @@ code, pre {
 	padding: 0;
 }
 
+textarea {
+	width: 40em;
+	height: 6em;
+}
+
 .panel-item {
 	overflow: hidden;
 }

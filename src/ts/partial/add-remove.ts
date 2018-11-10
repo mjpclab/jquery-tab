@@ -138,8 +138,8 @@ class AddRemove {
 	};
 
 	insert(
-		sourceRegion: JQueryTab.JQueriable,
-		position: JQueryTab.TabItemPosition
+		position: JQueryTab.TabItemPosition,
+		sourceRegion: JQueryTab.JQueriable
 	) {
 		this.insertWithoutSwitch(position, sourceRegion);
 		this._switchIfInitial();

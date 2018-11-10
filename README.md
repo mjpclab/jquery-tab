@@ -3,7 +3,7 @@ Make flat html document that contains title and normal content turns into tab st
 
 # Features
 - no link element needed, still search engine friendly for original content
-- options to keep active tab item after page refresh or post back
+- options help to keep active tab item after page refresh or post back
 - *name* could be used instead of *index* for individual tab item in some APIs
 - vertical label mode
 - nested tab
@@ -54,7 +54,6 @@ $('.region').tab({
 jquery-tab provides default CSS styles if you don't want to make it yourself. Make sure CSS class name related options are not customized.
 
 ## Importing by module
-Importing default theme which contains layout style and skin style:
 ```javascript
 import 'jquery-tab/src/built/theme/gray'
 import 'jquery-tab/src/built/theme/effect/fade' // optional fade effect when switching, must load after theme

@@ -730,7 +730,7 @@
                 inserted++;
             }
         };
-        AddRemove.prototype.insert = function (sourceRegion, position) {
+        AddRemove.prototype.insert = function (position, sourceRegion) {
             this.insertWithoutSwitch(position, sourceRegion);
             this._switchIfInitial();
         };
@@ -887,8 +887,8 @@
         var addTabItem = function (tabItem) {
             return addRemove.addTabItem(tabItem);
         };
-        var insert = function (sourceRegion, position) {
-            return addRemove.insert(sourceRegion, position);
+        var insert = function (position, sourceRegion) {
+            return addRemove.insert(position, sourceRegion);
         };
         var add = function (sourceRegion) {
             return addRemove.add(sourceRegion);

@@ -15,7 +15,7 @@ declare class AddRemove {
     addTabItemWithoutSwitch(tabItem: JQueryTab.TabItem): void;
     addTabItem(tabItem: JQueryTab.TabItem): void;
     insertWithoutSwitch(position: JQueryTab.TabItemPosition, sourceRegion: JQueryTab.JQueriable): void;
-    insert(sourceRegion: JQueryTab.JQueriable, position: JQueryTab.TabItemPosition): void;
+    insert(position: JQueryTab.TabItemPosition, sourceRegion: JQueryTab.JQueriable): void;
     addWithoutSwitch(sourceRegion: JQueryTab.JQueriable): void;
     add(sourceRegion: JQueryTab.JQueriable): void;
     remove(positions: JQueryTab.TabItemPosition[]): number | undefined;

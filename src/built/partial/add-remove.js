@@ -92,7 +92,7 @@ var AddRemove = /** @class */ (function () {
         }
     };
     ;
-    AddRemove.prototype.insert = function (sourceRegion, position) {
+    AddRemove.prototype.insert = function (position, sourceRegion) {
         this.insertWithoutSwitch(position, sourceRegion);
         this._switchIfInitial();
     };

@@ -91,8 +91,8 @@ function generateController(getter, domUpdater, tabItemSetter, switcher, addRemo
     var addTabItem = function (tabItem) {
         return addRemove.addTabItem(tabItem);
     };
-    var insert = function (sourceRegion, position) {
-        return addRemove.insert(sourceRegion, position);
+    var insert = function (position, sourceRegion) {
+        return addRemove.insert(position, sourceRegion);
     };
     var add = function (sourceRegion) {
         return addRemove.add(sourceRegion);

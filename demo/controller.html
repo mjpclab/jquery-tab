@@ -70,9 +70,30 @@
 	<button id="btn-add-tab-item">Add tab item</button>
 </p>
 <p>
-	Item(name/index):
+	Before Item(name/index):
 	<input type="text" id="txt-insert-tab-item-pos"/>
 	<button id="btn-insert-tab-item">Insert tab item</button>
+</p>
+
+<h1>Add/Insert</h1>
+<p>
+<textarea id="txt-add">
+<div>
+<h1>added title 1</h1>
+<p>added content 1.1</p>
+<p>added content 1.2</p>
+
+<h1>added title 2</h1>
+<p>added content 2.1</p>
+<p>added content 2.2</p>
+</div>
+</textarea><br/>
+<button id="btn-add">Add</button>
+</p>
+<p>
+	Before Item(name/index):
+	<input type="text" id="txt-insert-pos"/>
+	<button id="btn-insert">Insert</button>
 </p>
 
 <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
@@ -151,6 +172,17 @@
 			disabled: disabled,
 			hidden: hidden
 		});
+	});
+
+	$('#btn-add').click(function () {
+		var $region = $($('#txt-add').val());
+		controller.add($region);
+	});
+
+	$('#btn-insert').click(function () {
+		var pos = $('#txt-insert-pos').val();
+		var $region = $($('#txt-add').val());
+		controller.insert(pos, $region);
 	});
 </script>
 </body>

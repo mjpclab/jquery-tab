@@ -42,7 +42,7 @@ declare function generateController(getter: Getter, domUpdater: DomUpdater, tabI
     addTabItem: (tabItem: JQueryTab.TabItem) => void;
     insertTabItem: (position: string | number, tabItem: JQueryTab.TabItem) => void;
     add: (sourceRegion: string | Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node> | (Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node>)[]) => void;
-    insert: (sourceRegion: string | Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node> | (Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node>)[], position: string | number) => void;
+    insert: (position: string | number, sourceRegion: string | Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node> | (Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node>)[]) => void;
     remove: (...positions: (string | number)[]) => number | undefined;
 };
 export default generateController;
