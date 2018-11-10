@@ -17,6 +17,7 @@ declare namespace JQueryTab {
 		inactivePanelItemClass: string;
 		disabledPanelItemClass: string;
 		hiddenPanelItemClass: string;
+		evaluatingPanelItemClass: string;
 	}
 
 	interface Context {

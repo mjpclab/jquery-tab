@@ -15,7 +15,8 @@ function getExpandedOptions(defaultOptions, dataOptions, customOptions) {
         activePanelItemClass: panelItemClass + '-active',
         inactivePanelItemClass: panelItemClass + '-inactive',
         disabledPanelItemClass: panelItemClass + '-disabled',
-        hiddenPanelItemClass: panelItemClass + '-hidden'
+        hiddenPanelItemClass: panelItemClass + '-hidden',
+        evaluatingPanelItemClass: panelItemClass + '-evaluating'
     });
     return expandedOptions;
 }

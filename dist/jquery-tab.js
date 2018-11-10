@@ -66,7 +66,8 @@
             activePanelItemClass: panelItemClass + '-active',
             inactivePanelItemClass: panelItemClass + '-inactive',
             disabledPanelItemClass: panelItemClass + '-disabled',
-            hiddenPanelItemClass: panelItemClass + '-hidden'
+            hiddenPanelItemClass: panelItemClass + '-hidden',
+            evaluatingPanelItemClass: panelItemClass + '-evaluating'
         });
         return expandedOptions;
     }
@@ -306,9 +307,10 @@
     }());
 
     var DomUpdater = /** @class */ (function () {
-        function DomUpdater(getter, containers, options) {
+        function DomUpdater(getter, containers, context, options) {
             this.getter = getter;
             this.containers = containers;
+            this.context = context;
             this.options = options;
         }
         DomUpdater.prototype.updateActiveState = function (activeIndex) {
@@ -338,14 +340,23 @@
                 .attr('aria-hidden', 'true');
         };
         DomUpdater.prototype.updateFixedHeight = function () {
-            if (!this.options.fixedHeight) {
+            var options = this.options;
+            if (!options.fixedHeight) {
                 return;
             }
+            var currentIndex = this.context.currentIndex;
             var maxHeight = 0;
             this.containers.$panelContainerLeaf.children().each(function (index, panelItem) {
+                var $panelItem = $(panelItem);
+                if (index !== currentIndex) {
+                    $panelItem.addClass(options.evaluatingPanelItemClass);
+                }
                 var panelHeight = panelItem.scrollHeight;
                 if (panelHeight > maxHeight) {
                     maxHeight = panelHeight;
+                }
+                if (index !== currentIndex) {
+                    $panelItem.removeClass(options.evaluatingPanelItemClass);
                 }
             }).height(maxHeight);
         };
@@ -580,6 +591,7 @@
     function createLabelItem(tabItem, options) {
         var $labelItem = $(options.labelItemTemplate)
             .addClass(options.labelItemClass)
+            .addClass(options.inactiveLabelItemClass)
             .attr('role', 'tab');
         var $labelItemLeaf = getLeafElement($labelItem);
         $labelItemLeaf.append(tabItem.title);
@@ -589,6 +601,7 @@
     function createPanelItem(tabItem, options) {
         var $panelItem = $(options.panelItemTemplate)
             .addClass(options.panelItemClass)
+            .addClass(options.inactivePanelItemClass)
             .attr('role', 'tabpanel');
         var $panelItemLeaf = getLeafElement($panelItem);
         $panelItemLeaf.append(tabItem.content);
@@ -1018,7 +1031,7 @@
         //getters
         var getter = new Getter(containers, context, options);
         //dom updater
-        var domUpdater = new DomUpdater(getter, containers, options);
+        var domUpdater = new DomUpdater(getter, containers, context, options);
         //tab item setter
         var tabItemSetter = new TabItemSetter(getter, options);
         //save/load
@@ -1031,19 +1044,17 @@
         var controller = generateController(getter, domUpdater, tabItemSetter, switcher, addRemove);
         //init
         addRemove.addWithoutSwitch($region);
-        //replace original content
         if (!context.itemCount && !options.createEmptyTab) {
             return;
         }
         $region.append($tabContainer);
-        domUpdater.updateFixedHeight();
-        //show active panel
         if (context.itemCount > 0) {
             switcher.switchToWithoutSave(saveLoad.loadPosition());
             if (context.currentIndex === -1) {
                 switcher.switchToWithoutSave(0);
             }
         }
+        domUpdater.updateFixedHeight();
         handleHashChangeEvent(saveLoad, switcher, options);
         hahdleClickEvent(switcher, containers, context, options);
         $region.data('tab-controller', controller);

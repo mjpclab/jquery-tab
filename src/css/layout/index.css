@@ -81,3 +81,10 @@
 .tab-container .panel-container .panel-item-inactive {
 	display: none;
 }
+
+.tab-container .panel-container .panel-item-evaluating {
+	position: absolute;
+	z-index: -1;
+	display: block;
+	visibility: hidden;
+}

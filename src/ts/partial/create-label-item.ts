@@ -7,6 +7,7 @@ function createLabelItem(
 ) {
 	const $labelItem = $(options.labelItemTemplate)
 		.addClass(options.labelItemClass)
+		.addClass(options.inactiveLabelItemClass)
 		.attr('role', 'tab');
 
 	const $labelItemLeaf = getLeafElement($labelItem);

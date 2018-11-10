@@ -32,7 +32,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	const getter = new Getter(containers, context, options);
 
 	//dom updater
-	const domUpdater = new DomUpdater(getter, containers, options);
+	const domUpdater = new DomUpdater(getter, containers, context, options);
 
 	//tab item setter
 	const tabItemSetter = new TabItemSetter(getter, options);
@@ -52,20 +52,20 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	//init
 	addRemove.addWithoutSwitch($region);
 
-	//replace original content
 	if (!context.itemCount && !options.createEmptyTab) {
 		return;
 	}
 	$region.append($tabContainer);
-	domUpdater.updateFixedHeight();
 
-	//show active panel
 	if (context.itemCount > 0) {
 		switcher.switchToWithoutSave(saveLoad.loadPosition());
 		if (context.currentIndex === -1) {
 			switcher.switchToWithoutSave(0);
 		}
 	}
+
+	domUpdater.updateFixedHeight();
+
 	handleHashChangeEvent(saveLoad, switcher, options);
 	handleClickEvent(switcher, containers, context, options);
 

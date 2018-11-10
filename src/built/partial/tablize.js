@@ -26,7 +26,7 @@ function tablize($region, customOptions) {
     //getters
     var getter = new Getter(containers, context, options);
     //dom updater
-    var domUpdater = new DomUpdater(getter, containers, options);
+    var domUpdater = new DomUpdater(getter, containers, context, options);
     //tab item setter
     var tabItemSetter = new TabItemSetter(getter, options);
     //save/load
@@ -39,19 +39,17 @@ function tablize($region, customOptions) {
     var controller = generateController(getter, domUpdater, tabItemSetter, switcher, addRemove);
     //init
     addRemove.addWithoutSwitch($region);
-    //replace original content
     if (!context.itemCount && !options.createEmptyTab) {
         return;
     }
     $region.append($tabContainer);
-    domUpdater.updateFixedHeight();
-    //show active panel
     if (context.itemCount > 0) {
         switcher.switchToWithoutSave(saveLoad.loadPosition());
         if (context.currentIndex === -1) {
             switcher.switchToWithoutSave(0);
         }
     }
+    domUpdater.updateFixedHeight();
     handleHashChangeEvent(saveLoad, switcher, options);
     handleClickEvent(switcher, containers, context, options);
     $region.data('tab-controller', controller);

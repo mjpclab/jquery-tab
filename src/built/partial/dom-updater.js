@@ -1,7 +1,9 @@
+import $ from 'jquery';
 var DomUpdater = /** @class */ (function () {
-    function DomUpdater(getter, containers, options) {
+    function DomUpdater(getter, containers, context, options) {
         this.getter = getter;
         this.containers = containers;
+        this.context = context;
         this.options = options;
     }
     DomUpdater.prototype.updateActiveState = function (activeIndex) {
@@ -31,14 +33,23 @@ var DomUpdater = /** @class */ (function () {
             .attr('aria-hidden', 'true');
     };
     DomUpdater.prototype.updateFixedHeight = function () {
-        if (!this.options.fixedHeight) {
+        var options = this.options;
+        if (!options.fixedHeight) {
             return;
         }
+        var currentIndex = this.context.currentIndex;
         var maxHeight = 0;
         this.containers.$panelContainerLeaf.children().each(function (index, panelItem) {
+            var $panelItem = $(panelItem);
+            if (index !== currentIndex) {
+                $panelItem.addClass(options.evaluatingPanelItemClass);
+            }
             var panelHeight = panelItem.scrollHeight;
             if (panelHeight > maxHeight) {
                 maxHeight = panelHeight;
+            }
+            if (index !== currentIndex) {
+                $panelItem.removeClass(options.evaluatingPanelItemClass);
             }
         }).height(maxHeight);
     };
