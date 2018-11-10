@@ -39,7 +39,7 @@ If you want to customize the logic of getting tab item properties, some new opti
 - getIndexByName(name)
 - getName(index)
 - setName(name|index, newName)
-- getCurrentName
+- getCurrentName()
 - isDisabled(name|index)
 - isEnabled(name|index)
 - setDisabled(name|index, isDisabled=true)

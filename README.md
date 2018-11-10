@@ -72,7 +72,20 @@ $('.region').tab({
 ```
 
 # Specify options
-There are two ways to specify options. By `data-` attribute and by `tab()` method.
+There are two ways to specify options. By `tab()` method and by `data-` attribute.
+## Specify options by `tab()` method
+Option names are in camel case.
+```html
+<div class="region">
+	......
+</div>
+```
+```javascript
+$('.region').tab({
+	fixedHeight: true
+});
+```
+
 ## Specify options by `data-` attribute
 Option names become html attribute prefixed with `data-` on region element. Words are always in lower case and separated by `-`. Only available for primitive option value.
 ```html
@@ -83,14 +96,6 @@ Option names become html attribute prefixed with `data-` on region element. Word
 ```javascript
 $('.region').tab();
 ```
-## Specify options by `tab()` method
-Option names are in camel case.
-```javascript
-$('.region').tab({
-	fixedHeight: true
-});
-```
-
 # Auto enable jquery-tab
 Region containers that has class `tab-region` will apply jquery-tab plugin automatically.
 
@@ -102,7 +107,7 @@ That would be convenient if using this class name with attribute options. Then n
 ```
 
 # Deal with individual tab item
-Tab item property can be specified as attribute on title element, in lower case, separate words by "-", with `data-` prefixed,
+Tab item property can be specified as attribute on title element, in lower case, separate words by `-`, with `data-` prefixed.
 ```html
 <div class="region">
 	<h1 data-tab-item-name="first-item">title 1</h1>
@@ -118,13 +123,16 @@ Supported properties:
 `tabItemName` (`data-tab-item-name`)  
 The name should be a non-numeric string, otherwise in controller method parameters, it will be treated as a index.  
 The name can only contains letters, digits, dashes and underlines.  
-If names are duplicated in the same tab container, only first item will be recognized.
+If names are duplicated in the same tab container, only first item will be recognized.  
+The logic of getting tab item name could be customized by option `fnGetTabItemName`.
 
 `tabItemDisabled` (`data-tab-item-disabled`)  
-Specify if this tab item is disabled. A non-`false` value will be treated as disabled, even for empty string.
+Specify if this tab item is disabled. A non-`false` value will be treated as disabled, even for empty string.  
+The logic of determining if a tab item is disabled could be customized by option `fnIsTabItemDisabled`.
 
 `tabItemHidden` (`data-tab-item-hidden`)  
-Specify if this tab item is hidden. A non-`false` value will be treated as hidden, even for empty string.
+Specify if this tab item is hidden. A non-`false` value will be treated as hidden, even for empty string.  
+The logic of determining if a tab item is hidden could be customized by option `fnIsTabItemHidden`.
 
 # Options List
 ## Behavior
@@ -143,7 +151,7 @@ Specify events on label-item that will cancel delay switching.
 Specify how long (milliseconds) need to wait before trigger the delayed switching events.
 
 `fixedHeight`  
-Tab-container's height will be fixed to fit the longest panel and will not change when tabs are switched.
+Panel items' height will be fixed to fit the longest panel and will not change when tabs are switched.
 
 `createEmptyTab`  
 Determine if still create tab container when there is no tab item found.
@@ -156,6 +164,15 @@ A callback before switching the tab. Returns `false` to cancel a switching attem
 A callback after switching the tab.
 
 ## Tab item
+`titleSelector`  
+A jQuery selector string or object to pick up "title" element to be a label-item in label-container.
+
+`fnGetTitleContent($title)`  
+A callback to have an opportunity to change the html structure of a label-item.
+
+`keepTitleVisible` (default: `false`)  
+Show panel title again in the panel-item. Since panel title will be shown in label-container, normally it's unnecessary to be shown in panel-item again.
+
 `fnGetTabItemName($title, $content)`  
 Customize the logic of getting tab item name when initializing.
 
@@ -165,92 +182,83 @@ Customize the logic of determining if a tab item is disabled when initializing.
 `fnIsTabItemHidden($title, $content)`  
 Customize the logic of determining if a tab item is hidden when initializing.
 
-## Save/Load active Index
-jquery-tab will load active index by priority of statusFieldSelector, statusHashTemplate, fnLoadIndex and activePosition.
+## Save/Load active position
+jquery-tab will load active position by priority of statusFieldSelector, statusHashTemplate, fnLoadPosition and activePosition.
 
 `statusFieldSelector`  
-A jQuery selector string or object to find a form field(normally hidden) to store active tab index, thus after form post back and keep the field value on server to the browser, the jquery-tab will automatically restore the active tab.
+A jQuery selector string or object to find a form field(normally hidden) to store active tab position, thus after form post back and keep the field value on server to the client, the jquery-tab will automatically restore the active tab.
 
 `statusHashTemplate`  
-A key-value pair template to store active tab index in URL hash, e.g. `"tab="`.
+A key-value pair template to store active tab position in URL hash, e.g. `tab=`.
 
 `statusHashSeparator`  
-Determine a separator between multiple hash items if there are more than 1 tab-container on the same page.
+Specify a separator between multiple hash items if there are more than 1 tab-container store active position in hash on the same page.
 
-`fnSavePosition(name|index)`  
-A callback function to customize how active index is saved, so that this index can be restored in the future, for example when refreshing the page.
+`fnSavePosition(position)`  
+A callback function to customize how active position is saved, so that this position can be restored in the future, for example when refreshing the page.
+`position` could be tab item name or index.
 
 `fnLoadPosition`  
-A callback function to customize how active index is loaded.
-The returned value is either a number/number of string which represents active tab index,
+A callback function to customize how active position is loaded.
+The returned value is either a number/string of number which represents active tab index,
 or a string represents active tab item name.
 
 `activePosition`  
 The default initial active position of the tab.
-The value is either a number/number of string which represents active tab index,
+The value is either a number/string of number which represents active tab index,
 or a string represents active tab item name.
 
 ## UI Options
-### Title
-`titleSelector`  
-A jQuery selector string or object to pick up "title" element to be a label-item in label-container.
-
-`fnGetTitleContent($title)`  
-A callback to have an opportunity to change the html structure of label-item.
-
-`keepTitleVisible`  
-Show panel title again in the panel-item. Since panel title will be shown in label-container, normally it's unnecessary to be shown in panel-item again.
-
 ### Tab
 `tabContainerTemplate`  
-Tab container's template.
+Tab container's html template.
 
-`tabContainerClass`  
-CSS class for tab container. Default value is 'tab-container'.  
+`tabContainerClass` (default: `tab-container`)  
+CSS class for tab container.  
 If `mode` is "horizontal", then also append class "`tabContainerClass`-horizontal".  
 If `mode` is "vertical", then also append class "`tabContainerClass`-vertical".
 
 ### Label
 `labelContainerTemplate`  
-Label container's template.
+Label container's html template.
 
-`labelContainerClass`  
-CSS class for label container. Default value is 'label-container'.  
+`labelContainerClass` (default: `label-container`)  
+CSS class for label container.  
 if it is header label container, then also append class "`labelContainerClass`-header".  
 if it is footer label container, then also append class "`labelContainerClass`-footer".
 
-`showHeaderLabelContainer`  
-If show label container before panel container. Default value is true.
+`showHeaderLabelContainer` (default: `true`)  
+If show label container before panel container.
 
-`showFooterLabelContainer`  
-If show label container after panel container. Default value is false.
+`showFooterLabelContainer` (default: `false`)  
+If show label container after panel container.
 
 `labelItemTemplate`  
-Label item's template.
+Label item's html template.
 
-`labelItemClass`  
-CSS class for label item. Default value is 'label-item'.  
+`labelItemClass` (default: `label-item`)  
+CSS class for label item.  
 If it is current active label item, then also append class "`labelItemClass`-active",
 otherwise append class "`labelItemClass`-inactive".  
-If tab item of the label is disabled, then also append class "`labelItemClass`-disabled".  
-If tab item of the label is hidden, then also append class "`labelItemClass`-hidden".
+If the label's tab item is disabled, then also append class "`labelItemClass`-disabled".  
+If the label's tab item is hidden, then also append class "`labelItemClass`-hidden".
 
 ### Panel
 `panelContainerTemplate`  
-Panel containers's template.
+Panel containers's html template.
 
-`panelContainerClass`  
-CSS class for panel container. Default value is 'panel-container'.
+`panelContainerClass` (default: `panel-container`)  
+CSS class for panel container.
 
 `panelItemTemplate`  
-Panel-item's template.
+Panel-item's html template.
 
-`panelItemClass`  
-CSS class for panel item. Default value is 'panel-item'.  
+`panelItemClass` (default: `panel-item`)  
+CSS class for panel item.  
 If it is current active panel item, then also append class "`panelItemClass`-active",
-otherwise append class "`panelItemClass`-inactive".
-If tab item of the panel is disabled, then also append class "`panelItemClass`-disabled".
-If tab item of the panel is hidden, then also append class "`panelItemClass`-hidden".
+otherwise append class "`panelItemClass`-inactive".  
+If the panel's tab item is disabled, then also append class "`panelItemClass`-disabled".  
+If the panel's tab item is hidden, then also append class "`panelItemClass`-hidden".
 
 # The Controller
 ## Get Controller
