@@ -181,7 +181,7 @@
             $panelContainerLeaf.children().each(function (index, panel) {
                 var $panel = $(panel);
                 if ($panel.data(tabItemNameAttr) === name) {
-                    tabItemIndex = $panel.index();
+                    tabItemIndex = index;
                     return false;
                 }
             });

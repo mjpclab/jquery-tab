@@ -45,7 +45,7 @@ class Getter {
 		$panelContainerLeaf.children().each(function (index, panel) {
 			const $panel = $(panel);
 			if ($panel.data(tabItemNameAttr) === name) {
-				tabItemIndex = $panel.index();
+				tabItemIndex = index;
 				return false;
 			}
 		});

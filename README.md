@@ -270,7 +270,7 @@ Get current active tab item index.
 
 ### Tab item
 `getIndexByName(name)`  
-Get tab item index by `name`.
+Get tab item index by `name`. returns -1 if name not exists.
 
 `getName(index)`  
 Get tab item name by `index`.
