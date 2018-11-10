@@ -35,7 +35,7 @@ class AddRemove {
 		if (context.currentIndex === -1 && context.itemCount) {
 			switcher.switchTo(0);
 		}
-	};
+	}
 
 	insertTabItemWithoutSwitch(
 		position: JQueryTab.TabItemPosition,
@@ -77,7 +77,7 @@ class AddRemove {
 		}
 
 		context.itemCount++;
-	};
+	}
 
 	insertTabItem(
 		position: JQueryTab.TabItemPosition,
@@ -85,16 +85,16 @@ class AddRemove {
 	) {
 		this.insertTabItemWithoutSwitch(position, tabItem);
 		this._switchIfInitial();
-	};
+	}
 
 	addTabItemWithoutSwitch(tabItem: JQueryTab.TabItem) {
 		this.insertTabItemWithoutSwitch(this.context.itemCount, tabItem);
-	};
+	}
 
 	addTabItem(tabItem: JQueryTab.TabItem) {
 		this.addTabItemWithoutSwitch(tabItem);
 		this._switchIfInitial();
-	};
+	}
 
 	insertWithoutSwitch(
 		position: JQueryTab.TabItemPosition,
@@ -135,7 +135,7 @@ class AddRemove {
 			this.insertTabItemWithoutSwitch(index + inserted, tabItem);
 			inserted++;
 		}
-	};
+	}
 
 	insert(
 		position: JQueryTab.TabItemPosition,
@@ -143,16 +143,16 @@ class AddRemove {
 	) {
 		this.insertWithoutSwitch(position, sourceRegion);
 		this._switchIfInitial();
-	};
+	}
 
 	addWithoutSwitch(sourceRegion: JQueryTab.JQueriable) {
 		this.insertWithoutSwitch(this.context.itemCount, sourceRegion);
-	};
+	}
 
 	add(sourceRegion: JQueryTab.JQueriable) {
 		this.addWithoutSwitch(sourceRegion);
 		this._switchIfInitial();
-	};
+	}
 
 	remove(positions: JQueryTab.TabItemPosition[]) {
 		if (!positions.length) {
@@ -210,7 +210,7 @@ class AddRemove {
 		}
 
 		return removeIndecies.length;
-	};
+	}
 }
 
 export default AddRemove;

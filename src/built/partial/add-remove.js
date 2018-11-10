@@ -15,7 +15,6 @@ var AddRemove = /** @class */ (function () {
             switcher.switchTo(0);
         }
     };
-    ;
     AddRemove.prototype.insertTabItemWithoutSwitch = function (position, tabItem) {
         var _a = this, getter = _a.getter, saveLoad = _a.saveLoad, containers = _a.containers, context = _a.context, options = _a.options;
         var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf, $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf, $panelContainerLeaf = containers.$panelContainerLeaf;
@@ -50,21 +49,17 @@ var AddRemove = /** @class */ (function () {
         }
         context.itemCount++;
     };
-    ;
     AddRemove.prototype.insertTabItem = function (position, tabItem) {
         this.insertTabItemWithoutSwitch(position, tabItem);
         this._switchIfInitial();
     };
-    ;
     AddRemove.prototype.addTabItemWithoutSwitch = function (tabItem) {
         this.insertTabItemWithoutSwitch(this.context.itemCount, tabItem);
     };
-    ;
     AddRemove.prototype.addTabItem = function (tabItem) {
         this.addTabItemWithoutSwitch(tabItem);
         this._switchIfInitial();
     };
-    ;
     AddRemove.prototype.insertWithoutSwitch = function (position, sourceRegion) {
         var getter = this.getter;
         var _a = this.options, titleSelector = _a.titleSelector, fnGetTitleContent = _a.fnGetTitleContent, keepTitleVisible = _a.keepTitleVisible, fnGetTabItemName = _a.fnGetTabItemName, fnIsTabItemDisabled = _a.fnIsTabItemDisabled, fnIsTabItemHidden = _a.fnIsTabItemHidden;
@@ -91,21 +86,17 @@ var AddRemove = /** @class */ (function () {
             inserted++;
         }
     };
-    ;
     AddRemove.prototype.insert = function (position, sourceRegion) {
         this.insertWithoutSwitch(position, sourceRegion);
         this._switchIfInitial();
     };
-    ;
     AddRemove.prototype.addWithoutSwitch = function (sourceRegion) {
         this.insertWithoutSwitch(this.context.itemCount, sourceRegion);
     };
-    ;
     AddRemove.prototype.add = function (sourceRegion) {
         this.addWithoutSwitch(sourceRegion);
         this._switchIfInitial();
     };
-    ;
     AddRemove.prototype.remove = function (positions) {
         if (!positions.length) {
             return;
@@ -156,7 +147,6 @@ var AddRemove = /** @class */ (function () {
         }
         return removeIndecies.length;
     };
-    ;
     return AddRemove;
 }());
 export default AddRemove;
