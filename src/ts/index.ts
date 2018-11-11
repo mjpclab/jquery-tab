@@ -2,13 +2,14 @@
 
 import $ from 'jquery';
 
+import normalizeOptions from './utility/normalize-options'
 import tablize from './partial/tablize';
 import autoEnableTabs from './partial/auto-enable-tabs';
 
-$.fn.tab = function (customOptions?: JQueryTab.Options) {
+$.fn.tab = function (options?: JQueryTab.Options) {
+	const normalizedOptions = normalizeOptions(options);
 	this.each(function (index, region) {
-		const $region = $(region);
-		tablize($region, customOptions);
+		tablize($(region), normalizedOptions);
 	});
 
 	return this;

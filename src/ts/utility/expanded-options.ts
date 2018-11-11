@@ -1,20 +1,22 @@
 import $ from 'jquery';
 
-function getExpandedOptions(
+function expandedOptions(
 	defaultOptions: JQueryTab.NecessaryOptions,
 	dataOptions: JQueryTab.Options,
 	customOptions?: JQueryTab.Options,
 ): JQueryTab.ExpandedOptions {
 	const options: JQueryTab.NecessaryOptions = $.extend({}, defaultOptions, dataOptions, customOptions);
 
-	const {tabContainerClass, labelContainerClass, labelItemClass, panelItemClass} = options;
+	const {mode, tabContainerClass, labelContainerClass, labelItemClass, panelContainerClass, panelItemClass} = options;
 
 	const expandedOptions: JQueryTab.ExpandedOptions = $.extend(options, {
-		horizontalTabContainerClass: tabContainerClass + '-horizontal',
-		verticalTabContainerClass: tabContainerClass + '-vertical',
+		modeTabContainerClass: tabContainerClass + '-' + mode,
 
+		modeLabelContainerClass: labelContainerClass + '-' + mode,
 		headerLabelContainerClass: labelContainerClass + '-header',
+		modeHeaderLabelContainerClass: labelContainerClass + '-header' + '-' + mode,
 		footerLabelContainerClass: labelContainerClass + '-footer',
+		modeFooterLabelContainerClass: labelContainerClass + '-footer' + '-' + mode,
 
 		tabItemNameAttr: 'tabItemName',
 
@@ -22,6 +24,8 @@ function getExpandedOptions(
 		inactiveLabelItemClass: labelItemClass + '-inactive',
 		disabledLabelItemClass: labelItemClass + '-disabled',
 		hiddenLabelItemClass: labelItemClass + '-hidden',
+
+		modePanelContainerClass: panelContainerClass + '-' + mode,
 
 		activePanelItemClass: panelItemClass + '-active',
 		inactivePanelItemClass: panelItemClass + '-inactive',
@@ -33,4 +37,4 @@ function getExpandedOptions(
 	return expandedOptions;
 }
 
-export default getExpandedOptions;
+export default expandedOptions;

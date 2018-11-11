@@ -15,7 +15,7 @@
 
 	<h1>JavaScript</h1>
 	<code>
-		$('.region').tab();
+		$('.region').tab(...);
 	</code>
 </div>
 
@@ -23,8 +23,11 @@
 <script type="text/javascript" src="../dist/jquery-tab.js"></script>
 <script type="text/javascript">
 	$('.region').tab({
+		tabContainerTemplate: '<div><div class="tab-container-inner"></div></div>',
+		labelContainerTemplate: '<div><div class="label-container-inner"></div></div>',
 		labelItemTemplate: '<div><b class="label-item-inner"></b></div>',
 		panelContainerTemplate: '<div><div class="panel-container-inner"></div></div>',
+		panelItemTemplate: '<div><div class="panel-item-inner"></div></div>'
 	});
 </script>
 </body>

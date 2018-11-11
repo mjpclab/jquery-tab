@@ -6,6 +6,20 @@
 
     $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
 
+    function normalizeOptions(options) {
+        if (!options) {
+            return;
+        }
+        var normalizedOptions = $.extend({}, options);
+        var mode = normalizedOptions.mode;
+        if (mode) {
+            if (mode !== "horizontal" /* Horizontal */ && mode !== "vertical" /* Vertical */) {
+                normalizedOptions.mode = "horizontal" /* Horizontal */;
+            }
+        }
+        return normalizedOptions;
+    }
+
     var defaultOptions = {
         triggerEvents: 'click',
         delayTriggerEvents: '',
@@ -50,19 +64,22 @@
         panelItemClass: 'panel-item'
     };
 
-    function getExpandedOptions(defaultOptions, dataOptions, customOptions) {
+    function expandedOptions(defaultOptions, dataOptions, customOptions) {
         var options = $.extend({}, defaultOptions, dataOptions, customOptions);
-        var tabContainerClass = options.tabContainerClass, labelContainerClass = options.labelContainerClass, labelItemClass = options.labelItemClass, panelItemClass = options.panelItemClass;
+        var mode = options.mode, tabContainerClass = options.tabContainerClass, labelContainerClass = options.labelContainerClass, labelItemClass = options.labelItemClass, panelContainerClass = options.panelContainerClass, panelItemClass = options.panelItemClass;
         var expandedOptions = $.extend(options, {
-            horizontalTabContainerClass: tabContainerClass + '-horizontal',
-            verticalTabContainerClass: tabContainerClass + '-vertical',
+            modeTabContainerClass: tabContainerClass + '-' + mode,
+            modeLabelContainerClass: labelContainerClass + '-' + mode,
             headerLabelContainerClass: labelContainerClass + '-header',
+            modeHeaderLabelContainerClass: labelContainerClass + '-header' + '-' + mode,
             footerLabelContainerClass: labelContainerClass + '-footer',
+            modeFooterLabelContainerClass: labelContainerClass + '-footer' + '-' + mode,
             tabItemNameAttr: 'tabItemName',
             activeLabelItemClass: labelItemClass + '-active',
             inactiveLabelItemClass: labelItemClass + '-inactive',
             disabledLabelItemClass: labelItemClass + '-disabled',
             hiddenLabelItemClass: labelItemClass + '-hidden',
+            modePanelContainerClass: panelContainerClass + '-' + mode,
             activePanelItemClass: panelItemClass + '-active',
             inactivePanelItemClass: panelItemClass + '-inactive',
             disabledPanelItemClass: panelItemClass + '-disabled',
@@ -84,6 +101,7 @@
     function createLabelContainer(options) {
         var $labelContainer = $(options.labelContainerTemplate)
             .addClass(options.labelContainerClass)
+            .addClass(options.modeLabelContainerClass)
             .attr('role', 'tablist');
         if (options.mode === "vertical" /* Vertical */) {
             $labelContainer.attr('aria-orientation', 'vertical');
@@ -97,7 +115,9 @@
         var $headerLabelContainerLeaf;
         if (options.showHeaderLabelContainer) {
             var _a = createLabelContainer(options), $labelContainer = _a.$labelContainer, $labelContainerLeaf = _a.$labelContainerLeaf;
-            $labelContainer.addClass(options.headerLabelContainerClass);
+            $labelContainer
+                .addClass(options.headerLabelContainerClass)
+                .addClass(options.modeHeaderLabelContainerClass);
             $headerLabelContainer = $labelContainer;
             $headerLabelContainerLeaf = $labelContainerLeaf;
         }
@@ -105,7 +125,9 @@
     }
 
     function createPanelContainer(options) {
-        var $panelContainer = $(options.panelContainerTemplate).addClass(options.panelContainerClass);
+        var $panelContainer = $(options.panelContainerTemplate)
+            .addClass(options.panelContainerClass)
+            .addClass(options.modePanelContainerClass);
         var $panelContainerLeaf = getLeafElement($panelContainer);
         return { $panelContainer: $panelContainer, $panelContainerLeaf: $panelContainerLeaf };
     }
@@ -115,7 +137,9 @@
         var $footerLabelContainerLeaf;
         if (options.showFooterLabelContainer) {
             var _a = createLabelContainer(options), $labelContainer = _a.$labelContainer, $labelContainerLeaf = _a.$labelContainerLeaf;
-            $labelContainer.addClass(options.footerLabelContainerClass);
+            $labelContainer
+                .addClass(options.footerLabelContainerClass)
+                .addClass(options.modeFooterLabelContainerClass);
             $footerLabelContainer = $labelContainer;
             $footerLabelContainerLeaf = $labelContainerLeaf;
         }
@@ -124,14 +148,10 @@
 
     function createTabContainer(options) {
         //container
-        var $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass);
+        var $tabContainer = $(options.tabContainerTemplate)
+            .addClass(options.tabContainerClass)
+            .addClass(options.modeTabContainerClass);
         var $tabContainerLeaf = getLeafElement($tabContainer);
-        if (options.mode === "horizontal" /* Horizontal */) {
-            $tabContainer.addClass(options.horizontalTabContainerClass);
-        }
-        else if (options.mode === "vertical" /* Vertical */) {
-            $tabContainer.addClass(options.verticalTabContainerClass);
-        }
         //header labels
         var _a = createHeaderLabelContainer(options), $headerLabelContainer = _a.$headerLabelContainer, $headerLabelContainerLeaf = _a.$headerLabelContainerLeaf;
         $headerLabelContainer && $tabContainerLeaf.append($headerLabelContainer);
@@ -1023,7 +1043,7 @@
     var nextContainerId = 0;
     function tablize($region, customOptions) {
         var dataOptions = $region.data();
-        var options = getExpandedOptions(defaultOptions, dataOptions, customOptions);
+        var options = expandedOptions(defaultOptions, dataOptions, customOptions);
         var context = {
             tabState: 0 /* Initializing */,
             containerId: nextContainerId++,
@@ -1080,10 +1100,10 @@
     }
 
     /// <reference path='public.d.ts' />
-    $.fn.tab = function (customOptions) {
+    $.fn.tab = function (options) {
+        var normalizedOptions = normalizeOptions(options);
         this.each(function (index, region) {
-            var $region = $(region);
-            tablize($region, customOptions);
+            tablize($(region), normalizedOptions);
         });
         return this;
     };

@@ -51,7 +51,7 @@ $('.region').tab({
 `label-item` and `page-item` pair is a "tab item".
 
 # Including CSS
-jquery-tab provides default CSS styles if you don't want to make from scratch. Make sure CSS class name options and template options are not customized.
+jquery-tab provides default CSS styles if you don't want to make from scratch. Make sure CSS class name options are not customized.
 
 ## Importing by module
 ```javascript
@@ -229,7 +229,9 @@ Label container's html template.
 `labelContainerClass` (default: `label-container`)  
 CSS class for label container.  
 if it is header label container, then also append class "`labelContainerClass`-header".  
-if it is footer label container, then also append class "`labelContainerClass`-footer".
+if it is footer label container, then also append class "`labelContainerClass`-footer".  
+Also append mode class "`labelContainerClass`-horizontal" / "`labelContainerClass`-vertical".  
+Also append location mode "`labelContainerClass`-header-horizontal" / "`labelContainerClass`-header-vertical", "`labelContainerClass`-footer-horizontal" / "`labelContainerClass`-footer-vertical".
 
 `showHeaderLabelContainer` (default: `true`)  
 If show label container before panel container.
@@ -252,7 +254,8 @@ If the label's tab item is hidden, then also append class "`labelItemClass`-hidd
 Panel containers's html template.
 
 `panelContainerClass` (default: `panel-container`)  
-CSS class for panel container.
+CSS class for panel container.  
+Also append mode class "`panelContainerClass`-horizontal" / "`panelContainerClass`-vertical".  
 
 `panelItemTemplate`  
 Panel-item's html template.

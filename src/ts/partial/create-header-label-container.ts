@@ -9,7 +9,9 @@ function createHeaderLabelContainer(options: JQueryTab.ExpandedOptions) {
 			$labelContainer,
 			$labelContainerLeaf
 		} = createLabelContainer(options);
-		$labelContainer.addClass(options.headerLabelContainerClass);
+		$labelContainer
+			.addClass(options.headerLabelContainerClass)
+			.addClass(options.modeHeaderLabelContainerClass);
 
 		$headerLabelContainer = $labelContainer;
 		$headerLabelContainerLeaf = $labelContainerLeaf;

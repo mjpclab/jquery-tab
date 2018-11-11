@@ -1,11 +1,12 @@
 /// <reference path='public.d.ts' />
 import $ from 'jquery';
+import normalizeOptions from './utility/normalize-options';
 import tablize from './partial/tablize';
 import autoEnableTabs from './partial/auto-enable-tabs';
-$.fn.tab = function (customOptions) {
+$.fn.tab = function (options) {
+    var normalizedOptions = normalizeOptions(options);
     this.each(function (index, region) {
-        var $region = $(region);
-        tablize($region, customOptions);
+        tablize($(region), normalizedOptions);
     });
     return this;
 };

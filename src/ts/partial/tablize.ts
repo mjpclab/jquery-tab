@@ -1,6 +1,6 @@
 import $ from "jquery";
 import defaultOptions from "../utility/default-options";
-import getExpandedOptions from '../utility/get-expanded-options';
+import expandedOptions from '../utility/expanded-options';
 import createTabContainer from './create-tab-container';
 import Getter from './getter';
 import DomUpdater from './dom-updater';
@@ -16,7 +16,7 @@ let nextContainerId = 0;
 
 function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	const dataOptions = $region.data();
-	const options = getExpandedOptions(defaultOptions, dataOptions, customOptions);
+	const options = expandedOptions(defaultOptions, dataOptions, customOptions);
 
 	const context: JQueryTab.Context = {
 		tabState: JQueryTab.TabState.Initializing,

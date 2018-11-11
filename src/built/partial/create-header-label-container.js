@@ -4,7 +4,9 @@ function createHeaderLabelContainer(options) {
     var $headerLabelContainerLeaf;
     if (options.showHeaderLabelContainer) {
         var _a = createLabelContainer(options), $labelContainer = _a.$labelContainer, $labelContainerLeaf = _a.$labelContainerLeaf;
-        $labelContainer.addClass(options.headerLabelContainerClass);
+        $labelContainer
+            .addClass(options.headerLabelContainerClass)
+            .addClass(options.modeHeaderLabelContainerClass);
         $headerLabelContainer = $labelContainer;
         $headerLabelContainerLeaf = $labelContainerLeaf;
     }

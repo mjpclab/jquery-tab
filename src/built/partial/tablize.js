@@ -1,6 +1,6 @@
 import $ from "jquery";
 import defaultOptions from "../utility/default-options";
-import getExpandedOptions from '../utility/get-expanded-options';
+import expandedOptions from '../utility/expanded-options';
 import createTabContainer from './create-tab-container';
 import Getter from './getter';
 import DomUpdater from './dom-updater';
@@ -14,7 +14,7 @@ import handleClickEvent from './handle-click-event';
 var nextContainerId = 0;
 function tablize($region, customOptions) {
     var dataOptions = $region.data();
-    var options = getExpandedOptions(defaultOptions, dataOptions, customOptions);
+    var options = expandedOptions(defaultOptions, dataOptions, customOptions);
     var context = {
         tabState: 0 /* Initializing */,
         containerId: nextContainerId++,

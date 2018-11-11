@@ -6,14 +6,10 @@ import createFooterLabelContainer from './create-footer-label-container';
 
 function createTabContainer(options: JQueryTab.ExpandedOptions) {
 	//container
-	const $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass);
+	const $tabContainer = $(options.tabContainerTemplate)
+		.addClass(options.tabContainerClass)
+		.addClass(options.modeTabContainerClass);
 	const $tabContainerLeaf = getLeafElement($tabContainer);
-
-	if (options.mode === JQueryTab.Mode.Horizontal) {
-		$tabContainer.addClass(options.horizontalTabContainerClass);
-	} else if (options.mode === JQueryTab.Mode.Vertical) {
-		$tabContainer.addClass(options.verticalTabContainerClass);
-	}
 
 	//header labels
 	const {$headerLabelContainer, $headerLabelContainerLeaf} = createHeaderLabelContainer(options);

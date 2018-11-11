@@ -1,10 +1,12 @@
 declare namespace JQueryTab {
 	interface ExpandedOptions extends NecessaryOptions {
-		horizontalTabContainerClass: string;
-		verticalTabContainerClass: string;
+		modeTabContainerClass: string;
 
+		modeLabelContainerClass: string;
 		headerLabelContainerClass: string;
+		modeHeaderLabelContainerClass: string;
 		footerLabelContainerClass: string;
+		modeFooterLabelContainerClass: string;
 
 		tabItemNameAttr: string;
 
@@ -12,6 +14,8 @@ declare namespace JQueryTab {
 		inactiveLabelItemClass: string;
 		disabledLabelItemClass: string;
 		hiddenLabelItemClass: string;
+
+		modePanelContainerClass: string;
 
 		activePanelItemClass: string;
 		inactivePanelItemClass: string;

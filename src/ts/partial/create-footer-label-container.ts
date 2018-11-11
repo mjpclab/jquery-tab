@@ -9,7 +9,9 @@ function createFooterLabelContainer(options: JQueryTab.ExpandedOptions) {
 			$labelContainer,
 			$labelContainerLeaf
 		} = createLabelContainer(options);
-		$labelContainer.addClass(options.footerLabelContainerClass);
+		$labelContainer
+			.addClass(options.footerLabelContainerClass)
+			.addClass(options.modeFooterLabelContainerClass);
 
 		$footerLabelContainer = $labelContainer;
 		$footerLabelContainerLeaf = $labelContainerLeaf;

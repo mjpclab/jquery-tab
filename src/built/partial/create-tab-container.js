@@ -5,14 +5,10 @@ import createPanelContainer from './create-panel-container';
 import createFooterLabelContainer from './create-footer-label-container';
 function createTabContainer(options) {
     //container
-    var $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass);
+    var $tabContainer = $(options.tabContainerTemplate)
+        .addClass(options.tabContainerClass)
+        .addClass(options.modeTabContainerClass);
     var $tabContainerLeaf = getLeafElement($tabContainer);
-    if (options.mode === "horizontal" /* Horizontal */) {
-        $tabContainer.addClass(options.horizontalTabContainerClass);
-    }
-    else if (options.mode === "vertical" /* Vertical */) {
-        $tabContainer.addClass(options.verticalTabContainerClass);
-    }
     //header labels
     var _a = createHeaderLabelContainer(options), $headerLabelContainer = _a.$headerLabelContainer, $headerLabelContainerLeaf = _a.$headerLabelContainerLeaf;
     $headerLabelContainer && $tabContainerLeaf.append($headerLabelContainer);

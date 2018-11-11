@@ -26,12 +26,18 @@ Class names can be customized by several options:
 - `labelContainerClass`
 	- `labelContainerClass`-header
 	- `labelContainerClass`-footer
+	- `labelContainerClass`-horizontal
+	- `labelContainerClass`-vertical
+	- `labelContainerClass`-header-horizontal
+	- `labelContainerClass`-header-vertical
 - `labelItemClass`
 	- `labelItemClass`-active
 	- `labelItemClass`-inactive
 	- `labelItemClass`-disabled
 	- `labelItemClass`-hidden
 - `panelContainerClass`
+	- `panelContainerClass`-horizontal
+	- `panelContainerClass`-vertical
 - `panelItemClass`
 	- `panelItemClass`-active
 	- `panelItemClass`-inactive
