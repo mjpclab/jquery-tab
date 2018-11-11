@@ -51,7 +51,7 @@ $('.region').tab({
 `label-item` and `page-item` pair is a "tab item".
 
 # Including CSS
-jquery-tab provides default CSS styles if you don't want to make from scratch. Make sure CSS class name related options are not customized.
+jquery-tab provides default CSS styles if you don't want to make from scratch. Make sure CSS class name options and template options are not customized.
 
 ## Importing by module
 ```javascript
