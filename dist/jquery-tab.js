@@ -1051,11 +1051,19 @@
             return;
         }
         $region.append($tabContainer);
-        if (context.itemCount > 0) {
-            switcher.switchToWithoutSave(saveLoad.loadPosition());
-            if (context.currentIndex === -1) {
-                switcher.switchToWithoutSave(0);
-            }
+        var loadedPosition = saveLoad.loadPosition();
+        if (typeof loadedPosition === 'object') {
+            loadedPosition.then && loadedPosition.then(function (asyncLoadedPosition) {
+                if (context.currentIndex === 0) { // not switched by outside
+                    switcher.switchToWithoutSave(asyncLoadedPosition);
+                }
+            });
+        }
+        else {
+            switcher.switchToWithoutSave(loadedPosition);
+        }
+        if (context.currentIndex === -1) {
+            switcher.switchToWithoutSave(0);
         }
         domUpdater.updateFixedHeight();
         handleHashChangeEvent(saveLoad, switcher, options);

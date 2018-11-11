@@ -204,7 +204,8 @@ A callback function to customize how active position is saved, so that this posi
 `fnLoadPosition`  
 A callback function to customize how active position is loaded.
 The returned value is either a number/string of number which represents active tab index,
-or a string represents active tab item name.
+or a string represents active tab item name,
+or a "thenable" object(like jQuery deferred or Promise) which will resolve to a name or index. 
 
 `activePosition`  
 The default initial active position of the tab.

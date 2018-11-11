@@ -79,7 +79,7 @@ class SaveLoad {
 		return -1;
 	}
 
-	loadPosition() {
+	loadPosition(): JQueryTab.TabItemPosition | JQuery.Thenable<JQueryTab.TabItemPosition> {
 		const {$statusFields} = this;
 		const {$tabContainer} = this.containers;
 		const {statusHashTemplate, fnLoadPosition, activePosition} = this.options;
