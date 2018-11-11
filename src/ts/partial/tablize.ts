@@ -19,6 +19,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	const options = getExpandedOptions(defaultOptions, dataOptions, customOptions);
 
 	const context: JQueryTab.Context = {
+		tabState: JQueryTab.TabState.Initializing,
 		containerId: nextContainerId++,
 		nextItemId: 0,
 		itemCount: 0,
@@ -71,6 +72,8 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 
 	$region.data('tab-controller', controller);
 	$tabContainer.data('tab-controller', controller);
+
+	context.tabState = JQueryTab.TabState.Ready;
 }
 
 export default tablize;

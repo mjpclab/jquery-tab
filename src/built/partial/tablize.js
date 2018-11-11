@@ -16,6 +16,7 @@ function tablize($region, customOptions) {
     var dataOptions = $region.data();
     var options = getExpandedOptions(defaultOptions, dataOptions, customOptions);
     var context = {
+        tabState: 0 /* Initializing */,
         containerId: nextContainerId++,
         nextItemId: 0,
         itemCount: 0,
@@ -54,5 +55,6 @@ function tablize($region, customOptions) {
     handleClickEvent(switcher, containers, context, options);
     $region.data('tab-controller', controller);
     $tabContainer.data('tab-controller', controller);
+    context.tabState = 1 /* Ready */;
 }
 export default tablize;

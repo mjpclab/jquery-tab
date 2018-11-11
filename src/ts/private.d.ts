@@ -21,6 +21,7 @@ declare namespace JQueryTab {
 	}
 
 	interface Context {
+		tabState: TabState;
 		containerId: number;
 		nextItemId: number;
 		itemCount: number;

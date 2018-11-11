@@ -4,6 +4,11 @@ declare namespace JQueryTab {
 	type JQueriable = string | JQuery.TypeOrArray<JQuery.Node | JQuery<JQuery.Node>>;
 	type Template = string | JQuery.Node | JQuery<JQuery.Node>;
 
+	const enum TabState {
+		Initializing = 0,
+		Ready = 1,
+	}
+
 	const enum Mode {
 		Horizontal = 'horizontal',
 		Vertical = 'vertical',

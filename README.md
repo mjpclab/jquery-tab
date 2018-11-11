@@ -157,11 +157,14 @@ Panel items' height will be fixed to fit the longest panel and will not change w
 Determine if still create tab container when there is no tab item found.
 Would be useful if you want to create empty tab container first, and add tab items dynamically.
 
-`onBeforeSwitch(oldIndex, newIndex)`  
-A callback before switching the tab. Returns `false` to cancel a switching attempt.
+`onBeforeSwitch(from:{index, name}, to:{index, name}, tabState)`  
+A callback before switching the tab.
+Returns `false` to cancel a switching attempt.
+As switching can be happened on initialization, `tabState` can be used to check. `0` is initializing, and `1` is initialized.
 
-`onAfterSwitch(oldIndex, newIndex)`  
+`onAfterSwitch(from:{index, name}, to:{index, name}, tabState)`  
 A callback after switching the tab.
+As switching can be happened on initialization, `tabState` can be used to check. `0` is initializing, and `1` is initialized.
 
 ## Tab item
 `titleSelector`  

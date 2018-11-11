@@ -508,22 +508,24 @@
             if (newIndex < 0 || newIndex >= context.itemCount || newIndex === context.currentIndex) {
                 return;
             }
-            var _c = this, domUpdater = _c.domUpdater, options = _c.options;
             var $tabContainer = this.containers.$tabContainer;
-            var oldIndex = context.currentIndex, oldName = context.currentName;
+            var _c = this.context, oldIndex = _c.currentIndex, oldName = _c.currentName, tabState = _c.tabState;
             var _d = this.options, onBeforeSwitch = _d.onBeforeSwitch, onAfterSwitch = _d.onAfterSwitch;
             //before switching callback
             if (typeof (onBeforeSwitch) === 'function') {
-                onBeforeSwitch.call($tabContainer, { index: oldIndex, name: oldName }, { index: newIndex, name: newName });
+                var callBackResult = onBeforeSwitch.call($tabContainer, { index: oldIndex, name: oldName }, { index: newIndex, name: newName }, tabState);
+                if (callBackResult === false) {
+                    return;
+                }
             }
             //update state
-            domUpdater.updateActiveState(newIndex);
+            this.domUpdater.updateActiveState(newIndex);
             //finalize
             context.currentIndex = newIndex;
             context.currentName = newName;
             //after switching callback
             if (typeof (onAfterSwitch) === 'function') {
-                onAfterSwitch.call($tabContainer, { index: oldIndex, name: oldName }, { index: newIndex, name: newName });
+                onAfterSwitch.call($tabContainer, { index: oldIndex, name: oldName }, { index: newIndex, name: newName }, tabState);
             }
             return { index: newIndex, name: newName };
         };
@@ -1021,6 +1023,7 @@
         var dataOptions = $region.data();
         var options = getExpandedOptions(defaultOptions, dataOptions, customOptions);
         var context = {
+            tabState: 0 /* Initializing */,
             containerId: nextContainerId++,
             nextItemId: 0,
             itemCount: 0,
@@ -1059,6 +1062,7 @@
         hahdleClickEvent(switcher, containers, context, options);
         $region.data('tab-controller', controller);
         $tabContainer.data('tab-controller', controller);
+        context.tabState = 1 /* Ready */;
     }
 
     function autoEnableTabs() {

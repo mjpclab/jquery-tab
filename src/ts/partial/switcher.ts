@@ -39,22 +39,25 @@ class Switcher {
 			return;
 		}
 
-		const {domUpdater, options} = this;
 		const {$tabContainer} = this.containers;
-		const {currentIndex: oldIndex, currentName: oldName} = context;
+		const {currentIndex: oldIndex, currentName: oldName, tabState} = this.context;
 		const {onBeforeSwitch, onAfterSwitch} = this.options;
 
 		//before switching callback
 		if (typeof (onBeforeSwitch) === 'function') {
-			onBeforeSwitch.call(
+			const callBackResult = onBeforeSwitch.call(
 				$tabContainer,
 				{index: oldIndex, name: oldName},
-				{index: newIndex, name: newName}
+				{index: newIndex, name: newName},
+				tabState
 			);
+			if (callBackResult === false) {
+				return;
+			}
 		}
 
 		//update state
-		domUpdater.updateActiveState(newIndex);
+		this.domUpdater.updateActiveState(newIndex);
 
 		//finalize
 		context.currentIndex = newIndex;
@@ -65,7 +68,8 @@ class Switcher {
 			onAfterSwitch.call(
 				$tabContainer,
 				{index: oldIndex, name: oldName},
-				{index: newIndex, name: newName}
+				{index: newIndex, name: newName},
+				tabState
 			);
 		}
 
