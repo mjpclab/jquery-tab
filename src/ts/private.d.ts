@@ -32,6 +32,7 @@ declare namespace JQueryTab {
 	interface Containers {
 		$region: JQuery;
 		$tabContainer: JQuery;
+		$tabContainerLeaf: JQuery;
 		$headerLabelContainer?: JQuery;
 		$headerLabelContainerLeaf?: JQuery;
 		$panelContainer: JQuery;

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<link rel="stylesheet" type="text/css" href="../dist/theme/gray.css"/>
+	<link rel="stylesheet" type="text/css" href="css/main.css"/>
+	<title>jquery-tab demo - customized templates</title>
+</head>
+<body>
+<div class="region">
+	<h1>Structural Rules</h1>
+	<p>Title elements become tab labels.</p>
+	<p>Any rest contents until next title element become tab panel contents.</p>
+
+	<h1>JavaScript</h1>
+	<code>
+		$('.region').tab();
+	</code>
+</div>
+
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../dist/jquery-tab.js"></script>
+<script type="text/javascript">
+	$('.region').tab({
+		labelItemTemplate: '<div><b class="label-item-inner"></b></div>',
+		panelContainerTemplate: '<div><div class="panel-container-inner"></div></div>',
+	});
+</script>
+</body>
+</html>

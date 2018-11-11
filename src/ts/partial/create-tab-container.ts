@@ -1,5 +1,5 @@
 import $ from "jquery";
-
+import getLeafElement from "../utility/get-leaf-element";
 import createHeaderLabelContainer from './create-header-label-container';
 import createPanelContainer from './create-panel-container';
 import createFooterLabelContainer from './create-footer-label-container';
@@ -7,6 +7,8 @@ import createFooterLabelContainer from './create-footer-label-container';
 function createTabContainer(options: JQueryTab.ExpandedOptions) {
 	//container
 	const $tabContainer = $(options.tabContainerTemplate).addClass(options.tabContainerClass);
+	const $tabContainerLeaf = getLeafElement($tabContainer);
+
 	if (options.mode === JQueryTab.Mode.Horizontal) {
 		$tabContainer.addClass(options.horizontalTabContainerClass);
 	} else if (options.mode === JQueryTab.Mode.Vertical) {
@@ -15,18 +17,19 @@ function createTabContainer(options: JQueryTab.ExpandedOptions) {
 
 	//header labels
 	const {$headerLabelContainer, $headerLabelContainerLeaf} = createHeaderLabelContainer(options);
-	$headerLabelContainer && $tabContainer.append($headerLabelContainer);
+	$headerLabelContainer && $tabContainerLeaf.append($headerLabelContainer);
 
 	//panel
 	const {$panelContainer, $panelContainerLeaf} = createPanelContainer(options);
-	$tabContainer.append($panelContainer);
+	$tabContainerLeaf.append($panelContainer);
 
 	//footer labels
 	const {$footerLabelContainer, $footerLabelContainerLeaf} = createFooterLabelContainer(options);
-	$footerLabelContainer && $tabContainer.append($footerLabelContainer);
+	$footerLabelContainer && $tabContainerLeaf.append($footerLabelContainer);
 
 	return {
 		$tabContainer,
+		$tabContainerLeaf,
 		$headerLabelContainer,
 		$headerLabelContainerLeaf,
 		$panelContainer,
