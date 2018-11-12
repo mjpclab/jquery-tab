@@ -1073,21 +1073,23 @@
             return;
         }
         $region.append($tabContainer);
-        var loadedPosition = saveLoad.loadPosition();
-        if (typeof loadedPosition === 'object') {
-            loadedPosition.then && loadedPosition.then(function (asyncLoadedPosition) {
-                if (context.currentIndex === 0) { // not switched by outside
-                    switcher.switchToWithoutSave(asyncLoadedPosition);
-                }
-            });
+        if (context.itemCount > 0) {
+            var loadedPosition = saveLoad.loadPosition();
+            if (typeof loadedPosition === 'object') {
+                loadedPosition.then && loadedPosition.then(function (asyncLoadedPosition) {
+                    if (context.currentIndex === 0) { // not switched by outside
+                        switcher.switchToWithoutSave(asyncLoadedPosition);
+                    }
+                });
+            }
+            else {
+                switcher.switchToWithoutSave(loadedPosition);
+            }
+            if (context.currentIndex === -1) {
+                switcher.switchToWithoutSave(0);
+            }
+            domUpdater.updateFixedHeight();
         }
-        else {
-            switcher.switchToWithoutSave(loadedPosition);
-        }
-        if (context.currentIndex === -1) {
-            switcher.switchToWithoutSave(0);
-        }
-        domUpdater.updateFixedHeight();
         handleHashChangeEvent(saveLoad, switcher, options);
         hahdleClickEvent(switcher, containers, context, options);
         $region.data('tab-controller', controller);

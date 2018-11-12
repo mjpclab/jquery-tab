@@ -58,22 +58,24 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	}
 	$region.append($tabContainer);
 
-	const loadedPosition = saveLoad.loadPosition();
-	if (typeof loadedPosition === 'object') {
-		loadedPosition.then && loadedPosition.then(function (asyncLoadedPosition) {
-			if (context.currentIndex === 0) {  // not switched by outside
-				switcher.switchToWithoutSave(asyncLoadedPosition);
-			}
-		});
-	}
-	else {
-		switcher.switchToWithoutSave(loadedPosition);
-	}
-	if (context.currentIndex === -1) {
-		switcher.switchToWithoutSave(0);
-	}
+	if (context.itemCount > 0) {
+		const loadedPosition = saveLoad.loadPosition();
+		if (typeof loadedPosition === 'object') {
+			loadedPosition.then && loadedPosition.then(function (asyncLoadedPosition) {
+				if (context.currentIndex === 0) {  // not switched by outside
+					switcher.switchToWithoutSave(asyncLoadedPosition);
+				}
+			});
+		}
+		else {
+			switcher.switchToWithoutSave(loadedPosition);
+		}
+		if (context.currentIndex === -1) {
+			switcher.switchToWithoutSave(0);
+		}
 
-	domUpdater.updateFixedHeight();
+		domUpdater.updateFixedHeight();
+	}
 
 	handleHashChangeEvent(saveLoad, switcher, options);
 	handleClickEvent(switcher, containers, context, options);
