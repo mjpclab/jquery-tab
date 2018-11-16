@@ -17,6 +17,7 @@ function tablize($region, customOptions) {
     var options = expandedOptions(defaultOptions, dataOptions, customOptions);
     var context = {
         tabState: 0 /* Initializing */,
+        switched: false,
         containerId: nextContainerId++,
         nextItemId: 0,
         itemCount: 0,
@@ -48,7 +49,7 @@ function tablize($region, customOptions) {
         var loadedPosition = saveLoad.loadPosition();
         if (typeof loadedPosition === 'object') {
             loadedPosition.then && loadedPosition.then(function (asyncLoadedPosition) {
-                if (context.currentIndex === 0) { // not switched by outside
+                if (!context.switched) {
                     switcher.switchToWithoutSave(asyncLoadedPosition);
                 }
             });
@@ -59,6 +60,7 @@ function tablize($region, customOptions) {
         if (context.currentIndex === -1) {
             switcher.switchToWithoutSave(0);
         }
+        context.switched = false;
         domUpdater.updateFixedHeight();
     }
     handleHashChangeEvent(saveLoad, switcher, options);

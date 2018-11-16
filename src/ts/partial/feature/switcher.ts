@@ -62,6 +62,7 @@ class Switcher {
 		this.domUpdater.updateActiveState(newIndex);
 
 		//finalize
+		context.switched = true;
 		context.currentIndex = newIndex;
 		context.currentName = newName;
 

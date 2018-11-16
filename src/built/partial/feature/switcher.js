@@ -34,6 +34,7 @@ var Switcher = /** @class */ (function () {
         //update state
         this.domUpdater.updateActiveState(newIndex);
         //finalize
+        context.switched = true;
         context.currentIndex = newIndex;
         context.currentName = newName;
         //after switching callback
