@@ -1102,7 +1102,6 @@
         context.tabState = 1 /* Ready */;
     }
 
-    /// <reference path='../../type/public.d.ts' />
     function tabPlugin(options) {
         var normalizedOptions = normalizeOptions(options);
         this.each(function (index, region) {
@@ -1129,6 +1128,7 @@
         }
     }
 
+    /// <reference path='./type/public.d.ts' />
     enablePlugin('tab');
 
     return $;

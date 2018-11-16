@@ -1,4 +1,3 @@
-/// <reference path='../../type/public.d.ts' />
 import $ from "jquery";
 import normalizeOptions from "../utility/normalize-options";
 import tablize from "./tablize";
