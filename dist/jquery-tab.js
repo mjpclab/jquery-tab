@@ -1099,19 +1099,34 @@
         context.tabState = 1 /* Ready */;
     }
 
-    function autoEnableTabs() {
-        $('.tab-region').tab();
-    }
-
-    /// <reference path='public.d.ts' />
-    $.fn.tab = function (options) {
+    /// <reference path='../../type/public.d.ts' />
+    function tabPlugin(options) {
         var normalizedOptions = normalizeOptions(options);
         this.each(function (index, region) {
             tablize($(region), normalizedOptions);
         });
         return this;
-    };
-    autoEnableTabs();
+    }
+
+    function applyDefaultRegion() {
+        var $regions = $('.tab-region');
+        tabPlugin.call($regions);
+    }
+
+    function registerPlugin(pluginName) {
+        $.fn[pluginName] = tabPlugin;
+    }
+
+    var enabled = false;
+    function enablePlugin(pluginName) {
+        registerPlugin(pluginName);
+        if (!enabled) {
+            enabled = true;
+            applyDefaultRegion();
+        }
+    }
+
+    enablePlugin('tab');
 
     return $;
 

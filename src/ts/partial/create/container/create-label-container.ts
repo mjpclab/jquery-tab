@@ -1,5 +1,5 @@
 import $ from "jquery";
-import getLeafElement from "../utility/get-leaf-element";
+import getLeafElement from "../../../utility/get-leaf-element";
 
 function createLabelContainer(options: JQueryTab.ExpandedOptions) {
 	const $labelContainer = $(options.labelContainerTemplate)

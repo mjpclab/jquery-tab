@@ -1,6 +1,6 @@
 import $ from "jquery";
-import SaveLoad from "./save-load";
-import Switcher from "./switcher";
+import SaveLoad from "../feature/save-load";
+import Switcher from "../feature/switcher";
 
 const EVENT_HASH_CHANGE = 'hashchange';
 

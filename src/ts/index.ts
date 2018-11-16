@@ -1,20 +1,6 @@
-/// <reference path='public.d.ts' />
-
 import $ from 'jquery';
+import enablePlugin from "./partial/tab/enable-plugin";
 
-import normalizeOptions from './utility/normalize-options'
-import tablize from './partial/tablize';
-import autoEnableTabs from './partial/auto-enable-tabs';
-
-$.fn.tab = function (options?: JQueryTab.Options) {
-	const normalizedOptions = normalizeOptions(options);
-	this.each(function (index, region) {
-		tablize($(region), normalizedOptions);
-	});
-
-	return this;
-};
-
-autoEnableTabs();
+enablePlugin('tab');
 
 export default $;

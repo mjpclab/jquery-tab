@@ -1,5 +1,5 @@
 import $ from "jquery";
-import Switcher from "./switcher";
+import Switcher from "../feature/switcher";
 
 function hahdleClickEvent(
 	switcher: Switcher,
