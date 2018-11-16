@@ -44,6 +44,11 @@ declare namespace JQueryTab {
 		$footerLabelContainer?: JQuery;
 		$footerLabelContainerLeaf?: JQuery;
 	}
+
+	interface NormalizedTabItemPosition {
+		index: number;
+		name?: string;
+	}
 }
 
 declare function isFinite(number: string): boolean;

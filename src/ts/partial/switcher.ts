@@ -34,21 +34,23 @@ class Switcher {
 	switchToWithoutSave(newPosition: JQueryTab.TabItemPosition) {
 		const {context, getter} = this;
 
-		const {index: newIndex, name: newName} = getter.normalizePosition(newPosition);
+		const newNormalizedPos = getter.normalizePosition(newPosition);
+		const {index: newIndex, name: newName} = newNormalizedPos;
 		if (newIndex < 0 || newIndex >= context.itemCount || newIndex === context.currentIndex) {
 			return;
 		}
+		const {currentIndex: oldIndex, currentName: oldName, tabState} = context;
+		const oldNormalizedPos: JQueryTab.NormalizedTabItemPosition = {index: oldIndex, name: oldName};
 
 		const {$tabContainer} = this.containers;
-		const {currentIndex: oldIndex, currentName: oldName, tabState} = this.context;
 		const {onBeforeSwitch, onAfterSwitch} = this.options;
 
 		//before switching callback
 		if (typeof (onBeforeSwitch) === 'function') {
 			const callBackResult = onBeforeSwitch.call(
 				$tabContainer,
-				{index: oldIndex, name: oldName},
-				{index: newIndex, name: newName},
+				oldNormalizedPos,
+				newNormalizedPos,
 				tabState
 			);
 			if (callBackResult === false) {
@@ -67,13 +69,13 @@ class Switcher {
 		if (typeof (onAfterSwitch) === 'function') {
 			onAfterSwitch.call(
 				$tabContainer,
-				{index: oldIndex, name: oldName},
-				{index: newIndex, name: newName},
+				oldNormalizedPos,
+				newNormalizedPos,
 				tabState
 			);
 		}
 
-		return {index: newIndex, name: newName};
+		return newNormalizedPos;
 	}
 
 	switchTo(newPosition: JQueryTab.TabItemPosition) {

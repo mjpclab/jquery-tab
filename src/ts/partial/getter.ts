@@ -67,7 +67,7 @@ class Getter {
 		}
 	}
 
-	normalizePosition(position: JQueryTab.TabItemPosition) {
+	normalizePosition(position: JQueryTab.TabItemPosition): JQueryTab.NormalizedTabItemPosition {
 		if (typeof position === 'number') {
 			return {
 				index: position,

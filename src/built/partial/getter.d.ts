@@ -9,10 +9,7 @@ declare class Getter {
     getName(index: number): any;
     getIndexByName(name: string): number;
     positionToIndex(position: JQueryTab.TabItemPosition): number;
-    normalizePosition(position: JQueryTab.TabItemPosition): {
-        index: number;
-        name: any;
-    };
+    normalizePosition(position: JQueryTab.TabItemPosition): JQueryTab.NormalizedTabItemPosition;
     isDisabled(position: JQueryTab.TabItemPosition): boolean | undefined;
     isEnabled(position: JQueryTab.TabItemPosition): boolean;
     isHidden(position: JQueryTab.TabItemPosition): boolean | undefined;

@@ -4,26 +4,6 @@ declare namespace JQueryTab {
 	type JQueriable = string | JQuery.TypeOrArray<JQuery.Node | JQuery<JQuery.Node>>;
 	type Template = string | JQuery.Node | JQuery<JQuery.Node>;
 
-	const enum TabState {
-		Initializing = 0,
-		Ready = 1,
-	}
-
-	const enum Mode {
-		Horizontal = 'horizontal',
-		Vertical = 'vertical',
-	}
-
-	type TabItemPosition = number | string;
-
-	interface TabItem {
-		title: JQueryTab.JQueriable;
-		content: JQueryTab.JQueriable;
-		name?: string;
-		disabled?: boolean;
-		hidden?: boolean;
-	}
-
 	interface NecessaryOptions {
 		triggerEvents: string;
 		delayTriggerEvents: string;
@@ -66,6 +46,26 @@ declare namespace JQueryTab {
 	}
 
 	type Options = Partial<NecessaryOptions>;
+
+	const enum TabState {
+		Initializing = 0,
+		Ready = 1,
+	}
+
+	const enum Mode {
+		Horizontal = 'horizontal',
+		Vertical = 'vertical',
+	}
+
+	type TabItemPosition = number | string;
+
+	interface TabItem {
+		title: JQueryTab.JQueriable;
+		content: JQueryTab.JQueriable;
+		name?: string;
+		disabled?: boolean;
+		hidden?: boolean;
+	}
 
 	interface SwitchOptions {
 		includeDisabled?: boolean;

@@ -15,16 +15,18 @@ var Switcher = /** @class */ (function () {
     }
     Switcher.prototype.switchToWithoutSave = function (newPosition) {
         var _a = this, context = _a.context, getter = _a.getter;
-        var _b = getter.normalizePosition(newPosition), newIndex = _b.index, newName = _b.name;
+        var newNormalizedPos = getter.normalizePosition(newPosition);
+        var newIndex = newNormalizedPos.index, newName = newNormalizedPos.name;
         if (newIndex < 0 || newIndex >= context.itemCount || newIndex === context.currentIndex) {
             return;
         }
+        var oldIndex = context.currentIndex, oldName = context.currentName, tabState = context.tabState;
+        var oldNormalizedPos = { index: oldIndex, name: oldName };
         var $tabContainer = this.containers.$tabContainer;
-        var _c = this.context, oldIndex = _c.currentIndex, oldName = _c.currentName, tabState = _c.tabState;
-        var _d = this.options, onBeforeSwitch = _d.onBeforeSwitch, onAfterSwitch = _d.onAfterSwitch;
+        var _b = this.options, onBeforeSwitch = _b.onBeforeSwitch, onAfterSwitch = _b.onAfterSwitch;
         //before switching callback
         if (typeof (onBeforeSwitch) === 'function') {
-            var callBackResult = onBeforeSwitch.call($tabContainer, { index: oldIndex, name: oldName }, { index: newIndex, name: newName }, tabState);
+            var callBackResult = onBeforeSwitch.call($tabContainer, oldNormalizedPos, newNormalizedPos, tabState);
             if (callBackResult === false) {
                 return;
             }
@@ -36,9 +38,9 @@ var Switcher = /** @class */ (function () {
         context.currentName = newName;
         //after switching callback
         if (typeof (onAfterSwitch) === 'function') {
-            onAfterSwitch.call($tabContainer, { index: oldIndex, name: oldName }, { index: newIndex, name: newName }, tabState);
+            onAfterSwitch.call($tabContainer, oldNormalizedPos, newNormalizedPos, tabState);
         }
-        return { index: newIndex, name: newName };
+        return newNormalizedPos;
     };
     Switcher.prototype.switchTo = function (newPosition) {
         var result = this.switchToWithoutSave(newPosition);
