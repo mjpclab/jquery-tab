@@ -1,5 +1,5 @@
 import $ from "jquery";
-import getLeafElement from "../../../utility/get-leaf-element";
+import getLeafElement from "../../utility/get-leaf-element";
 import createHeaderLabelContainer from './create-header-label-container';
 import createPanelContainer from './create-panel-container';
 import createFooterLabelContainer from './create-footer-label-container';
