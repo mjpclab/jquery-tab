@@ -334,7 +334,8 @@ Only available in height fixed mode by setting option `fixedHeight`.
 
 ### Switch
 `switchTo(name|index)`  
-Switch active(selected) tab item to the one which its name is `name` or its index is `index`.
+Switch active(selected) tab item to the one which its name is `name` or its index is `index`.  
+If switch succeed, returns new active position information `{index, name?}`.
 
 `switchPrevious({includeDisabled?, includeHidden?, exclude?, loop?}?)`  
 `switchNext({includeDisabled?, includeHidden?, exclude?, loop?}?)`  
@@ -342,7 +343,8 @@ Switch to previous/next tab item.
 If `includeDisabled` is `true`, disabled tab item will not be skipped.  
 If `includeHidden` is `true`, hidden tab item will not be skipped.  
 Optional `exclude` is an array of tab item name or tab item index, which will be skipped when switching. Prior than `includeDisabled` and `includeHidden`.  
-If `loop` is `true`, once current active tab item is the last item on the direction, will loop to the first item.
+If `loop` is `true`, once current active tab item is the last item on the direction, will loop to the first item.  
+If switch succeed, returns new active position information `{index, name?}`.
 
 ### Modify
 `addTabItem({title, content, name?, disabled?, hidden?})`  
