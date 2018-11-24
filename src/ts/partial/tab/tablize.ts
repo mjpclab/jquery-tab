@@ -11,6 +11,7 @@ import AddRemove from '../feature/add-remove';
 import generateController from '../feature/generate-controller';
 import handleHashChangeEvent from '../event-handler/handle-hash-change-event';
 import handleClickEvent from '../event-handler/handle-click-event';
+import handleKeypressEvent from '../event-handler/handle-keypress-event';
 
 let nextContainerId = 0;
 
@@ -85,6 +86,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 
 	handleHashChangeEvent(saveLoad, switcher, options);
 	handleClickEvent(switcher, containers, context, options);
+	handleKeypressEvent(switcher, containers, context);
 
 	$region.data('tab-controller', controller);
 	$tabContainer.data('tab-controller', controller);
