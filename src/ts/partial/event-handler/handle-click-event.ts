@@ -1,7 +1,7 @@
-import $ from "jquery";
-import Switcher from "../feature/switcher";
+import $ from 'jquery';
+import Switcher from '../feature/switcher';
 
-function hahdleClickEvent(
+function handleClickEvent(
 	switcher: Switcher,
 	containers: JQueryTab.Containers,
 	context: JQueryTab.Context,
@@ -113,4 +113,4 @@ function hahdleClickEvent(
 
 }
 
-export default hahdleClickEvent;
+export default handleClickEvent;

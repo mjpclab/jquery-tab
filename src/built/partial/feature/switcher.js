@@ -1,4 +1,4 @@
-import $ from "jquery";
+import $ from 'jquery';
 var SwitchDirection;
 (function (SwitchDirection) {
     SwitchDirection[SwitchDirection["Backward"] = 0] = "Backward";

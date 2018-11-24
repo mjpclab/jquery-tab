@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import applyDefaultRegion from "./apply-default-region";
+import applyDefaultRegion from './apply-default-region';
 import registerPlugin from './register-plugin';
 
 let enabled = false;

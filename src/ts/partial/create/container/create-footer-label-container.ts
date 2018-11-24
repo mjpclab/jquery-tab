@@ -1,4 +1,4 @@
-import createLabelContainer from "./create-label-container";
+import createLabelContainer from './create-label-container';
 
 function createFooterLabelContainer(options: JQueryTab.ExpandedOptions) {
 	let $footerLabelContainer: JQuery | undefined;

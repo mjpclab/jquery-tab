@@ -1,5 +1,5 @@
-import $ from "jquery";
-function hahdleClickEvent(switcher, containers, context, options) {
+import $ from 'jquery';
+function handleClickEvent(switcher, containers, context, options) {
     var triggerEvents = options.triggerEvents, delayTriggerEvents = options.delayTriggerEvents, delayTriggerCancelEvents = options.delayTriggerCancelEvents, delayTriggerLatency = options.delayTriggerLatency, disabledLabelItemClass = options.disabledLabelItemClass, hiddenLabelItemClass = options.hiddenLabelItemClass;
     var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf, $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf;
     //handle delay trigger event
@@ -81,4 +81,4 @@ function hahdleClickEvent(switcher, containers, context, options) {
         }
     }
 }
-export default hahdleClickEvent;
+export default handleClickEvent;

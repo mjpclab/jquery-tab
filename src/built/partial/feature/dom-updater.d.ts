@@ -1,4 +1,4 @@
-import Getter from "./getter";
+import Getter from './getter';
 declare class DomUpdater {
     private readonly getter;
     private readonly containers;

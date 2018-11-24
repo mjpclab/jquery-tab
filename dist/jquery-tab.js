@@ -968,7 +968,7 @@
         }
     }
 
-    function hahdleClickEvent(switcher, containers, context, options) {
+    function handleClickEvent(switcher, containers, context, options) {
         var triggerEvents = options.triggerEvents, delayTriggerEvents = options.delayTriggerEvents, delayTriggerCancelEvents = options.delayTriggerCancelEvents, delayTriggerLatency = options.delayTriggerLatency, disabledLabelItemClass = options.disabledLabelItemClass, hiddenLabelItemClass = options.hiddenLabelItemClass;
         var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf, $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf;
         //handle delay trigger event
@@ -1159,7 +1159,7 @@
             domUpdater.updateFixedHeight();
         }
         handleHashChangeEvent(saveLoad, switcher, options);
-        hahdleClickEvent(switcher, containers, context, options);
+        handleClickEvent(switcher, containers, context, options);
         handleKeypressEvent(switcher, containers, context);
         $region.data('tab-controller', controller);
         $tabContainer.data('tab-controller', controller);

@@ -1,5 +1,5 @@
-import $ from "jquery";
-import createTabItem from "../create/item/create-tab-item";
+import $ from 'jquery';
+import createTabItem from '../create/item/create-tab-item';
 var AddRemove = /** @class */ (function () {
     function AddRemove(getter, saveLoad, switcher, containers, context, options) {
         this.getter = getter;

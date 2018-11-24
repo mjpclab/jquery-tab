@@ -1,5 +1,5 @@
-import createLabelItem from "./create-label-item";
-import createPanelItem from "./create-panel-item";
+import createLabelItem from './create-label-item';
+import createPanelItem from './create-panel-item';
 
 function createTabItem(
 	tabItem: JQueryTab.TabItem,

@@ -1,4 +1,4 @@
-import Getter from "./getter";
+import Getter from './getter';
 
 class TabItemSetter {
 	private readonly getter: Getter;

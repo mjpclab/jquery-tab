@@ -1,4 +1,4 @@
-import $ from "jquery";
+import $ from 'jquery';
 
 class Getter {
 	private readonly containers: JQueryTab.Containers;

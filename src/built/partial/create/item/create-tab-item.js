@@ -1,5 +1,5 @@
-import createLabelItem from "./create-label-item";
-import createPanelItem from "./create-panel-item";
+import createLabelItem from './create-label-item';
+import createPanelItem from './create-panel-item';
 function createTabItem(tabItem, context, options) {
     var name = tabItem.name, disabled = tabItem.disabled, hidden = tabItem.hidden;
     var tabItemNameAttr = options.tabItemNameAttr, disabledLabelItemClass = options.disabledLabelItemClass, disabledPanelItemClass = options.disabledPanelItemClass, hiddenLabelItemClass = options.hiddenLabelItemClass, hiddenPanelItemClass = options.hiddenPanelItemClass;

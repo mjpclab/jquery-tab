@@ -1,4 +1,4 @@
-import $ from "jquery";
+import $ from 'jquery';
 
 const HASH_PREFIX = '#';
 const RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;

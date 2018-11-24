@@ -1,5 +1,5 @@
-import Getter from "./getter";
-import SaveLoad from "./save-load";
+import Getter from './getter';
+import SaveLoad from './save-load';
 import Switcher from './switcher';
 declare class AddRemove {
     private readonly getter;

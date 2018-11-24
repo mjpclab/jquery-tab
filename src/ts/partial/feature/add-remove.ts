@@ -1,8 +1,8 @@
-import $ from "jquery";
-import Getter from "./getter";
-import SaveLoad from "./save-load";
+import $ from 'jquery';
+import Getter from './getter';
+import SaveLoad from './save-load';
 import Switcher from './switcher';
-import createTabItem from "../create/item/create-tab-item";
+import createTabItem from '../create/item/create-tab-item';
 
 class AddRemove {
 	private readonly getter: Getter;

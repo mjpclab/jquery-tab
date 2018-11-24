@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Getter from "./getter";
+import Getter from './getter';
 
 class DomUpdater {
 	private readonly getter: Getter;

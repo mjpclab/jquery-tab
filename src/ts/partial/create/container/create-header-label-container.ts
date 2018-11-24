@@ -1,4 +1,4 @@
-import createLabelContainer from "./create-label-container";
+import createLabelContainer from './create-label-container';
 
 function createHeaderLabelContainer(options: JQueryTab.ExpandedOptions) {
 	let $headerLabelContainer: JQuery | undefined;

@@ -1,5 +1,5 @@
-import $ from "jquery";
-import getLeafElement from "../../utility/get-leaf-element";
+import $ from 'jquery';
+import getLeafElement from '../../utility/get-leaf-element';
 function createPanelItem(tabItem, options) {
     var $panelItem = $(options.panelItemTemplate)
         .addClass(options.panelItemClass)

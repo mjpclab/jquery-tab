@@ -1,5 +1,5 @@
-import $ from "jquery";
-import defaultOptions from "../utility/default-options";
+import $ from 'jquery';
+import defaultOptions from '../utility/default-options';
 import expandedOptions from '../utility/expanded-options';
 import createTabContainer from '../create/container/create-tab-container';
 import Getter from '../feature/getter';

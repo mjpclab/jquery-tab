@@ -1,7 +1,7 @@
-import Getter from "./getter";
+import Getter from './getter';
 import DomUpdater from './dom-updater';
 import TabItemSetter from './tab-item-setter';
-import Switcher from "./switcher";
+import Switcher from './switcher';
 import AddRemove from './add-remove';
 declare function generateController(getter: Getter, domUpdater: DomUpdater, tabItemSetter: TabItemSetter, switcher: Switcher, addRemove: AddRemove): {
     getCount: () => number;

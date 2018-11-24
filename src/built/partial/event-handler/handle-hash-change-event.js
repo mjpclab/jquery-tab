@@ -1,4 +1,4 @@
-import $ from "jquery";
+import $ from 'jquery';
 var EVENT_HASH_CHANGE = 'hashchange';
 function handleHashChangeEvent(saveLoad, switcher, options) {
     if (options.statusHashTemplate && window) {

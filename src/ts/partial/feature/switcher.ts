@@ -1,4 +1,4 @@
-import $ from "jquery";
+import $ from 'jquery';
 import Getter from './getter';
 import DomUpdater from './dom-updater';
 import SaveLoad from './save-load';

@@ -1,4 +1,4 @@
-import $ from "jquery";
+import $ from 'jquery';
 var HASH_PREFIX = '#';
 var RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
 function isValidPosition(position) {

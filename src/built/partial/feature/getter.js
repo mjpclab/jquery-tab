@@ -1,4 +1,4 @@
-import $ from "jquery";
+import $ from 'jquery';
 var Getter = /** @class */ (function () {
     function Getter(containers, context, options) {
         this.containers = containers;

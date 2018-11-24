@@ -1,6 +1,6 @@
-import $ from "jquery";
-import normalizeOptions from "../utility/normalize-options";
-import tablize from "./tablize";
+import $ from 'jquery';
+import normalizeOptions from '../utility/normalize-options';
+import tablize from './tablize';
 
 function tabPlugin(this: JQuery, options?: JQueryTab.Options) {
 	const normalizedOptions = normalizeOptions(options);

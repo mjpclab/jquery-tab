@@ -1,4 +1,4 @@
-import Getter from "./getter";
+import Getter from './getter';
 declare class TabItemSetter {
     private readonly getter;
     private readonly options;
