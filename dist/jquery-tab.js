@@ -1051,6 +1051,10 @@
         }
     }
 
+    var UP = 'Up';
+    var DOWN = 'Down';
+    var LEFT = 'Left';
+    var RIGHT = 'Right';
     var ARROW_UP = 'ArrowUp';
     var ARROW_DOWN = 'ArrowDown';
     var ARROW_LEFT = 'ArrowLeft';
@@ -1074,11 +1078,15 @@
         $labelContainers.keydown(function (e) {
             if (e.key) {
                 switch (e.key) {
+                    case UP:
+                    case LEFT:
                     case ARROW_UP:
                     case ARROW_LEFT:
                         switcher.switchPrevious();
                         setFocus(this);
                         break;
+                    case DOWN:
+                    case RIGHT:
                     case ARROW_DOWN:
                     case ARROW_RIGHT:
                         switcher.switchNext();

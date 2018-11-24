@@ -1,6 +1,11 @@
 import $ from 'jquery';
 import Switcher from '../feature/switcher';
 
+const UP = 'Up';
+const DOWN = 'Down';
+const LEFT = 'Left';
+const RIGHT = 'Right';
+
 const ARROW_UP = 'ArrowUp';
 const ARROW_DOWN = 'ArrowDown';
 const ARROW_LEFT = 'ArrowLeft';
@@ -32,11 +37,15 @@ function handleKeypressEvent(
 	$labelContainers.keydown(function (e) {
 		if (e.key) {
 			switch (e.key) {
+				case UP:
+				case LEFT:
 				case ARROW_UP:
 				case ARROW_LEFT:
 					switcher.switchPrevious();
 					setFocus(this);
 					break;
+				case DOWN:
+				case RIGHT:
 				case ARROW_DOWN:
 				case ARROW_RIGHT:
 					switcher.switchNext();
