@@ -21,7 +21,7 @@
     }
 
     var defaultOptions = {
-        triggerEvents: 'click',
+        triggerEvents: 'focus click',
         delayTriggerEvents: '',
         delayTriggerCancelEvents: '',
         delayTriggerLatency: 200,
@@ -626,6 +626,7 @@
         var $labelItem = $(options.labelItemTemplate)
             .addClass(options.labelItemClass)
             .addClass(options.inactiveLabelItemClass)
+            .attr('tabindex', '0')
             .attr('role', 'tab');
         var $labelItemLeaf = getLeafElement($labelItem);
         $labelItemLeaf.append(tabItem.title);
