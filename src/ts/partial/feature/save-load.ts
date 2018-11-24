@@ -3,7 +3,7 @@ import $ from "jquery";
 const HASH_PREFIX = '#';
 const RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
 
-function isValidPosition(position: JQueryTab.TabItemPosition) {
+function isValidPosition(position: JQueryTab.ThenableTabItemPosition) {
 	return position !== -1 && position !== undefined && position !== null && position !== '';
 }
 
@@ -79,12 +79,12 @@ class SaveLoad {
 		return -1;
 	}
 
-	loadPosition(): JQueryTab.TabItemPosition | JQuery.Thenable<JQueryTab.TabItemPosition> {
+	loadPosition(): JQueryTab.ThenableTabItemPosition {
 		const {$statusFields} = this;
 		const {$tabContainer} = this.containers;
 		const {statusHashTemplate, fnLoadPosition, activePosition} = this.options;
 
-		let position: JQueryTab.TabItemPosition = -1;
+		let position: JQueryTab.ThenableTabItemPosition = -1;
 		$statusFields.each(function (i, statusField) {
 			const status = $(statusField).val() as string | number;
 			if (typeof status === 'number' || status.length) {
@@ -106,7 +106,14 @@ class SaveLoad {
 		if (fnLoadPosition) {
 			position = fnLoadPosition.call($tabContainer);
 			if (isValidPosition(position)) {
-				return position;
+				if (typeof position === 'object') {
+					if (position.then) {
+						return position;
+					}
+				}
+				else {
+					return position;
+				}
 			}
 		}
 

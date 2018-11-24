@@ -58,6 +58,7 @@ declare namespace JQueryTab {
 	}
 
 	type TabItemPosition = number | string;
+	type ThenableTabItemPosition = number | string | JQuery.Thenable<number | string>;
 
 	interface TabItem {
 		title: JQueryTab.JQueriable;

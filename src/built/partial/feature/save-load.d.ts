@@ -6,6 +6,6 @@ declare class SaveLoad {
     constructor(containers: JQueryTab.Containers, options: JQueryTab.ExpandedOptions);
     savePosition(position: JQueryTab.TabItemPosition): void;
     parseHashPosition(): string | -1;
-    loadPosition(): JQueryTab.TabItemPosition | JQuery.Thenable<JQueryTab.TabItemPosition>;
+    loadPosition(): JQueryTab.ThenableTabItemPosition;
 }
 export default SaveLoad;

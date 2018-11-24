@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<link rel="stylesheet" type="text/css" href="../dist/theme/gray.css"/>
+	<link rel="stylesheet" type="text/css" href="css/main.css"/>
+	<title>jquery-tab demo - load position by Promise</title>
+</head>
+<body>
+<div class="region" data-active-position="1">
+	<h1>Structural Rules</h1>
+	<p>Title elements become tab labels.</p>
+	<p>Any rest contents until next title element become tab panel contents.</p>
+
+	<h1>Save to localStorage</h1>
+	<p>Save current active tab item information into localStorage, so that it could be kept after refresh.</p>
+
+	<h1>JavaScript</h1>
+	<code>
+		$('.region').tab(fnSavePosition:..., fnLoadPosition:...);
+	</code>
+</div>
+
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../dist/jquery-tab.js"></script>
+<script type="text/javascript">
+	$('.region').tab({
+		fnLoadPosition: function () {
+			return new Promise(function (resolve) {
+				setTimeout(function () {
+					resolve(2);
+				}, 1000);
+			});
+		}
+	});
+</script>
+</body>
+</html>

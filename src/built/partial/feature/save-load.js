@@ -81,7 +81,14 @@ var SaveLoad = /** @class */ (function () {
         if (fnLoadPosition) {
             position = fnLoadPosition.call($tabContainer);
             if (isValidPosition(position)) {
-                return position;
+                if (typeof position === 'object') {
+                    if (position.then) {
+                        return position;
+                    }
+                }
+                else {
+                    return position;
+                }
             }
         }
         if (isValidPosition(activePosition)) {

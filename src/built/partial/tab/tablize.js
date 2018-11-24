@@ -57,10 +57,13 @@ function tablize($region, customOptions) {
         else {
             switcher.switchToWithoutSave(loadedPosition);
         }
+        if (context.currentIndex === -1 && options.activePosition !== 0) {
+            switcher.switchToWithoutSave(options.activePosition);
+        }
         if (context.currentIndex === -1) {
             switcher.switchToWithoutSave(0);
         }
-        context.switched = false;
+        context.switched = false; //reset to false after initial switch
         domUpdater.updateFixedHeight();
     }
     handleHashChangeEvent(saveLoad, switcher, options);
