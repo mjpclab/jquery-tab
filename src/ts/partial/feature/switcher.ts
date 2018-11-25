@@ -54,7 +54,7 @@ class Switcher {
 				tabState
 			);
 			if (callBackResult === false) {
-				return;
+				return false;
 			}
 		}
 

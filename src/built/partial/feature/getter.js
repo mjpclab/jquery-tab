@@ -100,27 +100,23 @@ var Getter = /** @class */ (function () {
     Getter.prototype.isVisible = function (position) {
         return !this.isHidden(position);
     };
-    Getter.prototype.getHeaderLabel = function (position) {
-        var $headerLabelContainerLeaf = this.containers.$headerLabelContainerLeaf;
-        if ($headerLabelContainerLeaf) {
+    Getter.prototype.getLabel = function (position, $labelContainerLeaf) {
+        if ($labelContainerLeaf) {
             var itemCount = this.context.itemCount;
             var index = this.positionToIndex(position);
             if (index >= 0 && index < itemCount) {
-                return $headerLabelContainerLeaf.children().eq(index);
+                return $labelContainerLeaf.children().eq(index);
             }
         }
         return $([]);
     };
+    Getter.prototype.getHeaderLabel = function (position) {
+        var $headerLabelContainerLeaf = this.containers.$headerLabelContainerLeaf;
+        return this.getLabel(position, $headerLabelContainerLeaf);
+    };
     Getter.prototype.getFooterLabel = function (position) {
         var $footerLabelContainerLeaf = this.containers.$footerLabelContainerLeaf;
-        if ($footerLabelContainerLeaf) {
-            var itemCount = this.context.itemCount;
-            var index = this.positionToIndex(position);
-            if (index >= 0 && index < itemCount) {
-                return $footerLabelContainerLeaf.children().eq(index);
-            }
-        }
-        return $([]);
+        return this.getLabel(position, $footerLabelContainerLeaf);
     };
     Getter.prototype.getHeaderFooterLabels = function (position) {
         var itemCount = this.context.itemCount;

@@ -27,6 +27,10 @@ var TabItemSetter = /** @class */ (function () {
     TabItemSetter.prototype.setVisible = function (position, visible) {
         this.setHidden(position, !visible);
     };
+    TabItemSetter.prototype.setFocus = function (position, $labelContainerLeaf) {
+        var getter = this.getter;
+        getter.getLabel(position, $($labelContainerLeaf)).focus();
+    };
     return TabItemSetter;
 }());
 export default TabItemSetter;

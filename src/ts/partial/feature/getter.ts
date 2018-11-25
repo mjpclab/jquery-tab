@@ -125,28 +125,25 @@ class Getter {
 		return !this.isHidden(position);
 	}
 
-	getHeaderLabel(position: JQueryTab.TabItemPosition) {
-		const {$headerLabelContainerLeaf} = this.containers;
-		if ($headerLabelContainerLeaf) {
+	getLabel(position: JQueryTab.TabItemPosition, $labelContainerLeaf?: JQuery<HTMLElement>) {
+		if ($labelContainerLeaf) {
 			const {itemCount} = this.context;
 			const index = this.positionToIndex(position);
 			if (index >= 0 && index < itemCount) {
-				return $headerLabelContainerLeaf.children().eq(index);
+				return $labelContainerLeaf.children().eq(index);
 			}
 		}
 		return $([]);
 	}
 
+	getHeaderLabel(position: JQueryTab.TabItemPosition) {
+		const {$headerLabelContainerLeaf} = this.containers;
+		return this.getLabel(position, $headerLabelContainerLeaf);
+	}
+
 	getFooterLabel(position: JQueryTab.TabItemPosition) {
 		const {$footerLabelContainerLeaf} = this.containers;
-		if ($footerLabelContainerLeaf) {
-			const {itemCount} = this.context;
-			const index = this.positionToIndex(position);
-			if (index >= 0 && index < itemCount) {
-				return $footerLabelContainerLeaf.children().eq(index);
-			}
-		}
-		return $([]);
+		return this.getLabel(position, $footerLabelContainerLeaf);
 	}
 
 	getHeaderFooterLabels(position: JQueryTab.TabItemPosition) {

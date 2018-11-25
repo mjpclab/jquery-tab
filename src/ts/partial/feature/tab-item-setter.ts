@@ -44,6 +44,10 @@ class TabItemSetter {
 		this.setHidden(position, !visible);
 	}
 
+	setFocus(position: JQueryTab.TabItemPosition, $labelContainerLeaf: HTMLElement | JQuery<HTMLElement>) {
+		const {getter} = this;
+		getter.getLabel(position, $($labelContainerLeaf)).focus();
+	}
 }
 
 export default TabItemSetter;

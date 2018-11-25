@@ -14,6 +14,7 @@ declare class Getter {
     isEnabled(position: JQueryTab.TabItemPosition): boolean;
     isHidden(position: JQueryTab.TabItemPosition): boolean | undefined;
     isVisible(position: JQueryTab.TabItemPosition): boolean;
+    getLabel(position: JQueryTab.TabItemPosition, $labelContainerLeaf?: JQuery<HTMLElement>): JQuery<HTMLElement>;
     getHeaderLabel(position: JQueryTab.TabItemPosition): JQuery<HTMLElement>;
     getFooterLabel(position: JQueryTab.TabItemPosition): JQuery<HTMLElement>;
     getHeaderFooterLabels(position: JQueryTab.TabItemPosition): JQuery<HTMLElement>;

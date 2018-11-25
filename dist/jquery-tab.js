@@ -2,15 +2,15 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery')) :
     typeof define === 'function' && define.amd ? define(['jquery'], factory) :
     (global['jquery-tab'] = factory(global.jQuery));
-}(this, (function ($) { 'use strict';
+}(this, (function ($$1) { 'use strict';
 
-    $ = $ && $.hasOwnProperty('default') ? $['default'] : $;
+    $$1 = $$1 && $$1.hasOwnProperty('default') ? $$1['default'] : $$1;
 
     function normalizeOptions(options) {
         if (!options) {
             return;
         }
-        var normalizedOptions = $.extend({}, options);
+        var normalizedOptions = $$1.extend({}, options);
         var mode = normalizedOptions.mode;
         if (mode) {
             if (mode !== "horizontal" /* Horizontal */ && mode !== "vertical" /* Vertical */) {
@@ -65,9 +65,9 @@
     };
 
     function expandedOptions(defaultOptions, dataOptions, customOptions) {
-        var options = $.extend({}, defaultOptions, dataOptions, customOptions);
+        var options = $$1.extend({}, defaultOptions, dataOptions, customOptions);
         var mode = options.mode, tabContainerClass = options.tabContainerClass, labelContainerClass = options.labelContainerClass, labelItemClass = options.labelItemClass, panelContainerClass = options.panelContainerClass, panelItemClass = options.panelItemClass;
-        var expandedOptions = $.extend(options, {
+        var expandedOptions = $$1.extend(options, {
             modeTabContainerClass: tabContainerClass + '-' + mode,
             modeLabelContainerClass: labelContainerClass + '-' + mode,
             headerLabelContainerClass: labelContainerClass + '-header',
@@ -99,7 +99,7 @@
     }
 
     function createLabelContainer(options) {
-        var $labelContainer = $(options.labelContainerTemplate)
+        var $labelContainer = $$1(options.labelContainerTemplate)
             .addClass(options.labelContainerClass)
             .addClass(options.modeLabelContainerClass)
             .attr('role', 'tablist');
@@ -125,7 +125,7 @@
     }
 
     function createPanelContainer(options) {
-        var $panelContainer = $(options.panelContainerTemplate)
+        var $panelContainer = $$1(options.panelContainerTemplate)
             .addClass(options.panelContainerClass)
             .addClass(options.modePanelContainerClass);
         var $panelContainerLeaf = getLeafElement($panelContainer);
@@ -148,7 +148,7 @@
 
     function createTabContainer(options) {
         //container
-        var $tabContainer = $(options.tabContainerTemplate)
+        var $tabContainer = $$1(options.tabContainerTemplate)
             .addClass(options.tabContainerClass)
             .addClass(options.modeTabContainerClass);
         var $tabContainerLeaf = getLeafElement($tabContainer);
@@ -201,7 +201,7 @@
             var $panelContainerLeaf = this.containers.$panelContainerLeaf;
             var tabItemNameAttr = this.options.tabItemNameAttr;
             $panelContainerLeaf.children().each(function (index, panel) {
-                var $panel = $(panel);
+                var $panel = $$1(panel);
                 if ($panel.data(tabItemNameAttr) === name) {
                     tabItemIndex = index;
                     return false;
@@ -274,27 +274,23 @@
         Getter.prototype.isVisible = function (position) {
             return !this.isHidden(position);
         };
-        Getter.prototype.getHeaderLabel = function (position) {
-            var $headerLabelContainerLeaf = this.containers.$headerLabelContainerLeaf;
-            if ($headerLabelContainerLeaf) {
+        Getter.prototype.getLabel = function (position, $labelContainerLeaf) {
+            if ($labelContainerLeaf) {
                 var itemCount = this.context.itemCount;
                 var index = this.positionToIndex(position);
                 if (index >= 0 && index < itemCount) {
-                    return $headerLabelContainerLeaf.children().eq(index);
+                    return $labelContainerLeaf.children().eq(index);
                 }
             }
-            return $([]);
+            return $$1([]);
+        };
+        Getter.prototype.getHeaderLabel = function (position) {
+            var $headerLabelContainerLeaf = this.containers.$headerLabelContainerLeaf;
+            return this.getLabel(position, $headerLabelContainerLeaf);
         };
         Getter.prototype.getFooterLabel = function (position) {
             var $footerLabelContainerLeaf = this.containers.$footerLabelContainerLeaf;
-            if ($footerLabelContainerLeaf) {
-                var itemCount = this.context.itemCount;
-                var index = this.positionToIndex(position);
-                if (index >= 0 && index < itemCount) {
-                    return $footerLabelContainerLeaf.children().eq(index);
-                }
-            }
-            return $([]);
+            return this.getLabel(position, $footerLabelContainerLeaf);
         };
         Getter.prototype.getHeaderFooterLabels = function (position) {
             var itemCount = this.context.itemCount;
@@ -302,7 +298,7 @@
             if (index >= 0 && index < itemCount) {
                 return this.getHeaderLabel(index).add(this.getFooterLabel(index));
             }
-            return $([]);
+            return $$1([]);
         };
         Getter.prototype.getPanel = function (position) {
             var itemCount = this.context.itemCount;
@@ -311,7 +307,7 @@
                 var $panelContainerLeaf = this.containers.$panelContainerLeaf;
                 return $panelContainerLeaf.children().eq(index);
             }
-            return $([]);
+            return $$1([]);
         };
         Getter.prototype.getCurrentHeaderLabel = function () {
             return this.getHeaderLabel(this.context.currentIndex);
@@ -369,7 +365,7 @@
             var currentIndex = this.context.currentIndex;
             var maxHeight = 0;
             this.containers.$panelContainerLeaf.children().each(function (index, panelItem) {
-                var $panelItem = $(panelItem);
+                var $panelItem = $$1(panelItem);
                 if (index !== currentIndex) {
                     $panelItem.addClass(options.evaluatingPanelItemClass);
                 }
@@ -414,6 +410,10 @@
         TabItemSetter.prototype.setVisible = function (position, visible) {
             this.setHidden(position, !visible);
         };
+        TabItemSetter.prototype.setFocus = function (position, $labelContainerLeaf) {
+            var getter = this.getter;
+            getter.getLabel(position, $($labelContainerLeaf)).focus();
+        };
         return TabItemSetter;
     }());
 
@@ -430,7 +430,7 @@
             var statusFieldSelector = options.statusFieldSelector, statusHashTemplate = options.statusHashTemplate;
             var $statusFields = $region.find(statusFieldSelector);
             if (!$statusFields.length) {
-                $statusFields = $(statusFieldSelector);
+                $statusFields = $$1(statusFieldSelector);
             }
             this.$statusFields = $statusFields;
             if (statusHashTemplate) {
@@ -481,7 +481,7 @@
             var _a = this.options, statusHashTemplate = _a.statusHashTemplate, fnLoadPosition = _a.fnLoadPosition, activePosition = _a.activePosition;
             var position = -1;
             $statusFields.each(function (i, statusField) {
-                var status = $(statusField).val();
+                var status = $$1(statusField).val();
                 if (typeof status === 'number' || status.length) {
                     position = status;
                     return false;
@@ -546,7 +546,7 @@
             if (typeof (onBeforeSwitch) === 'function') {
                 var callBackResult = onBeforeSwitch.call($tabContainer, oldNormalizedPos, newNormalizedPos, tabState);
                 if (callBackResult === false) {
-                    return;
+                    return false;
                 }
             }
             //update state
@@ -574,7 +574,7 @@
             var getter = this.getter;
             var opts = switchOptions || {};
             var includeDisabled = opts.includeDisabled, includeHidden = opts.includeHidden, loop = opts.loop, exclude = opts.exclude;
-            var excludeIndecies = exclude && exclude.length ? $.map(exclude, function (position) {
+            var excludeIndecies = exclude && exclude.length ? $$1.map(exclude, function (position) {
                 return getter.positionToIndex(position);
             }) : [];
             var $panelContainer = this.containers.$panelContainer;
@@ -599,7 +599,7 @@
             var iterationStep = direction === SwitchDirection.Backward ? -1 : 1;
             for (var i = 1; i <= maxIterationCount; i++) {
                 var panelIndex = (currentIndex + i * iterationStep + itemCount) % itemCount;
-                if ($.inArray(panelIndex, excludeIndecies) >= 0) {
+                if ($$1.inArray(panelIndex, excludeIndecies) >= 0) {
                     continue;
                 }
                 var $panel = $panelItems.eq(panelIndex);
@@ -623,7 +623,7 @@
     }());
 
     function createLabelItem(tabItem, options) {
-        var $labelItem = $(options.labelItemTemplate)
+        var $labelItem = $$1(options.labelItemTemplate)
             .addClass(options.labelItemClass)
             .addClass(options.inactiveLabelItemClass)
             .attr('tabindex', '0')
@@ -634,7 +634,7 @@
     }
 
     function createPanelItem(tabItem, options) {
-        var $panelItem = $(options.panelItemTemplate)
+        var $panelItem = $$1(options.panelItemTemplate)
             .addClass(options.panelItemClass)
             .addClass(options.inactivePanelItemClass)
             .attr('role', 'tabpanel');
@@ -742,7 +742,7 @@
         AddRemove.prototype.insertWithoutSwitch = function (position, sourceRegion) {
             var getter = this.getter;
             var _a = this.options, titleSelector = _a.titleSelector, fnGetTitleContent = _a.fnGetTitleContent, keepTitleVisible = _a.keepTitleVisible, fnGetTabItemName = _a.fnGetTabItemName, fnIsTabItemDisabled = _a.fnIsTabItemDisabled, fnIsTabItemHidden = _a.fnIsTabItemHidden;
-            var $sourceRegion = $(sourceRegion);
+            var $sourceRegion = $$1(sourceRegion);
             var inserted = 0;
             var index = getter.positionToIndex(position);
             while (true) {
@@ -756,7 +756,7 @@
                 var $rest = $title.nextUntil(titleSelector);
                 var tabItem = {
                     title: fnGetTitleContent.call($sourceRegion, $title, $rest),
-                    content: $([]).add($title).add($rest),
+                    content: $$1([]).add($title).add($rest),
                     name: fnGetTabItemName.call($sourceRegion, $title, $rest),
                     disabled: fnIsTabItemDisabled.call($sourceRegion, $title, $rest),
                     hidden: fnIsTabItemHidden.call($sourceRegion, $title, $rest)
@@ -784,7 +784,7 @@
             var removeIndecies = [];
             for (var i = 0, len = positions.length; i < len; i++) {
                 var removeIndex = getter.positionToIndex(positions[i]);
-                if (removeIndex >= 0 && removeIndex < context.itemCount && $.inArray(removeIndex, removeIndecies) === -1) {
+                if (removeIndex >= 0 && removeIndex < context.itemCount && $$1.inArray(removeIndex, removeIndecies) === -1) {
                     removeIndecies.push(removeIndex);
                 }
             }
@@ -794,7 +794,7 @@
             removeIndecies.sort(function (prev, next) {
                 return next - prev;
             });
-            if (context.itemCount > 1 && $.inArray(context.currentIndex, removeIndecies) >= 0) {
+            if (context.itemCount > 1 && $$1.inArray(context.currentIndex, removeIndecies) >= 0) {
                 switcher.switchNext({ exclude: removeIndecies }) ||
                     switcher.switchPrevious({ exclude: removeIndecies }) ||
                     switcher.switchNext({ includeDisabled: true, exclude: removeIndecies }) ||
@@ -961,21 +961,25 @@
     var EVENT_HASH_CHANGE = 'hashchange';
     function handleHashChangeEvent(saveLoad, switcher, options) {
         if (options.statusHashTemplate && window) {
-            $(window).on(EVENT_HASH_CHANGE, function () {
+            $$1(window).on(EVENT_HASH_CHANGE, function () {
                 var position = saveLoad.parseHashPosition();
                 switcher.switchTo(position);
             });
         }
     }
 
-    function handleClickEvent(switcher, containers, context, options) {
+    function handleClickEvent(tabItemSetter, switcher, containers, context, options) {
         var triggerEvents = options.triggerEvents, delayTriggerEvents = options.delayTriggerEvents, delayTriggerCancelEvents = options.delayTriggerCancelEvents, delayTriggerLatency = options.delayTriggerLatency, disabledLabelItemClass = options.disabledLabelItemClass, hiddenLabelItemClass = options.hiddenLabelItemClass;
         var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf, $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf;
         //handle delay trigger event
         var delayTriggerTimeoutHandler;
-        var startDelayTrigger = function (position) {
+        var startDelayTrigger = function (position, $label) {
             delayTriggerTimeoutHandler = setTimeout(function () {
-                switcher.switchTo(position);
+                var switchResult = switcher.switchTo(position);
+                if (switchResult === false) { //explicitly cancelled
+                    $label.blur();
+                    tabItemSetter.setFocus(context.currentIndex, $label.parent());
+                }
                 delayTriggerTimeoutHandler = undefined;
             }, delayTriggerLatency);
         };
@@ -990,20 +994,20 @@
                 return;
             }
             cancelDelayTrigger();
-            var $label = $(e.currentTarget);
+            var $label = $$1(e.currentTarget);
             var labelIndex = $label.index();
             if (labelIndex === context.currentIndex ||
                 $label.hasClass(disabledLabelItemClass) ||
                 $label.hasClass(hiddenLabelItemClass)) {
                 return;
             }
-            startDelayTrigger(labelIndex);
+            startDelayTrigger(labelIndex, $label);
         };
         var labelItemCancelDelayClick = function (e) {
             if (e.currentTarget.parentNode !== e.delegateTarget) {
                 return;
             }
-            var $label = $(e.currentTarget);
+            var $label = $$1(e.currentTarget);
             var labelIndex = $label.index();
             if (labelIndex === context.currentIndex) {
                 return;
@@ -1032,14 +1036,18 @@
                 return;
             }
             cancelDelayTrigger();
-            var $label = $(e.currentTarget);
+            var $label = $$1(e.currentTarget);
             var labelIndex = $label.index();
             if (labelIndex === context.currentIndex ||
                 $label.hasClass(disabledLabelItemClass) ||
                 $label.hasClass(hiddenLabelItemClass)) {
                 return;
             }
-            switcher.switchTo(labelIndex);
+            var switchResult = switcher.switchTo(labelIndex);
+            if (switchResult === false) { //explicitly cancelled
+                $label.blur();
+                tabItemSetter.setFocus(context.currentIndex, $label.parent());
+            }
         };
         if (triggerEvents) {
             if ($headerLabelContainerLeaf) {
@@ -1063,17 +1071,14 @@
     var ARROW_DOWN_CODE = 40;
     var ARROW_LEFT_CODE = 37;
     var ARROW_RIGHT_CODE = 39;
-    function handleKeypressEvent(switcher, containers, context) {
-        var $labelContainers = $([]);
+    function handleKeypressEvent(tabItemSetter, switcher, containers, context) {
+        var $labelContainers = $$1([]);
         var $headerLabelContainer = containers.$headerLabelContainer, $footerLabelContainer = containers.$footerLabelContainer;
         if ($headerLabelContainer) {
             $labelContainers = $labelContainers.add($headerLabelContainer);
         }
         if ($footerLabelContainer) {
             $labelContainers = $labelContainers.add($footerLabelContainer);
-        }
-        function setFocus(container) {
-            $(container).children().eq(context.currentIndex).trigger('focus');
         }
         $labelContainers.keydown(function (e) {
             var switchResult;
@@ -1106,7 +1111,7 @@
                 }
             }
             if (switchResult) {
-                setFocus(this);
+                tabItemSetter.setFocus(context.currentIndex, this);
                 e.preventDefault();
             }
         });
@@ -1124,7 +1129,7 @@
             itemCount: 0,
             currentIndex: -1
         };
-        var containers = $.extend({ $region: $region }, createTabContainer(options));
+        var containers = $$1.extend({ $region: $region }, createTabContainer(options));
         var $tabContainer = containers.$tabContainer;
         //getters
         var getter = new Getter(containers, context, options);
@@ -1168,8 +1173,8 @@
             domUpdater.updateFixedHeight();
         }
         handleHashChangeEvent(saveLoad, switcher, options);
-        handleClickEvent(switcher, containers, context, options);
-        handleKeypressEvent(switcher, containers, context);
+        handleClickEvent(tabItemSetter, switcher, containers, context, options);
+        handleKeypressEvent(tabItemSetter, switcher, containers, context);
         $region.data('tab-controller', controller);
         $tabContainer.data('tab-controller', controller);
         context.tabState = 1 /* Ready */;
@@ -1178,18 +1183,18 @@
     function tabPlugin(options) {
         var normalizedOptions = normalizeOptions(options);
         this.each(function (index, region) {
-            tablize($(region), normalizedOptions);
+            tablize($$1(region), normalizedOptions);
         });
         return this;
     }
 
     function applyDefaultRegion() {
-        var $regions = $('.tab-region');
+        var $regions = $$1('.tab-region');
         tabPlugin.call($regions);
     }
 
     function registerPlugin(pluginName) {
-        $.fn[pluginName] = tabPlugin;
+        $$1.fn[pluginName] = tabPlugin;
     }
 
     var enabled = false;
@@ -1204,6 +1209,6 @@
     /// <reference path='./type/public.d.ts' />
     enablePlugin('tab');
 
-    return $;
+    return $$1;
 
 })));

@@ -1,7 +1,9 @@
 import $ from 'jquery';
+import TabItemSetter from '../feature/tab-item-setter';
 import Switcher from '../feature/switcher';
 
 function handleClickEvent(
+	tabItemSetter: TabItemSetter,
 	switcher: Switcher,
 	containers: JQueryTab.Containers,
 	context: JQueryTab.Context,
@@ -22,9 +24,16 @@ function handleClickEvent(
 
 	//handle delay trigger event
 	let delayTriggerTimeoutHandler: any;
-	const startDelayTrigger = function (position: JQueryTab.TabItemPosition) {
+	const startDelayTrigger = function (
+		position: JQueryTab.TabItemPosition,
+		$label: JQuery<HTMLElement>
+	) {
 		delayTriggerTimeoutHandler = setTimeout(function () {
-			switcher.switchTo(position);
+			const switchResult = switcher.switchTo(position);
+			if (switchResult === false) {  //explicitly cancelled
+				$label.blur();
+				tabItemSetter.setFocus(context.currentIndex, $label.parent());
+			}
 			delayTriggerTimeoutHandler = undefined;
 		}, delayTriggerLatency);
 	};
@@ -50,7 +59,7 @@ function handleClickEvent(
 		) {
 			return;
 		}
-		startDelayTrigger(labelIndex);
+		startDelayTrigger(labelIndex, $label);
 	};
 	const labelItemCancelDelayClick = function (e: any) {
 		if (e.currentTarget.parentNode !== e.delegateTarget) {
@@ -99,7 +108,11 @@ function handleClickEvent(
 			return;
 		}
 
-		switcher.switchTo(labelIndex);
+		const switchResult = switcher.switchTo(labelIndex);
+		if (switchResult === false) {  //explicitly cancelled
+			$label.blur();
+			tabItemSetter.setFocus(context.currentIndex, $label.parent());
+		}
 	};
 
 	if (triggerEvents) {

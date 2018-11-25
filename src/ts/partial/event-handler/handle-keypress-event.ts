@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import Switcher from '../feature/switcher';
+import TabItemSetter from '../feature/tab-item-setter';
 
 const UP = 'Up';
 const DOWN = 'Down';
@@ -17,6 +18,7 @@ const ARROW_LEFT_CODE = 37;
 const ARROW_RIGHT_CODE = 39;
 
 function handleKeypressEvent(
+	tabItemSetter: TabItemSetter,
 	switcher: Switcher,
 	containers: JQueryTab.Containers,
 	context: JQueryTab.Context
@@ -30,12 +32,8 @@ function handleKeypressEvent(
 		$labelContainers = $labelContainers.add($footerLabelContainer);
 	}
 
-	function setFocus(container: HTMLElement) {
-		$(container).children().eq(context.currentIndex).trigger('focus');
-	}
-
 	$labelContainers.keydown(function (e) {
-		let switchResult: JQueryTab.SwitchResult | undefined;
+		let switchResult: JQueryTab.SwitchResult | boolean | undefined;
 		if (e.key) {
 			switch (e.key) {
 				case UP:
@@ -66,7 +64,7 @@ function handleKeypressEvent(
 		}
 
 		if (switchResult) {
-			setFocus(this);
+			tabItemSetter.setFocus(context.currentIndex, this);
 			e.preventDefault();
 		}
 

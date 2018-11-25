@@ -8,5 +8,6 @@ declare class TabItemSetter {
     setEnabled(position: JQueryTab.TabItemPosition, enabled: boolean): void;
     setHidden(position: JQueryTab.TabItemPosition, hidden: boolean): void;
     setVisible(position: JQueryTab.TabItemPosition, visible: boolean): void;
+    setFocus(position: JQueryTab.TabItemPosition, $labelContainerLeaf: HTMLElement | JQuery<HTMLElement>): void;
 }
 export default TabItemSetter;

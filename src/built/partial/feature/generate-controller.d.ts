@@ -27,9 +27,9 @@ declare function generateController(getter: Getter, domUpdater: DomUpdater, tabI
     setHidden: (position: string | number, hidden?: boolean) => void;
     setVisible: (position: string | number, visible?: boolean) => void;
     updateFixedHeight: () => void;
-    switchTo: (newPosition: string | number) => JQueryTab.NormalizedTabItemPosition | undefined;
-    switchPrevious: (switchOptions?: JQueryTab.SwitchOptions | undefined) => JQueryTab.NormalizedTabItemPosition | undefined;
-    switchNext: (switchOptions?: JQueryTab.SwitchOptions | undefined) => JQueryTab.NormalizedTabItemPosition | undefined;
+    switchTo: (newPosition: string | number) => false | JQueryTab.NormalizedTabItemPosition | undefined;
+    switchPrevious: (switchOptions?: JQueryTab.SwitchOptions | undefined) => false | JQueryTab.NormalizedTabItemPosition | undefined;
+    switchNext: (switchOptions?: JQueryTab.SwitchOptions | undefined) => false | JQueryTab.NormalizedTabItemPosition | undefined;
     addTabItem: (tabItem: JQueryTab.TabItem) => void;
     insertTabItem: (position: string | number, tabItem: JQueryTab.TabItem) => void;
     add: (sourceRegion: string | Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node> | (Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node>)[]) => void;

@@ -85,8 +85,8 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	}
 
 	handleHashChangeEvent(saveLoad, switcher, options);
-	handleClickEvent(switcher, containers, context, options);
-	handleKeypressEvent(switcher, containers, context);
+	handleClickEvent(tabItemSetter, switcher, containers, context, options);
+	handleKeypressEvent(tabItemSetter, switcher, containers, context);
 
 	$region.data('tab-controller', controller);
 	$tabContainer.data('tab-controller', controller);

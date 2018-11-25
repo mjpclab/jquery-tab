@@ -11,7 +11,7 @@ var ARROW_UP_CODE = 38;
 var ARROW_DOWN_CODE = 40;
 var ARROW_LEFT_CODE = 37;
 var ARROW_RIGHT_CODE = 39;
-function handleKeypressEvent(switcher, containers, context) {
+function handleKeypressEvent(tabItemSetter, switcher, containers, context) {
     var $labelContainers = $([]);
     var $headerLabelContainer = containers.$headerLabelContainer, $footerLabelContainer = containers.$footerLabelContainer;
     if ($headerLabelContainer) {
@@ -19,9 +19,6 @@ function handleKeypressEvent(switcher, containers, context) {
     }
     if ($footerLabelContainer) {
         $labelContainers = $labelContainers.add($footerLabelContainer);
-    }
-    function setFocus(container) {
-        $(container).children().eq(context.currentIndex).trigger('focus');
     }
     $labelContainers.keydown(function (e) {
         var switchResult;
@@ -54,7 +51,7 @@ function handleKeypressEvent(switcher, containers, context) {
             }
         }
         if (switchResult) {
-            setFocus(this);
+            tabItemSetter.setFocus(context.currentIndex, this);
             e.preventDefault();
         }
     });

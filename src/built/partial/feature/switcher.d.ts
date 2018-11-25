@@ -9,10 +9,10 @@ declare class Switcher {
     private readonly context;
     private readonly options;
     constructor(getter: Getter, domUpdater: DomUpdater, saveLoad: SaveLoad, containers: JQueryTab.Containers, context: JQueryTab.Context, options: JQueryTab.ExpandedOptions);
-    switchToWithoutSave(newPosition: JQueryTab.TabItemPosition): JQueryTab.NormalizedTabItemPosition | undefined;
-    switchTo(newPosition: JQueryTab.TabItemPosition): JQueryTab.NormalizedTabItemPosition | undefined;
+    switchToWithoutSave(newPosition: JQueryTab.TabItemPosition): false | JQueryTab.NormalizedTabItemPosition | undefined;
+    switchTo(newPosition: JQueryTab.TabItemPosition): false | JQueryTab.NormalizedTabItemPosition | undefined;
     private _switchNeighbor;
-    switchPrevious(switchOptions?: JQueryTab.SwitchOptions): JQueryTab.NormalizedTabItemPosition | undefined;
-    switchNext(switchOptions?: JQueryTab.SwitchOptions): JQueryTab.NormalizedTabItemPosition | undefined;
+    switchPrevious(switchOptions?: JQueryTab.SwitchOptions): false | JQueryTab.NormalizedTabItemPosition | undefined;
+    switchNext(switchOptions?: JQueryTab.SwitchOptions): false | JQueryTab.NormalizedTabItemPosition | undefined;
 }
 export default Switcher;

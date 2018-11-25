@@ -28,7 +28,7 @@ var Switcher = /** @class */ (function () {
         if (typeof (onBeforeSwitch) === 'function') {
             var callBackResult = onBeforeSwitch.call($tabContainer, oldNormalizedPos, newNormalizedPos, tabState);
             if (callBackResult === false) {
-                return;
+                return false;
             }
         }
         //update state
