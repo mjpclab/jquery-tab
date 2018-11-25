@@ -31,25 +31,24 @@ function handleKeypressEvent(
 	}
 
 	function setFocus(container: HTMLElement) {
-		$(container).children().eq(context.currentIndex).focus();
+		$(container).children().eq(context.currentIndex).trigger('focus');
 	}
 
 	$labelContainers.keydown(function (e) {
+		let switchResult: JQueryTab.SwitchResult | undefined;
 		if (e.key) {
 			switch (e.key) {
 				case UP:
 				case LEFT:
 				case ARROW_UP:
 				case ARROW_LEFT:
-					switcher.switchPrevious();
-					setFocus(this);
+					switchResult = switcher.switchPrevious();
 					break;
 				case DOWN:
 				case RIGHT:
 				case ARROW_DOWN:
 				case ARROW_RIGHT:
-					switcher.switchNext();
-					setFocus(this);
+					switchResult = switcher.switchNext();
 					break;
 			}
 		}
@@ -57,16 +56,20 @@ function handleKeypressEvent(
 			switch (e.keyCode) {
 				case ARROW_UP_CODE:
 				case ARROW_LEFT_CODE:
-					switcher.switchPrevious();
-					setFocus(this);
+					switchResult = switcher.switchPrevious();
 					break;
 				case ARROW_DOWN_CODE:
 				case ARROW_RIGHT_CODE:
-					switcher.switchNext();
-					setFocus(this);
+					switchResult = switcher.switchNext();
 					break;
 			}
 		}
+
+		if (switchResult) {
+			setFocus(this);
+			e.preventDefault();
+		}
+
 	});
 }
 
