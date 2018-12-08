@@ -7,10 +7,16 @@ var ARROW_UP = 'ArrowUp';
 var ARROW_DOWN = 'ArrowDown';
 var ARROW_LEFT = 'ArrowLeft';
 var ARROW_RIGHT = 'ArrowRight';
+var TAB = 'Tab';
+var SPACE = ' ';
+var ENTER = 'Enter';
 var ARROW_UP_CODE = 38;
 var ARROW_DOWN_CODE = 40;
 var ARROW_LEFT_CODE = 37;
 var ARROW_RIGHT_CODE = 39;
+var TAB_CODE = 9;
+var SPACE_CODE = 32;
+var ENTER_CODE = 13;
 function handleKeypressEvent(tabItemSetter, switcher, containers, context) {
     var $labelContainers = $([]);
     var $headerLabelContainer = containers.$headerLabelContainer, $footerLabelContainer = containers.$footerLabelContainer;
@@ -36,6 +42,16 @@ function handleKeypressEvent(tabItemSetter, switcher, containers, context) {
                 case ARROW_RIGHT:
                     switchResult = switcher.switchNext();
                     break;
+                case TAB:
+                    switchResult = e.shiftKey ? switcher.switchPrevious() : switcher.switchNext();
+                    if (switchResult !== undefined) {
+                        e.preventDefault();
+                    }
+                    break;
+                case SPACE:
+                case ENTER:
+                    $(e.target).click();
+                    break;
             }
         }
         else if (e.keyCode) {
@@ -47,6 +63,16 @@ function handleKeypressEvent(tabItemSetter, switcher, containers, context) {
                 case ARROW_DOWN_CODE:
                 case ARROW_RIGHT_CODE:
                     switchResult = switcher.switchNext();
+                    break;
+                case TAB_CODE:
+                    switchResult = e.shiftKey ? switcher.switchPrevious() : switcher.switchNext();
+                    if (switchResult !== undefined) {
+                        e.preventDefault();
+                    }
+                    break;
+                case SPACE_CODE:
+                case ENTER_CODE:
+                    $(e.target).click();
                     break;
             }
         }

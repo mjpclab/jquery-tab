@@ -12,10 +12,18 @@ const ARROW_DOWN = 'ArrowDown';
 const ARROW_LEFT = 'ArrowLeft';
 const ARROW_RIGHT = 'ArrowRight';
 
+const TAB = 'Tab';
+const SPACE = ' ';
+const ENTER = 'Enter';
+
 const ARROW_UP_CODE = 38;
 const ARROW_DOWN_CODE = 40;
 const ARROW_LEFT_CODE = 37;
 const ARROW_RIGHT_CODE = 39;
+
+const TAB_CODE = 9;
+const SPACE_CODE = 32;
+const ENTER_CODE = 13;
 
 function handleKeypressEvent(
 	tabItemSetter: TabItemSetter,
@@ -48,9 +56,18 @@ function handleKeypressEvent(
 				case ARROW_RIGHT:
 					switchResult = switcher.switchNext();
 					break;
+				case TAB:
+					switchResult = e.shiftKey ? switcher.switchPrevious() : switcher.switchNext();
+					if (switchResult !== undefined) {
+						e.preventDefault();
+					}
+					break;
+				case SPACE:
+				case ENTER:
+					$(e.target).click();
+					break;
 			}
-		}
-		else if (e.keyCode) {
+		} else if (e.keyCode) {
 			switch (e.keyCode) {
 				case ARROW_UP_CODE:
 				case ARROW_LEFT_CODE:
@@ -59,6 +76,16 @@ function handleKeypressEvent(
 				case ARROW_DOWN_CODE:
 				case ARROW_RIGHT_CODE:
 					switchResult = switcher.switchNext();
+					break;
+				case TAB_CODE:
+					switchResult = e.shiftKey ? switcher.switchPrevious() : switcher.switchNext();
+					if (switchResult !== undefined) {
+						e.preventDefault();
+					}
+					break;
+				case SPACE_CODE:
+				case ENTER_CODE:
+					$(e.target).click();
 					break;
 			}
 		}

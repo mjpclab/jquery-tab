@@ -21,7 +21,7 @@
     }
 
     var defaultOptions = {
-        triggerEvents: 'focus click',
+        triggerEvents: 'click',
         delayTriggerEvents: '',
         delayTriggerCancelEvents: '',
         delayTriggerLatency: 200,
@@ -968,18 +968,14 @@
         }
     }
 
-    function handleClickEvent(tabItemSetter, switcher, containers, context, options) {
+    function handleClickEvent(switcher, containers, context, options) {
         var triggerEvents = options.triggerEvents, delayTriggerEvents = options.delayTriggerEvents, delayTriggerCancelEvents = options.delayTriggerCancelEvents, delayTriggerLatency = options.delayTriggerLatency, disabledLabelItemClass = options.disabledLabelItemClass, hiddenLabelItemClass = options.hiddenLabelItemClass;
         var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf, $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf;
         //handle delay trigger event
         var delayTriggerTimeoutHandler;
-        var startDelayTrigger = function (position, $label) {
+        var startDelayTrigger = function (position) {
             delayTriggerTimeoutHandler = setTimeout(function () {
-                var switchResult = switcher.switchTo(position);
-                if (switchResult === false) { //explicitly cancelled
-                    $label.blur();
-                    tabItemSetter.setFocus(context.currentIndex, $label.parent());
-                }
+                switcher.switchTo(position);
                 delayTriggerTimeoutHandler = undefined;
             }, delayTriggerLatency);
         };
@@ -1001,7 +997,7 @@
                 $label.hasClass(hiddenLabelItemClass)) {
                 return;
             }
-            startDelayTrigger(labelIndex, $label);
+            startDelayTrigger(labelIndex);
         };
         var labelItemCancelDelayClick = function (e) {
             if (e.currentTarget.parentNode !== e.delegateTarget) {
@@ -1043,11 +1039,7 @@
                 $label.hasClass(hiddenLabelItemClass)) {
                 return;
             }
-            var switchResult = switcher.switchTo(labelIndex);
-            if (switchResult === false) { //explicitly cancelled
-                $label.blur();
-                tabItemSetter.setFocus(context.currentIndex, $label.parent());
-            }
+            switcher.switchTo(labelIndex);
         };
         if (triggerEvents) {
             if ($headerLabelContainerLeaf) {
@@ -1067,10 +1059,16 @@
     var ARROW_DOWN = 'ArrowDown';
     var ARROW_LEFT = 'ArrowLeft';
     var ARROW_RIGHT = 'ArrowRight';
+    var TAB = 'Tab';
+    var SPACE = ' ';
+    var ENTER = 'Enter';
     var ARROW_UP_CODE = 38;
     var ARROW_DOWN_CODE = 40;
     var ARROW_LEFT_CODE = 37;
     var ARROW_RIGHT_CODE = 39;
+    var TAB_CODE = 9;
+    var SPACE_CODE = 32;
+    var ENTER_CODE = 13;
     function handleKeypressEvent(tabItemSetter, switcher, containers, context) {
         var $labelContainers = $$1([]);
         var $headerLabelContainer = containers.$headerLabelContainer, $footerLabelContainer = containers.$footerLabelContainer;
@@ -1096,6 +1094,16 @@
                     case ARROW_RIGHT:
                         switchResult = switcher.switchNext();
                         break;
+                    case TAB:
+                        switchResult = e.shiftKey ? switcher.switchPrevious() : switcher.switchNext();
+                        if (switchResult !== undefined) {
+                            e.preventDefault();
+                        }
+                        break;
+                    case SPACE:
+                    case ENTER:
+                        $$1(e.target).click();
+                        break;
                 }
             }
             else if (e.keyCode) {
@@ -1107,6 +1115,16 @@
                     case ARROW_DOWN_CODE:
                     case ARROW_RIGHT_CODE:
                         switchResult = switcher.switchNext();
+                        break;
+                    case TAB_CODE:
+                        switchResult = e.shiftKey ? switcher.switchPrevious() : switcher.switchNext();
+                        if (switchResult !== undefined) {
+                            e.preventDefault();
+                        }
+                        break;
+                    case SPACE_CODE:
+                    case ENTER_CODE:
+                        $$1(e.target).click();
                         break;
                 }
             }
@@ -1173,7 +1191,7 @@
             domUpdater.updateFixedHeight();
         }
         handleHashChangeEvent(saveLoad, switcher, options);
-        handleClickEvent(tabItemSetter, switcher, containers, context, options);
+        handleClickEvent(switcher, containers, context, options);
         handleKeypressEvent(tabItemSetter, switcher, containers, context);
         $region.data('tab-controller', controller);
         $tabContainer.data('tab-controller', controller);

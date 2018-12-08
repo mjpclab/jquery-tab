@@ -1,5 +1,5 @@
 const defaultOptions: JQueryTab.NecessaryOptions = {
-	triggerEvents: 'focus click',
+	triggerEvents: 'click',
 	delayTriggerEvents: '',
 	delayTriggerCancelEvents: '',
 	delayTriggerLatency: 200,

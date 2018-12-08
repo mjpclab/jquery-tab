@@ -68,7 +68,7 @@ function tablize($region, customOptions) {
         domUpdater.updateFixedHeight();
     }
     handleHashChangeEvent(saveLoad, switcher, options);
-    handleClickEvent(tabItemSetter, switcher, containers, context, options);
+    handleClickEvent(switcher, containers, context, options);
     handleKeypressEvent(tabItemSetter, switcher, containers, context);
     $region.data('tab-controller', controller);
     $tabContainer.data('tab-controller', controller);

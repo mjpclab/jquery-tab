@@ -1,16 +1,12 @@
 import $ from 'jquery';
-function handleClickEvent(tabItemSetter, switcher, containers, context, options) {
+function handleClickEvent(switcher, containers, context, options) {
     var triggerEvents = options.triggerEvents, delayTriggerEvents = options.delayTriggerEvents, delayTriggerCancelEvents = options.delayTriggerCancelEvents, delayTriggerLatency = options.delayTriggerLatency, disabledLabelItemClass = options.disabledLabelItemClass, hiddenLabelItemClass = options.hiddenLabelItemClass;
     var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf, $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf;
     //handle delay trigger event
     var delayTriggerTimeoutHandler;
-    var startDelayTrigger = function (position, $label) {
+    var startDelayTrigger = function (position) {
         delayTriggerTimeoutHandler = setTimeout(function () {
-            var switchResult = switcher.switchTo(position);
-            if (switchResult === false) { //explicitly cancelled
-                $label.blur();
-                tabItemSetter.setFocus(context.currentIndex, $label.parent());
-            }
+            switcher.switchTo(position);
             delayTriggerTimeoutHandler = undefined;
         }, delayTriggerLatency);
     };
@@ -32,7 +28,7 @@ function handleClickEvent(tabItemSetter, switcher, containers, context, options)
             $label.hasClass(hiddenLabelItemClass)) {
             return;
         }
-        startDelayTrigger(labelIndex, $label);
+        startDelayTrigger(labelIndex);
     };
     var labelItemCancelDelayClick = function (e) {
         if (e.currentTarget.parentNode !== e.delegateTarget) {
@@ -74,11 +70,7 @@ function handleClickEvent(tabItemSetter, switcher, containers, context, options)
             $label.hasClass(hiddenLabelItemClass)) {
             return;
         }
-        var switchResult = switcher.switchTo(labelIndex);
-        if (switchResult === false) { //explicitly cancelled
-            $label.blur();
-            tabItemSetter.setFocus(context.currentIndex, $label.parent());
-        }
+        switcher.switchTo(labelIndex);
     };
     if (triggerEvents) {
         if ($headerLabelContainerLeaf) {

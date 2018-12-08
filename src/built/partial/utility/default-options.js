@@ -1,5 +1,5 @@
 var defaultOptions = {
-    triggerEvents: 'focus click',
+    triggerEvents: 'click',
     delayTriggerEvents: '',
     delayTriggerCancelEvents: '',
     delayTriggerLatency: 200,

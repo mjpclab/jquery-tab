@@ -138,7 +138,7 @@ The logic of determining if a tab item is hidden could be customized by option `
 ## Behavior
 `triggerEvents`  
 Determine the types of events triggered on label-item that will make the panel-item switched.
-Multiple events can be specified separated by space. Default value is `focus click`.
+Multiple events can be specified separated by space. Default value is `click`.
 
 `delayTriggerEvents`  
 Specify events on label-item that will trigger panel switch after delay a small piece of time.
