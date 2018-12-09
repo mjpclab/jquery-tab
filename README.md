@@ -7,7 +7,7 @@ Make flat html document that contains title and normal content turns into tab st
 - *name* could be used instead of *index* for individual tab item in some APIs
 - vertical label mode
 - nested tab
-- ARIA attributes integrated
+- ARIA support
 
 # Usage
 
