@@ -4,6 +4,14 @@ declare namespace JQueryTab {
 	type JQueriable = string | JQuery.TypeOrArray<JQuery.Node | JQuery<JQuery.Node>>;
 	type Template = string | JQuery.Node | JQuery<JQuery.Node>;
 
+	const enum TabState {
+		Initializing = 0,
+		Ready = 1,
+	}
+
+	type TabItemPosition = number | string;
+	type ThenableTabItemPosition = number | string | JQuery.Thenable<number | string>;
+
 	interface NecessaryOptions {
 		triggerEvents: string;
 		delayTriggerEvents: string;
@@ -13,17 +21,17 @@ declare namespace JQueryTab {
 		statusHashTemplate: string;
 		statusHashSeparator: string;
 		fnSavePosition?: (this: JQuery, position: TabItemPosition) => void;
-		fnLoadPosition?: (this: JQuery) => TabItemPosition;
+		fnLoadPosition?: (this: JQuery) => ThenableTabItemPosition;
 		fixedHeight: boolean;
 
 		mode: Mode;
 		activePosition: TabItemPosition;
 		createEmptyTab: boolean;
-		onBeforeSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;
-		onAfterSwitch?: (this: JQuery, oldIndex: number, newIndex: number) => void;
+		onBeforeSwitch?: (this: JQuery, from: NormalizedTabItemPosition, to: NormalizedTabItemPosition, tabState: TabState) => any;
+		onAfterSwitch?: (this: JQuery, from: NormalizedTabItemPosition, to: NormalizedTabItemPosition, tabState: TabState) => any;
 
 		titleSelector: string;
-		fnGetTitleContent: (this: JQuery, $title: JQuery) => JQueryTab.JQueriable;
+		fnGetTitleContent: (this: JQuery, $title: JQuery, $rest: JQuery) => JQueryTab.JQueriable;
 		keepTitleVisible: boolean;
 		fnGetTabItemName: (this: JQuery, $title: JQuery, $rest: JQuery) => string | undefined;
 		fnIsTabItemDisabled: (this: JQuery, $title: JQuery, $rest: JQuery) => boolean;
@@ -47,18 +55,10 @@ declare namespace JQueryTab {
 
 	type Options = Partial<NecessaryOptions>;
 
-	const enum TabState {
-		Initializing = 0,
-		Ready = 1,
-	}
-
 	const enum Mode {
 		Horizontal = 'horizontal',
 		Vertical = 'vertical',
 	}
-
-	type TabItemPosition = number | string;
-	type ThenableTabItemPosition = number | string | JQuery.Thenable<number | string>;
 
 	interface TabItem {
 		title: JQueryTab.JQueriable;

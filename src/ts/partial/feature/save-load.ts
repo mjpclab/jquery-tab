@@ -46,13 +46,11 @@ class SaveLoad {
 			const statusHash = statusHashTemplate + position;
 			if (hash.indexOf(statusHashTemplate) >= 0 && reStatusHash) {
 				hash = hash.replace(reStatusHash, statusHash);
-			}
-			else {
+			} else {
 				if (hash !== HASH_PREFIX) {
 					if (hash.length) {
 						hash += statusHashSeparator;
-					}
-					else {
+					} else {
 						hash = HASH_PREFIX;
 					}
 				}
@@ -110,8 +108,7 @@ class SaveLoad {
 					if (position.then) {
 						return position;
 					}
-				}
-				else {
+				} else {
 					return position;
 				}
 			}

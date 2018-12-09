@@ -170,7 +170,7 @@ As switching can be happened on initialization, `tabState` can be used to check.
 `titleSelector`  
 A jQuery selector string or object to pick up "title" element to be a label-item in label-container.
 
-`fnGetTitleContent($title)`  
+`fnGetTitleContent($title, $content)`  
 A callback to have an opportunity to change the html structure of a label-item.
 
 `keepTitleVisible` (default: `false`)  
