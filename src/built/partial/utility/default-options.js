@@ -3,6 +3,7 @@ var defaultOptions = {
     delayTriggerEvents: '',
     delayTriggerCancelEvents: '',
     delayTriggerLatency: 200,
+    keyboardSwitch: true,
     statusFieldSelector: '',
     statusHashTemplate: '',
     statusHashSeparator: '&',

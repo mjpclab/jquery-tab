@@ -29,8 +29,13 @@ function handleKeypressEvent(
 	tabItemSetter: TabItemSetter,
 	switcher: Switcher,
 	containers: JQueryTab.Containers,
-	context: JQueryTab.Context
+	context: JQueryTab.Context,
+	options: JQueryTab.ExpandedOptions
 ) {
+	if (!options.keyboardSwitch) {
+		return;
+	}
+
 	let $labelContainers = $([]);
 	const {$headerLabelContainer, $footerLabelContainer} = containers;
 	if ($headerLabelContainer) {

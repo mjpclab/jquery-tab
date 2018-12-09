@@ -150,6 +150,11 @@ Specify events on label-item that will cancel delay switching.
 `delayTriggerLatency`  
 Specify how long (milliseconds) need to wait before trigger the delayed switching events.
 
+`keyboardSwitch`  
+Specify if active tab item could be switched by keyboard when label item has focus.
+If enabled, end user could use arrow keys and Tab key to switch active tab item.
+Defaults to `true`.
+
 `fixedHeight`  
 Panel items' height will be fixed to fit the longest panel and will not change when tabs are switched.
 

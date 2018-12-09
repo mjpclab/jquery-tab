@@ -17,7 +17,10 @@ var ARROW_RIGHT_CODE = 39;
 var TAB_CODE = 9;
 var SPACE_CODE = 32;
 var ENTER_CODE = 13;
-function handleKeypressEvent(tabItemSetter, switcher, containers, context) {
+function handleKeypressEvent(tabItemSetter, switcher, containers, context, options) {
+    if (!options.keyboardSwitch) {
+        return;
+    }
     var $labelContainers = $([]);
     var $headerLabelContainer = containers.$headerLabelContainer, $footerLabelContainer = containers.$footerLabelContainer;
     if ($headerLabelContainer) {

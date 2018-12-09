@@ -25,6 +25,7 @@
         delayTriggerEvents: '',
         delayTriggerCancelEvents: '',
         delayTriggerLatency: 200,
+        keyboardSwitch: true,
         statusFieldSelector: '',
         statusHashTemplate: '',
         statusHashSeparator: '&',
@@ -1069,7 +1070,10 @@
     var TAB_CODE = 9;
     var SPACE_CODE = 32;
     var ENTER_CODE = 13;
-    function handleKeypressEvent(tabItemSetter, switcher, containers, context) {
+    function handleKeypressEvent(tabItemSetter, switcher, containers, context, options) {
+        if (!options.keyboardSwitch) {
+            return;
+        }
         var $labelContainers = $$1([]);
         var $headerLabelContainer = containers.$headerLabelContainer, $footerLabelContainer = containers.$footerLabelContainer;
         if ($headerLabelContainer) {
@@ -1192,7 +1196,7 @@
         }
         handleHashChangeEvent(saveLoad, switcher, options);
         handleClickEvent(switcher, containers, context, options);
-        handleKeypressEvent(tabItemSetter, switcher, containers, context);
+        handleKeypressEvent(tabItemSetter, switcher, containers, context, options);
         $region.data('tab-controller', controller);
         $tabContainer.data('tab-controller', controller);
         context.tabState = 1 /* Ready */;

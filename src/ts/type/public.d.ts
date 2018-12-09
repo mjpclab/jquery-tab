@@ -17,6 +17,7 @@ declare namespace JQueryTab {
 		delayTriggerEvents: string;
 		delayTriggerCancelEvents: string;
 		delayTriggerLatency: number;
+		keyboardSwitch: boolean;
 		statusFieldSelector: string;
 		statusHashTemplate: string;
 		statusHashSeparator: string;

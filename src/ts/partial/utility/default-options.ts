@@ -3,6 +3,7 @@ const defaultOptions: JQueryTab.NecessaryOptions = {
 	delayTriggerEvents: '',
 	delayTriggerCancelEvents: '',
 	delayTriggerLatency: 200,
+	keyboardSwitch: true,
 	statusFieldSelector: '',
 	statusHashTemplate: '',
 	statusHashSeparator: '&',

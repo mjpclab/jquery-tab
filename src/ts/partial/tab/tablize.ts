@@ -68,8 +68,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 					switcher.switchToWithoutSave(asyncLoadedPosition);
 				}
 			});
-		}
-		else {
+		} else {
 			switcher.switchToWithoutSave(loadedPosition);
 		}
 
@@ -86,7 +85,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 
 	handleHashChangeEvent(saveLoad, switcher, options);
 	handleClickEvent(switcher, containers, context, options);
-	handleKeypressEvent(tabItemSetter, switcher, containers, context);
+	handleKeypressEvent(tabItemSetter, switcher, containers, context, options);
 
 	$region.data('tab-controller', controller);
 	$tabContainer.data('tab-controller', controller);
