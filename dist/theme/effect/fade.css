@@ -13,6 +13,7 @@
 .tab-container .panel-container .panel-item-inactive {
 	position: absolute;
 	z-index: -1;
+	pointer-events: none;
 	opacity: 0;
 	filter: alpha(opacity=0);
 }
