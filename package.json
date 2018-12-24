@@ -21,8 +21,8 @@
   },
   "keywords": [
     "jquery",
-    "tab",
-    "sheet"
+    "jquery-plugin",
+    "tab"
   ],
   "scripts": {
     "build": "bash build.sh"
