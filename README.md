@@ -55,8 +55,8 @@ jquery-tab provides default CSS styles if you don't want to make from scratch. M
 
 ## Importing by module
 ```javascript
-import 'jquery-tab/src/built/theme/gray'
-import 'jquery-tab/src/built/theme/effect/fade' // optional fade effect when switching, must load after theme
+import 'jquery-tab/src/built/theme/gray';
+import 'jquery-tab/src/built/theme/effect/fade'; // optional fade effect when switching, must load after theme
 ```
 
 ## Use standalone CSS file
@@ -219,6 +219,9 @@ or a string represents active tab item name.
 
 ## UI Options
 ### Tab
+`mode`  
+Specify label container layout. Can be `horizontal` (default) or `vertical`.
+
 `tabContainerTemplate`  
 Tab container's html template.
 
