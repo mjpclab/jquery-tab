@@ -76,10 +76,12 @@ declare namespace JQueryTab {
 		loop?: boolean;
 	}
 
-	interface SwitchResult {
+	interface NormalizedTabItemPosition {
 		index: number;
 		name?: string;
 	}
+
+	type SwitchResult = NormalizedTabItemPosition | false | undefined;
 }
 
 interface JQueryStatic {

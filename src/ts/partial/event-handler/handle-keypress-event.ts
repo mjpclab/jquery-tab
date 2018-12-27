@@ -46,7 +46,7 @@ function handleKeypressEvent(
 	}
 
 	$labelContainers.keydown(function (e) {
-		let switchResult: JQueryTab.SwitchResult | boolean | undefined;
+		let switchResult: JQueryTab.SwitchResult;
 		if (e.key) {
 			switch (e.key) {
 				case UP:

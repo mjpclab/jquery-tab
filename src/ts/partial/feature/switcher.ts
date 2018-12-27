@@ -31,7 +31,7 @@ class Switcher {
 		this.options = options;
 	}
 
-	switchToWithoutSave(newPosition: JQueryTab.TabItemPosition) {
+	switchToWithoutSave(newPosition: JQueryTab.TabItemPosition): JQueryTab.SwitchResult {
 		const {context, getter} = this;
 
 		const newNormalizedPos = getter.normalizePosition(newPosition);
@@ -79,7 +79,7 @@ class Switcher {
 		return newNormalizedPos;
 	}
 
-	switchTo(newPosition: JQueryTab.TabItemPosition) {
+	switchTo(newPosition: JQueryTab.TabItemPosition): JQueryTab.SwitchResult {
 		const result = this.switchToWithoutSave(newPosition);
 		if (result) {
 			const {saveLoad} = this;
@@ -92,7 +92,7 @@ class Switcher {
 	private _switchNeighbor(
 		direction: SwitchDirection,
 		switchOptions?: JQueryTab.SwitchOptions
-	) {
+	): JQueryTab.SwitchResult {
 		const {getter} = this;
 		const opts = switchOptions || {};
 		const {includeDisabled, includeHidden, loop, exclude} = opts;
@@ -110,15 +110,12 @@ class Switcher {
 		if (loop) {
 			if (currentIndex >= 0 && currentIndex < itemCount) {
 				maxIterationCount = itemCount - 1;
-			}
-			else {
+			} else {
 				maxIterationCount = itemCount;
 			}
-		}
-		else if (direction === SwitchDirection.Backward) {
+		} else if (direction === SwitchDirection.Backward) {
 			maxIterationCount = currentIndex;
-		}
-		else if (direction === SwitchDirection.Forward) {
+		} else if (direction === SwitchDirection.Forward) {
 			maxIterationCount = itemCount - currentIndex - 1;
 		}
 
@@ -143,11 +140,11 @@ class Switcher {
 		}
 	}
 
-	switchPrevious(switchOptions?: JQueryTab.SwitchOptions) {
+	switchPrevious(switchOptions?: JQueryTab.SwitchOptions): JQueryTab.SwitchResult {
 		return this._switchNeighbor(SwitchDirection.Backward, switchOptions);
 	}
 
-	switchNext(switchOptions?: JQueryTab.SwitchOptions) {
+	switchNext(switchOptions?: JQueryTab.SwitchOptions): JQueryTab.SwitchResult {
 		return this._switchNeighbor(SwitchDirection.Forward, switchOptions);
 	}
 
