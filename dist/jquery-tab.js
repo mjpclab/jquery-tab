@@ -1,8 +1,8 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery')) :
     typeof define === 'function' && define.amd ? define(['jquery'], factory) :
-    (global['jquery-tab'] = factory(global.jQuery));
-}(this, (function ($$1) { 'use strict';
+    (global = global || self, global['jquery-tab'] = factory(global.jQuery));
+}(this, function ($$1) { 'use strict';
 
     $$1 = $$1 && $$1.hasOwnProperty('default') ? $$1['default'] : $$1;
 
@@ -1233,4 +1233,4 @@
 
     return $$1;
 
-})));
+}));

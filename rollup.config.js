@@ -11,8 +11,7 @@ const getConfig = function (isMinify) {
 			globals: {
 				jquery: 'jQuery'
 			},
-			dir: 'dist',
-			file: `jquery-tab${isMinify ? '.min' : ''}.js`,
+			file: `dist/jquery-tab${isMinify ? '.min' : ''}.js`,
 		},
 		external: ['jquery'],
 		plugins: [
