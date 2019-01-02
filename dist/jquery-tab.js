@@ -1100,13 +1100,10 @@
                         break;
                     case TAB:
                         switchResult = e.shiftKey ? switcher.switchPrevious() : switcher.switchNext();
-                        if (switchResult !== undefined) {
-                            e.preventDefault();
-                        }
                         break;
                     case SPACE:
                     case ENTER:
-                        $$1(e.target).click();
+                        switchResult = switcher.switchTo($$1(e.target).index());
                         break;
                 }
             }
@@ -1122,13 +1119,10 @@
                         break;
                     case TAB_CODE:
                         switchResult = e.shiftKey ? switcher.switchPrevious() : switcher.switchNext();
-                        if (switchResult !== undefined) {
-                            e.preventDefault();
-                        }
                         break;
                     case SPACE_CODE:
                     case ENTER_CODE:
-                        $$1(e.target).click();
+                        switchResult = switcher.switchTo($$1(e.target).index());
                         break;
                 }
             }

@@ -47,13 +47,10 @@ function handleKeypressEvent(tabItemSetter, switcher, containers, context, optio
                     break;
                 case TAB:
                     switchResult = e.shiftKey ? switcher.switchPrevious() : switcher.switchNext();
-                    if (switchResult !== undefined) {
-                        e.preventDefault();
-                    }
                     break;
                 case SPACE:
                 case ENTER:
-                    $(e.target).click();
+                    switchResult = switcher.switchTo($(e.target).index());
                     break;
             }
         }
@@ -69,13 +66,10 @@ function handleKeypressEvent(tabItemSetter, switcher, containers, context, optio
                     break;
                 case TAB_CODE:
                     switchResult = e.shiftKey ? switcher.switchPrevious() : switcher.switchNext();
-                    if (switchResult !== undefined) {
-                        e.preventDefault();
-                    }
                     break;
                 case SPACE_CODE:
                 case ENTER_CODE:
-                    $(e.target).click();
+                    switchResult = switcher.switchTo($(e.target).index());
                     break;
             }
         }

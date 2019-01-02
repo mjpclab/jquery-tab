@@ -3,7 +3,7 @@ import Getter from './getter';
 import DomUpdater from './dom-updater';
 import SaveLoad from './save-load';
 
-enum SwitchDirection { Backward, Forward}
+enum SwitchDirection {Backward, Forward}
 
 class Switcher {
 	private readonly getter: Getter;
