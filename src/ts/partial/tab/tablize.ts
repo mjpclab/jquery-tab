@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import defaultOptions from '../utility/default-options';
 import expandedOptions from '../utility/expanded-options';
+import getNextTabContainerId from '../utility/get-next-tab-container-id';
+
 import createTabContainer from '../create/container/create-tab-container';
 import Getter from '../feature/getter';
 import DomUpdater from '../feature/dom-updater';
@@ -9,11 +11,10 @@ import SaveLoad from '../feature/save-load';
 import Switcher from '../feature/switcher';
 import AddRemove from '../feature/add-remove';
 import generateController from '../feature/generate-controller';
+
 import handleHashChangeEvent from '../event-handler/handle-hash-change-event';
 import handleClickEvent from '../event-handler/handle-click-event';
 import handleKeypressEvent from '../event-handler/handle-keypress-event';
-
-let nextContainerId = 0;
 
 function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	const dataOptions = $region.data();
@@ -22,7 +23,7 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	const context: JQueryTab.Context = {
 		tabState: JQueryTab.TabState.Initializing,
 		switched: false,
-		containerId: nextContainerId++,
+		containerId: getNextTabContainerId(),
 		nextItemId: 0,
 		itemCount: 0,
 		currentIndex: -1

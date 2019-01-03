@@ -90,6 +90,13 @@
         return expandedOptions;
     }
 
+    var NUMBER_MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991;
+    var currentTabberContainerId = -1;
+    function getNextTabContainerId() {
+        currentTabberContainerId = (currentTabberContainerId + 1) % NUMBER_MAX_SAFE_INTEGER;
+        return currentTabberContainerId;
+    }
+
     function getLeafElement($node) {
         var $result = $node;
         var $deeper;
@@ -1133,14 +1140,13 @@
         });
     }
 
-    var nextContainerId = 0;
     function tablize($region, customOptions) {
         var dataOptions = $region.data();
         var options = expandedOptions(defaultOptions, dataOptions, customOptions);
         var context = {
             tabState: 0 /* Initializing */,
             switched: false,
-            containerId: nextContainerId++,
+            containerId: getNextTabContainerId(),
             nextItemId: 0,
             itemCount: 0,
             currentIndex: -1
