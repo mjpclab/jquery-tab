@@ -13,6 +13,8 @@ const ARROW_LEFT = 'ArrowLeft';
 const ARROW_RIGHT = 'ArrowRight';
 
 const TAB = 'Tab';
+const HOME = 'Home';
+const END = 'End';
 const SPACE = ' ';
 const ENTER = 'Enter';
 
@@ -22,10 +24,12 @@ const ARROW_LEFT_CODE = 37;
 const ARROW_RIGHT_CODE = 39;
 
 const TAB_CODE = 9;
+const HOME_CODE = 36;
+const END_CODE = 35;
 const SPACE_CODE = 32;
 const ENTER_CODE = 13;
 
-function handleKeypressEvent(
+function handleKeydownEvent(
 	tabItemSetter: TabItemSetter,
 	switcher: Switcher,
 	containers: JQueryTab.Containers,
@@ -64,6 +68,12 @@ function handleKeypressEvent(
 				case TAB:
 					switchResult = e.shiftKey ? switcher.switchPrevious() : switcher.switchNext();
 					break;
+				case HOME:
+					switchResult = switcher.switchFirst();
+					break;
+				case END:
+					switchResult = switcher.switchLast();
+					break;
 				case SPACE:
 				case ENTER:
 					switchResult = switcher.switchTo($(e.target).index());
@@ -82,6 +92,12 @@ function handleKeypressEvent(
 				case TAB_CODE:
 					switchResult = e.shiftKey ? switcher.switchPrevious() : switcher.switchNext();
 					break;
+				case HOME_CODE:
+					switchResult = switcher.switchFirst();
+					break;
+				case END_CODE:
+					switchResult = switcher.switchLast();
+					break;
 				case SPACE_CODE:
 				case ENTER_CODE:
 					switchResult = switcher.switchTo($(e.target).index());
@@ -97,4 +113,4 @@ function handleKeypressEvent(
 	});
 }
 
-export default handleKeypressEvent;
+export default handleKeydownEvent;

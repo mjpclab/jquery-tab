@@ -52,7 +52,7 @@ var Switcher = /** @class */ (function () {
         }
         return result;
     };
-    Switcher.prototype._switchNeighbor = function (direction, switchOptions) {
+    Switcher.prototype._switchNeighbor = function (fromIndex, direction, switchOptions) {
         var getter = this.getter;
         var opts = switchOptions || {};
         var includeDisabled = opts.includeDisabled, includeHidden = opts.includeHidden, loop = opts.loop, exclude = opts.exclude;
@@ -61,11 +61,11 @@ var Switcher = /** @class */ (function () {
         }) : [];
         var $panelContainer = this.containers.$panelContainer;
         var $panelItems = $panelContainer.children();
-        var _a = this.context, itemCount = _a.itemCount, currentIndex = _a.currentIndex;
-        var _b = this.options, disabledPanelItemClass = _b.disabledPanelItemClass, hiddenPanelItemClass = _b.hiddenPanelItemClass;
+        var itemCount = this.context.itemCount;
+        var _a = this.options, disabledPanelItemClass = _a.disabledPanelItemClass, hiddenPanelItemClass = _a.hiddenPanelItemClass;
         var maxIterationCount = -1;
         if (loop) {
-            if (currentIndex >= 0 && currentIndex < itemCount) {
+            if (fromIndex >= 0 && fromIndex < itemCount) {
                 maxIterationCount = itemCount - 1;
             }
             else {
@@ -73,14 +73,14 @@ var Switcher = /** @class */ (function () {
             }
         }
         else if (direction === SwitchDirection.Backward) {
-            maxIterationCount = currentIndex;
+            maxIterationCount = fromIndex;
         }
         else if (direction === SwitchDirection.Forward) {
-            maxIterationCount = itemCount - currentIndex - 1;
+            maxIterationCount = itemCount - fromIndex - 1;
         }
         var iterationStep = direction === SwitchDirection.Backward ? -1 : 1;
         for (var i = 1; i <= maxIterationCount; i++) {
-            var panelIndex = (currentIndex + i * iterationStep + itemCount) % itemCount;
+            var panelIndex = (fromIndex + i * iterationStep + itemCount) % itemCount;
             if ($.inArray(panelIndex, excludeIndecies) >= 0) {
                 continue;
             }
@@ -96,10 +96,16 @@ var Switcher = /** @class */ (function () {
         }
     };
     Switcher.prototype.switchPrevious = function (switchOptions) {
-        return this._switchNeighbor(SwitchDirection.Backward, switchOptions);
+        return this._switchNeighbor(this.context.currentIndex, SwitchDirection.Backward, switchOptions);
     };
     Switcher.prototype.switchNext = function (switchOptions) {
-        return this._switchNeighbor(SwitchDirection.Forward, switchOptions);
+        return this._switchNeighbor(this.context.currentIndex, SwitchDirection.Forward, switchOptions);
+    };
+    Switcher.prototype.switchFirst = function (switchOptions) {
+        return this._switchNeighbor(-1, SwitchDirection.Forward, switchOptions);
+    };
+    Switcher.prototype.switchLast = function (switchOptions) {
+        return this._switchNeighbor(this.context.itemCount, SwitchDirection.Backward, switchOptions);
     };
     return Switcher;
 }());

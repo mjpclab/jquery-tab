@@ -30,6 +30,8 @@ declare function generateController(getter: Getter, domUpdater: DomUpdater, tabI
     switchTo: (newPosition: string | number) => JQueryTab.SwitchResult;
     switchPrevious: (switchOptions?: JQueryTab.SwitchOptions | undefined) => JQueryTab.SwitchResult;
     switchNext: (switchOptions?: JQueryTab.SwitchOptions | undefined) => JQueryTab.SwitchResult;
+    switchFirst: (switchOptions?: JQueryTab.SwitchOptions | undefined) => JQueryTab.SwitchResult;
+    switchLast: (switchOptions?: JQueryTab.SwitchOptions | undefined) => JQueryTab.SwitchResult;
     addTabItem: (tabItem: JQueryTab.TabItem) => void;
     insertTabItem: (position: string | number, tabItem: JQueryTab.TabItem) => void;
     add: (sourceRegion: string | Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node> | (Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node>)[]) => void;

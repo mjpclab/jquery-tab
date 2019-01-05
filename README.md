@@ -347,7 +347,9 @@ If switch succeed, returns new active position information `{index, name?}`.
 
 `switchPrevious({includeDisabled?, includeHidden?, exclude?, loop?}?)`  
 `switchNext({includeDisabled?, includeHidden?, exclude?, loop?}?)`  
-Switch to previous/next tab item.
+`switchFirst({includeDisabled?, includeHidden?, exclude?}?)`  
+`switchLast({includeDisabled?, includeHidden?, exclude?}?)`  
+Switch to previous/next/first/last tab item.  
 If `includeDisabled` is `true`, disabled tab item will not be skipped.  
 If `includeHidden` is `true`, hidden tab item will not be skipped.  
 Optional `exclude` is an array of tab item name or tab item index, which will be skipped when switching. Prior than `includeDisabled` and `includeHidden`.  

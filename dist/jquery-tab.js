@@ -578,7 +578,7 @@
             }
             return result;
         };
-        Switcher.prototype._switchNeighbor = function (direction, switchOptions) {
+        Switcher.prototype._switchNeighbor = function (fromIndex, direction, switchOptions) {
             var getter = this.getter;
             var opts = switchOptions || {};
             var includeDisabled = opts.includeDisabled, includeHidden = opts.includeHidden, loop = opts.loop, exclude = opts.exclude;
@@ -587,11 +587,11 @@
             }) : [];
             var $panelContainer = this.containers.$panelContainer;
             var $panelItems = $panelContainer.children();
-            var _a = this.context, itemCount = _a.itemCount, currentIndex = _a.currentIndex;
-            var _b = this.options, disabledPanelItemClass = _b.disabledPanelItemClass, hiddenPanelItemClass = _b.hiddenPanelItemClass;
+            var itemCount = this.context.itemCount;
+            var _a = this.options, disabledPanelItemClass = _a.disabledPanelItemClass, hiddenPanelItemClass = _a.hiddenPanelItemClass;
             var maxIterationCount = -1;
             if (loop) {
-                if (currentIndex >= 0 && currentIndex < itemCount) {
+                if (fromIndex >= 0 && fromIndex < itemCount) {
                     maxIterationCount = itemCount - 1;
                 }
                 else {
@@ -599,14 +599,14 @@
                 }
             }
             else if (direction === SwitchDirection.Backward) {
-                maxIterationCount = currentIndex;
+                maxIterationCount = fromIndex;
             }
             else if (direction === SwitchDirection.Forward) {
-                maxIterationCount = itemCount - currentIndex - 1;
+                maxIterationCount = itemCount - fromIndex - 1;
             }
             var iterationStep = direction === SwitchDirection.Backward ? -1 : 1;
             for (var i = 1; i <= maxIterationCount; i++) {
-                var panelIndex = (currentIndex + i * iterationStep + itemCount) % itemCount;
+                var panelIndex = (fromIndex + i * iterationStep + itemCount) % itemCount;
                 if ($$1.inArray(panelIndex, excludeIndecies) >= 0) {
                     continue;
                 }
@@ -622,10 +622,16 @@
             }
         };
         Switcher.prototype.switchPrevious = function (switchOptions) {
-            return this._switchNeighbor(SwitchDirection.Backward, switchOptions);
+            return this._switchNeighbor(this.context.currentIndex, SwitchDirection.Backward, switchOptions);
         };
         Switcher.prototype.switchNext = function (switchOptions) {
-            return this._switchNeighbor(SwitchDirection.Forward, switchOptions);
+            return this._switchNeighbor(this.context.currentIndex, SwitchDirection.Forward, switchOptions);
+        };
+        Switcher.prototype.switchFirst = function (switchOptions) {
+            return this._switchNeighbor(-1, SwitchDirection.Forward, switchOptions);
+        };
+        Switcher.prototype.switchLast = function (switchOptions) {
+            return this._switchNeighbor(this.context.itemCount, SwitchDirection.Backward, switchOptions);
         };
         return Switcher;
     }());
@@ -923,6 +929,12 @@
         var switchNext = function (switchOptions) {
             return switcher.switchNext(switchOptions);
         };
+        var switchFirst = function (switchOptions) {
+            return switcher.switchFirst(switchOptions);
+        };
+        var switchLast = function (switchOptions) {
+            return switcher.switchLast(switchOptions);
+        };
         //add remove
         var insertTabItem = function (position, tabItem) {
             return addRemove.insertTabItem(position, tabItem);
@@ -956,7 +968,7 @@
             getCurrentPanel: getCurrentPanel,
             setName: setName, setDisabled: setDisabled, setEnabled: setEnabled, setHidden: setHidden, setVisible: setVisible,
             updateFixedHeight: updateFixedHeight,
-            switchTo: switchTo, switchPrevious: switchPrevious, switchNext: switchNext,
+            switchTo: switchTo, switchPrevious: switchPrevious, switchNext: switchNext, switchFirst: switchFirst, switchLast: switchLast,
             addTabItem: addTabItem,
             insertTabItem: insertTabItem,
             add: add,
@@ -1068,6 +1080,8 @@
     var ARROW_LEFT = 'ArrowLeft';
     var ARROW_RIGHT = 'ArrowRight';
     var TAB = 'Tab';
+    var HOME = 'Home';
+    var END = 'End';
     var SPACE = ' ';
     var ENTER = 'Enter';
     var ARROW_UP_CODE = 38;
@@ -1075,9 +1089,11 @@
     var ARROW_LEFT_CODE = 37;
     var ARROW_RIGHT_CODE = 39;
     var TAB_CODE = 9;
+    var HOME_CODE = 36;
+    var END_CODE = 35;
     var SPACE_CODE = 32;
     var ENTER_CODE = 13;
-    function handleKeypressEvent(tabItemSetter, switcher, containers, context, options) {
+    function handleKeydownEvent(tabItemSetter, switcher, containers, context, options) {
         if (!options.keyboardSwitch) {
             return;
         }
@@ -1108,6 +1124,12 @@
                     case TAB:
                         switchResult = e.shiftKey ? switcher.switchPrevious() : switcher.switchNext();
                         break;
+                    case HOME:
+                        switchResult = switcher.switchFirst();
+                        break;
+                    case END:
+                        switchResult = switcher.switchLast();
+                        break;
                     case SPACE:
                     case ENTER:
                         switchResult = switcher.switchTo($$1(e.target).index());
@@ -1126,6 +1148,12 @@
                         break;
                     case TAB_CODE:
                         switchResult = e.shiftKey ? switcher.switchPrevious() : switcher.switchNext();
+                        break;
+                    case HOME_CODE:
+                        switchResult = switcher.switchFirst();
+                        break;
+                    case END_CODE:
+                        switchResult = switcher.switchLast();
                         break;
                     case SPACE_CODE:
                     case ENTER_CODE:
@@ -1196,7 +1224,7 @@
         }
         handleHashChangeEvent(saveLoad, switcher, options);
         handleClickEvent(switcher, containers, context, options);
-        handleKeypressEvent(tabItemSetter, switcher, containers, context, options);
+        handleKeydownEvent(tabItemSetter, switcher, containers, context, options);
         $region.data('tab-controller', controller);
         $tabContainer.data('tab-controller', controller);
         context.tabState = 1 /* Ready */;

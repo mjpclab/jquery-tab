@@ -90,6 +90,7 @@ class Switcher {
 	}
 
 	private _switchNeighbor(
+		fromIndex: number,
 		direction: SwitchDirection,
 		switchOptions?: JQueryTab.SwitchOptions
 	): JQueryTab.SwitchResult {
@@ -103,26 +104,26 @@ class Switcher {
 		const {$panelContainer} = this.containers;
 		const $panelItems = $panelContainer.children();
 
-		const {itemCount, currentIndex} = this.context;
+		const {itemCount} = this.context;
 		const {disabledPanelItemClass, hiddenPanelItemClass} = this.options;
 
 		let maxIterationCount = -1;
 		if (loop) {
-			if (currentIndex >= 0 && currentIndex < itemCount) {
+			if (fromIndex >= 0 && fromIndex < itemCount) {
 				maxIterationCount = itemCount - 1;
 			} else {
 				maxIterationCount = itemCount;
 			}
 		} else if (direction === SwitchDirection.Backward) {
-			maxIterationCount = currentIndex;
+			maxIterationCount = fromIndex;
 		} else if (direction === SwitchDirection.Forward) {
-			maxIterationCount = itemCount - currentIndex - 1;
+			maxIterationCount = itemCount - fromIndex - 1;
 		}
 
 		const iterationStep = direction === SwitchDirection.Backward ? -1 : 1;
 
 		for (let i = 1; i <= maxIterationCount; i++) {
-			const panelIndex = (currentIndex + i * iterationStep + itemCount) % itemCount;
+			const panelIndex = (fromIndex + i * iterationStep + itemCount) % itemCount;
 			if ($.inArray(panelIndex, excludeIndecies) >= 0) {
 				continue;
 			}
@@ -141,13 +142,20 @@ class Switcher {
 	}
 
 	switchPrevious(switchOptions?: JQueryTab.SwitchOptions): JQueryTab.SwitchResult {
-		return this._switchNeighbor(SwitchDirection.Backward, switchOptions);
+		return this._switchNeighbor(this.context.currentIndex, SwitchDirection.Backward, switchOptions);
 	}
 
 	switchNext(switchOptions?: JQueryTab.SwitchOptions): JQueryTab.SwitchResult {
-		return this._switchNeighbor(SwitchDirection.Forward, switchOptions);
+		return this._switchNeighbor(this.context.currentIndex, SwitchDirection.Forward, switchOptions);
 	}
 
+	switchFirst(switchOptions?: JQueryTab.SwitchOptions): JQueryTab.SwitchResult {
+		return this._switchNeighbor(-1, SwitchDirection.Forward, switchOptions);
+	}
+
+	switchLast(switchOptions?: JQueryTab.SwitchOptions): JQueryTab.SwitchResult {
+		return this._switchNeighbor(this.context.itemCount, SwitchDirection.Backward, switchOptions);
+	}
 }
 
 export default Switcher;

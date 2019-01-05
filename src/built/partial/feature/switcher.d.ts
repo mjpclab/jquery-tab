@@ -14,5 +14,7 @@ declare class Switcher {
     private _switchNeighbor;
     switchPrevious(switchOptions?: JQueryTab.SwitchOptions): JQueryTab.SwitchResult;
     switchNext(switchOptions?: JQueryTab.SwitchOptions): JQueryTab.SwitchResult;
+    switchFirst(switchOptions?: JQueryTab.SwitchOptions): JQueryTab.SwitchResult;
+    switchLast(switchOptions?: JQueryTab.SwitchOptions): JQueryTab.SwitchResult;
 }
 export default Switcher;

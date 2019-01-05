@@ -12,7 +12,7 @@ import AddRemove from '../feature/add-remove';
 import generateController from '../feature/generate-controller';
 import handleHashChangeEvent from '../event-handler/handle-hash-change-event';
 import handleClickEvent from '../event-handler/handle-click-event';
-import handleKeypressEvent from '../event-handler/handle-keypress-event';
+import handleKeydownEvent from '../event-handler/handle-keydown-event';
 function tablize($region, customOptions) {
     var dataOptions = $region.data();
     var options = expandedOptions(defaultOptions, dataOptions, customOptions);
@@ -69,7 +69,7 @@ function tablize($region, customOptions) {
     }
     handleHashChangeEvent(saveLoad, switcher, options);
     handleClickEvent(switcher, containers, context, options);
-    handleKeypressEvent(tabItemSetter, switcher, containers, context, options);
+    handleKeydownEvent(tabItemSetter, switcher, containers, context, options);
     $region.data('tab-controller', controller);
     $tabContainer.data('tab-controller', controller);
     context.tabState = 1 /* Ready */;

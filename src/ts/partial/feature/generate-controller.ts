@@ -121,6 +121,14 @@ function generateController(
 		return switcher.switchNext(switchOptions);
 	};
 
+	const switchFirst = function (switchOptions?: JQueryTab.SwitchOptions) {
+		return switcher.switchFirst(switchOptions);
+	};
+
+	const switchLast = function (switchOptions?: JQueryTab.SwitchOptions) {
+		return switcher.switchLast(switchOptions);
+	};
+
 	//add remove
 
 	const insertTabItem = function (position: JQueryTab.TabItemPosition, tabItem: JQueryTab.TabItem) {
@@ -156,7 +164,7 @@ function generateController(
 		getCurrentPanel,
 		setName, setDisabled, setEnabled, setHidden, setVisible,
 		updateFixedHeight,
-		switchTo, switchPrevious, switchNext,
+		switchTo, switchPrevious, switchNext, switchFirst, switchLast,
 		addTabItem,
 		insertTabItem,
 		add,

@@ -84,6 +84,12 @@ function generateController(getter, domUpdater, tabItemSetter, switcher, addRemo
     var switchNext = function (switchOptions) {
         return switcher.switchNext(switchOptions);
     };
+    var switchFirst = function (switchOptions) {
+        return switcher.switchFirst(switchOptions);
+    };
+    var switchLast = function (switchOptions) {
+        return switcher.switchLast(switchOptions);
+    };
     //add remove
     var insertTabItem = function (position, tabItem) {
         return addRemove.insertTabItem(position, tabItem);
@@ -117,7 +123,7 @@ function generateController(getter, domUpdater, tabItemSetter, switcher, addRemo
         getCurrentPanel: getCurrentPanel,
         setName: setName, setDisabled: setDisabled, setEnabled: setEnabled, setHidden: setHidden, setVisible: setVisible,
         updateFixedHeight: updateFixedHeight,
-        switchTo: switchTo, switchPrevious: switchPrevious, switchNext: switchNext,
+        switchTo: switchTo, switchPrevious: switchPrevious, switchNext: switchNext, switchFirst: switchFirst, switchLast: switchLast,
         addTabItem: addTabItem,
         insertTabItem: insertTabItem,
         add: add,
