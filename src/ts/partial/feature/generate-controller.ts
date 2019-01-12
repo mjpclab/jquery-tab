@@ -4,6 +4,7 @@ import TabItemSetter from './tab-item-setter';
 import Switcher from './switcher';
 import Adder from './adder';
 import Remover from './remover';
+import Mover from './mover';
 
 function generateController(
 	getter: Getter,
@@ -12,6 +13,7 @@ function generateController(
 	switcher: Switcher,
 	adder: Adder,
 	remover: Remover,
+	mover: Mover
 ) {
 	//getter
 
@@ -131,7 +133,7 @@ function generateController(
 		return switcher.switchLast(switchOptions);
 	};
 
-	//add remove
+	//add
 
 	const insertTabItem = function (position: JQueryTab.TabItemPosition, tabItem: JQueryTab.TabItem) {
 		return adder.insertTabItem(position, tabItem);
@@ -149,8 +151,14 @@ function generateController(
 		return adder.add(sourceRegion);
 	};
 
+	//remove
 	const remove = function (...positions: JQueryTab.TabItemPosition[]) {
 		return remover.remove(positions);
+	};
+
+	//move
+	const exchangeTabItem = function (fromPosition: JQueryTab.TabItemPosition, toPosition: JQueryTab.TabItemPosition) {
+		mover.exchangeTabItem(fromPosition, toPosition);
 	};
 
 	const controller = {
@@ -167,11 +175,8 @@ function generateController(
 		setName, setDisabled, setEnabled, setHidden, setVisible,
 		updateFixedHeight,
 		switchTo, switchPrevious, switchNext, switchFirst, switchLast,
-		addTabItem,
-		insertTabItem,
-		add,
-		insert,
-		remove
+		addTabItem, insertTabItem, add, insert, remove,
+		exchangeTabItem
 	};
 
 	return controller;

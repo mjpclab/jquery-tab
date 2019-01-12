@@ -1,4 +1,4 @@
-function generateController(getter, domUpdater, tabItemSetter, switcher, adder, remover) {
+function generateController(getter, domUpdater, tabItemSetter, switcher, adder, remover, mover) {
     //getter
     var getCount = function () {
         return getter.getCount();
@@ -90,7 +90,7 @@ function generateController(getter, domUpdater, tabItemSetter, switcher, adder, 
     var switchLast = function (switchOptions) {
         return switcher.switchLast(switchOptions);
     };
-    //add remove
+    //add
     var insertTabItem = function (position, tabItem) {
         return adder.insertTabItem(position, tabItem);
     };
@@ -103,12 +103,17 @@ function generateController(getter, domUpdater, tabItemSetter, switcher, adder, 
     var add = function (sourceRegion) {
         return adder.add(sourceRegion);
     };
+    //remove
     var remove = function () {
         var positions = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             positions[_i] = arguments[_i];
         }
         return remover.remove(positions);
+    };
+    //move
+    var exchangeTabItem = function (fromPosition, toPosition) {
+        mover.exchangeTabItem(fromPosition, toPosition);
     };
     var controller = {
         getCount: getCount,
@@ -124,11 +129,8 @@ function generateController(getter, domUpdater, tabItemSetter, switcher, adder, 
         setName: setName, setDisabled: setDisabled, setEnabled: setEnabled, setHidden: setHidden, setVisible: setVisible,
         updateFixedHeight: updateFixedHeight,
         switchTo: switchTo, switchPrevious: switchPrevious, switchNext: switchNext, switchFirst: switchFirst, switchLast: switchLast,
-        addTabItem: addTabItem,
-        insertTabItem: insertTabItem,
-        add: add,
-        insert: insert,
-        remove: remove
+        addTabItem: addTabItem, insertTabItem: insertTabItem, add: add, insert: insert, remove: remove,
+        exchangeTabItem: exchangeTabItem
     };
     return controller;
 }

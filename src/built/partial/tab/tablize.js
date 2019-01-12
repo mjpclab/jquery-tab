@@ -10,6 +10,7 @@ import SaveLoad from '../feature/save-load';
 import Switcher from '../feature/switcher';
 import Adder from '../feature/adder';
 import Remover from '../feature/remover';
+import Mover from '../feature/mover';
 import generateController from '../feature/generate-controller';
 import handleHashChangeEvent from '../event-handler/handle-hash-change-event';
 import handleClickEvent from '../event-handler/handle-click-event';
@@ -41,8 +42,10 @@ function tablize($region, customOptions) {
     var adder = new Adder(getter, saveLoad, switcher, containers, context, options);
     //remover
     var remover = new Remover(getter, saveLoad, switcher, context);
+    //mover
+    var mover = new Mover(getter, containers, context);
     //controller
-    var controller = generateController(getter, domUpdater, tabItemSetter, switcher, adder, remover);
+    var controller = generateController(getter, domUpdater, tabItemSetter, switcher, adder, remover, mover);
     //init
     adder.addWithoutSwitch($region);
     if (!context.itemCount && !options.createEmptyTab) {

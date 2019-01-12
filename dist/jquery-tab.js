@@ -853,7 +853,48 @@
         return Remover;
     }());
 
-    function generateController(getter, domUpdater, tabItemSetter, switcher, adder, remover) {
+    function exchangeElement($container, fromIndex, toIndex) {
+        var $children = $container.children();
+        var $from = $children.eq(fromIndex);
+        var $to = $children.eq(toIndex);
+        $from.insertAfter($to);
+        //use .children() again to get the latest order
+        $to.insertBefore($container.children().eq(fromIndex));
+    }
+    var Mover = /** @class */ (function () {
+        function Mover(getter, containers, context) {
+            this.getter = getter;
+            this.containers = containers;
+            this.context = context;
+        }
+        Mover.prototype.exchangeTabItem = function (fromPosition, toPosition) {
+            var _a = this, getter = _a.getter, context = _a.context;
+            var itemCount = context.itemCount;
+            var _b = this.containers, $headerLabelContainer = _b.$headerLabelContainer, $panelContainer = _b.$panelContainer, $footerLabelContainer = _b.$footerLabelContainer;
+            var fromIndex = getter.positionToIndex(fromPosition);
+            var toIndex = getter.positionToIndex(toPosition);
+            if (fromIndex < 0 || fromIndex >= itemCount || toIndex < 0 || toIndex >= itemCount || fromIndex === toIndex) {
+                return;
+            }
+            if (fromIndex > toIndex) {
+                var tmpIndex = fromIndex;
+                fromIndex = toIndex;
+                toIndex = tmpIndex;
+            }
+            $headerLabelContainer && exchangeElement($headerLabelContainer, fromIndex, toIndex);
+            $footerLabelContainer && exchangeElement($footerLabelContainer, fromIndex, toIndex);
+            exchangeElement($panelContainer, fromIndex, toIndex);
+            if (fromIndex === context.currentIndex) {
+                context.currentIndex = toIndex;
+            }
+            else if (toIndex === context.currentIndex) {
+                context.currentIndex = fromIndex;
+            }
+        };
+        return Mover;
+    }());
+
+    function generateController(getter, domUpdater, tabItemSetter, switcher, adder, remover, mover) {
         //getter
         var getCount = function () {
             return getter.getCount();
@@ -945,7 +986,7 @@
         var switchLast = function (switchOptions) {
             return switcher.switchLast(switchOptions);
         };
-        //add remove
+        //add
         var insertTabItem = function (position, tabItem) {
             return adder.insertTabItem(position, tabItem);
         };
@@ -958,12 +999,17 @@
         var add = function (sourceRegion) {
             return adder.add(sourceRegion);
         };
+        //remove
         var remove = function () {
             var positions = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 positions[_i] = arguments[_i];
             }
             return remover.remove(positions);
+        };
+        //move
+        var exchangeTabItem = function (fromPosition, toPosition) {
+            mover.exchangeTabItem(fromPosition, toPosition);
         };
         var controller = {
             getCount: getCount,
@@ -979,11 +1025,8 @@
             setName: setName, setDisabled: setDisabled, setEnabled: setEnabled, setHidden: setHidden, setVisible: setVisible,
             updateFixedHeight: updateFixedHeight,
             switchTo: switchTo, switchPrevious: switchPrevious, switchNext: switchNext, switchFirst: switchFirst, switchLast: switchLast,
-            addTabItem: addTabItem,
-            insertTabItem: insertTabItem,
-            add: add,
-            insert: insert,
-            remove: remove
+            addTabItem: addTabItem, insertTabItem: insertTabItem, add: add, insert: insert, remove: remove,
+            exchangeTabItem: exchangeTabItem
         };
         return controller;
     }
@@ -1205,8 +1248,10 @@
         var adder = new Adder(getter, saveLoad, switcher, containers, context, options);
         //remover
         var remover = new Remover(getter, saveLoad, switcher, context);
+        //mover
+        var mover = new Mover(getter, containers, context);
         //controller
-        var controller = generateController(getter, domUpdater, tabItemSetter, switcher, adder, remover);
+        var controller = generateController(getter, domUpdater, tabItemSetter, switcher, adder, remover, mover);
         //init
         adder.addWithoutSwitch($region);
         if (!context.itemCount && !options.createEmptyTab) {

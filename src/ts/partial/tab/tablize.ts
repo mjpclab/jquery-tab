@@ -11,6 +11,7 @@ import SaveLoad from '../feature/save-load';
 import Switcher from '../feature/switcher';
 import Adder from '../feature/adder';
 import Remover from '../feature/remover';
+import Mover from '../feature/mover';
 import generateController from '../feature/generate-controller';
 
 import handleHashChangeEvent from '../event-handler/handle-hash-change-event';
@@ -54,8 +55,11 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	//remover
 	const remover = new Remover(getter, saveLoad, switcher, context);
 
+	//mover
+	const mover = new Mover(getter, containers, context);
+
 	//controller
-	const controller = generateController(getter, domUpdater, tabItemSetter, switcher, adder, remover);
+	const controller = generateController(getter, domUpdater, tabItemSetter, switcher, adder, remover, mover);
 
 	//init
 	adder.addWithoutSwitch($region);

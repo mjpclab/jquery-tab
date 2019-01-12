@@ -4,7 +4,8 @@ import TabItemSetter from './tab-item-setter';
 import Switcher from './switcher';
 import Adder from './adder';
 import Remover from './remover';
-declare function generateController(getter: Getter, domUpdater: DomUpdater, tabItemSetter: TabItemSetter, switcher: Switcher, adder: Adder, remover: Remover): {
+import Mover from './mover';
+declare function generateController(getter: Getter, domUpdater: DomUpdater, tabItemSetter: TabItemSetter, switcher: Switcher, adder: Adder, remover: Remover, mover: Mover): {
     getCount: () => number;
     getCurrentIndex: () => number;
     getCurrentName: () => string | undefined;
@@ -38,5 +39,6 @@ declare function generateController(getter: Getter, domUpdater: DomUpdater, tabI
     add: (sourceRegion: string | Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node> | (Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node>)[]) => void;
     insert: (position: string | number, sourceRegion: string | Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node> | (Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node>)[]) => void;
     remove: (...positions: (string | number)[]) => number | undefined;
+    exchangeTabItem: (fromPosition: string | number, toPosition: string | number) => void;
 };
 export default generateController;
