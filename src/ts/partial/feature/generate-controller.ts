@@ -2,14 +2,16 @@ import Getter from './getter';
 import DomUpdater from './dom-updater';
 import TabItemSetter from './tab-item-setter';
 import Switcher from './switcher';
-import AddRemove from './add-remove';
+import Adder from './adder';
+import Remover from './remover';
 
 function generateController(
 	getter: Getter,
 	domUpdater: DomUpdater,
 	tabItemSetter: TabItemSetter,
 	switcher: Switcher,
-	addRemove: AddRemove
+	adder: Adder,
+	remover: Remover,
 ) {
 	//getter
 
@@ -132,23 +134,23 @@ function generateController(
 	//add remove
 
 	const insertTabItem = function (position: JQueryTab.TabItemPosition, tabItem: JQueryTab.TabItem) {
-		return addRemove.insertTabItem(position, tabItem);
+		return adder.insertTabItem(position, tabItem);
 	};
 
 	const addTabItem = function (tabItem: JQueryTab.TabItem) {
-		return addRemove.addTabItem(tabItem);
+		return adder.addTabItem(tabItem);
 	};
 
 	const insert = function (position: JQueryTab.TabItemPosition, sourceRegion: JQueryTab.JQueriable) {
-		return addRemove.insert(position, sourceRegion);
+		return adder.insert(position, sourceRegion);
 	};
 
 	const add = function (sourceRegion: JQueryTab.JQueriable) {
-		return addRemove.add(sourceRegion);
+		return adder.add(sourceRegion);
 	};
 
 	const remove = function (...positions: JQueryTab.TabItemPosition[]) {
-		return addRemove.remove(positions);
+		return remover.remove(positions);
 	};
 
 	const controller = {

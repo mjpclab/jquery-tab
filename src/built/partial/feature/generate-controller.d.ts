@@ -2,8 +2,9 @@ import Getter from './getter';
 import DomUpdater from './dom-updater';
 import TabItemSetter from './tab-item-setter';
 import Switcher from './switcher';
-import AddRemove from './add-remove';
-declare function generateController(getter: Getter, domUpdater: DomUpdater, tabItemSetter: TabItemSetter, switcher: Switcher, addRemove: AddRemove): {
+import Adder from './adder';
+import Remover from './remover';
+declare function generateController(getter: Getter, domUpdater: DomUpdater, tabItemSetter: TabItemSetter, switcher: Switcher, adder: Adder, remover: Remover): {
     getCount: () => number;
     getCurrentIndex: () => number;
     getCurrentName: () => string | undefined;

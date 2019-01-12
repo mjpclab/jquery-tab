@@ -9,7 +9,8 @@ import DomUpdater from '../feature/dom-updater';
 import TabItemSetter from '../feature/tab-item-setter';
 import SaveLoad from '../feature/save-load';
 import Switcher from '../feature/switcher';
-import AddRemove from '../feature/add-remove';
+import Adder from '../feature/adder';
+import Remover from '../feature/remover';
 import generateController from '../feature/generate-controller';
 
 import handleHashChangeEvent from '../event-handler/handle-hash-change-event';
@@ -47,14 +48,17 @@ function tablize($region: JQuery, customOptions?: JQueryTab.Options) {
 	//switcher
 	const switcher = new Switcher(getter, domUpdater, saveLoad, containers, context, options);
 
-	//add remove
-	const addRemove = new AddRemove(getter, saveLoad, switcher, containers, context, options);
+	//adder
+	const adder = new Adder(getter, saveLoad, switcher, containers, context, options);
+
+	//remover
+	const remover = new Remover(getter, saveLoad, switcher, context);
 
 	//controller
-	const controller = generateController(getter, domUpdater, tabItemSetter, switcher, addRemove);
+	const controller = generateController(getter, domUpdater, tabItemSetter, switcher, adder, remover);
 
 	//init
-	addRemove.addWithoutSwitch($region);
+	adder.addWithoutSwitch($region);
 
 	if (!context.itemCount && !options.createEmptyTab) {
 		return;

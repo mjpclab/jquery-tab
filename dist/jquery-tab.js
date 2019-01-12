@@ -693,8 +693,8 @@
         return { $labelItem: $labelItem, $labelItemLeaf: $labelItemLeaf, $panelItem: $panelItem, $panelItemLeaf: $panelItemLeaf, cloneLabelItem: cloneLabelItem };
     }
 
-    var AddRemove = /** @class */ (function () {
-        function AddRemove(getter, saveLoad, switcher, containers, context, options) {
+    var Adder = /** @class */ (function () {
+        function Adder(getter, saveLoad, switcher, containers, context, options) {
             this.getter = getter;
             this.saveLoad = saveLoad;
             this.switcher = switcher;
@@ -702,13 +702,13 @@
             this.context = context;
             this.options = options;
         }
-        AddRemove.prototype._switchIfInitial = function () {
+        Adder.prototype._switchIfInitial = function () {
             var _a = this, switcher = _a.switcher, context = _a.context;
             if (context.currentIndex === -1 && context.itemCount) {
                 switcher.switchTo(0);
             }
         };
-        AddRemove.prototype.insertTabItemWithoutSwitch = function (position, tabItem) {
+        Adder.prototype.insertTabItemWithoutSwitch = function (position, tabItem) {
             var _a = this, getter = _a.getter, saveLoad = _a.saveLoad, containers = _a.containers, context = _a.context, options = _a.options;
             var $headerLabelContainerLeaf = containers.$headerLabelContainerLeaf, $footerLabelContainerLeaf = containers.$footerLabelContainerLeaf, $panelContainerLeaf = containers.$panelContainerLeaf;
             var _b = createTabItem(tabItem, context, options), $panelItem = _b.$panelItem, cloneLabelItem = _b.cloneLabelItem;
@@ -742,18 +742,18 @@
             }
             context.itemCount++;
         };
-        AddRemove.prototype.insertTabItem = function (position, tabItem) {
+        Adder.prototype.insertTabItem = function (position, tabItem) {
             this.insertTabItemWithoutSwitch(position, tabItem);
             this._switchIfInitial();
         };
-        AddRemove.prototype.addTabItemWithoutSwitch = function (tabItem) {
+        Adder.prototype.addTabItemWithoutSwitch = function (tabItem) {
             this.insertTabItemWithoutSwitch(this.context.itemCount, tabItem);
         };
-        AddRemove.prototype.addTabItem = function (tabItem) {
+        Adder.prototype.addTabItem = function (tabItem) {
             this.addTabItemWithoutSwitch(tabItem);
             this._switchIfInitial();
         };
-        AddRemove.prototype.insertWithoutSwitch = function (position, sourceRegion) {
+        Adder.prototype.insertWithoutSwitch = function (position, sourceRegion) {
             var getter = this.getter;
             var _a = this.options, titleSelector = _a.titleSelector, fnGetTitleContent = _a.fnGetTitleContent, keepTitleVisible = _a.keepTitleVisible, fnGetTabItemName = _a.fnGetTabItemName, fnIsTabItemDisabled = _a.fnIsTabItemDisabled, fnIsTabItemHidden = _a.fnIsTabItemHidden;
             var $sourceRegion = $$1(sourceRegion);
@@ -779,18 +779,28 @@
                 inserted++;
             }
         };
-        AddRemove.prototype.insert = function (position, sourceRegion) {
+        Adder.prototype.insert = function (position, sourceRegion) {
             this.insertWithoutSwitch(position, sourceRegion);
             this._switchIfInitial();
         };
-        AddRemove.prototype.addWithoutSwitch = function (sourceRegion) {
+        Adder.prototype.addWithoutSwitch = function (sourceRegion) {
             this.insertWithoutSwitch(this.context.itemCount, sourceRegion);
         };
-        AddRemove.prototype.add = function (sourceRegion) {
+        Adder.prototype.add = function (sourceRegion) {
             this.addWithoutSwitch(sourceRegion);
             this._switchIfInitial();
         };
-        AddRemove.prototype.remove = function (positions) {
+        return Adder;
+    }());
+
+    var Remover = /** @class */ (function () {
+        function Remover(getter, saveLoad, switcher, context) {
+            this.getter = getter;
+            this.saveLoad = saveLoad;
+            this.switcher = switcher;
+            this.context = context;
+        }
+        Remover.prototype.remove = function (positions) {
             if (!positions.length) {
                 return;
             }
@@ -840,10 +850,10 @@
             }
             return removeIndecies.length;
         };
-        return AddRemove;
+        return Remover;
     }());
 
-    function generateController(getter, domUpdater, tabItemSetter, switcher, addRemove) {
+    function generateController(getter, domUpdater, tabItemSetter, switcher, adder, remover) {
         //getter
         var getCount = function () {
             return getter.getCount();
@@ -937,23 +947,23 @@
         };
         //add remove
         var insertTabItem = function (position, tabItem) {
-            return addRemove.insertTabItem(position, tabItem);
+            return adder.insertTabItem(position, tabItem);
         };
         var addTabItem = function (tabItem) {
-            return addRemove.addTabItem(tabItem);
+            return adder.addTabItem(tabItem);
         };
         var insert = function (position, sourceRegion) {
-            return addRemove.insert(position, sourceRegion);
+            return adder.insert(position, sourceRegion);
         };
         var add = function (sourceRegion) {
-            return addRemove.add(sourceRegion);
+            return adder.add(sourceRegion);
         };
         var remove = function () {
             var positions = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 positions[_i] = arguments[_i];
             }
-            return addRemove.remove(positions);
+            return remover.remove(positions);
         };
         var controller = {
             getCount: getCount,
@@ -1191,12 +1201,14 @@
         var saveLoad = new SaveLoad(containers, options);
         //switcher
         var switcher = new Switcher(getter, domUpdater, saveLoad, containers, context, options);
-        //add remove
-        var addRemove = new AddRemove(getter, saveLoad, switcher, containers, context, options);
+        //adder
+        var adder = new Adder(getter, saveLoad, switcher, containers, context, options);
+        //remover
+        var remover = new Remover(getter, saveLoad, switcher, context);
         //controller
-        var controller = generateController(getter, domUpdater, tabItemSetter, switcher, addRemove);
+        var controller = generateController(getter, domUpdater, tabItemSetter, switcher, adder, remover);
         //init
-        addRemove.addWithoutSwitch($region);
+        adder.addWithoutSwitch($region);
         if (!context.itemCount && !options.createEmptyTab) {
             return;
         }

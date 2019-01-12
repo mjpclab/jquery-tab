@@ -1,4 +1,4 @@
-function generateController(getter, domUpdater, tabItemSetter, switcher, addRemove) {
+function generateController(getter, domUpdater, tabItemSetter, switcher, adder, remover) {
     //getter
     var getCount = function () {
         return getter.getCount();
@@ -92,23 +92,23 @@ function generateController(getter, domUpdater, tabItemSetter, switcher, addRemo
     };
     //add remove
     var insertTabItem = function (position, tabItem) {
-        return addRemove.insertTabItem(position, tabItem);
+        return adder.insertTabItem(position, tabItem);
     };
     var addTabItem = function (tabItem) {
-        return addRemove.addTabItem(tabItem);
+        return adder.addTabItem(tabItem);
     };
     var insert = function (position, sourceRegion) {
-        return addRemove.insert(position, sourceRegion);
+        return adder.insert(position, sourceRegion);
     };
     var add = function (sourceRegion) {
-        return addRemove.add(sourceRegion);
+        return adder.add(sourceRegion);
     };
     var remove = function () {
         var positions = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             positions[_i] = arguments[_i];
         }
-        return addRemove.remove(positions);
+        return remover.remove(positions);
     };
     var controller = {
         getCount: getCount,
