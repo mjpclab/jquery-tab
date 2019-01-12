@@ -9,83 +9,109 @@
 </head>
 <body>
 <div class="region" data-fixed-height="true">
-	<h1 data-tab-item-name="structural-rules">Structural Rules</h1>
-	<p>Title elements become tab labels.</p>
-	<p>Any rest contents until next title element become tab panel contents.</p>
+	<h1 data-tab-item-name="item-0">label 0</h1>
+	<div>panel 0</div>
 
-	<h1 data-tab-item-name="javascript">JavaScript</h1>
-	<code>
-		<pre>
-		$('.region').tab();
-		var controller = $('.region').data('tab-controller');
-		</pre>
-	</code>
+	<h1 data-tab-item-name="item-1">label 1</h1>
+	<div>panel 1</div>
 
-	<h1 data-tab-item-name="third-section">Third Section</h1>
-	<p>This is third section of tab.</p>
+	<h1 data-tab-item-name="item-2">label 2</h1>
+	<div>panel 2</div>
+
+	<h1 data-tab-item-name="item-3">label 3</h1>
+	<div>panel 3</div>
+
+	<h1 data-tab-item-name="item-4">label 4</h1>
+	<div>panel 4</div>
+
+	<h1 data-tab-item-name="item-5">label 5</h1>
+	<div>panel 5</div>
+
+	<h1 data-tab-item-name="item-6">label 6</h1>
+	<div>panel 6</div>
+
+	<h1 data-tab-item-name="item-7">label 7</h1>
+	<div>panel 7</div>
+
+	<h1 data-tab-item-name="item-8">label 8</h1>
+	<div>panel 8</div>
+
+	<h1 data-tab-item-name="item-9">label 9</h1>
+	<div>panel 9</div>
+
+	<h1 data-tab-item-name="item-10">label 10</h1>
+	<div>panel 10</div>
 </div>
 
 
-<h1>Switching</h1>
-<p>
-	Switch to(name/index):
-	<input type="text" value="third-section" id="txt-switch-to"/>
-	<button id="btn-switch-to">Go</button>
-</p>
-<p>
-	<button id="btn-switch-prev">Switch Previous</button>
-	<button id="btn-switch-next">Switch Next</button>
-</p>
+<div class="tab-region" data-mode="vertical">
+	<h1>Switching</h1>
+	<p>
+		Switch to(name/index):
+		<input type="text" id="txt-switch-to"/>
+		<button id="btn-switch-to">Go</button>
+	</p>
+	<p>
+		<button id="btn-switch-first">|&lt;&lt; Switch First</button>
+		<button id="btn-switch-prev">&lt; Switch Previous</button>
+		<button id="btn-switch-next">Switch Next &gt;</button>
+		<button id="btn-switch-last">Switch Last &gt;&gt;|</button>
+	</p>
+	<p>
+		<label><input type="checkbox" id="chk-include-disabled"/>include disabled</label>
+		<label><input type="checkbox" id="chk-include-hidden"/>include hidden</label>
+		<label><input type="checkbox" id="chk-loop"/>loop</label>
+	</p>
 
-<h1>Enable/Disable</h1>
-<p>
-	Item(name/index):
-	<input type="text" id="txt-enable-disable"/>
-	<button id="btn-enable">Enable</button>
-	<button id="btn-disable">Disable</button>
-</p>
+	<h1>Enable/Disable</h1>
+	<p>
+		Item(name/index):
+		<input type="text" id="txt-enable-disable"/>
+		<button id="btn-enable">Enable</button>
+		<button id="btn-disable">Disable</button>
+	</p>
 
-<h1>Visible/Hidden</h1>
-<p>
-	Item(name/index):
-	<input type="text" id="txt-visible-hidden"/>
-	<button id="btn-visible">Visible</button>
-	<button id="btn-hidden">Hidden</button>
-</p>
+	<h1>Visible/Hidden</h1>
+	<p>
+		Item(name/index):
+		<input type="text" id="txt-visible-hidden"/>
+		<button id="btn-visible">Visible</button>
+		<button id="btn-hidden">Hidden</button>
+	</p>
 
-<h1>Remove</h1>
-<p>
-	Item(name/index):
-	<input type="text" id="txt-remove"/>
-	<button id="btn-remove">Remove</button>
-</p>
+	<h1>Remove</h1>
+	<p>
+		Item(name/index):
+		<input type="text" id="txt-remove"/>
+		<button id="btn-remove">Remove</button>
+	</p>
 
-<h1>Add/Insert Tab Item</h1>
-<p>
-	Title: <input type="text" id="txt-add-tab-item-title"/><br/>
-	Content: <textarea id="txt-add-tab-item-content"></textarea><br/>
-	name: <input type="text" id="txt-add-tab-item-name"/><br/>
-	disabled: <input type="checkbox" id="chk-add-tab-item-disabled"/><br/>
-	hidden: <input type="checkbox" id="chk-add-tab-item-hidden"/><br/>
-	<button id="btn-add-tab-item">Add tab item</button>
-</p>
-<p>
-	Before Item(name/index):
-	<input type="text" id="txt-insert-tab-item-pos"/>
-	<button id="btn-insert-tab-item">Insert tab item</button>
-</p>
+	<h1>Add/Insert Tab Item</h1>
+	<p>
+		Title: <input type="text" id="txt-add-tab-item-title"/><br/>
+		Content: <textarea id="txt-add-tab-item-content"></textarea><br/>
+		name: <input type="text" id="txt-add-tab-item-name"/><br/>
+		disabled: <input type="checkbox" id="chk-add-tab-item-disabled"/><br/>
+		hidden: <input type="checkbox" id="chk-add-tab-item-hidden"/><br/>
+		<button id="btn-add-tab-item">Add tab item</button>
+	</p>
+	<p>
+		Before Item(name/index):
+		<input type="text" id="txt-insert-tab-item-pos"/>
+		<button id="btn-insert-tab-item">Insert tab item</button>
+	</p>
 
-<h1>Add/Insert</h1>
-<p>
+	<h1>Add/Insert</h1>
+	<p>
 <textarea id="txt-add">
 <div>
-<h1>added title 1</h1>
-<p>added content 1.1</p>
-<p>added content 1.2</p>
+	<h1>added title 1</h1>
+	<p>added content 1.1</p>
+	<p>added content 1.2</p>
 
-<h1>added title 2</h1>
-<p>added content 2.1</p>
-<p>added content 2.2</p>
+	<h1>added title 2</h1>
+	<p>added content 2.1</p>
+	<p>added content 2.2</p>
 </div>
 </textarea><br/>
 <button id="btn-add">Add</button>
@@ -95,6 +121,7 @@
 	<input type="text" id="txt-insert-pos"/>
 	<button id="btn-insert">Insert</button>
 </p>
+</div>
 
 <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="../dist/jquery-tab.js"></script>
@@ -107,11 +134,35 @@
 	});
 
 	$('#btn-switch-prev').click(function () {
-		controller.switchPrevious();
+		controller.switchPrevious({
+			includeDisabled: $('#chk-include-disabled').val(),
+			includeHidden: $('#chk-include-hidden').val(),
+			loop: $('#chk-loop').prop('checked')
+		});
 	});
 
 	$('#btn-switch-next').click(function () {
-		controller.switchNext();
+		controller.switchNext({
+			includeDisabled: $('#chk-include-disabled').val(),
+			includeHidden: $('#chk-include-hidden').val(),
+			loop: $('#chk-loop').prop('checked')
+		});
+	});
+
+	$('#btn-switch-first').click(function () {
+		controller.switchFirst({
+			includeDisabled: $('#chk-include-disabled').val(),
+			includeHidden: $('#chk-include-hidden').val(),
+			loop: $('#chk-loop').prop('checked')
+		});
+	});
+
+	$('#btn-switch-last').click(function () {
+		controller.switchLast({
+			includeDisabled: $('#chk-include-disabled').val(),
+			includeHidden: $('#chk-include-hidden').val(),
+			loop: $('#chk-loop').prop('checked')
+		});
 	});
 
 	$('#btn-enable').click(function () {
