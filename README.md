@@ -373,6 +373,16 @@ Parse and insert another $region's structure before tab item which its name is `
 `remove(name|index, ...)`  
 Remove one or more tab items by `name` or `index` and returns removed tab item count.
 
+`exchangeTabItem(from-name|from-index, to-name|to-index)`  
+`moveTabItemBefore(from-name|from-index, to-name-before|to-index-before)`  
+`moveTabItemAfter(from-name|from-index, to-name-after|to-index-after)`  
+`moveTabItemPrevious(from-name|from-index)`  
+`moveTabItemNext(from-name|from-index)`  
+`moveTabItemFirst(from-name|from-index)`  
+`moveTabItemLast(from-name|from-index)`  
+Move tab item from one position to another.
+
+
 # Browser Compatibility
 Feature | IE | Edge | Firefox | Chrome | Safari | Opera
 --------|----|------|---------|--------|--------|------
