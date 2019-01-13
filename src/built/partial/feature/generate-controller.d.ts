@@ -44,5 +44,7 @@ declare function generateController(getter: Getter, domUpdater: DomUpdater, tabI
     moveTabItemAfter: (fromPosition: string | number, toPosition: string | number) => void;
     moveTabItemFirst: (fromPosition: string | number) => void;
     moveTabItemLast: (fromPosition: string | number) => void;
+    moveTabItemPrevious: (fromPosition: string | number) => void;
+    moveTabItemNext: (fromPosition: string | number) => void;
 };
 export default generateController;

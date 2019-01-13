@@ -134,10 +134,18 @@
 	</p>
 	<p>
 		Move tab item(from,to):
-		<input type="text" id="txt-move--tab-item-from-pos"/>
+		<input type="text" id="txt-move-tab-item-from-pos"/>
 		<input type="text" id="txt-move-tab-item-to-pos"/>
 		<button id="btn-move-tab-item-before">Move to before</button>
 		<button id="btn-move-tab-item-after">Move to after</button>
+	</p>
+	<p>
+		Move tab item(from):
+		<input type="text" id="txt-move-tab-item-pos"/>
+		<button id="btn-move-tab-item-first">|&lt;&lt; Move First</button>
+		<button id="btn-move-tab-item-prev">&lt; Move Previous</button>
+		<button id="btn-move-tab-item-next">Move Next &gt;</button>
+		<button id="btn-move-tab-item-last">Move Last &gt;&gt;|</button>
 	</p>
 </div>
 
@@ -271,17 +279,33 @@
 	});
 
 	$('#btn-move-tab-item-before').click(function () {
-		var fromPos = $('#txt-move--tab-item-from-pos').val();
+		var fromPos = $('#txt-move-tab-item-from-pos').val();
 		var toPos = $('#txt-move-tab-item-to-pos').val();
 		controller.moveTabItemBefore(fromPos, toPos);
 		updateCurrentIndex();
 	});
 
 	$('#btn-move-tab-item-after').click(function () {
-		var fromPos = $('#txt-move--tab-item-from-pos').val();
+		var fromPos = $('#txt-move-tab-item-from-pos').val();
 		var toPos = $('#txt-move-tab-item-to-pos').val();
 		controller.moveTabItemAfter(fromPos, toPos);
 		updateCurrentIndex();
+	});
+
+	$('#btn-move-tab-item-first').click(function () {
+		controller.moveTabItemFirst($('#txt-move-tab-item-pos').val());
+	});
+
+	$('#btn-move-tab-item-last').click(function () {
+		controller.moveTabItemLast($('#txt-move-tab-item-pos').val());
+	});
+
+	$('#btn-move-tab-item-prev').click(function () {
+		controller.moveTabItemPrevious($('#txt-move-tab-item-pos').val());
+	});
+
+	$('#btn-move-tab-item-next').click(function () {
+		controller.moveTabItemNext($('#txt-move-tab-item-pos').val());
 	});
 </script>
 </body>

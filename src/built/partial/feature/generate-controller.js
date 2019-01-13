@@ -127,6 +127,12 @@ function generateController(getter, domUpdater, tabItemSetter, switcher, adder, 
     var moveTabItemLast = function (fromPosition) {
         mover.moveTabItemLast(fromPosition);
     };
+    var moveTabItemPrevious = function (fromPosition) {
+        mover.moveTabItemPrevious(fromPosition);
+    };
+    var moveTabItemNext = function (fromPosition) {
+        mover.moveTabItemNext(fromPosition);
+    };
     var controller = {
         getCount: getCount,
         getCurrentIndex: getCurrentIndex,
@@ -142,7 +148,8 @@ function generateController(getter, domUpdater, tabItemSetter, switcher, adder, 
         updateFixedHeight: updateFixedHeight,
         switchTo: switchTo, switchPrevious: switchPrevious, switchNext: switchNext, switchFirst: switchFirst, switchLast: switchLast,
         addTabItem: addTabItem, insertTabItem: insertTabItem, add: add, insert: insert, remove: remove,
-        exchangeTabItem: exchangeTabItem, moveTabItemBefore: moveTabItemBefore, moveTabItemAfter: moveTabItemAfter, moveTabItemFirst: moveTabItemFirst, moveTabItemLast: moveTabItemLast
+        exchangeTabItem: exchangeTabItem, moveTabItemBefore: moveTabItemBefore, moveTabItemAfter: moveTabItemAfter,
+        moveTabItemFirst: moveTabItemFirst, moveTabItemLast: moveTabItemLast, moveTabItemPrevious: moveTabItemPrevious, moveTabItemNext: moveTabItemNext
     };
     return controller;
 }

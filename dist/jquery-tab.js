@@ -943,6 +943,20 @@
         Mover.prototype.moveTabItemLast = function (fromPosition) {
             this.moveTabItemAfter(fromPosition, this.context.itemCount - 1);
         };
+        Mover.prototype.moveTabItemPrevious = function (fromPosition) {
+            var fromIndex = this.getter.positionToIndex(fromPosition);
+            if (fromIndex <= 0 || fromIndex >= this.context.itemCount) {
+                return;
+            }
+            this.moveTabItemBefore(fromIndex, fromIndex - 1);
+        };
+        Mover.prototype.moveTabItemNext = function (fromPosition) {
+            var fromIndex = this.getter.positionToIndex(fromPosition);
+            if (fromIndex < 0 || fromIndex >= this.context.itemCount - 1) {
+                return;
+            }
+            this.moveTabItemAfter(fromIndex, fromIndex + 1);
+        };
         Mover.prototype.exchangeTabItem = function (fromPosition, toPosition) {
             var indexes = this._parseFromToPositions(fromPosition, toPosition);
             if (!indexes) {
@@ -1100,6 +1114,12 @@
         var moveTabItemLast = function (fromPosition) {
             mover.moveTabItemLast(fromPosition);
         };
+        var moveTabItemPrevious = function (fromPosition) {
+            mover.moveTabItemPrevious(fromPosition);
+        };
+        var moveTabItemNext = function (fromPosition) {
+            mover.moveTabItemNext(fromPosition);
+        };
         var controller = {
             getCount: getCount,
             getCurrentIndex: getCurrentIndex,
@@ -1115,7 +1135,8 @@
             updateFixedHeight: updateFixedHeight,
             switchTo: switchTo, switchPrevious: switchPrevious, switchNext: switchNext, switchFirst: switchFirst, switchLast: switchLast,
             addTabItem: addTabItem, insertTabItem: insertTabItem, add: add, insert: insert, remove: remove,
-            exchangeTabItem: exchangeTabItem, moveTabItemBefore: moveTabItemBefore, moveTabItemAfter: moveTabItemAfter, moveTabItemFirst: moveTabItemFirst, moveTabItemLast: moveTabItemLast
+            exchangeTabItem: exchangeTabItem, moveTabItemBefore: moveTabItemBefore, moveTabItemAfter: moveTabItemAfter,
+            moveTabItemFirst: moveTabItemFirst, moveTabItemLast: moveTabItemLast, moveTabItemPrevious: moveTabItemPrevious, moveTabItemNext: moveTabItemNext
         };
         return controller;
     }

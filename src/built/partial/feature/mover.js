@@ -88,6 +88,20 @@ var Mover = /** @class */ (function () {
     Mover.prototype.moveTabItemLast = function (fromPosition) {
         this.moveTabItemAfter(fromPosition, this.context.itemCount - 1);
     };
+    Mover.prototype.moveTabItemPrevious = function (fromPosition) {
+        var fromIndex = this.getter.positionToIndex(fromPosition);
+        if (fromIndex <= 0 || fromIndex >= this.context.itemCount) {
+            return;
+        }
+        this.moveTabItemBefore(fromIndex, fromIndex - 1);
+    };
+    Mover.prototype.moveTabItemNext = function (fromPosition) {
+        var fromIndex = this.getter.positionToIndex(fromPosition);
+        if (fromIndex < 0 || fromIndex >= this.context.itemCount - 1) {
+            return;
+        }
+        this.moveTabItemAfter(fromIndex, fromIndex + 1);
+    };
     Mover.prototype.exchangeTabItem = function (fromPosition, toPosition) {
         var indexes = this._parseFromToPositions(fromPosition, toPosition);
         if (!indexes) {

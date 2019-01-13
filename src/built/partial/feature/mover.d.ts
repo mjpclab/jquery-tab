@@ -10,6 +10,8 @@ declare class Mover {
     moveTabItemAfter(fromPosition: JQueryTab.TabItemPosition, toPosition: JQueryTab.TabItemPosition): void;
     moveTabItemFirst(fromPosition: JQueryTab.TabItemPosition): void;
     moveTabItemLast(fromPosition: JQueryTab.TabItemPosition): void;
+    moveTabItemPrevious(fromPosition: JQueryTab.TabItemPosition): void;
+    moveTabItemNext(fromPosition: JQueryTab.TabItemPosition): void;
     exchangeTabItem(fromPosition: JQueryTab.TabItemPosition, toPosition: JQueryTab.TabItemPosition): void;
 }
 export default Mover;

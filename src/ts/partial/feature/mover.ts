@@ -120,6 +120,22 @@ class Mover {
 		this.moveTabItemAfter(fromPosition, this.context.itemCount - 1);
 	}
 
+	moveTabItemPrevious(fromPosition: JQueryTab.TabItemPosition) {
+		const fromIndex = this.getter.positionToIndex(fromPosition);
+		if (fromIndex <= 0 || fromIndex >= this.context.itemCount) {
+			return;
+		}
+		this.moveTabItemBefore(fromIndex, fromIndex - 1);
+	}
+
+	moveTabItemNext(fromPosition: JQueryTab.TabItemPosition) {
+		const fromIndex = this.getter.positionToIndex(fromPosition);
+		if (fromIndex < 0 || fromIndex >= this.context.itemCount - 1) {
+			return;
+		}
+		this.moveTabItemAfter(fromIndex, fromIndex + 1);
+	}
+
 	exchangeTabItem(fromPosition: JQueryTab.TabItemPosition, toPosition: JQueryTab.TabItemPosition) {
 		const indexes = this._parseFromToPositions(fromPosition, toPosition);
 		if (!indexes) {

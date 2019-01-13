@@ -177,6 +177,14 @@ function generateController(
 		mover.moveTabItemLast(fromPosition);
 	};
 
+	const moveTabItemPrevious = function (fromPosition: JQueryTab.TabItemPosition) {
+		mover.moveTabItemPrevious(fromPosition);
+	};
+
+	const moveTabItemNext = function (fromPosition: JQueryTab.TabItemPosition) {
+		mover.moveTabItemNext(fromPosition);
+	};
+
 	const controller = {
 		getCount,
 		getCurrentIndex,
@@ -192,7 +200,8 @@ function generateController(
 		updateFixedHeight,
 		switchTo, switchPrevious, switchNext, switchFirst, switchLast,
 		addTabItem, insertTabItem, add, insert, remove,
-		exchangeTabItem, moveTabItemBefore, moveTabItemAfter, moveTabItemFirst, moveTabItemLast,
+		exchangeTabItem, moveTabItemBefore, moveTabItemAfter,
+		moveTabItemFirst, moveTabItemLast, moveTabItemPrevious, moveTabItemNext
 	};
 
 	return controller;
