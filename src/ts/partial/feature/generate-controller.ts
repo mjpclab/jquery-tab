@@ -161,6 +161,22 @@ function generateController(
 		mover.exchangeTabItem(fromPosition, toPosition);
 	};
 
+	const moveTabItemBefore = function (fromPosition: JQueryTab.TabItemPosition, toPosition: JQueryTab.TabItemPosition) {
+		mover.moveTabItemBefore(fromPosition, toPosition);
+	};
+
+	const moveTabItemAfter = function (fromPosition: JQueryTab.TabItemPosition, toPosition: JQueryTab.TabItemPosition) {
+		mover.moveTabItemAfter(fromPosition, toPosition);
+	};
+
+	const moveTabItemFirst = function (fromPosition: JQueryTab.TabItemPosition) {
+		mover.moveTabItemFirst(fromPosition);
+	};
+
+	const moveTabItemLast = function (fromPosition: JQueryTab.TabItemPosition) {
+		mover.moveTabItemLast(fromPosition);
+	};
+
 	const controller = {
 		getCount,
 		getCurrentIndex,
@@ -176,7 +192,7 @@ function generateController(
 		updateFixedHeight,
 		switchTo, switchPrevious, switchNext, switchFirst, switchLast,
 		addTabItem, insertTabItem, add, insert, remove,
-		exchangeTabItem
+		exchangeTabItem, moveTabItemBefore, moveTabItemAfter, moveTabItemFirst, moveTabItemLast,
 	};
 
 	return controller;

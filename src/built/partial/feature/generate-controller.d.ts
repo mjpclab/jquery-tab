@@ -40,5 +40,9 @@ declare function generateController(getter: Getter, domUpdater: DomUpdater, tabI
     insert: (position: string | number, sourceRegion: string | Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node> | (Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node>)[]) => void;
     remove: (...positions: (string | number)[]) => number | undefined;
     exchangeTabItem: (fromPosition: string | number, toPosition: string | number) => void;
+    moveTabItemBefore: (fromPosition: string | number, toPosition: string | number) => void;
+    moveTabItemAfter: (fromPosition: string | number, toPosition: string | number) => void;
+    moveTabItemFirst: (fromPosition: string | number) => void;
+    moveTabItemLast: (fromPosition: string | number) => void;
 };
 export default generateController;
