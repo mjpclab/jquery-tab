@@ -2,21 +2,21 @@ import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import {uglify} from 'rollup-plugin-uglify';
 
-const getConfig = function (isMinify) {
+const getConfig = function (format, isMinify, filename) {
 	const config = {
 		input: 'src/built/index.js',
 		output: {
 			name: 'jquery-tab',
-			format: 'umd',
+			format: format,
 			globals: {
 				jquery: 'jQuery'
 			},
-			file: `dist/jquery-tab${isMinify ? '.min' : ''}.js`,
+			file: `dist/${filename}.js`,
 		},
 		external: ['jquery'],
 		plugins: [
-			resolve(), // so Rollup can find `ms`
-			commonjs(), // so Rollup can convert `ms` to an ES module
+			resolve(),
+			commonjs(),
 			isMinify && uglify({ie8: true})
 		],
 	};
@@ -25,6 +25,6 @@ const getConfig = function (isMinify) {
 };
 
 export default [
-	getConfig(false),
-	getConfig(true)
+	getConfig('umd', false, 'jquery-tab'),
+	getConfig('umd', true, 'jquery-tab.min')
 ];

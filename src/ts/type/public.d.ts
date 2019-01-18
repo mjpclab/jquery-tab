@@ -12,6 +12,11 @@ declare namespace JQueryTab {
 	type TabItemPosition = number | string;
 	type ThenableTabItemPosition = number | string | JQuery.Thenable<number | string>;
 
+	const enum Mode {
+		Horizontal = 'horizontal',
+		Vertical = 'vertical',
+	}
+
 	interface NecessaryOptions {
 		triggerEvents: string;
 		delayTriggerEvents: string;
@@ -55,11 +60,6 @@ declare namespace JQueryTab {
 	}
 
 	type Options = Partial<NecessaryOptions>;
-
-	const enum Mode {
-		Horizontal = 'horizontal',
-		Vertical = 'vertical',
-	}
 
 	interface TabItem {
 		title: JQueryTab.JQueriable;
