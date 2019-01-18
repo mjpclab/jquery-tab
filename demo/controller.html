@@ -294,18 +294,22 @@
 
 	$('#btn-move-tab-item-first').click(function () {
 		controller.moveTabItemFirst($('#txt-move-tab-item-pos').val());
+		updateCurrentIndex();
 	});
 
 	$('#btn-move-tab-item-last').click(function () {
 		controller.moveTabItemLast($('#txt-move-tab-item-pos').val());
+		updateCurrentIndex();
 	});
 
 	$('#btn-move-tab-item-prev').click(function () {
 		controller.moveTabItemPrevious($('#txt-move-tab-item-pos').val());
+		updateCurrentIndex();
 	});
 
 	$('#btn-move-tab-item-next').click(function () {
 		controller.moveTabItemNext($('#txt-move-tab-item-pos').val());
+		updateCurrentIndex();
 	});
 </script>
 </body>
