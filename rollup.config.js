@@ -2,14 +2,14 @@ import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import {uglify} from 'rollup-plugin-uglify';
 
-const getConfig = function (format, filename) {
+const getConfig = function (filename) {
 	const isMinify = filename.indexOf('.min') >= 0;
 
 	const config = {
 		input: 'src/built/index.js',
 		output: {
 			name: 'jquery-tab',
-			format: format,
+			format: 'umd',
 			globals: {
 				jquery: 'jQuery'
 			},
@@ -27,6 +27,6 @@ const getConfig = function (format, filename) {
 };
 
 export default [
-	getConfig('umd', 'jquery-tab'),
-	getConfig('umd', 'jquery-tab.min')
+	getConfig('jquery-tab'),
+	getConfig('jquery-tab.min')
 ];

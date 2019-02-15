@@ -11,7 +11,10 @@ rollup --config
 mkdir -p dist/theme/effect/
 
 # generate css
-cat src/css/layout/index.css src/css/skin/gray.css > dist/theme/gray.css
+for file in src/css/skin/*.css; do
+	cat src/css/layout/index.css "$file" > dist/theme/$(basename $file)
+done;
+
 for file in dist/theme/*.css; do
 	uglify -c -s "$file" -o "${file/\.css/.min.css}"
 done;
