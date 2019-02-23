@@ -47,4 +47,4 @@ declare namespace JQueryTab {
 	}
 }
 
-declare function isFinite(number: string): boolean;
+declare function isFinite(value: number | string): boolean;

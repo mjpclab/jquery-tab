@@ -3,7 +3,7 @@
   "version": "3.3.0",
   "description": "A jQuery tab sheet plugin",
   "main": "src/built/index.js",
-  "types": "src/ts/index.ts",
+  "types": "src/built/index.d.ts",
   "dependencies": {
     "jquery": "*"
   },
