@@ -55,8 +55,8 @@ jquery-tab provides default CSS styles if you don't want to make from scratch. M
 
 ## Importing by module
 ```javascript
-import 'jquery-tab/src/built/theme/gray';
-import 'jquery-tab/src/built/theme/effect/fade'; // optional fade effect when switching, must load after theme
+import 'jquery-tab/dist/theme/gray.css';
+import 'jquery-tab/dist/theme/effect/fade.css'; // optional fade effect when switching, must load after theme
 ```
 
 ## Use standalone CSS file

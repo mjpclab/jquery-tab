@@ -6,7 +6,7 @@ const getConfig = function (filename) {
 	const isMinify = filename.indexOf('.min') >= 0;
 
 	const config = {
-		input: 'src/built/index.js',
+		input: 'built/index.js',
 		output: {
 			name: 'jquery-tab',
 			format: 'umd',
