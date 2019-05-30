@@ -1410,13 +1410,9 @@
         tabPlugin.call($regions);
     }
 
-    function registerPlugin(pluginName) {
-        $$1.fn[pluginName] = tabPlugin;
-    }
-
     var enabled = false;
-    function enablePlugin(pluginName) {
-        registerPlugin(pluginName);
+    function enablePlugin() {
+        $$1.fn.tab = tabPlugin;
         if (!enabled) {
             enabled = true;
             applyDefaultRegion();
@@ -1424,7 +1420,7 @@
     }
 
     /// <reference path='./type/public.d.ts' />
-    enablePlugin('tab');
+    enablePlugin();
 
     return $$1;
 

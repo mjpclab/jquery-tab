@@ -1,3 +1,2 @@
-import $ from 'jquery';
-declare function enablePlugin(pluginName: keyof typeof $.fn): void;
+declare function enablePlugin(): void;
 export default enablePlugin;

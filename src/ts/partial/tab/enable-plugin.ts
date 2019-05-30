@@ -1,11 +1,12 @@
 import $ from 'jquery';
+import tabPlugin from './tab-plugin'
 import applyDefaultRegion from './apply-default-region';
-import registerPlugin from './register-plugin';
 
 let enabled = false;
 
-function enablePlugin(pluginName: keyof typeof $.fn) {
-	registerPlugin(pluginName);
+function enablePlugin() {
+	$.fn.tab = tabPlugin;
+
 	if (!enabled) {
 		enabled = true;
 		applyDefaultRegion();
