@@ -1,6 +1,6 @@
 {
   "name": "jquery-tab",
-  "version": "3.3.0",
+  "version": "4.0.0",
   "description": "A jQuery tab sheet plugin",
   "main": "dist/jquery-tab.js",
   "types": "built/index.d.ts",
