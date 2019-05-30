@@ -65,8 +65,7 @@ class Adder {
 					saveLoad.savePosition(context.currentIndex);
 				}
 			}
-		}
-		else {
+		} else {
 			if ($headerLabelContainerLeaf) {
 				$headerLabelContainerLeaf.append(cloneLabelItem());
 			}
@@ -126,7 +125,7 @@ class Adder {
 			const $rest = $title.nextUntil(titleSelector);
 
 			const tabItem = {
-				title: fnGetTitleContent.call($sourceRegion, $title, $rest),
+				title: $(fnGetTitleContent.call($sourceRegion, $title, $rest)).clone(),
 				content: $([]).add($title).add($rest),
 				name: fnGetTabItemName.call($sourceRegion, $title, $rest),
 				disabled: fnIsTabItemDisabled.call($sourceRegion, $title, $rest),

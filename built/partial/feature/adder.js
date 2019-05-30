@@ -76,7 +76,7 @@ var Adder = /** @class */ (function () {
             }
             var $rest = $title.nextUntil(titleSelector);
             var tabItem = {
-                title: fnGetTitleContent.call($sourceRegion, $title, $rest),
+                title: $(fnGetTitleContent.call($sourceRegion, $title, $rest)).clone(),
                 content: $([]).add($title).add($rest),
                 name: fnGetTabItemName.call($sourceRegion, $title, $rest),
                 disabled: fnIsTabItemDisabled.call($sourceRegion, $title, $rest),

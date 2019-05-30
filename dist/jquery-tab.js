@@ -769,7 +769,7 @@
                 }
                 var $rest = $title.nextUntil(titleSelector);
                 var tabItem = {
-                    title: fnGetTitleContent.call($sourceRegion, $title, $rest),
+                    title: $$1(fnGetTitleContent.call($sourceRegion, $title, $rest)).clone(),
                     content: $$1([]).add($title).add($rest),
                     name: fnGetTabItemName.call($sourceRegion, $title, $rest),
                     disabled: fnIsTabItemDisabled.call($sourceRegion, $title, $rest),
