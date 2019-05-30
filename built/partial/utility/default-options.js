@@ -35,7 +35,7 @@ var defaultOptions = {
     labelContainerClass: 'label-container',
     showHeaderLabelContainer: true,
     showFooterLabelContainer: false,
-    labelItemTemplate: '<label></label>',
+    labelItemTemplate: '<span></span>',
     labelItemClass: 'label-item',
     panelContainerTemplate: '<div></div>',
     panelContainerClass: 'panel-container',
