@@ -4,7 +4,11 @@ const HASH_PREFIX = '#';
 const RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
 
 function isValidPosition(position: JQueryTab.ThenableTabItemPosition) {
-	return position !== -1 && position !== undefined && position !== null && position !== '';
+	return position !== -1 &&
+		position !== undefined &&
+		position !== null &&
+		position !== '' &&
+		(typeof position !== 'object' || typeof position.then === 'function');
 }
 
 class SaveLoad {
@@ -104,13 +108,7 @@ class SaveLoad {
 		if (fnLoadPosition) {
 			position = fnLoadPosition.call($tabContainer);
 			if (isValidPosition(position)) {
-				if (typeof position === 'object') {
-					if (position.then) {
-						return position;
-					}
-				} else {
-					return position;
-				}
+				return position;
 			}
 		}
 

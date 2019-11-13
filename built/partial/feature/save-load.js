@@ -2,7 +2,11 @@ import $ from 'jquery';
 var HASH_PREFIX = '#';
 var RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
 function isValidPosition(position) {
-    return position !== -1 && position !== undefined && position !== null && position !== '';
+    return position !== -1 &&
+        position !== undefined &&
+        position !== null &&
+        position !== '' &&
+        (typeof position !== 'object' || typeof position.then === 'function');
 }
 var SaveLoad = /** @class */ (function () {
     function SaveLoad(containers, options) {
@@ -81,14 +85,7 @@ var SaveLoad = /** @class */ (function () {
         if (fnLoadPosition) {
             position = fnLoadPosition.call($tabContainer);
             if (isValidPosition(position)) {
-                if (typeof position === 'object') {
-                    if (position.then) {
-                        return position;
-                    }
-                }
-                else {
-                    return position;
-                }
+                return position;
             }
         }
         if (isValidPosition(activePosition)) {

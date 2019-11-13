@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery')) :
     typeof define === 'function' && define.amd ? define(['jquery'], factory) :
     (global = global || self, global['jquery-tab'] = factory(global.jQuery));
-}(this, function ($$1) { 'use strict';
+}(this, (function ($$1) { 'use strict';
 
     $$1 = $$1 && $$1.hasOwnProperty('default') ? $$1['default'] : $$1;
 
@@ -428,7 +428,11 @@
     var HASH_PREFIX = '#';
     var RE_ESCAPE_CHARS = /[.?*+\\\(\)\[\]\{\}]/g;
     function isValidPosition(position) {
-        return position !== -1 && position !== undefined && position !== null && position !== '';
+        return position !== -1 &&
+            position !== undefined &&
+            position !== null &&
+            position !== '' &&
+            (typeof position !== 'object' || typeof position.then === 'function');
     }
     var SaveLoad = /** @class */ (function () {
         function SaveLoad(containers, options) {
@@ -507,14 +511,7 @@
             if (fnLoadPosition) {
                 position = fnLoadPosition.call($tabContainer);
                 if (isValidPosition(position)) {
-                    if (typeof position === 'object') {
-                        if (position.then) {
-                            return position;
-                        }
-                    }
-                    else {
-                        return position;
-                    }
+                    return position;
                 }
             }
             if (isValidPosition(activePosition)) {
@@ -1424,4 +1421,4 @@
 
     return $$1;
 
-}));
+})));

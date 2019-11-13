@@ -1,4 +1,3 @@
-/// <reference types="jquery" />
 import Getter from './getter';
 import DomUpdater from './dom-updater';
 import TabItemSetter from './tab-item-setter';
@@ -37,8 +36,8 @@ declare function generateController(getter: Getter, domUpdater: DomUpdater, tabI
     switchLast: (switchOptions?: JQueryTab.SwitchOptions | undefined) => JQueryTab.SwitchResult;
     addTabItem: (tabItem: JQueryTab.TabItem) => void;
     insertTabItem: (position: string | number, tabItem: JQueryTab.TabItem) => void;
-    add: (sourceRegion: string | Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node> | (Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node>)[]) => void;
-    insert: (position: string | number, sourceRegion: string | Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node> | (Element | Text | Comment | DocumentFragment | JQuery<JQuery.Node>)[]) => void;
+    add: (sourceRegion: JQueryTab.JQueriable) => void;
+    insert: (position: string | number, sourceRegion: JQueryTab.JQueriable) => void;
     remove: (...positions: (string | number)[]) => number | undefined;
     exchangeTabItem: (fromPosition: string | number, toPosition: string | number) => void;
     moveTabItemBefore: (fromPosition: string | number, toPosition: string | number) => void;
