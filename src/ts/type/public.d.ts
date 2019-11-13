@@ -4,6 +4,8 @@ declare namespace JQueryTab {
 	type JQueriable = string | JQuery.TypeOrArray<JQuery.Node | JQuery<JQuery.Node>>;
 	type Template = string | JQuery.Node | JQuery<JQuery.Node>;
 
+	type HeightCssProp = 'height' | 'min-height' | 'minHeight' | 'max-height' | 'maxHeight';
+
 	const enum TabState {
 		Initializing = 0,
 		Ready = 1,
@@ -29,6 +31,7 @@ declare namespace JQueryTab {
 		fnSavePosition?: (this: JQuery, position: TabItemPosition) => void;
 		fnLoadPosition?: (this: JQuery) => ThenableTabItemPosition;
 		fixedHeight: boolean;
+		fixedHeightProp: HeightCssProp;
 
 		mode: Mode;
 		activePosition: TabItemPosition;

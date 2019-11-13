@@ -30,6 +30,7 @@
         statusHashTemplate: '',
         statusHashSeparator: '&',
         fixedHeight: false,
+        fixedHeightProp: 'height',
         mode: "horizontal" /* Horizontal */,
         activePosition: 0,
         createEmptyTab: false,
@@ -65,6 +66,7 @@
         panelItemClass: 'panel-item'
     };
 
+    var reCssPropHeight = /[Hh]eight/;
     function expandedOptions(defaultOptions, dataOptions, customOptions) {
         var options = $$1.extend({}, defaultOptions, dataOptions, customOptions);
         var mode = options.mode, tabContainerClass = options.tabContainerClass, labelContainerClass = options.labelContainerClass, labelItemClass = options.labelItemClass, panelContainerClass = options.panelContainerClass, panelItemClass = options.panelItemClass;
@@ -87,6 +89,9 @@
             hiddenPanelItemClass: panelItemClass + '-hidden',
             evaluatingPanelItemClass: panelItemClass + '-evaluating'
         });
+        if (!reCssPropHeight.test(expandedOptions.fixedHeightProp)) {
+            expandedOptions.fixedHeightProp = defaultOptions.fixedHeightProp;
+        }
         return expandedOptions;
     }
 
@@ -366,25 +371,25 @@
                 .attr('aria-hidden', 'true');
         };
         DomUpdater.prototype.updateFixedHeight = function () {
-            var options = this.options;
-            if (!options.fixedHeight) {
+            var _a = this.options, fixedHeight = _a.fixedHeight, fixedHeightProp = _a.fixedHeightProp, evaluatingPanelItemClass = _a.evaluatingPanelItemClass;
+            if (!fixedHeight || !fixedHeightProp) {
                 return;
             }
             var currentIndex = this.context.currentIndex;
-            var maxHeight = 0;
+            var panelMaxHeight = 0;
             this.containers.$panelContainerLeaf.children().each(function (index, panelItem) {
                 var $panelItem = $$1(panelItem);
                 if (index !== currentIndex) {
-                    $panelItem.addClass(options.evaluatingPanelItemClass);
+                    $panelItem.addClass(evaluatingPanelItemClass);
                 }
                 var panelHeight = panelItem.scrollHeight;
-                if (panelHeight > maxHeight) {
-                    maxHeight = panelHeight;
+                if (panelHeight > panelMaxHeight) {
+                    panelMaxHeight = panelHeight;
                 }
                 if (index !== currentIndex) {
-                    $panelItem.removeClass(options.evaluatingPanelItemClass);
+                    $panelItem.removeClass(evaluatingPanelItemClass);
                 }
-            }).height(maxHeight);
+            }).css(fixedHeightProp, panelMaxHeight + 'px');
         };
         return DomUpdater;
     }());

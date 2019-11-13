@@ -8,6 +8,7 @@ var defaultOptions = {
     statusHashTemplate: '',
     statusHashSeparator: '&',
     fixedHeight: false,
+    fixedHeightProp: 'height',
     mode: "horizontal" /* Horizontal */,
     activePosition: 0,
     createEmptyTab: false,

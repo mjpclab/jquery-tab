@@ -8,6 +8,7 @@ const defaultOptions: JQueryTab.NecessaryOptions = {
 	statusHashTemplate: '',
 	statusHashSeparator: '&',
 	fixedHeight: false,
+	fixedHeightProp: 'height',
 
 	mode: JQueryTab.Mode.Horizontal,
 	activePosition: 0,

@@ -52,27 +52,27 @@ class DomUpdater {
 	}
 
 	updateFixedHeight() {
-		const {options} = this;
-		if (!options.fixedHeight) {
+		const {fixedHeight, fixedHeightProp, evaluatingPanelItemClass} = this.options;
+		if (!fixedHeight || !fixedHeightProp) {
 			return;
 		}
 
 		const {currentIndex} = this.context;
-		let maxHeight = 0;
+		let panelMaxHeight = 0;
 
 		this.containers.$panelContainerLeaf.children().each(function (index, panelItem) {
 			const $panelItem = $(panelItem);
 			if (index !== currentIndex) {
-				$panelItem.addClass(options.evaluatingPanelItemClass);
+				$panelItem.addClass(evaluatingPanelItemClass);
 			}
 			const panelHeight = panelItem.scrollHeight;
-			if (panelHeight > maxHeight) {
-				maxHeight = panelHeight;
+			if (panelHeight > panelMaxHeight) {
+				panelMaxHeight = panelHeight;
 			}
 			if (index !== currentIndex) {
-				$panelItem.removeClass(options.evaluatingPanelItemClass);
+				$panelItem.removeClass(evaluatingPanelItemClass);
 			}
-		}).height(maxHeight);
+		}).css(fixedHeightProp, panelMaxHeight + 'px');
 	}
 }
 

@@ -1,5 +1,7 @@
 import $ from 'jquery';
 
+const reCssPropHeight = /[Hh]eight/;
+
 function expandedOptions(
 	defaultOptions: JQueryTab.NecessaryOptions,
 	dataOptions: JQueryTab.Options,
@@ -33,6 +35,10 @@ function expandedOptions(
 		hiddenPanelItemClass: panelItemClass + '-hidden',
 		evaluatingPanelItemClass: panelItemClass + '-evaluating'
 	});
+
+	if (!reCssPropHeight.test(expandedOptions.fixedHeightProp)) {
+		expandedOptions.fixedHeightProp = defaultOptions.fixedHeightProp
+	}
 
 	return expandedOptions;
 }

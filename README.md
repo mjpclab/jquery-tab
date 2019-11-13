@@ -156,7 +156,11 @@ If enabled, end user could use arrow keys and Tab key to switch active tab item.
 Defaults to `true`.
 
 `fixedHeight`  
-Panel items' height will be fixed to fit the longest panel and will not change when tabs are switched.
+Panel items' height will be set according to the longest content. This prevents height changing when switching.
+
+`fixedHeightProp`  
+Specify the *height* CSS property used by `fixedHeight` option. Can be "height", "min-height", or "max-height".
+Defaults to `height`.
 
 `createEmptyTab`  
 Determine if still create tab container when there is no tab item found.
