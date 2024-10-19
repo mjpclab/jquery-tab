@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # install required node scripts:
-# npm install --global typescript rollup uglify
+# npm install --global typescript rollup clean-css-cli
 
 cd "$(dirname $0)"
 rm -rf src/built/* dist/*
@@ -16,10 +16,10 @@ for file in src/css/skin/*.css; do
 done;
 
 for file in dist/theme/*.css; do
-	uglify -c -s "$file" -o "${file/\.css/.min.css}"
+	cleancss -o "${file/\.css/.min.css}" "$file"
 done;
 
 cp src/css/effect/* dist/theme/effect/
 for file in dist/theme/effect/*.css; do
-	uglify -c -s "$file" -o "${file/\.css/.min.css}"
+	cleancss -o "${file/\.css/.min.css}" "$file"
 done;
