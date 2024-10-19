@@ -1,16 +1,18 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery')) :
     typeof define === 'function' && define.amd ? define(['jquery'], factory) :
-    (global = global || self, global['jquery-tab'] = factory(global.jQuery));
-}(this, (function ($$1) { 'use strict';
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global["jquery-tab"] = factory(global.jQuery));
+})(this, (function ($$1) { 'use strict';
 
-    $$1 = $$1 && Object.prototype.hasOwnProperty.call($$1, 'default') ? $$1['default'] : $$1;
+    function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+    var $__default = /*#__PURE__*/_interopDefaultLegacy($$1);
 
     function normalizeOptions(options) {
         if (!options) {
             return;
         }
-        var normalizedOptions = $$1.extend({}, options);
+        var normalizedOptions = $__default["default"].extend({}, options);
         var mode = normalizedOptions.mode;
         if (mode) {
             if (mode !== "horizontal" /* Horizontal */ && mode !== "vertical" /* Vertical */) {
@@ -68,9 +70,9 @@
 
     var reCssPropHeight = /[Hh]eight/;
     function expandedOptions(defaultOptions, dataOptions, customOptions) {
-        var options = $$1.extend({}, defaultOptions, dataOptions, customOptions);
+        var options = $__default["default"].extend({}, defaultOptions, dataOptions, customOptions);
         var mode = options.mode, tabContainerClass = options.tabContainerClass, labelContainerClass = options.labelContainerClass, labelItemClass = options.labelItemClass, panelContainerClass = options.panelContainerClass, panelItemClass = options.panelItemClass;
-        var expandedOptions = $$1.extend(options, {
+        var expandedOptions = $__default["default"].extend(options, {
             modeTabContainerClass: tabContainerClass + '-' + mode,
             modeLabelContainerClass: labelContainerClass + '-' + mode,
             headerLabelContainerClass: labelContainerClass + '-header',
@@ -112,7 +114,7 @@
     }
 
     function createLabelContainer(options) {
-        var $labelContainer = $$1(options.labelContainerTemplate)
+        var $labelContainer = $__default["default"](options.labelContainerTemplate)
             .addClass(options.labelContainerClass)
             .addClass(options.modeLabelContainerClass)
             .attr('role', 'tablist');
@@ -138,7 +140,7 @@
     }
 
     function createPanelContainer(options) {
-        var $panelContainer = $$1(options.panelContainerTemplate)
+        var $panelContainer = $__default["default"](options.panelContainerTemplate)
             .addClass(options.panelContainerClass)
             .addClass(options.modePanelContainerClass);
         var $panelContainerLeaf = getLeafElement($panelContainer);
@@ -161,7 +163,7 @@
 
     function createTabContainer(options) {
         //container
-        var $tabContainer = $$1(options.tabContainerTemplate)
+        var $tabContainer = $__default["default"](options.tabContainerTemplate)
             .addClass(options.tabContainerClass)
             .addClass(options.modeTabContainerClass);
         var $tabContainerLeaf = getLeafElement($tabContainer);
@@ -214,7 +216,7 @@
             var $panelContainerLeaf = this.containers.$panelContainerLeaf;
             var tabItemNameAttr = this.options.tabItemNameAttr;
             $panelContainerLeaf.children().each(function (index, panel) {
-                var $panel = $$1(panel);
+                var $panel = $__default["default"](panel);
                 if ($panel.data(tabItemNameAttr) === name) {
                     tabItemIndex = index;
                     return false;
@@ -295,7 +297,7 @@
                     return $labelContainerLeaf.children().eq(index);
                 }
             }
-            return $$1([]);
+            return $__default["default"]([]);
         };
         Getter.prototype.getHeaderLabel = function (position) {
             var $headerLabelContainerLeaf = this.containers.$headerLabelContainerLeaf;
@@ -311,7 +313,7 @@
             if (index >= 0 && index < itemCount) {
                 return this.getHeaderLabel(index).add(this.getFooterLabel(index));
             }
-            return $$1([]);
+            return $__default["default"]([]);
         };
         Getter.prototype.getPanel = function (position) {
             var itemCount = this.context.itemCount;
@@ -320,7 +322,7 @@
                 var $panelContainerLeaf = this.containers.$panelContainerLeaf;
                 return $panelContainerLeaf.children().eq(index);
             }
-            return $$1([]);
+            return $__default["default"]([]);
         };
         Getter.prototype.getCurrentHeaderLabel = function () {
             return this.getHeaderLabel(this.context.currentIndex);
@@ -378,7 +380,7 @@
             var currentIndex = this.context.currentIndex;
             var panelMaxHeight = 0;
             this.containers.$panelContainerLeaf.children().each(function (index, panelItem) {
-                var $panelItem = $$1(panelItem);
+                var $panelItem = $__default["default"](panelItem);
                 if (index !== currentIndex) {
                     $panelItem.addClass(evaluatingPanelItemClass);
                 }
@@ -447,7 +449,7 @@
             var statusFieldSelector = options.statusFieldSelector, statusHashTemplate = options.statusHashTemplate;
             var $statusFields = $region.find(statusFieldSelector);
             if (!$statusFields.length) {
-                $statusFields = $$1(statusFieldSelector);
+                $statusFields = $__default["default"](statusFieldSelector);
             }
             this.$statusFields = $statusFields;
             if (statusHashTemplate) {
@@ -498,7 +500,7 @@
             var _a = this.options, statusHashTemplate = _a.statusHashTemplate, fnLoadPosition = _a.fnLoadPosition, activePosition = _a.activePosition;
             var position = -1;
             $statusFields.each(function (i, statusField) {
-                var status = $$1(statusField).val();
+                var status = $__default["default"](statusField).val();
                 if (typeof status === 'number' || status.length) {
                     position = status;
                     return false;
@@ -584,7 +586,7 @@
             var getter = this.getter;
             var opts = switchOptions || {};
             var includeDisabled = opts.includeDisabled, includeHidden = opts.includeHidden, loop = opts.loop, exclude = opts.exclude;
-            var excludeIndecies = exclude && exclude.length ? $$1.map(exclude, function (position) {
+            var excludeIndecies = exclude && exclude.length ? $__default["default"].map(exclude, function (position) {
                 return getter.positionToIndex(position);
             }) : [];
             var $panelContainer = this.containers.$panelContainer;
@@ -609,7 +611,7 @@
             var iterationStep = direction === SwitchDirection.Backward ? -1 : 1;
             for (var i = 1; i <= maxIterationCount; i++) {
                 var panelIndex = (fromIndex + i * iterationStep + itemCount) % itemCount;
-                if ($$1.inArray(panelIndex, excludeIndecies) >= 0) {
+                if ($__default["default"].inArray(panelIndex, excludeIndecies) >= 0) {
                     continue;
                 }
                 var $panel = $panelItems.eq(panelIndex);
@@ -639,7 +641,7 @@
     }());
 
     function createLabelItem(tabItem, options) {
-        var $labelItem = $$1(options.labelItemTemplate)
+        var $labelItem = $__default["default"](options.labelItemTemplate)
             .addClass(options.labelItemClass)
             .addClass(options.inactiveLabelItemClass)
             .attr('tabindex', '0')
@@ -650,7 +652,7 @@
     }
 
     function createPanelItem(tabItem, options) {
-        var $panelItem = $$1(options.panelItemTemplate)
+        var $panelItem = $__default["default"](options.panelItemTemplate)
             .addClass(options.panelItemClass)
             .addClass(options.inactivePanelItemClass)
             .attr('role', 'tabpanel');
@@ -758,7 +760,7 @@
         Adder.prototype.insertWithoutSwitch = function (position, sourceRegion) {
             var getter = this.getter;
             var _a = this.options, titleSelector = _a.titleSelector, fnGetTitleContent = _a.fnGetTitleContent, keepTitleVisible = _a.keepTitleVisible, fnGetTabItemName = _a.fnGetTabItemName, fnIsTabItemDisabled = _a.fnIsTabItemDisabled, fnIsTabItemHidden = _a.fnIsTabItemHidden;
-            var $sourceRegion = $$1(sourceRegion);
+            var $sourceRegion = $__default["default"](sourceRegion);
             var inserted = 0;
             var index = getter.positionToIndex(position);
             while (true) {
@@ -771,8 +773,8 @@
                 }
                 var $rest = $title.nextUntil(titleSelector);
                 var tabItem = {
-                    title: $$1(fnGetTitleContent.call($sourceRegion, $title, $rest)).clone(),
-                    content: $$1([]).add($title).add($rest),
+                    title: $__default["default"](fnGetTitleContent.call($sourceRegion, $title, $rest)).clone(),
+                    content: $__default["default"]([]).add($title).add($rest),
                     name: fnGetTabItemName.call($sourceRegion, $title, $rest),
                     disabled: fnIsTabItemDisabled.call($sourceRegion, $title, $rest),
                     hidden: fnIsTabItemHidden.call($sourceRegion, $title, $rest)
@@ -810,7 +812,7 @@
             var removeIndecies = [];
             for (var i = 0, len = positions.length; i < len; i++) {
                 var removeIndex = getter.positionToIndex(positions[i]);
-                if (removeIndex >= 0 && removeIndex < context.itemCount && $$1.inArray(removeIndex, removeIndecies) === -1) {
+                if (removeIndex >= 0 && removeIndex < context.itemCount && $__default["default"].inArray(removeIndex, removeIndecies) === -1) {
                     removeIndecies.push(removeIndex);
                 }
             }
@@ -820,7 +822,7 @@
             removeIndecies.sort(function (prev, next) {
                 return next - prev;
             });
-            if (context.itemCount > 1 && $$1.inArray(context.currentIndex, removeIndecies) >= 0) {
+            if (context.itemCount > 1 && $__default["default"].inArray(context.currentIndex, removeIndecies) >= 0) {
                 switcher.switchNext({ exclude: removeIndecies }) ||
                     switcher.switchPrevious({ exclude: removeIndecies }) ||
                     switcher.switchNext({ includeDisabled: true, exclude: removeIndecies }) ||
@@ -1146,7 +1148,7 @@
     var EVENT_HASH_CHANGE = 'hashchange';
     function handleHashChangeEvent(saveLoad, switcher, options) {
         if (options.statusHashTemplate && window) {
-            $$1(window).on(EVENT_HASH_CHANGE, function () {
+            $__default["default"](window).on(EVENT_HASH_CHANGE, function () {
                 var position = saveLoad.parseHashPosition();
                 switcher.switchTo(position);
             });
@@ -1175,7 +1177,7 @@
                 return;
             }
             cancelDelayTrigger();
-            var $label = $$1(e.currentTarget);
+            var $label = $__default["default"](e.currentTarget);
             var labelIndex = $label.index();
             if (labelIndex === context.currentIndex ||
                 $label.hasClass(disabledLabelItemClass) ||
@@ -1188,7 +1190,7 @@
             if (e.currentTarget.parentNode !== e.delegateTarget) {
                 return;
             }
-            var $label = $$1(e.currentTarget);
+            var $label = $__default["default"](e.currentTarget);
             var labelIndex = $label.index();
             if (labelIndex === context.currentIndex) {
                 return;
@@ -1217,7 +1219,7 @@
                 return;
             }
             cancelDelayTrigger();
-            var $label = $$1(e.currentTarget);
+            var $label = $__default["default"](e.currentTarget);
             var labelIndex = $label.index();
             if (labelIndex === context.currentIndex ||
                 $label.hasClass(disabledLabelItemClass) ||
@@ -1262,7 +1264,7 @@
         if (!options.keyboardSwitch) {
             return;
         }
-        var $labelContainers = $$1([]);
+        var $labelContainers = $__default["default"]([]);
         var $headerLabelContainer = containers.$headerLabelContainer, $footerLabelContainer = containers.$footerLabelContainer;
         if ($headerLabelContainer) {
             $labelContainers = $labelContainers.add($headerLabelContainer);
@@ -1297,7 +1299,7 @@
                         break;
                     case SPACE:
                     case ENTER:
-                        switchResult = switcher.switchTo($$1(e.target).index());
+                        switchResult = switcher.switchTo($__default["default"](e.target).index());
                         break;
                 }
             }
@@ -1322,7 +1324,7 @@
                         break;
                     case SPACE_CODE:
                     case ENTER_CODE:
-                        switchResult = switcher.switchTo($$1(e.target).index());
+                        switchResult = switcher.switchTo($__default["default"](e.target).index());
                         break;
                 }
             }
@@ -1344,7 +1346,7 @@
             itemCount: 0,
             currentIndex: -1
         };
-        var containers = $$1.extend({ $region: $region }, createTabContainer(options));
+        var containers = $__default["default"].extend({ $region: $region }, createTabContainer(options));
         var $tabContainer = containers.$tabContainer;
         //getters
         var getter = new Getter(containers, context, options);
@@ -1402,19 +1404,19 @@
     function tabPlugin(options) {
         var normalizedOptions = normalizeOptions(options);
         this.each(function (index, region) {
-            tablize($$1(region), normalizedOptions);
+            tablize($__default["default"](region), normalizedOptions);
         });
         return this;
     }
 
     function applyDefaultRegion() {
-        var $regions = $$1('.tab-region');
+        var $regions = $__default["default"]('.tab-region');
         tabPlugin.call($regions);
     }
 
     var enabled = false;
     function enablePlugin() {
-        $$1.fn.tab = tabPlugin;
+        $__default["default"].fn.tab = tabPlugin;
         if (!enabled) {
             enabled = true;
             applyDefaultRegion();
@@ -1424,6 +1426,6 @@
     /// <reference path='./type/public.d.ts' />
     enablePlugin();
 
-    return $$1;
+    return $__default["default"];
 
-})));
+}));

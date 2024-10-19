@@ -1,6 +1,4 @@
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import {uglify} from 'rollup-plugin-uglify';
+import terser from '@rollup/plugin-terser';
 
 const getConfig = function (filename) {
 	const isMinify = filename.indexOf('.min') >= 0;
@@ -17,9 +15,9 @@ const getConfig = function (filename) {
 		},
 		external: ['jquery'],
 		plugins: [
-			resolve(),
-			commonjs(),
-			isMinify && uglify({ie8: true})
+			isMinify && terser({
+				compress: {ie8: true}
+			})
 		],
 	};
 

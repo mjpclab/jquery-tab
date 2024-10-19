@@ -8,11 +8,9 @@
     "jquery": "*"
   },
   "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
     "@types/jquery": "^3.5.31",
-    "rollup": "^1.32.1",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-uglify": "^6.0.4",
+    "rollup": "^2.79.2",
     "typescript": "^3.9.10"
   },
   "repository": {
